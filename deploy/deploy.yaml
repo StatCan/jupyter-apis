@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: jupyter-apis
+    app.kubernetes.io/instance: jupyter-apis
+    app.kubernetes.io/name: jupyter-apis
+  name: jupyter-apis
+  namespace: kubeflow
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: jupyter-apis
+      app.kubernetes.io/instance: jupyter-apis
+      app.kubernetes.io/name: jupyter-apis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: jupyter-apis
+        app.kubernetes.io/instance: jupyter-apis
+        app.kubernetes.io/name: jupyter-apis
+    spec:
+      containers:
+      - image: zachomedia/jupyter-apis:latest
+        imagePullPolicy: Always
+        name: jupyter-web-app
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+          name: http
+        resources: {}
+      imagePullSecrets:
+      - name: k8scc01covidacr-registry-connection
+      serviceAccountName: jupyter-web-app-service-account
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jupyter-apis
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/component: jupyter-apis
+    app.kubernetes.io/instance: jupyter-apis
+    app.kubernetes.io/name: jupyter-apis
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  labels:
+    app.kubernetes.io/component: jupyter-web-app
+    app.kubernetes.io/instance: jupyter-web-app-v1.0.0
+    app.kubernetes.io/managed-by: kfctl
+    app.kubernetes.io/name: jupyter-web-app
+    app.kubernetes.io/part-of: kubeflow
+    app.kubernetes.io/version: v1.0.0
+  name: jupyter-web-app
+  namespace: kubeflow
+spec:
+  gateways:
+  - kubeflow-gateway
+  hosts:
+  - '*'
+  http:
+  - match:
+    - uri:
+        prefix: /jupyter/api/storageclasses/
+      method:
+        exact: GET
+    rewrite:
+      uri: /api/storageclasses/
+    route:
+    - destination:
+        host: jupyter-apis.kubeflow.svc.cluster.local
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /jupyter/api/namespaces/
+      method:
+        exact: GET
+    rewrite:
+      uri: /api/namespaces/
+    route:
+    - destination:
+        host: jupyter-apis.kubeflow.svc.cluster.local
+        port:
+          number: 80
+  - headers:
+      request:
+        add:
+          x-forwarded-prefix: /jupyter
+    match:
+    - uri:
+        prefix: /jupyter/
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: jupyter-web-app-service.kubeflow.svc.cluster.local
+        port:
+          number: 80

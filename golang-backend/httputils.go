@@ -14,6 +14,7 @@ type APIResponse struct {
 
 // respond response returns a JSON response to the client.
 func (s *server) respond(w http.ResponseWriter, r *http.Request, resp interface{}) {
+	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	encoder := json.NewEncoder(w)
 	err := encoder.Encode(resp)
@@ -27,6 +28,7 @@ func (s *server) respond(w http.ResponseWriter, r *http.Request, resp interface{
 func (s *server) error(w http.ResponseWriter, r *http.Request, err error) {
 	log.Printf("returning error response: %v", err)
 
+	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusInternalServerError)
 	encoder := json.NewEncoder(w)
 	werr := encoder.Encode(APIResponse{

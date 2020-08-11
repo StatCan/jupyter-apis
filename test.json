@@ -1,0 +1,23 @@
+{
+	"name": "test4",
+	"namespace": "zachary-seguin",
+	"image": "k8scc01covidacr.azurecr.io/minimal-notebook-cpu:d58600076b0c188364d8651d3986ee0d37ecb4ad",
+	"customImage": "",
+	"customImageCheck": false,
+	"cpu": "0.5",
+	"memory": "1.0Gi",
+	"gpus": {
+		"num": "none"
+	},
+	"noWorkspace": false,
+	"workspace": {
+		"type": "Existing",
+		"name": "workspace-test4",
+		"templatedName": "workspace-{notebook-name}",
+		"class": "{none}",
+		"extraFields": {}
+	},
+	"datavols": [],
+	"shm": true,
+	"configurations": ["minio-profile"]
+}

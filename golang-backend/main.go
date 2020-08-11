@@ -84,6 +84,7 @@ func main() {
 
 	// Setup route handlers
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
+
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
@@ -94,6 +95,27 @@ func main() {
 			},
 		},
 	}, s.GetNotebooks)).Methods("GET")
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    notebooksv1.GroupVersion.Group,
+				Verb:     "create",
+				Resource: "notebooks",
+				Version:  notebooksv1.GroupVersion.Version,
+			},
+		},
+	}, s.NewNotebook)).Headers("Content-Type", "application/json").Methods("POST")
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    notebooksv1.GroupVersion.Group,
+				Verb:     "delete",
+				Resource: "notebooks",
+				Version:  notebooksv1.GroupVersion.Version,
+			},
+		},
+	}, s.DeleteNotebook)).Methods("DELETE")
+
 	router.HandleFunc("/api/namespaces/{namespace}/pvcs", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

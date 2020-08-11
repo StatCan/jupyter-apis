@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"sort"
@@ -14,6 +16,43 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
+
+const DefaultServiceAccountName string = "default-editor"
+const SharedMemoryVolumeName string = "dshm"
+const SharedMemoryVolumePath string = "/dev/shm"
+const WorkspacePath string = "/home/jovyan"
+
+type volumetype string
+
+const (
+	VolumeTypeExisting volumetype = "Existing"
+	VolumeTypeNew      volumetype = "New"
+)
+
+type volumerequest struct {
+	Type          volumetype             `json:"type"`
+	Name          string                 `json:"name"`
+	TemplatedName string                 `json:"templatedName"`
+	Class         string                 `json:"class"`
+	ExtraFields   map[string]interface{} `json:"extraFields"`
+	Path          string                 `json:"path"`
+}
+
+type newnotebookrequest struct {
+	Name             string            `json:"name"`
+	Namespace        string            `json:"namespace"`
+	Image            string            `json:"image"`
+	CustomImage      string            `json:"customImage"`
+	CustomImageCheck bool              `json:"customImageCheck"`
+	CPU              resource.Quantity `json:"cpu"`
+	Memory           resource.Quantity `json:"memory"`
+	// TODO: GPU
+	NoWorkspace        bool            `json:"noWorkspace"`
+	Workspace          volumerequest   `json:"workspace"`
+	DataVolumes        []volumerequest `json:"datavols"`
+	EnableSharedMemory bool            `json:"shm"`
+	Configurations     []string        `json:"configurations"`
+}
 
 type notebookresponse struct {
 	Age        string            `json:"age"`
@@ -185,4 +224,155 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.respond(w, r, resp)
+}
+
+func (s *server) handleVolume(req volumerequest, notebook *notebooksv1.Notebook) error {
+	if req.Type == VolumeTypeExisting {
+		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: req.Name,
+			VolumeSource: corev1.VolumeSource{
+				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+					ClaimName: req.Name,
+				},
+			},
+		})
+
+		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      req.Name,
+			MountPath: req.Path,
+		})
+	} else if req.Type == VolumeTypeNew {
+		return fmt.Errorf("unsupported volume type %q", req.Type)
+	} else {
+		return fmt.Errorf("unknown volume type %q", req.Type)
+	}
+
+	return nil
+}
+
+func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	// Read the incoming notebook
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+
+	var req newnotebookrequest
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	image := req.Image
+	if req.CustomImageCheck {
+		image = req.CustomImage
+	}
+
+	// Setup the notebook
+	// TODO: Work with default CPU/memory limits from config
+	// TODO: Add GPU support
+	notebook := notebooksv1.Notebook{
+		ObjectMeta: v1.ObjectMeta{
+			Name:      req.Name,
+			Namespace: namespace,
+		},
+		Spec: notebooksv1.NotebookSpec{
+			Template: notebooksv1.NotebookTemplateSpec{
+				Spec: corev1.PodSpec{
+					ServiceAccountName: DefaultServiceAccountName,
+					Containers: []corev1.Container{
+						corev1.Container{
+							Name:  req.Name,
+							Image: image,
+							Resources: corev1.ResourceRequirements{
+								Limits: corev1.ResourceList{
+									corev1.ResourceCPU:    req.CPU,
+									corev1.ResourceMemory: req.Memory,
+								},
+								Requests: corev1.ResourceList{
+									corev1.ResourceCPU:    req.CPU,
+									corev1.ResourceMemory: req.Memory,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	// Add workspace volume
+	if !req.NoWorkspace {
+		req.Workspace.Path = WorkspacePath
+		err = s.handleVolume(req.Workspace, &notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	for _, volreq := range req.DataVolumes {
+		err = s.handleVolume(volreq, &notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	// Add shared memory, if enabled
+	if req.EnableSharedMemory {
+		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: SharedMemoryVolumeName,
+			VolumeSource: corev1.VolumeSource{
+				EmptyDir: &corev1.EmptyDirVolumeSource{
+					Medium: corev1.StorageMediumMemory,
+				},
+			},
+		})
+
+		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      SharedMemoryVolumeName,
+			MountPath: SharedMemoryVolumePath,
+		})
+	}
+
+	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)
+
+	// Submit the notebook to the API server
+	_, err = s.clientsets.notebooks.V1().Notebooks(namespace).Create(r.Context(), &notebook)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	s.respond(w, r, APIResponse{
+		Success: true,
+	})
+}
+
+func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	notebook := vars["notebook"]
+
+	log.Printf("deleting notebook %q for %q", notebook, namespace)
+
+	propagation := v1.DeletePropagationForeground
+	err := s.clientsets.notebooks.V1().Notebooks(namespace).Delete(r.Context(), notebook, &v1.DeleteOptions{
+		PropagationPolicy: &propagation,
+	})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	s.respond(w, r, APIResponse{
+		Success: true,
+	})
 }

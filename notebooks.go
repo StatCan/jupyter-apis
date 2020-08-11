@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -30,28 +31,35 @@ const (
 )
 
 type volumerequest struct {
-	Type          volumetype             `json:"type"`
-	Name          string                 `json:"name"`
-	TemplatedName string                 `json:"templatedName"`
-	Class         string                 `json:"class"`
-	ExtraFields   map[string]interface{} `json:"extraFields"`
-	Path          string                 `json:"path"`
+	Type          volumetype                        `json:"type"`
+	Name          string                            `json:"name"`
+	TemplatedName string                            `json:"templatedName"`
+	Class         string                            `json:"class"`
+	ExtraFields   map[string]interface{}            `json:"extraFields"`
+	Path          string                            `json:"path"`
+	Size          resource.Quantity                 `json:"size"`
+	Mode          corev1.PersistentVolumeAccessMode `json:"mode"`
+}
+
+type gpurequest struct {
+	Quantity resource.Quantity `json:"num"`
+	Vendor   string            `json:"vendor"`
 }
 
 type newnotebookrequest struct {
-	Name             string            `json:"name"`
-	Namespace        string            `json:"namespace"`
-	Image            string            `json:"image"`
-	CustomImage      string            `json:"customImage"`
-	CustomImageCheck bool              `json:"customImageCheck"`
-	CPU              resource.Quantity `json:"cpu"`
-	Memory           resource.Quantity `json:"memory"`
-	// TODO: GPU
-	NoWorkspace        bool            `json:"noWorkspace"`
-	Workspace          volumerequest   `json:"workspace"`
-	DataVolumes        []volumerequest `json:"datavols"`
-	EnableSharedMemory bool            `json:"shm"`
-	Configurations     []string        `json:"configurations"`
+	Name               string            `json:"name"`
+	Namespace          string            `json:"namespace"`
+	Image              string            `json:"image"`
+	CustomImage        string            `json:"customImage"`
+	CustomImageCheck   bool              `json:"customImageCheck"`
+	CPU                resource.Quantity `json:"cpu"`
+	Memory             resource.Quantity `json:"memory"`
+	GPUs               gpurequest        `json:"gpus"`
+	NoWorkspace        bool              `json:"noWorkspace"`
+	Workspace          volumerequest     `json:"workspace"`
+	DataVolumes        []volumerequest   `json:"datavols"`
+	EnableSharedMemory bool              `json:"shm"`
+	Configurations     []string          `json:"configurations"`
 }
 
 type notebookresponse struct {
@@ -226,26 +234,50 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func (s *server) handleVolume(req volumerequest, notebook *notebooksv1.Notebook) error {
-	if req.Type == VolumeTypeExisting {
-		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-			Name: req.Name,
-			VolumeSource: corev1.VolumeSource{
-				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-					ClaimName: req.Name,
+func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *notebooksv1.Notebook) error {
+	if req.Type == VolumeTypeNew {
+		// Create the PVC
+		pvc := corev1.PersistentVolumeClaim{
+			ObjectMeta: v1.ObjectMeta{
+				Name:      req.Name,
+				Namespace: notebook.Namespace,
+			},
+			Spec: corev1.PersistentVolumeClaimSpec{
+				AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+				Resources: corev1.ResourceRequirements{
+					Requests: corev1.ResourceList{
+						corev1.ResourceStorage: req.Size,
+					},
 				},
 			},
-		})
+		}
 
-		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-			Name:      req.Name,
-			MountPath: req.Path,
-		})
-	} else if req.Type == VolumeTypeNew {
-		return fmt.Errorf("unsupported volume type %q", req.Type)
-	} else {
+		// Add the storage class, if set and not set to an "empty" value
+		if req.Class != "" && req.Class != "{none}" && req.Class != "{empty}" {
+			pvc.Spec.StorageClassName = &req.Class
+		}
+
+		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, v1.CreateOptions{}); err != nil {
+			return err
+		}
+	} else if req.Type != VolumeTypeExisting {
 		return fmt.Errorf("unknown volume type %q", req.Type)
 	}
+
+	// Add the volume and volume mount ot the notebook spec
+	notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+		Name: req.Name,
+		VolumeSource: corev1.VolumeSource{
+			PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+				ClaimName: req.Name,
+			},
+		},
+	})
+
+	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+		Name:      req.Name,
+		MountPath: req.Path,
+	})
 
 	return nil
 }
@@ -276,7 +308,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Setup the notebook
 	// TODO: Work with default CPU/memory limits from config
-	// TODO: Add GPU support
 	notebook := notebooksv1.Notebook{
 		ObjectMeta: v1.ObjectMeta{
 			Name:      req.Name,
@@ -310,7 +341,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	// Add workspace volume
 	if !req.NoWorkspace {
 		req.Workspace.Path = WorkspacePath
-		err = s.handleVolume(req.Workspace, &notebook)
+		err = s.handleVolume(r.Context(), req.Workspace, &notebook)
 		if err != nil {
 			s.error(w, r, err)
 			return
@@ -318,7 +349,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, volreq := range req.DataVolumes {
-		err = s.handleVolume(volreq, &notebook)
+		err = s.handleVolume(r.Context(), volreq, &notebook)
 		if err != nil {
 			s.error(w, r, err)
 			return
@@ -340,6 +371,12 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			Name:      SharedMemoryVolumeName,
 			MountPath: SharedMemoryVolumePath,
 		})
+	}
+
+	// Add GPU
+	if !req.GPUs.Quantity.IsZero() {
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = req.GPUs.Quantity
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = req.GPUs.Quantity
 	}
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)

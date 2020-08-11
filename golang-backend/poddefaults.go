@@ -6,7 +6,7 @@ import (
 	"reflect"
 
 	"github.com/gorilla/mux"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 type poddefaultresponse struct {
@@ -26,7 +26,7 @@ func (s *server) GetPodDefaults(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("loading poddefaults for %q", namespace)
 
-	pds, err := s.clientsets.kubeflow.KubeflowV1alpha1().PodDefaults(namespace).List(r.Context(), v1.ListOptions{})
+	pds, err := s.listers.podDefaults.PodDefaults(namespace).List(labels.Everything())
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -39,7 +39,7 @@ func (s *server) GetPodDefaults(w http.ResponseWriter, r *http.Request) {
 		PodDefaults: make([]poddefaultresponse, 0),
 	}
 
-	for _, pd := range pds.Items {
+	for _, pd := range pds {
 		resp.PodDefaults = append(resp.PodDefaults, poddefaultresponse{
 			Label:       reflect.ValueOf(pd.Spec.Selector.MatchLabels).MapKeys()[0].String(),
 			Description: pd.Spec.Desc,

@@ -3,11 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"sort"
 
 	"github.com/gorilla/mux"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 type pvcresponse struct {
@@ -30,11 +31,13 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 	log.Printf("loading persistent volume claims for %q", namespace)
 
-	pvcs, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(namespace).List(r.Context(), v1.ListOptions{})
+	pvcs, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).List(labels.Everything())
 	if err != nil {
 		s.error(w, r, err)
 		return
 	}
+
+	sort.Sort(persistentVolumeClaimsByName(pvcs))
 
 	resp := pvcsresponse{
 		APIResponse: APIResponse{
@@ -43,7 +46,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 		PersistentVolumeClaims: make([]pvcresponse, 0),
 	}
 
-	for _, pvc := range pvcs.Items {
+	for _, pvc := range pvcs {
 		size := pvc.Spec.Resources.Requests.Storage()
 
 		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, pvcresponse{

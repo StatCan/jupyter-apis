@@ -11,15 +11,18 @@ import (
 	"sync"
 	"time"
 
-	notebooksclient "github.com/StatCan/jupyter-apis/notebooks"
-	notebooksv1 "github.com/StatCan/jupyter-apis/notebooks/api/v1"
+	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
 	kubeflowv1alpha1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1alpha1"
 	kubeflow "github.com/StatCan/kubeflow-controller/pkg/generated/clientset/versioned"
+	kubeflowv1listers "github.com/StatCan/kubeflow-controller/pkg/generated/listers/kubeflowcontroller/v1"
+	kubeflowv1alpha1listers "github.com/StatCan/kubeflow-controller/pkg/generated/listers/kubeflowcontroller/v1alpha1"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
+	v1listers "k8s.io/client-go/listers/core/v1"
+	storagev1listers "k8s.io/client-go/listers/storage/v1"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
@@ -27,20 +30,29 @@ import (
 var kubeconfig string
 var userIDHeader string
 
+type listers struct {
+	events                 v1listers.EventLister
+	storageClasses         storagev1listers.StorageClassLister
+	persistentVolumeClaims v1listers.PersistentVolumeClaimLister
+	podDefaults            kubeflowv1alpha1listers.PodDefaultLister
+	notebooks              kubeflowv1listers.NotebookLister
+}
+
 type clientsets struct {
 	kubernetes *kubernetes.Clientset
 	kubeflow   *kubeflow.Clientset
-	notebooks  *notebooksclient.Clientset
 }
 
 type server struct {
 	mux sync.Mutex
 
 	clientsets clientsets
+	listers    listers
 }
 
 func main() {
 	var err error
+	gctx, gcancel := context.WithCancel(context.Background())
 
 	// Setup the default path to the of the kubeconfig file.
 	// TODO: This breaks the in-cluster config and needs to be commented out in those instances. Need to find a fix.
@@ -73,11 +85,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Generate the Notebooks clientset
-	s.clientsets.notebooks, err = notebooksclient.NewForConfig(config)
-	if err != nil {
-		log.Fatal(err)
-	}
+	err = s.setupListers(gctx)
 
 	// Generate the Gorilla Mux router
 	router := mux.NewRouter()
@@ -88,30 +96,30 @@ func main() {
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
-				Group:    notebooksv1.GroupVersion.Group,
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
 				Verb:     "list",
 				Resource: "notebooks",
-				Version:  notebooksv1.GroupVersion.Version,
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
 			},
 		},
 	}, s.GetNotebooks)).Methods("GET")
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
-				Group:    notebooksv1.GroupVersion.Group,
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
 				Verb:     "create",
 				Resource: "notebooks",
-				Version:  notebooksv1.GroupVersion.Version,
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
 			},
 		},
 	}, s.NewNotebook)).Headers("Content-Type", "application/json").Methods("POST")
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
-				Group:    notebooksv1.GroupVersion.Group,
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
 				Verb:     "delete",
 				Resource: "notebooks",
-				Version:  notebooksv1.GroupVersion.Version,
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
 			},
 		},
 	}, s.DeleteNotebook)).Methods("DELETE")
@@ -165,6 +173,9 @@ func main() {
 
 	// Block until we receive our signal
 	<-c
+
+	// Cancel global context
+	gcancel()
 
 	// Create a deadline to wait for
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)

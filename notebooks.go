@@ -10,12 +10,13 @@ import (
 	"sort"
 	"strings"
 
-	notebooksv1 "github.com/StatCan/jupyter-apis/notebooks/api/v1"
+	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
 	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 const DefaultServiceAccountName string = "default-editor"
@@ -42,8 +43,8 @@ type volumerequest struct {
 }
 
 type gpurequest struct {
-	Quantity resource.Quantity `json:"num"`
-	Vendor   string            `json:"vendor"`
+	Quantity string `json:"num"`
+	Vendor   string `json:"vendor"`
 }
 
 type newnotebookrequest struct {
@@ -105,21 +106,7 @@ const (
 	GPUVendorAMD    GPUVendor = "amd"
 )
 
-type EventsByTimestamp []corev1.Event
-
-func (e EventsByTimestamp) Len() int {
-	return len(e)
-}
-
-func (e EventsByTimestamp) Less(a, b int) bool {
-	return e[b].CreationTimestamp.Before(&e[a].CreationTimestamp)
-}
-
-func (e EventsByTimestamp) Swap(a, b int) {
-	e[a], e[b] = e[b], e[a]
-}
-
-func processStatus(notebook notebooksv1.Notebook, events []corev1.Event) (Status, string) {
+func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Status, string) {
 	// Notebook is being deleted
 	if notebook.DeletionTimestamp != nil {
 		return StatusWaiting, "Deleting Notebook Server"
@@ -155,7 +142,7 @@ func processStatus(notebook notebooksv1.Notebook, events []corev1.Event) (Status
 	return "", ""
 }
 
-func processGPU(notebook notebooksv1.Notebook) (resource.Quantity, GPUVendor) {
+func processGPU(notebook *kubeflowv1.Notebook) (resource.Quantity, GPUVendor) {
 	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["nvidia.com/gpu"]; ok {
 		return limit, GPUVendorNvidia
 	} else if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["amd.com/gpu"]; ok {
@@ -171,11 +158,13 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("loading notebooks for %q", namespace)
 
-	notebooks, err := s.clientsets.notebooks.V1().Notebooks(namespace).List(r.Context())
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
 	if err != nil {
 		s.error(w, r, err)
 		return
 	}
+
+	sort.Sort(notebooksByName(notebooks))
 
 	resp := notebooksresponse{
 		APIResponse: APIResponse{
@@ -184,23 +173,23 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		Notebooks: make([]notebookresponse, 0),
 	}
 
-	for _, notebook := range notebooks.Items {
+	for _, notebook := range notebooks {
 		// Load events
-		allevents, err := s.clientsets.kubernetes.CoreV1().Events(notebook.Namespace).List(r.Context(), v1.ListOptions{
-			FieldSelector: fmt.Sprintf("involvedObject.kind=Notebook,involvedObject.name=%s", notebook.Name),
-		})
+		allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
 		if err != nil {
 			log.Printf("failed to load events for %s/%s: %v", notebook.Namespace, notebook.Name, err)
 		}
 
 		// Filter past events
-		events := make([]corev1.Event, 0)
-		for _, event := range allevents.Items {
-			if !event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
-				events = append(events, event)
+		events := make([]*corev1.Event, 0)
+		for _, event := range allevents {
+			if event.InvolvedObject.Kind != "Notebook" || event.InvolvedObject.Name != notebook.Name || event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
+				continue
 			}
+
+			events = append(events, event)
 		}
-		sort.Sort(EventsByTimestamp(events))
+		sort.Sort(eventsByTimestamp(events))
 
 		imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
 
@@ -234,7 +223,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *notebooksv1.Notebook) error {
+func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error {
 	if req.Type == VolumeTypeNew {
 		// Create the PVC
 		pvc := corev1.PersistentVolumeClaim{
@@ -308,13 +297,13 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Setup the notebook
 	// TODO: Work with default CPU/memory limits from config
-	notebook := notebooksv1.Notebook{
+	notebook := kubeflowv1.Notebook{
 		ObjectMeta: v1.ObjectMeta{
 			Name:      req.Name,
 			Namespace: namespace,
 		},
-		Spec: notebooksv1.NotebookSpec{
-			Template: notebooksv1.NotebookTemplateSpec{
+		Spec: kubeflowv1.NotebookSpec{
+			Template: kubeflowv1.NotebookTemplateSpec{
 				Spec: corev1.PodSpec{
 					ServiceAccountName: DefaultServiceAccountName,
 					Containers: []corev1.Container{
@@ -374,15 +363,21 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add GPU
-	if !req.GPUs.Quantity.IsZero() {
-		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = req.GPUs.Quantity
-		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = req.GPUs.Quantity
+	if req.GPUs.Quantity != "none" {
+		qty, err := resource.ParseQuantity(req.GPUs.Quantity)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = qty
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = qty
 	}
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)
 
 	// Submit the notebook to the API server
-	_, err = s.clientsets.notebooks.V1().Notebooks(namespace).Create(r.Context(), &notebook)
+	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Create(r.Context(), &notebook, v1.CreateOptions{})
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -401,7 +396,7 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 	log.Printf("deleting notebook %q for %q", notebook, namespace)
 
 	propagation := v1.DeletePropagationForeground
-	err := s.clientsets.notebooks.V1().Notebooks(namespace).Delete(r.Context(), notebook, &v1.DeleteOptions{
+	err := s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Delete(r.Context(), notebook, v1.DeleteOptions{
 		PropagationPolicy: &propagation,
 	})
 	if err != nil {

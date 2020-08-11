@@ -32,6 +32,7 @@ import (
 var kubeconfig string
 var spawnerConfigPath string
 var userIDHeader string
+var staticDirectory string
 
 type listers struct {
 	events                 v1listers.EventLister
@@ -59,9 +60,11 @@ func main() {
 	var err error
 	gctx, gcancel := context.WithCancel(context.Background())
 
-	// Setup the default path to the of the kubeconfig file.
-	// TODO: This breaks the in-cluster config and needs to be commented out in those instances. Need to find a fix.
-	if home := homedir.HomeDir(); home != "" {
+	// Check if we are running inside the cluster, and default to using that instead of kubeconfig if that's the case
+	_, err = os.Stat("/var/run/secrets/kubernetes.io/serviceaccount")
+
+	// Setup the default path to the of the kubeconfig file
+	if home := homedir.HomeDir(); os.IsNotExist(err) && home != "" {
 		flag.StringVar(&kubeconfig, "kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
 	} else {
 		flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
@@ -69,6 +72,7 @@ func main() {
 
 	flag.StringVar(&userIDHeader, "userid-header", "kubeflow-userid", "header in the request which identifies the incoming user")
 	flag.StringVar(&spawnerConfigPath, "spawner-config", "/etc/config/spawner_ui_config.yaml", "path to the spawner configuration file")
+	flag.StringVar(&staticDirectory, "static-dir", "static/", "path to the static assets")
 
 	// Parse flags
 	flag.Parse()
@@ -167,12 +171,14 @@ func main() {
 		},
 	}, s.GetPodDefaults)).Methods("GET")
 
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir(staticDirectory)))
+
 	// Setup the server, with:
 	//  Add combined logging handler
 	//  Default Read/Write timeouts every 15s
 	srv := &http.Server{
 		Handler:      kubeflowUserHandler(userIDHeader, handlers.CombinedLoggingHandler(os.Stdout, router)),
-		Addr:         "0.0.0.0:8080",
+		Addr:         "0.0.0.0:5000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}

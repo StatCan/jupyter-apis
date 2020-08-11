@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +19,7 @@ import (
 	kubeflowv1alpha1listers "github.com/StatCan/kubeflow-controller/pkg/generated/listers/kubeflowcontroller/v1alpha1"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"gopkg.in/yaml.v2"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
@@ -28,6 +30,7 @@ import (
 )
 
 var kubeconfig string
+var spawnerConfigPath string
 var userIDHeader string
 
 type listers struct {
@@ -46,6 +49,8 @@ type clientsets struct {
 type server struct {
 	mux sync.Mutex
 
+	Config Configuration
+
 	clientsets clientsets
 	listers    listers
 }
@@ -63,6 +68,24 @@ func main() {
 	}
 
 	flag.StringVar(&userIDHeader, "userid-header", "kubeflow-userid", "header in the request which identifies the incoming user")
+	flag.StringVar(&spawnerConfigPath, "spawner-config", "/etc/config/spawner_ui_config.yaml", "path to the spawner configuration file")
+
+	// Parse flags
+	flag.Parse()
+
+	// Setup the server
+	s := server{}
+
+	// Parse config
+	cfdata, err := ioutil.ReadFile(spawnerConfigPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = yaml.Unmarshal(cfdata, &s.Config)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Construct the configuration based on the provided flags.
 	// If no config file is provided, then the in-cluster config is used.
@@ -70,8 +93,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	s := server{}
 
 	// Generate the Kubernetes clientset
 	s.clientsets.kubernetes, err = kubernetes.NewForConfig(config)
@@ -91,6 +112,7 @@ func main() {
 	router := mux.NewRouter()
 
 	// Setup route handlers
+	router.HandleFunc("/api/config", s.GetConfig).Methods("GET")
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
 
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{

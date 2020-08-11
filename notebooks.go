@@ -22,7 +22,6 @@ import (
 const DefaultServiceAccountName string = "default-editor"
 const SharedMemoryVolumeName string = "dshm"
 const SharedMemoryVolumePath string = "/dev/shm"
-const WorkspacePath string = "/home/jovyan"
 
 type volumetype string
 
@@ -294,6 +293,9 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	if req.CustomImageCheck {
 		image = req.CustomImage
 	}
+	if s.Config.SpawnerFormDefaults.Image.ReadOnly {
+		image = s.Config.SpawnerFormDefaults.Image.Value
+	}
 
 	// Setup the notebook
 	// TODO: Work with default CPU/memory limits from config
@@ -311,14 +313,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 							Name:  req.Name,
 							Image: image,
 							Resources: corev1.ResourceRequirements{
-								Limits: corev1.ResourceList{
-									corev1.ResourceCPU:    req.CPU,
-									corev1.ResourceMemory: req.Memory,
-								},
-								Requests: corev1.ResourceList{
-									corev1.ResourceCPU:    req.CPU,
-									corev1.ResourceMemory: req.Memory,
-								},
+								Requests: corev1.ResourceList{},
+								Limits:   corev1.ResourceList{},
 							},
 						},
 					},
@@ -327,9 +323,57 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
+	// Resources
+	if s.Config.SpawnerFormDefaults.CPU.ReadOnly {
+		val, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = val
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = val
+	} else {
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPU
+	}
+
+	if s.Config.SpawnerFormDefaults.Memory.ReadOnly {
+		val, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.Memory.Value)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = val
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = val
+	} else {
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.Memory
+	}
+
 	// Add workspace volume
-	if !req.NoWorkspace {
-		req.Workspace.Path = WorkspacePath
+	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly {
+		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		workspaceVol := volumerequest{
+			Name:  s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Name.Value,
+			Size:  size,
+			Path:  s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value,
+			Mode:  corev1.PersistentVolumeAccessMode(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.AccessModes.Value),
+			Class: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Class.Value,
+		}
+		err = s.handleVolume(r.Context(), workspaceVol, &notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	} else if !req.NoWorkspace {
+		req.Workspace.Path = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value
 		err = s.handleVolume(r.Context(), req.Workspace, &notebook)
 		if err != nil {
 			s.error(w, r, err)
@@ -337,16 +381,39 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	for _, volreq := range req.DataVolumes {
-		err = s.handleVolume(r.Context(), volreq, &notebook)
-		if err != nil {
-			s.error(w, r, err)
-			return
+	if s.Config.SpawnerFormDefaults.DataVolumes.ReadOnly {
+		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Values {
+			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
+			if err != nil {
+				s.error(w, r, err)
+				return
+			}
+
+			vol := volumerequest{
+				Name:  volreq.Name.Value,
+				Size:  size,
+				Path:  volreq.MountPath.Value,
+				Mode:  corev1.PersistentVolumeAccessMode(volreq.AccessModes.Value),
+				Class: volreq.Class.Value,
+			}
+			err = s.handleVolume(r.Context(), vol, &notebook)
+			if err != nil {
+				s.error(w, r, err)
+				return
+			}
+		}
+	} else {
+		for _, volreq := range req.DataVolumes {
+			err = s.handleVolume(r.Context(), volreq, &notebook)
+			if err != nil {
+				s.error(w, r, err)
+				return
+			}
 		}
 	}
 
 	// Add shared memory, if enabled
-	if req.EnableSharedMemory {
+	if (s.Config.SpawnerFormDefaults.SharedMemory.ReadOnly && s.Config.SpawnerFormDefaults.SharedMemory.Value) || (!s.Config.SpawnerFormDefaults.SharedMemory.ReadOnly && req.EnableSharedMemory) {
 		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
 			Name: SharedMemoryVolumeName,
 			VolumeSource: corev1.VolumeSource{
@@ -363,15 +430,28 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add GPU
-	if req.GPUs.Quantity != "none" {
-		qty, err := resource.ParseQuantity(req.GPUs.Quantity)
-		if err != nil {
-			s.error(w, r, err)
-			return
-		}
+	if s.Config.SpawnerFormDefaults.GPUs.ReadOnly {
+		if s.Config.SpawnerFormDefaults.GPUs.Value.Quantity != "none" {
+			qty, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.GPUs.Value.Quantity)
+			if err != nil {
+				s.error(w, r, err)
+				return
+			}
 
-		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = qty
-		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = qty
+			notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(s.Config.SpawnerFormDefaults.GPUs.Value.Vendor)] = qty
+			notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(s.Config.SpawnerFormDefaults.GPUs.Value.Vendor)] = qty
+		}
+	} else {
+		if req.GPUs.Quantity != "none" {
+			qty, err := resource.ParseQuantity(req.GPUs.Quantity)
+			if err != nil {
+				s.error(w, r, err)
+				return
+			}
+
+			notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = qty
+			notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = qty
+		}
 	}
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)

@@ -13,6 +13,7 @@ import (
 	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
 	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
+	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -64,7 +65,7 @@ type newnotebookrequest struct {
 
 type notebookresponse struct {
 	Age        string            `json:"age"`
-	CPU        resource.Quantity `json:"cpu"`
+	CPU        *inf.Dec          `json:"cpu"`
 	GPU        resource.Quantity `json:"gpu"`
 	GPUVendor  GPUVendor         `json:"gpuvendor"`
 	Image      string            `json:"image"`
@@ -203,13 +204,18 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 			volumes = append(volumes, vol.Name)
 		}
 
+		cpulimit := resource.Zero.AsDec()
+		if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
+			cpulimit = req.AsDec()
+		}
+
 		resp.Notebooks = append(resp.Notebooks, notebookresponse{
 			Age:        prettytime.Format(notebook.CreationTimestamp.Time),
 			Name:       notebook.Name,
 			Namespace:  notebook.Namespace,
 			Image:      notebook.Spec.Template.Spec.Containers[0].Image,
 			ShortImage: imageparts[len(imageparts)-1],
-			CPU:        notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU],
+			CPU:        cpulimit,
 			Memory:     notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
 			Reason:     reason,
 			Status:     status,

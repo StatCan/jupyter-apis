@@ -309,6 +309,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		ObjectMeta: v1.ObjectMeta{
 			Name:      req.Name,
 			Namespace: namespace,
+			Labels:    make(map[string]string),
 		},
 		Spec: kubeflowv1.NotebookSpec{
 			Template: kubeflowv1.NotebookTemplateSpec{
@@ -457,6 +458,17 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 			notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = qty
 			notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = qty
+		}
+	}
+
+	// Add configuration items
+	if s.Config.SpawnerFormDefaults.Configurations.ReadOnly {
+		for _, config := range s.Config.SpawnerFormDefaults.Configurations.Value {
+			notebook.ObjectMeta.Labels[config] = "true"
+		}
+	} else {
+		for _, config := range req.Configurations {
+			notebook.ObjectMeta.Labels[config] = "true"
 		}
 	}
 

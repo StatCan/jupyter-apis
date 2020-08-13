@@ -29,7 +29,7 @@ func (s *server) error(w http.ResponseWriter, r *http.Request, err error) {
 	log.Printf("returning error response: %v", err)
 
 	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(http.StatusInternalServerError)
+	w.WriteHeader(http.StatusOK)
 	encoder := json.NewEncoder(w)
 	werr := encoder.Encode(APIResponse{
 		Success: false,

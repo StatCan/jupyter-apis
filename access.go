@@ -57,7 +57,11 @@ func (s *server) checkAccess(subjectAccessReviewTemplate authorizationv1.Subject
 		}
 
 		// Update the SubjectAccessReview request with the namespace and user information
-		sar.Spec.ResourceAttributes.Namespace = vars["namespace"]
+		if namespace, ok := vars["namespace"]; ok {
+			sar.Spec.ResourceAttributes.Namespace = namespace
+		} else {
+			sar.Spec.ResourceAttributes.Namespace = ""
+		}
 		sar.Spec.User = user
 
 		// Submit the SubjectAccessReview to the Kubernetes API server

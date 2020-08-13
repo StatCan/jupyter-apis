@@ -35,6 +35,7 @@ var userIDHeader string
 var staticDirectory string
 
 type listers struct {
+	namespaces             v1listers.NamespaceLister
 	events                 v1listers.EventLister
 	storageClasses         storagev1listers.StorageClassLister
 	persistentVolumeClaims v1listers.PersistentVolumeClaimLister
@@ -117,8 +118,19 @@ func main() {
 
 	// Setup route handlers
 	router.HandleFunc("/api/config", s.GetConfig).Methods("GET")
+
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
 
+	router.HandleFunc("/api/namespaces", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "namespaces",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetNamespaces)).Methods("GET")
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

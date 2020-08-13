@@ -33,4 +33,5 @@ RUN CGO_ENABLED=0 go install .
 FROM scratch
 COPY --from=frontend /app/dist/out/default /static/
 COPY --from=backend /go/bin/jupyter-apis /jupyter-apis
+EXPOSE 5000
 ENTRYPOINT [ "/jupyter-apis" ]

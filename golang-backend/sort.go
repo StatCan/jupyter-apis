@@ -49,3 +49,18 @@ func (pvcs persistentVolumeClaimsByName) Less(a, b int) bool {
 func (pvcs persistentVolumeClaimsByName) Swap(a, b int) {
 	pvcs[a], pvcs[b] = pvcs[b], pvcs[a]
 }
+
+// Namespaces by Name
+type namespacesByName []*corev1.Namespace
+
+func (namespaces namespacesByName) Len() int {
+	return len(namespaces)
+}
+
+func (namespaces namespacesByName) Less(a, b int) bool {
+	return namespaces[a].Name < namespaces[b].Name
+}
+
+func (namespaces namespacesByName) Swap(a, b int) {
+	namespaces[a], namespaces[b] = namespaces[b], namespaces[a]
+}

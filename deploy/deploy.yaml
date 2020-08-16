@@ -21,7 +21,7 @@ spec:
         app.kubernetes.io/name: jupyter-apis
     spec:
       containers:
-      - image: k8scc01covidacr.azurecr.io/jupyter-apis:c6280e40c11618c3908449d92f2f67d4e6b17ecc
+      - image: zachomedia/jupyter-apis:latest
         imagePullPolicy: Always
         name: jupyter-web-app
         ports:

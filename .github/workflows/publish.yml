@@ -47,14 +47,3 @@ jobs:
         image-name: ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
         severity-threshold: CRITICAL
         run-quality-checks: false
-
-    # Prepare to deploy the image
-    # - run: |
-    #     sed -i -E 's/[0-9a-f]{40}/${{ github.sha }}/g' deploy/deploy.yaml
-
-    # Deploy to Kubernetes
-    - name: kubectl
-      uses: statcan/actions/kubectl@master
-      with:
-        kubeconfig: ${{ secrets.KUBECONFIG }}
-        args: apply -f deploy/deploy.yaml

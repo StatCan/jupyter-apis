@@ -52,7 +52,7 @@ export class ResourceTableComponent implements OnInit {
     this.dataSource.sort = this.sort;
 
     // Create the exponential backoff poller
-    this.poller = new ExponentialBackoff({ interval: 1000, retries: 3 });
+    this.poller = new ExponentialBackoff({ interval: 2000, retries: 3 });
     const resourcesSub = this.poller.start().subscribe(() => {
       // NOTE: We are using both the 'trackBy' feature in the Table for performance
       // and also detecting with lodash if the new data is different from the old

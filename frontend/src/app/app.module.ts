@@ -19,7 +19,7 @@ import { faDocker } from "@fortawesome/free-brands-svg-icons";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { MaterialImportsModule } from "./utils/imports";
+import { MaterialModule } from "./utils/imports";
 
 import { NamespaceService } from "./services/namespace.service";
 import { KubernetesService } from "./services/kubernetes.service";
@@ -83,7 +83,7 @@ import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MaterialImportsModule,
+    MaterialModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
     FormsModule,

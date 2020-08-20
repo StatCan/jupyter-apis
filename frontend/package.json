@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "format": "prettier --write './**/*.{ts,html,css}'",
-    "start": "ng serve --base-href /jupyter/ --deploy-url /jupyter/",
+    "start": "ng serve --base-href /jupyter/ --deploy-url /jupyter/ --proxy-config proxy.config.js",
     "build": "ng build --base-href /jupyter/ --deploy-url /jupyter/",
     "test": "ng test",
     "lint": "ng lint",

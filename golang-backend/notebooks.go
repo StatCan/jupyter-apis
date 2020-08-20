@@ -115,40 +115,39 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Statu
 	// Return Container State if it's available
 	if notebook.Status.ContainerState.Running != nil {
 		return StatusRunning, "Running"
-	} else if notebook.Status.ContainerState.Terminated != nil {
+	}
+	if notebook.Status.ContainerState.Terminated != nil {
 		return StatusError, "The Pod has Terminated"
+	}
+	status, reason := StatusWarning, ""
+
+	if notebook.Status.ContainerState.Waiting != nil {
+		status, reason = StatusWaiting, notebook.Status.ContainerState.Waiting.Reason
+		if notebook.Status.ContainerState.Waiting.Reason == "ImagePullBackoff" {
+			status, reason = StatusError, notebook.Status.ContainerState.Waiting.Reason
+		}
 	} else {
-		status, reason := StatusWarning, ""
-
-		if notebook.Status.ContainerState.Waiting != nil {
-			status, reason = StatusWaiting, notebook.Status.ContainerState.Waiting.Reason
-			if notebook.Status.ContainerState.Waiting.Reason == "ImagePullBackoff" {
-				status, reason = StatusError, notebook.Status.ContainerState.Waiting.Reason
-			}
-		} else {
-			status, reason = StatusWaiting, "Scheduling the Pod"
-		}
-
-		// Process events
-		for _, event := range events {
-			if event.Type == corev1.EventTypeWarning {
-				return StatusWarning, event.Message
-			}
-		}
-
-		return status, reason
+		status, reason = StatusWaiting, "Scheduling the Pod"
 	}
 
-	return "", ""
+	// Process events
+	for _, event := range events {
+		if event.Type == corev1.EventTypeWarning {
+			return StatusWarning, event.Message
+		}
+	}
+
+	return status, reason
+
 }
 
 func processGPU(notebook *kubeflowv1.Notebook) (resource.Quantity, GPUVendor) {
 	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["nvidia.com/gpu"]; ok {
 		return limit, GPUVendorNvidia
-	} else if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["amd.com/gpu"]; ok {
+	}
+	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["amd.com/gpu"]; ok {
 		return limit, GPUVendorAMD
 	}
-
 	return resource.Quantity{}, ""
 }
 
@@ -316,7 +315,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				Spec: corev1.PodSpec{
 					ServiceAccountName: DefaultServiceAccountName,
 					Containers: []corev1.Container{
-						corev1.Container{
+						{
 							Name:  req.Name,
 							Image: image,
 							Resources: corev1.ResourceRequirements{

@@ -30,8 +30,6 @@ export class NamespaceService {
             cdeh.onNamespaceSelected = this.updateSelectedNamespace.bind(this);
           }
         );
-      } else {
-        this.updateSelectedNamespace("kubeflow");
       }
     });
   }

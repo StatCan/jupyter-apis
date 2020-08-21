@@ -10,10 +10,18 @@
   <!-- Volume Name Input -->
   <mat-form-field appearance="outline" id="name">
     <mat-label>Name</mat-label>
-    <input matInput formControlName="name" *ngIf="volume.value.type == 'New'" />
-    <mat-select formControlName="name" *ngIf="volume.value.type == 'Existing'">
-      <mat-option *ngFor="let pvc of existingPVCs" [value]="pvc">{{ pvc }}</mat-option>
-    </mat-select>
+    <input
+      matInput
+      formControlName="name"
+      *ngIf="volume.value.type == 'New'; else existingPvcControl"
+    />
+    <ng-template #existingPvcControl>
+      <mat-select formControlName="name">
+        <mat-option *ngFor="let pvc of existingPVCs" [value]="pvc">{{
+          pvc
+        }}</mat-option>
+      </mat-select>
+    </ng-template>
   </mat-form-field>
 
   <!-- Size Input -->

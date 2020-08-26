@@ -35,6 +35,7 @@ var kubeconfig string
 var spawnerConfigPath string
 var userIDHeader string
 var staticDirectory string
+var listenAddr string
 
 type listers struct {
 	namespaces             v1listers.NamespaceLister
@@ -76,6 +77,8 @@ func main() {
 	flag.StringVar(&userIDHeader, "userid-header", "kubeflow-userid", "header in the request which identifies the incoming user")
 	flag.StringVar(&spawnerConfigPath, "spawner-config", "/etc/config/spawner_ui_config.yaml", "path to the spawner configuration file")
 	flag.StringVar(&staticDirectory, "static-dir", "static/", "path to the static assets")
+	flag.StringVar(&listenAddr, "listen-addr", lookupEnvironment("LISTEN_ADDRESS","127.0.0.1:5000"), "server listen address")
+
 
 	// Parse flags
 	flag.Parse()
@@ -198,7 +201,7 @@ func main() {
 	//  Default Read/Write timeouts every 15s
 	srv := &http.Server{
 		Handler:      kubeflowUserHandler(userIDHeader, handlers.CombinedLoggingHandler(os.Stdout, router)),
-		Addr:         "0.0.0.0:5000",
+		Addr:         listenAddr,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
@@ -239,4 +242,11 @@ func main() {
 
 	log.Println("shutting down")
 	os.Exit(0)
+}
+
+func lookupEnvironment(name string, defaultValue string) string{
+	if value, isSet := os.LookupEnv(name); isSet {
+		return value
+	}
+	return defaultValue
 }

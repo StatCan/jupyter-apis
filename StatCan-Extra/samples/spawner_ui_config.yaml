@@ -59,7 +59,7 @@ spawnerFormDefaults:
         value: 'workspace-{notebook-name}'
       size:
         # The Size of the Workspace Volume (in Gi)
-        value: '10Gi'
+        value: '4Gi'
       mountPath:
         # The Path that the Workspace Volume will be mounted
         value: /home/jovyan
@@ -87,7 +87,7 @@ spawnerFormDefaults:
     #       name:
     #         value: '{notebook-name}-vol-1'
     #       size:
-    #         value: '10Gi'
+    #         value: '16Gi'
     #       class:
     #         value: standard
     #       mountPath:
@@ -102,7 +102,7 @@ spawnerFormDefaults:
     #       name:
     #         value: '{notebook-name}-vol-2'
     #       size:
-    #         value: '10Gi'
+    #         value: '16Gi'
     #       mountPath:
     #         value: /home/jovyan/vol-2
     #       accessModes:

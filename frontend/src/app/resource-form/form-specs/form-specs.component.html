@@ -13,13 +13,17 @@
     <mat-form-field appearance="outline">
       <mat-label>CPU</mat-label>
       <input matInput placeholder="# of CPU Cores" formControlName="cpu" />
-      <mat-error>Please provide the CPU requirements</mat-error>
+      <mat-error>
+        {{ showCPUError() }}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Memory</mat-label>
       <input matInput placeholder="Amount of Memory" formControlName="memory" />
-      <mat-error>Please provide the RAM requirements</mat-error>
+      <mat-error>
+        {{ showMemoryError() }}
+      </mat-error>
     </mat-form-field>
   </div>
 </div>

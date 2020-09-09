@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: "",
+  kubecostUrl: "http://localhost:9090",
   resource: "notebooks",
   ui: "default",
   rokUrl: ""

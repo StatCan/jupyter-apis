@@ -11,6 +11,7 @@ import { KubernetesService } from "src/app/services/kubernetes.service";
 import { Resource } from "src/app/utils/types";
 import { ExponentialBackoff } from "src/app/utils/polling";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
+import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
 
 @Component({
   selector: "app-resource-table",
@@ -21,6 +22,7 @@ export class ResourceTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   // Logic data
+  aggregatedCost: AggregateCostResponse = null;
   resources = [];
   currNamespace = "";
 
@@ -45,8 +47,9 @@ export class ResourceTableComponent implements OnInit {
   constructor(
     private namespaceService: NamespaceService,
     private k8s: KubernetesService,
+    private kubecostService: KubecostService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.dataSource.sort = this.sort;
@@ -73,10 +76,7 @@ export class ResourceTableComponent implements OnInit {
     // Keep track of the selected namespace
     const namespaceSub = this.namespaceService
       .getSelectedNamespace()
-      .subscribe(namespace => {
-        this.currNamespace = namespace;
-        this.poller.reset();
-      });
+      .subscribe(this.onNamespaceChange.bind(this));
 
     this.subscriptions.add(resourcesSub);
     this.subscriptions.add(namespaceSub);
@@ -84,6 +84,24 @@ export class ResourceTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  onNamespaceChange(namespace: string) {
+    this.currNamespace = namespace;
+    this.dataSource.data = [];
+    this.resources = [];
+    this.poller.reset();
+    this.getAggregatedCost();
+  }
+
+  formatCost(value: number): string {
+    return '$' + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)
+  }
+
+  getAggregatedCost() {
+    this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
+      aggCost => this.aggregatedCost = aggCost
+    )
   }
 
   // Resource (Notebook) Actions

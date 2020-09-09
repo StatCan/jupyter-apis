@@ -48,6 +48,7 @@ import { RokFormDataVolumesComponent } from "./uis/rok/rok-resource-form/rok-for
 import { RokErrorMsgComponent } from "./uis/rok/rok-error-msg/rok-error-msg.component";
 import { FormConfigurationsComponent } from "./resource-form/form-configurations/form-configurations.component";
 import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component";
+import { KubecostService } from './services/kubecost.service';
 
 
 @NgModule({
@@ -88,7 +89,7 @@ import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [NamespaceService, KubernetesService, SnackBarService],
+  providers: [NamespaceService, KubecostService, KubernetesService, SnackBarService],
   bootstrap: [AppComponent],
   entryComponents: [SnackBarComponent, ConfirmDialogComponent]
 })

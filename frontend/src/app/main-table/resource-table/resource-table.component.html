@@ -1,4 +1,4 @@
-<div class="card mat-elevation-z2">
+<div class="card mat-elevation-z2 mat-typography">
   <div class="header">
     <p>Notebook Servers</p>
 
@@ -127,5 +127,31 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+  <div class="header">
+    <p>Cost</p>
+  </div>
+
+  <p>
+    Estimated cost per day of notebook server resources – summed values may not
+    match total due to rounding
+  </p>
+
+  <mat-divider></mat-divider>
+
+  <table *ngIf="aggregatedCost?.data[currNamespace]; let cost" style="width: auto">
+    <tr class="mat-header-row">
+      <th class="mat-header-cell">Compute</th>
+      <th class="mat-header-cell">GPUs</th>
+      <th class="mat-header-cell">Storage</th>
+      <th class="mat-header-cell">Total</th>
+    </tr>
+    <tr class="mat-row" style="text-align: right;">
+      <td class="mat-cell">{{ formatCost(cost.cpuCost + cost.ramCost) }}</td>
+      <td class="mat-cell">{{ formatCost(cost.gpuCost) }}</td>
+      <td class="mat-cell">{{ formatCost(cost.pvCost) }}</td>
+      <td class="mat-cell" style="font-weight: 500;">{{ formatCost(cost.totalCost) }}</td>
+    </tr>
   </table>
 </div>

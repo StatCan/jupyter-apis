@@ -33,5 +33,6 @@ RUN CGO_ENABLED=0 go install .
 FROM scratch
 COPY --from=frontend /app/dist/out/default /static/
 COPY --from=backend /go/bin/jupyter-apis /jupyter-apis
+ENV LISTEN_ADDRESS 0.0.0.0:5000
 EXPOSE 5000
 ENTRYPOINT [ "/jupyter-apis" ]

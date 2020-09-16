@@ -22,11 +22,11 @@ export class FormNameComponent implements OnInit, OnDestroy {
   constructor(private k8s: KubernetesService, private ns: NamespaceService) {}
 
   ngOnInit() {
-    // Add the ExistingName validator to the list if it doesn't already exist
+    // Add validator for notebook name (existing name, length, lowercase alphanumeric and '-')
     this.parentForm
       .get("name")
-      .setValidators([Validators.required, this.existingName()]);
-
+      .setValidators([Validators.required, this.existingNameValidator(), Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/), Validators.maxLength(52)]);
+    
     // Keep track of the existing Notebooks in the selected Namespace
     // Use these names to check if the input name exists
     const nsSub = this.ns.getSelectedNamespace().subscribe(ns => {
@@ -45,18 +45,26 @@ export class FormNameComponent implements OnInit, OnDestroy {
 
   showNameError() {
     const nameCtrl = this.parentForm.get("name");
-
+    
+    if (nameCtrl.value.length==0) {
+      return `The Notebook Server's name can't be empty`;
+    }
     if (nameCtrl.hasError("existingName")) {
       return `Notebook Server "${nameCtrl.value}" already exists`;
-    } else {
-      return "The Notebook Server's name can't be empty";
+    }
+    if (nameCtrl.hasError("pattern")) {
+      return `The Notebook Server's name can only contain lowercase alphanumeric characters or '-' and must start and end with an alphanumeric character`;
+    } 
+    if (nameCtrl.hasError("maxlength")) {
+      return `The Notebook Server's name can't be more than 52 characters`;
     }
   }
 
-  private existingName(): ValidatorFn {
+  private existingNameValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       const exists = this.notebooks.has(control.value);
       return exists ? { existingName: true } : null;
     };
   }
+  
 }

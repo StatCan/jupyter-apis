@@ -59,7 +59,7 @@ export class FormSpecsComponent implements OnInit {
       .get("memory")
       .setValidators([
         Validators.required,
-        Validators.pattern(/^[0-9]+([.][0-9]+)?(Gi)?$/),
+        Validators.pattern(/^[0-9]+([.][0-9]+)?(Gi)$/),
         Validators.min(1)
       ]);
     this.parentForm.setValidators(resourcesValidator());

@@ -1,5 +1,41 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { FormGroup, AbstractControl, Validators, ValidatorFn, ControlContainer } from "@angular/forms";
+import {Component, OnInit, Input} from "@angular/core";
+import {
+  FormGroup,
+  AbstractControl,
+  Validators,
+  ValidatorFn,
+  ValidationErrors,
+  FormControl,
+  FormGroupDirective,
+  NgForm
+} from "@angular/forms";
+
+const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
+  [0, {cpu: 15, ram: 96}],
+  [1, {cpu: 5, ram: 48}]
+]);
+
+type MaxResourceSpec = {cpu: number; ram: number};
+
+function resourcesValidator(): ValidatorFn {
+  return function (control: AbstractControl): ValidationErrors | null {
+    const gpuNumValue = control.get("gpus").get("num").value;
+    const gpu = gpuNumValue === "none" ? 0 : parseInt(gpuNumValue, 10) || 0;
+    const cpu = parseFloat(control.get("cpu").value);
+    const ram = parseFloat(control.get("memory").value);
+    const errors = {};
+
+    const max = MAX_FOR_GPU.get(gpu);
+    if (cpu > max.cpu) {
+      errors["maxCpu"] = {max: max.cpu, gpu};
+    }
+    if (ram > max.ram) {
+      errors["maxRam"] = {max: max.ram, gpu};
+    }
+
+    return Object.entries(errors).length > 0 ? errors : null;
+  };
+}
 
 @Component({
   selector: "app-form-specs",
@@ -11,84 +47,70 @@ export class FormSpecsComponent implements OnInit {
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
 
-  constructor() {}
-
-  ngOnInit() 
-  {
+  ngOnInit() {
     this.parentForm
-      .get('cpu')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPUValidator()]);
+      .get("cpu")
+      .setValidators([
+        Validators.required,
+        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+        Validators.min(0.5)
+      ]);
     this.parentForm
-      .get('memory')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?(Gi)?$/), Validators.min(1), this.maxMemoryValidator()]);
+      .get("memory")
+      .setValidators([
+        Validators.required,
+        Validators.pattern(/^[0-9]+([.][0-9]+)?(Gi)?$/),
+        Validators.min(1)
+      ]);
+    this.parentForm.setValidators(resourcesValidator());
   }
 
-  showCPUError()
-  {
-    const cpu = this.parentForm.get('cpu');
-    const gpus = this.parentForm.get('gpus').get('num').value;
-
-    if (cpu.hasError('required')) {
-      return `Please provide the CPU requirements`;
-    }
-    if (cpu.hasError('pattern')) {
-      return `Invalid character`;
-    }
-    if (cpu.hasError('min')) {
-      return `Can't be less than 0.5 CPU`;
-    }
-    if (cpu.hasError('maxCPU')) {
-      if (gpus=='none') {
-        return `Can't exceed 15 CPU`;
-      } else {
-        return `Can't exceed 5 CPU`;
+  parentErrorKeysErrorStateMatcher(keys: string | string[]) {
+    const arrKeys = ([] as string[]).concat(keys);
+    return {
+      isErrorState(
+        control: FormControl,
+        form: FormGroupDirective | NgForm
+      ): boolean {
+        return (
+          (control.dirty && control.invalid) ||
+          (form.dirty && arrKeys.some(key => form.hasError(key)))
+        );
       }
-    }
-    
+    };
   }
 
-  showMemoryError()
-  {
-    const memory = this.parentForm.get('memory');
-    const gpus = this.parentForm.get('gpus').get('num').value;
+  cpuErrorMessage(): string {
+    let e: any;
+    const errs = this.parentForm.get("cpu").errors || {};
 
-    if (memory.hasError('required')) {
-      return "Please provide the RAM requirements";
-    }
-    if (memory.hasError('pattern')) {
-      return `Invalid character`
-    }
-    if (memory.hasError('min')) {
-      return `Can't be less than 1Gi of RAM`
-    }
-    if (memory.hasError('maxMemory')) {
-      if (gpus=='none') {
-        return `Can't exceed 48Gi of RAM`;
-      } else {
-        return `Can't exceed 96Gi of RAM`;
-      }
-    }
-  }
-  
-  private maxCPUValidator(): ValidatorFn
-  {
-    return (control: AbstractControl): { [key: string]: any} | null => {
-      var max: number;
-      const gpus = this.parentForm.get('gpus').get('num').value;
-      gpus == 'none' ? max = 15 : max = 5; 
-      return control.value>max ? { maxCPU: true } : null
+    if (errs.required) return "Specify number of CPUs";
+    if (errs.pattern) return "Must be a number";
+    if ((e = errs.min)) return `Specify at least ${e.min} CPUs`;
+
+    if (this.parentForm.hasError("maxCpu")) {
+      e = this.parentForm.errors.maxCpu;
+      return (
+        `Can't exceed ${e.max} CPUs` +
+        (e.gpu > 0 ? ` with ${e.gpu} GPU(s) selected` : "")
+      );
     }
   }
 
-  private maxMemoryValidator(): ValidatorFn
-  {
-    return (control: AbstractControl): { [key: string]: any} | null => {
-      var max: number;
-      const gpus = this.parentForm.get('gpus').get('num').value;
-      gpus == 'none' ? max = 48 : max = 96; 
-      return control.value>max ? { maxMemory: true } : null
+  memoryErrorMessage(): string {
+    let e: any;
+    const errs = this.parentForm.get("memory").errors || {};
+
+    if (errs.required || errs.pattern)
+      return "Specify amount of memory (e.g. 2Gi)";
+    if ((e = errs.min)) return `Specify at least ${e.min}Gi of memory`;
+
+    if (this.parentForm.hasError("maxRam")) {
+      e = this.parentForm.errors.maxRam;
+      return (
+        `Can't exceed ${e.max}Gi of memory` +
+        (e.gpu > 0 ? ` with ${e.gpu} GPU(s) selected` : "")
+      );
     }
   }
 }
-
-

@@ -12,18 +12,24 @@
   <div class="inputs-wrapper">
     <mat-form-field appearance="outline">
       <mat-label>CPU</mat-label>
-      <input matInput placeholder="# of CPU Cores" formControlName="cpu" />
-      <mat-error>
-        {{ showCPUError() }}
-      </mat-error>
+      <input
+        matInput
+        placeholder="# of CPU Cores"
+        formControlName="cpu"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxCpu')"
+      />
+      <mat-error>{{ cpuErrorMessage() }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Memory</mat-label>
-      <input matInput placeholder="Amount of Memory" formControlName="memory" />
-      <mat-error>
-        {{ showMemoryError() }}
-      </mat-error>
+      <input
+        matInput
+        placeholder="Amount of Memory"
+        formControlName="memory"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxRam')"
+      />
+      <mat-error>{{ memoryErrorMessage() }}</mat-error>
     </mat-form-field>
   </div>
 </div>

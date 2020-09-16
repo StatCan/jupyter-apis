@@ -22,13 +22,20 @@
         }}</mat-option>
       </mat-select>
     </ng-template>
+    <mat-error>
+      {{ showNameError() }}
+    </mat-error>
   </mat-form-field>
 
   <!-- Size Input -->
   <mat-form-field appearance="outline" id="size">
     <mat-label>Size</mat-label>
-    <input matInput formControlName="size" />
-  </mat-form-field>
+    <mat-select formControlName="size">
+      <mat-option *ngFor="let sizeOptions of sizes" [value]="sizeOptions">{{
+        sizeOptions
+      }}</mat-option>
+    </mat-select>  
+  </mat-form-field> 
 
   <!-- Mode Input -->
   <mat-form-field appearance="outline" id="mode">

@@ -177,6 +177,17 @@ func main() {
 			},
 		},
 	}, s.GetPersistentVolumeClaims)).Methods("GET")
+	
+	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "delete",
+				Resource: "persistentvolumeclaims",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.DeletePvc)).Methods("DELETE")
 	router.HandleFunc("/api/namespaces/{namespace}/poddefaults", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

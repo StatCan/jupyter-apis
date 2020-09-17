@@ -13,7 +13,7 @@
 
   <mat-divider></mat-divider>
 
-  <table mat-table [dataSource]="dataSource" [trackBy]="trackByFn" matSort>
+  <table mat-table [dataSource]="notebooks" matSort>
     <!-- Status Column -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef>Status</th>

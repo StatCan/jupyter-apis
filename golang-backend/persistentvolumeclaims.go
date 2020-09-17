@@ -9,6 +9,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/labels"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 type pvcresponse struct {
@@ -60,3 +61,26 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 	s.respond(w, r, resp)
 }
+
+//TODO: Delete pvc
+func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	pvc := vars["pvc"]
+
+	log.Printf("deleting pvc %q for %q", pvc, namespace)
+
+	propagation := v1.DeletePropagationForeground
+	err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(namespace).Delete(r.Context(), pvc, v1.DeleteOptions{
+		PropagationPolicy: &propagation,
+	})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	s.respond(w, r, APIResponse{
+		Success: true,
+	})
+}
+

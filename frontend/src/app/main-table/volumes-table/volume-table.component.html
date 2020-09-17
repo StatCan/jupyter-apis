@@ -1,0 +1,41 @@
+<div class="card mat-elevation-z2">
+  <div class="header">
+    <p>Notebook Volumes</p>
+  </div>
+  <table mat-table [dataSource]="custompvcs" matSort>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let elem">{{ elem.pvc.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="namespace">
+      <th mat-header-cell *matHeaderCellDef>Namespace</th>
+      <td mat-cell *matCellDef="let elem">{{ elem.pvc.namespace }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isMounted">
+      <th mat-header-cell *matHeaderCellDef>Is Mounted?</th>
+      <td mat-cell *matCellDef="let elem">
+        {{ elem.ismounted ? 'Yes' : 'No' }}
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let elem">
+        <button
+          mat-icon-button
+          [disabled]="elem.ismounted === true"
+          (click)="deletePvc(elem)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

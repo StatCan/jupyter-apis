@@ -109,11 +109,26 @@ export class KubernetesService {
     );
   }
 
-  // Delete functions
-  deleteResource(ns: string, nm: string): Observable<string> {
+  //Delete functions
+  deleteResource(ns: string, name: string): Observable<string> {
     const url =
       environment.apiUrl +
-      `/api/namespaces/${ns}/${environment.resource}/${nm}`;
+      `/api/namespaces/${ns}/${environment.resource}/${name}`;
+
+    return this.http.delete<Resp>(url).pipe(
+      tap(data => this.handleBackendError(data)),
+      catchError(error => this.handleError(error)),
+      map(_ => {
+        return "deleted";
+      })
+    );
+  }
+
+  // Delete pvc
+  deletePersistentStorageClaim(ns: string, name: string): Observable<string> {
+    const url =
+      environment.apiUrl +
+      `/api/namespaces/${ns}/pvcs/${name}`;
 
     return this.http.delete<Resp>(url).pipe(
       tap(data => this.handleBackendError(data)),

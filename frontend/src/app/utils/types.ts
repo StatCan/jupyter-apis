@@ -1,7 +1,7 @@
 export interface Volume {
   name: string;
   size: string;
-  namepsace?: string;
+  namespace?: string;
   class?: string;
   mode: string;
   type?: string;
@@ -137,4 +137,9 @@ export enum SnackType {
   Error,
   Warning,
   Info
+}
+
+export interface Pvc {
+  pvc: Volume;
+  ismounted: boolean
 }

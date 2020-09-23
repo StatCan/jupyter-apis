@@ -1,16 +1,15 @@
-import { Component, OnInit } from "@angular/core";
-import { NamespaceService } from "../services/namespace.service";
-import { KubernetesService } from "src/app/services/kubernetes.service";
+import {Component, OnInit} from "@angular/core";
+import {NamespaceService} from "../services/namespace.service";
+import {KubernetesService} from "src/app/services/kubernetes.service";
 
-import { Subscription } from "rxjs";
-import { isEqual } from "lodash";
-import { first } from "rxjs/operators";
+import {Subscription} from "rxjs";
+import {isEqual} from "lodash";
+import {first} from "rxjs/operators";
 
-import { ExponentialBackoff } from "src/app/utils/polling";
-import { MatDialog } from "@angular/material/dialog";
-import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
-import { Pvc, Volume, Resource } from "../utils/types";
-
+import {ExponentialBackoff} from "src/app/utils/polling";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component";
+import {Pvc, Volume, Resource} from "../utils/types";
 
 @Component({
   selector: "app-main-table",
@@ -35,47 +34,36 @@ export class MainTableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.poller = new ExponentialBackoff({ interval: 2000, retries: 3 });
+    this.poller = new ExponentialBackoff({interval: 2000, retries: 3});
     const resourcesSub = this.poller.start().subscribe(() => {
       if (!this.currNamespace) {
         return;
-      } 
+      }
 
-      let getVolumes = this.k8s.getVolumes(this.currNamespace).toPromise().then(
-       pvcs => {
-        if(isEqual(this.pvcs, pvcs)){
-          return;
+      Promise.all([
+        this.k8s.getResource(this.currNamespace).toPromise(),
+        this.k8s.getVolumes(this.currNamespace).toPromise()
+      ]).then(([notebooks, volumes]) => {
+        if (!isEqual(notebooks, this.resources) || !isEqual(volumes, this.pvcs)) {
+          this.poller.reset();
         }
-         this.pvcs = pvcs; 
-       }
-      ); 
-      
-      let getResource = this.k8s.getResource(this.currNamespace).toPromise().then(
-        resources => {
-        if (isEqual(this.resources, resources)){
-          return;
-        }
-        this.resources = resources;
-        this.usedPVCs.clear();
-        this.resources.forEach(res => {this.usedPVCs.add(res.volumes.forEach(element => {this.usedPVCs.add(element);}))})  
-      });
-      
-      Promise.all([getVolumes, getResource])
-      .then(val => {
-        this.customPvcs = [];
-        this.pvcs.forEach(vol => {
-          this.customPvcs.push({pvc:vol, ismounted:this.usedPVCs.has(vol.name)});
-        });
+        this.resources = notebooks;
+        this.pvcs = volumes;
+        let mounts = Object.fromEntries(
+          notebooks.flatMap(nb => nb.volumes.map(v => [v, nb]))
+        );
+        this.customPvcs = volumes.map(v => ({
+          pvc: v,
+          mountedBy: mounts[v.name]?.name
+        }));
       });
     });
 
     // Keep track of the selected namespace
-    const namespaceSub = this.ns
-      .getSelectedNamespace()
-      .subscribe(namespace => {
-        this.currNamespace = namespace;
-        this.poller.reset();
-      });
+    const namespaceSub = this.ns.getSelectedNamespace().subscribe(namespace => {
+      this.currNamespace = namespace;
+      this.poller.reset();
+    });
 
     this.subscriptions.add(resourcesSub);
     this.subscriptions.add(namespaceSub);
@@ -115,29 +103,29 @@ export class MainTableComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "fit-content",
       data: {
-        title: "You are about to delete the PVC: " + p.pvc.name,
+        title: "You are about to delete the volume: " + p.pvc.name,
         message:
-          "Are you sure you want to delete this Persistent Volume Claim? ",
+          "Are you sure you want to delete this volume? " +
+          "This action can't be undone.",
         yes: "delete",
         no: "cancel"
       }
     });
 
     dialogRef
-    .afterClosed()
-    .pipe(first())
-    .subscribe(result => {
-      if (result !== "delete") {
-        return;
-      }
+      .afterClosed()
+      .pipe(first())
+      .subscribe(result => {
+        if (result !== "delete") {
+          return;
+        }
 
-      this.k8s
-        .deletePersistentStorageClaim(p.pvc.namespace, p.pvc.name)
-        .pipe(first())
-        .subscribe(r => {
-          this.poller.reset();
-        });
-    });
+        this.k8s
+          .deletePersistentStorageClaim(p.pvc.namespace, p.pvc.name)
+          .pipe(first())
+          .subscribe(_ => {
+            this.poller.reset();
+          });
+      });
   }
-
 }

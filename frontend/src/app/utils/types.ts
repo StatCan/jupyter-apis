@@ -139,7 +139,7 @@ export enum SnackType {
   Info
 }
 
-export interface Pvc {
+export type Pvc = {
   pvc: Volume;
-  ismounted: boolean
+  mountedBy: string | null;
 }

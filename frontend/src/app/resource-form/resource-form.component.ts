@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, AfterContentChecked, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { NamespaceService } from "../services/namespace.service";
 import { KubernetesService } from "../services/kubernetes.service";
@@ -30,7 +30,8 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
     private namespaceService: NamespaceService,
     private k8s: KubernetesService,
     private router: Router,
-    private popup: SnackBarService
+    private popup: SnackBarService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -75,6 +76,10 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
         this.defaultStorageclass = true;
       }
     });
+  }
+  
+  ngAfterContentChecked() {
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy() {

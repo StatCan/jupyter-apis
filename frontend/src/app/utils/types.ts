@@ -138,8 +138,3 @@ export enum SnackType {
   Warning,
   Info
 }
-
-export type Pvc = {
-  pvc: Volume;
-  mountedBy: string | null;
-}

@@ -125,7 +125,7 @@ export class KubernetesService {
   }
 
   // Delete pvc
-  deletePersistentStorageClaim(ns: string, name: string): Observable<string> {
+  deletePersistentVolumeClaim(ns: string, name: string): Observable<string> {
     const url =
       environment.apiUrl +
       `/api/namespaces/${ns}/pvcs/${name}`;

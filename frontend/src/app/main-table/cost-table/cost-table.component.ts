@@ -1,52 +1,36 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
-import { Resource } from "src/app/utils/types";
-import {MatDialog} from "@angular/material/dialog";
-import {first} from "rxjs/operators";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { Subscription } from "rxjs";
 import { isEqual } from "lodash";
+
 import { NamespaceService } from "src/app/services/namespace.service";
 import { KubernetesService } from "src/app/services/kubernetes.service";
 import { ExponentialBackoff } from "src/app/utils/polling";
-import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
 
 @Component({
-  selector: "app-resource-table",
-  templateUrl: "./resource-table.component.html",
-  styleUrls: ["./resource-table.component.scss"]
+  selector: "app-cost-table",
+  templateUrl: "./cost-table.component.html",
+  styleUrls: ["./cost-table.component.scss"]
 })
-
-export class ResourceTableComponent implements OnInit {
-  @Input() notebooks: Resource[];
-  @Output() deleteNotebookEvent = new EventEmitter<Resource>();
+export class CostTableComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   // Logic data
+  aggregatedCost: AggregateCostResponse = null;
   resources = [];
   currNamespace = "";
 
   subscriptions = new Subscription();
   poller: ExponentialBackoff;
 
-  displayedColumns: string[] = [
-    "status",
-    "name",
-    "age",
-    "image",
-    "cpu",
-    "memory",
-    "volumes",
-    "actions"
-  ];
   dataSource = new MatTableDataSource();
-
-  showNameFilter = false;
 
   constructor(
     private namespaceService: NamespaceService,
     private k8s: KubernetesService,
-    private dialog: MatDialog
+    private kubecostService: KubecostService,
   ) { }
 
   ngOnInit() {
@@ -89,41 +73,16 @@ export class ResourceTableComponent implements OnInit {
     this.dataSource.data = [];
     this.resources = [];
     this.poller.reset();
-  }
-  // Resource (Notebook) Actions
-  connectResource(rsrc: Resource): void {
-    window.open(`/notebook/${rsrc.namespace}/${rsrc.name}/`);
-  }
-  
-  deleteResource(rsrc: Resource): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: "fit-content",
-      data: {
-        title: "You are about to delete Notebook Server: " + rsrc.name,
-        message:
-          "Are you sure you want to delete this Notebook Server? " +
-          "Your data might be lost if the Server is not backed by persistent storage.",
-        yes: "delete",
-        no: "cancel"
-      }
-    });
-    dialogRef
-      .afterClosed()
-      .pipe(first())
-      .subscribe(result => {
-        if (result !== "delete") {
-          return;
-        }
-        this.deleteNotebookEvent.emit(rsrc);
-      });
-  }
-  // Misc
-  trackByFn(index: number, r: Resource) {
-    return `${r.name}/${r.namespace}/${r.age}/${r.status}/${r.reason}`;
+    this.getAggregatedCost();
   }
 
-  toggleFilter() {
-    this.showNameFilter = !this.showNameFilter;
+  formatCost(value: number): string {
+    return '$' + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)
   }
 
+  getAggregatedCost() {
+    this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
+      aggCost => this.aggregatedCost = aggCost
+    )
+  }
 }

@@ -8,19 +8,27 @@
     <!-- Status Column -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let elem">
-        <!-- Running -->
+      <td mat-cell *matCellDef="let elem" [ngSwitch]="pvcStatus(elem)">
+        <!-- Mounted -->
         <mat-icon
-          *ngIf="!checkDeletionStatus(elem)"
+          *ngSwitchCase="PvcStatus.MOUNTED"
           [ngClass]="['running', 'status']"
-          matTooltip="Running"
-          >check_circle
+          matTooltip="Attached"
+          >link
+        </mat-icon>
+
+        <!-- Unmounted -->
+        <mat-icon
+          *ngSwitchCase="PvcStatus.UNMOUNTED"
+          [ngClass]="['warning', 'status']"
+          matTooltip="Unattached"
+          >link_off
         </mat-icon>
         
-        <!-- Waiting -->
+        <!-- Deleting -->
         <mat-spinner
-          *ngIf="checkDeletionStatus(elem)"
-          matTooltip="Deleting Volume"
+          *ngSwitchCase="PvcStatus.DELETING"
+          matTooltip="Deleting"
           diameter="24"
           class="inline"
         >
@@ -54,7 +62,7 @@
       <td mat-cell *matCellDef="let elem">
         <button
           mat-icon-button
-          [disabled]="checkDeletionStatus(elem) || elem.mountedBy"
+          [disabled]="pvcStatus(elem) !== PvcStatus.UNMOUNTED"
           (click)="deletePvc(elem)"
         >
           <mat-icon>delete</mat-icon>

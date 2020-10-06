@@ -1,7 +1,7 @@
 export interface Volume {
   name: string;
   size: string;
-  namepsace?: string;
+  namespace?: string;
   class?: string;
   mode: string;
   type?: string;

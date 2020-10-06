@@ -29,7 +29,7 @@ import { NamespaceSelectComponent } from "./main-table/namespace-select/namespac
 import { ResourceTableComponent } from "./main-table/resource-table/resource-table.component";
 import { SnackBarComponent } from "./services/snack-bar/snack-bar.component";
 import { ResourceFormComponent } from "./resource-form/resource-form.component";
-import { ConfirmDialogComponent } from "./main-table/resource-table/confirm-dialog/confirm-dialog.component";
+import { ConfirmDialogComponent } from "./main-table/confirm-dialog/confirm-dialog.component";
 import { VolumeComponent } from "./resource-form/volume/volume.component";
 import { FormNameComponent } from "./resource-form/form-name/form-name.component";
 import { FormImageComponent } from "./resource-form/form-image/form-image.component";
@@ -48,6 +48,7 @@ import { RokFormDataVolumesComponent } from "./uis/rok/rok-resource-form/rok-for
 import { RokErrorMsgComponent } from "./uis/rok/rok-error-msg/rok-error-msg.component";
 import { FormConfigurationsComponent } from "./resource-form/form-configurations/form-configurations.component";
 import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component";
+import { VolumeTableComponent } from "./main-table/volumes-table/volume-table.component";
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component
     RokErrorMsgComponent,
     FormConfigurationsComponent,
     FormGpusComponent,
+    VolumeTableComponent,
   ],
   imports: [
     BrowserModule,

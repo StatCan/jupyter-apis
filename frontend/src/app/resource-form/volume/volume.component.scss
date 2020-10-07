@@ -20,12 +20,16 @@
 
 .volume-wrapper {
   display: flex;
-  margin-left: -0.5rem;
-  margin-right: -0.5rem;
 }
 
 .volume-wrapper > * {
   flex: 1 1 0px;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
+}
+.volume-wrapper > *:first-child {
+  padding-left: 0;
+}
+.volume-wrapper > *:last-child {
+  padding-right: 0;
 }

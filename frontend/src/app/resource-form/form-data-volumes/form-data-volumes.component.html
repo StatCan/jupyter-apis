@@ -17,7 +17,7 @@
     <mat-icon>add</mat-icon>ADD VOLUME
   </button>
 
-  <div *ngFor="let vol of datavols; let i = index" class="volume-wrapper">
+  <div *ngFor="let vol of datavols; let i = index" class="delible-volume">
     <app-volume
       [volume]="vol"
       [notebookName]="parentForm.get('name').value"

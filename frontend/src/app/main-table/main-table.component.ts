@@ -5,6 +5,7 @@ import {KubernetesService} from "src/app/services/kubernetes.service";
 import {Subscription} from "rxjs";
 import {isEqual} from "lodash";
 import {first} from "rxjs/operators";
+import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
 
 import {ExponentialBackoff} from "src/app/utils/polling";
 import {Volume, Resource} from "../utils/types";
@@ -23,12 +24,15 @@ export class MainTableComponent implements OnInit {
   pvcs: Volume[] = [];
   pvcProperties: PvcWithStatus[] = [];
 
+  aggregatedCost: AggregateCostResponse = null;
+
   subscriptions = new Subscription();
   poller: ExponentialBackoff;
 
   constructor(
     public ns: NamespaceService,
     private k8s: KubernetesService,
+    private kubecostService: KubecostService,
   ) {}
 
   ngOnInit() {
@@ -61,6 +65,7 @@ export class MainTableComponent implements OnInit {
     const namespaceSub = this.ns.getSelectedNamespace().subscribe(namespace => {
       this.currNamespace = namespace;
       this.poller.reset();
+      this.getAggregatedCost();
     });
 
     this.subscriptions.add(resourcesSub);
@@ -83,5 +88,11 @@ export class MainTableComponent implements OnInit {
       .subscribe(_ => {
         this.poller.reset();
       });
+  }
+
+  getAggregatedCost() {
+    this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
+      aggCost => this.aggregatedCost = aggCost
+    )
   }
 }

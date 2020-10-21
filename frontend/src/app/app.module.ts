@@ -31,6 +31,7 @@ import { SnackBarComponent } from "./services/snack-bar/snack-bar.component";
 import { ResourceFormComponent } from "./resource-form/resource-form.component";
 import { ConfirmDialogComponent } from "./main-table/confirm-dialog/confirm-dialog.component";
 import { VolumeComponent } from "./resource-form/volume/volume.component";
+import { CostTableComponent } from "./main-table/cost-table/cost-table.component";
 import { FormNameComponent } from "./resource-form/form-name/form-name.component";
 import { FormImageComponent } from "./resource-form/form-image/form-image.component";
 import { FormSpecsComponent } from "./resource-form/form-specs/form-specs.component";
@@ -49,7 +50,7 @@ import { RokErrorMsgComponent } from "./uis/rok/rok-error-msg/rok-error-msg.comp
 import { FormConfigurationsComponent } from "./resource-form/form-configurations/form-configurations.component";
 import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component";
 import { VolumeTableComponent } from "./main-table/volumes-table/volume-table.component";
-
+import { KubecostService } from './services/kubecost.service';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { VolumeTableComponent } from "./main-table/volumes-table/volume-table.co
     FormConfigurationsComponent,
     FormGpusComponent,
     VolumeTableComponent,
+    CostTableComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +92,7 @@ import { VolumeTableComponent } from "./main-table/volumes-table/volume-table.co
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [NamespaceService, KubernetesService, SnackBarService],
+  providers: [NamespaceService, KubecostService, KubernetesService, SnackBarService],
   bootstrap: [AppComponent],
   entryComponents: [SnackBarComponent, ConfirmDialogComponent]
 })

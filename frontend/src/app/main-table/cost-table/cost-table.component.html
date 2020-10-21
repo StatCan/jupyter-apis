@@ -15,7 +15,7 @@
       <th class="mat-header-cell">Compute</th>
       <th class="mat-header-cell">GPUs</th>
       <th class="mat-header-cell">Storage</th>
-      <th class="mat-header-cell">Total</th>
+      <th class="mat-header-cell" width="99%">Total</th>
     </tr>
     <tr *ngIf="aggregatedCost?.data[currNamespace]; let cost" class="mat-row" style="text-align: left;">
       <td class="mat-cell">{{ formatCost(cost.cpuCost + cost.ramCost) }}</td>

@@ -1,54 +1,15 @@
-.card {
-  width: 900px;
-  padding: 0px;
-  border-radius: 5px;
-  background: white;
-}
-
 p {
   padding-left: 24px;
   padding-right: 16px;
 }
 
-table {
-  width: 100%;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  padding: 0px 16px 0px 16px;
-  height: 64px;
-}
-
 .header p {
-  padding: 19px 0 0px;
+  padding: 12px 0 0px;
   font-weight: 400;
   font-size: 20px;
-}
-
-.mat-icon {
-  line-height: 0.85;
-}
-
-.header > mat-icon {
-  margin: 10px 5px 0 0;
 }
 
 .mat-cell, .mat-header-cell, .mat-footer-cell {
   padding-left: 12px;
   padding-right: 195px;
 }
-
-td.mat-cell:last-of-type,
-td.mat-footer-cell:last-of-type,
-th.mat-header-cell:last-of-type {
-  padding-right: 5px;
-}
-
-th,
-td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-

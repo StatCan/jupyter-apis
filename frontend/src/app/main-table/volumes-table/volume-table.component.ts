@@ -19,7 +19,7 @@ enum PvcStatus {
 @Component({
   selector: "app-volume-table",
   templateUrl: "./volume-table.component.html",
-  styleUrls: ["./volume-table.component.scss"]
+  styleUrls: ["./volume-table.component.scss", "../main-table.component.scss"]
 })
 export class VolumeTableComponent implements OnChanges {
   @Input() pvcProperties: PvcWithStatus[];

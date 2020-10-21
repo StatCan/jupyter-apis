@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"path"
@@ -36,6 +37,7 @@ var spawnerConfigPath string
 var userIDHeader string
 var staticDirectory string
 var listenAddr string
+var kubecostUrl string
 
 type listers struct {
 	namespaces             v1listers.NamespaceLister
@@ -58,6 +60,8 @@ type server struct {
 
 	clientsets clientsets
 	listers    listers
+
+	kubecostUrl *url.URL
 }
 
 func main() {
@@ -77,8 +81,8 @@ func main() {
 	flag.StringVar(&userIDHeader, "userid-header", "kubeflow-userid", "header in the request which identifies the incoming user")
 	flag.StringVar(&spawnerConfigPath, "spawner-config", "/etc/config/spawner_ui_config.yaml", "path to the spawner configuration file")
 	flag.StringVar(&staticDirectory, "static-dir", "static/", "path to the static assets")
-	flag.StringVar(&listenAddr, "listen-addr", lookupEnvironment("LISTEN_ADDRESS","127.0.0.1:5000"), "server listen address")
-
+	flag.StringVar(&listenAddr, "listen-addr", lookupEnvironment("LISTEN_ADDRESS", "127.0.0.1:5000"), "server listen address")
+	flag.StringVar(&kubecostUrl, "kubecost-url", lookupEnvironment("KUBECOST_URL", "http://127.0.0.1:9090"), "Url to connect to Kubecost API")
 
 	// Parse flags
 	flag.Parse()
@@ -93,6 +97,12 @@ func main() {
 	}
 
 	err = yaml.Unmarshal(cfdata, &s.Config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Parse kubecostUrl
+	s.kubecostUrl, err = url.Parse(kubecostUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -125,6 +135,17 @@ func main() {
 	router.HandleFunc("/api/config", s.GetConfig).Methods("GET")
 
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/cost/aggregated", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "pods",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetCost)).Methods("GET")
 
 	router.HandleFunc("/api/namespaces", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
@@ -177,7 +198,7 @@ func main() {
 			},
 		},
 	}, s.GetPersistentVolumeClaims)).Methods("GET")
-	
+
 	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
@@ -188,6 +209,7 @@ func main() {
 			},
 		},
 	}, s.DeletePvc)).Methods("DELETE")
+
 	router.HandleFunc("/api/namespaces/{namespace}/poddefaults", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
@@ -255,7 +277,7 @@ func main() {
 	os.Exit(0)
 }
 
-func lookupEnvironment(name string, defaultValue string) string{
+func lookupEnvironment(name string, defaultValue string) string {
 	if value, isSet := os.LookupEnv(name); isSet {
 		return value
 	}

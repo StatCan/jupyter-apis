@@ -29,7 +29,10 @@
   <!-- The Table showing our Costs-->
   <div class="parent spacing">
     <div class="spacer"></div>
-    <app-cost-table></app-cost-table>
+    <app-cost-table
+      [aggregatedCost]="aggregatedCost"
+      [currNamespace]="currNamespace"
+      ></app-cost-table>
     <div class="spacer"></div>
   </div>
 

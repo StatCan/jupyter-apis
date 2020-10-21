@@ -42,8 +42,8 @@ export class KubecostService {
   constructor(private http: HttpClient, private snackBar: SnackBarService) { }
 
   getAggregateCost(ns: string): Observable<AggregateCostResponse> {
-    const url = `${environment.kubecostUrl}/model/aggregatedCostModel`;
-
+    const url = environment.apiUrl + `/api/namespaces/${ns}/cost/aggregated`
+    
     return this.http.get<AggregateCostResponse>(url, {
       params: {
         aggregation: 'namespace',
@@ -55,7 +55,6 @@ export class KubecostService {
       catchError(err => this.handleError(err))
     );
   }
-
 
 
   // ---------------------------Error Handling----------------------------------

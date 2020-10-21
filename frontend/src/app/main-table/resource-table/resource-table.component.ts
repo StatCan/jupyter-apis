@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { Resource } from "src/app/utils/types";
 import {MatDialog} from "@angular/material/dialog";
@@ -10,7 +10,7 @@ import {first} from "rxjs/operators";
   templateUrl: "./resource-table.component.html",
   styleUrls: ["./resource-table.component.scss", "../main-table.component.scss"]
 })
-export class ResourceTableComponent implements OnInit {
+export class ResourceTableComponent{
   @Input() notebooks: Resource[];
   @Output() deleteNotebookEvent = new EventEmitter<Resource>();
 
@@ -29,10 +29,6 @@ export class ResourceTableComponent implements OnInit {
   constructor(
     private dialog: MatDialog
   ) {}
-
-  ngOnInit() {  }
-
-  ngOnDestroy() {  }
 
   // Resource (Notebook) Actions
   connectResource(rsrc: Resource): void {

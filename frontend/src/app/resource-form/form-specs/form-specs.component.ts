@@ -11,8 +11,8 @@ import {
 } from "@angular/forms";
 
 const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
-  [0, {cpu: 15, ram: 96}],
-  [1, {cpu: 5, ram: 48}]
+  [0, {cpu: 15, ram: 48}],
+  [1, {cpu: 5, ram: 96}]
 ]);
 
 type MaxResourceSpec = {cpu: number; ram: number};

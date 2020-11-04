@@ -1,27 +1,30 @@
 <div class="card mat-elevation-z2 mat-typography">
   <div class="header">
     <mat-icon>attach_money</mat-icon>
-    <p>Cost</p>
+    <p>{{ "costTable.title" | translate }}</p>
   </div>
 
   <p>
-    Estimated cost per day of notebook server resources – summed values may not
-    match total due to rounding
+    {{ "costTable.txtCost" | translate }}
   </p>
 
   <mat-divider></mat-divider>
   <table style="width: auto">
-    <tr class="mat-header-row" style="text-align: left;">
-      <th class="mat-header-cell">Compute</th>
-      <th class="mat-header-cell">GPUs</th>
-      <th class="mat-header-cell">Storage</th>
-      <th class="mat-header-cell" width="99%">Total</th>
+    <tr class="mat-header-row" style="text-align: left">
+      <th class="mat-header-cell">{{ "costTable.thCompute" | translate }}</th>
+      <th class="mat-header-cell">{{ "costTable.thGpus" | translate }}</th>
+      <th class="mat-header-cell">{{ "costTable.thStorage" | translate }}</th>
+      <th class="mat-header-cell" width="99%">
+        {{ "costTable.thTotal" | translate }}
+      </th>
     </tr>
     <tr *ngIf="aggregatedCost?.data[currNamespace]; let cost" class="mat-row" style="text-align: left;">
       <td class="mat-cell">{{ formatCost(cost.cpuCost + cost.ramCost) }}</td>
       <td class="mat-cell">{{ formatCost(cost.gpuCost) }}</td>
       <td class="mat-cell">{{ formatCost(cost.pvCost) }}</td>
-      <td class="mat-cell" style="font-weight: 500;">{{ formatCost(cost.totalCost) }}</td>
+      <td class="mat-cell" style="font-weight: 500;">
+        {{ formatCost(cost.totalCost) }}
+      </td>
     </tr>
   </table>
-  </div>
+</div>

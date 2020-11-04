@@ -1,15 +1,15 @@
 <div class="group-wrapper" [formGroup]="parentForm">
   <h3>
     <fa-icon [icon]="['fas', 'laptop-code']" class="check"></fa-icon>
-    Workspace Volume
+    {{ "formWorkspaceVolume.h3WorkspaceVolume" | translate }}
   </h3>
-  <p>Configure the Volume to be mounted as your personal Workspace.</p>
+  <p>{{ "formWorkspaceVolume.txtWorkspaceVolume" | translate }}</p>
   <p *ngIf="readonly">
-    *The Cluster Administrator has disabled editing this Section!
+    {{ "formWorkspaceVolume.txtWorkspaceVolumeIf" | translate }}
   </p>
-  <mat-checkbox formControlName="noWorkspace"
-    >Don't use Persistent Storage for User's home</mat-checkbox
-  >
+  <mat-checkbox formControlName="noWorkspace">
+    {{ "formWorkspaceVolume.ckbNoPersistent" | translate }}
+  </mat-checkbox>
 
   <app-volume
     [volume]="parentForm.get('workspace')"

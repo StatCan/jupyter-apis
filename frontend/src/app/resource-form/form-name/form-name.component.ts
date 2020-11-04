@@ -8,6 +8,7 @@ import {
 import { KubernetesService } from "src/app/services/kubernetes.service";
 import { NamespaceService } from "src/app/services/namespace.service";
 import { Subscription } from "rxjs";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-form-name",
@@ -19,7 +20,10 @@ export class FormNameComponent implements OnInit, OnDestroy {
   notebooks: Set<string> = new Set<string>();
   @Input() parentForm: FormGroup;
 
-  constructor(private k8s: KubernetesService, private ns: NamespaceService) {}
+  constructor(
+    private k8s: KubernetesService, 
+    private ns: NamespaceService,
+    private translate: TranslateService) {}
 
   ngOnInit() {
     // Add validator for notebook name (existing name, length, lowercase alphanumeric and '-')
@@ -47,16 +51,16 @@ export class FormNameComponent implements OnInit, OnDestroy {
     const nameCtrl = this.parentForm.get("name");
     
     if (nameCtrl.value.length==0) {
-      return `The Notebook Server's name can't be empty`;
+      return this.translate.instant("formName.errorNameRequired");
     }
     if (nameCtrl.hasError("existingName")) {
-      return `Notebook Server "${nameCtrl.value}" already exists`;
+      return this.translate.instant("formName.errorNameExists", {existingName: `${nameCtrl.value}`});
     }
     if (nameCtrl.hasError("pattern")) {
-      return `The Notebook Server's name can only contain lowercase alphanumeric characters or '-' and must start and end with an alphanumeric character`;
+      return this.translate.instant("formName.errorNamePattern");
     } 
     if (nameCtrl.hasError("maxlength")) {
-      return `The Notebook Server's name can't be more than 52 characters`;
+      return this.translate.instant("formName.errorNameMaxLenght");
     }
   }
 

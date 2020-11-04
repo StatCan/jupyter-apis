@@ -8,6 +8,7 @@ import { Subscription, of } from "rxjs";
 import { Volume, Config, SnackType } from "../utils/types";
 import { SnackBarService } from "../services/snack-bar.service";
 import { getFormDefaults, initFormControls } from "../utils/common";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: "app-resource-form",
@@ -31,7 +32,8 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
     private k8s: KubernetesService,
     private router: Router,
     private popup: SnackBarService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -67,8 +69,7 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
       if (defaultClass.length === 0) {
         this.defaultStorageclass = false;
         this.popup.show(
-          "No default Storage Class is set. Can't create new Disks for the " +
-            "new Notebook. Please use an Existing Disk.",
+          this.translate.instant("resourceForm.msgDefaultStorageClass"),
           SnackType.Warning,
           0
         );
@@ -77,7 +78,7 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   ngAfterContentChecked() {
     this.cdr.detectChanges();
   }

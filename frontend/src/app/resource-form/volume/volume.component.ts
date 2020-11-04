@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import { Volume } from "src/app/utils/types";
 import { Subscription } from "rxjs";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: "app-volume",
@@ -14,14 +15,14 @@ export class VolumeComponent implements OnInit, OnDestroy {
 
   currentPVC: Volume;
   existingPVCs: Set<string> = new Set();
-  
+
   subscriptions = new Subscription();
 
   // ----- @Input Parameters -----
   @Input() volume: FormGroup;
   @Input() namespace: string;
   @Input() sizes: Set<string>;
-  
+
   @Input()
   get notebookName() {
     return this._notebookName;
@@ -100,14 +101,14 @@ export class VolumeComponent implements OnInit, OnDestroy {
   }
 
   // ----- Component Functions -----
-  constructor() {}
+  constructor(private translate: TranslateService) {}
 
   ngOnInit() {
     this.volume
       .get("name")
       .setValidators([Validators.required, Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)]);
     
-      this.subscriptions.add(
+   this.subscriptions.add(
       this.volume.get("type").valueChanges.subscribe((type: string) => {
         this.setVolumeType(type);
       })
@@ -167,12 +168,10 @@ export class VolumeComponent implements OnInit, OnDestroy {
     const volumeName = this.volume.get("name");
     
     if (volumeName.hasError("required")) {
-      return `The volume name can't be empty`
-    } 
+      return this.translate.instant("volume.errorNameRequired");
+    }
     if (volumeName.hasError("pattern")) {
-      return `The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+      return this.translate.instant("volume.errorNamePattern");
     }
   }
-
-
 }

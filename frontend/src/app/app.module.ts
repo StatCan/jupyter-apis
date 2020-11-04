@@ -51,6 +51,9 @@ import { FormConfigurationsComponent } from "./resource-form/form-configurations
 import { FormGpusComponent } from "./resource-form/form-gpus/form-gpus.component";
 import { VolumeTableComponent } from "./main-table/volumes-table/volume-table.component";
 import { KubecostService } from './services/kubecost.service';
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {HttpClient} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -90,9 +93,21 @@ import { KubecostService } from './services/kubecost.service';
     FontAwesomeModule,
     BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
-  providers: [NamespaceService, KubecostService, KubernetesService, SnackBarService],
+  providers: [
+    NamespaceService,
+    KubecostService,
+    KubernetesService,
+    SnackBarService
+  ],
   bootstrap: [AppComponent],
   entryComponents: [SnackBarComponent, ConfirmDialogComponent]
 })
@@ -109,4 +124,9 @@ export class AppModule {
       faSlidersH
     );
   }
+}
+
+// AOT compilation support
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, "../jupyter/assets/i18n/", ".json");
 }

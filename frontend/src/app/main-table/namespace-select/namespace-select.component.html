@@ -1,6 +1,6 @@
 <!-- Namespaces Selector -->
 <mat-form-field>
-  <mat-label>Select Namespace</mat-label>
+  <mat-label>{{ "namespaceSelect.lblSelectNamespace" | translate }}</mat-label>
   <input
     matInput
     [(ngModel)]="currNamespace"
@@ -14,5 +14,5 @@
   class="margin"
   (click)="namespaceChanged(currNamespace)"
 >
-  Update
+  {{ "namespaceSelect.btnUpdate" | translate }}
 </button>

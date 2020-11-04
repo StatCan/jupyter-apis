@@ -9,6 +9,7 @@ import {
   FormGroupDirective,
   NgForm
 } from "@angular/forms";
+import {TranslateService} from "@ngx-translate/core";
 
 const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
   [0, {cpu: 15, ram: 96}],
@@ -47,6 +48,7 @@ export class FormSpecsComponent implements OnInit {
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
 
+  constructor(private translate: TranslateService) {}
   ngOnInit() {
     this.parentForm
       .get("cpu")
@@ -84,15 +86,20 @@ export class FormSpecsComponent implements OnInit {
     let e: any;
     const errs = this.parentForm.get("cpu").errors || {};
 
-    if (errs.required) return "Specify number of CPUs";
-    if (errs.pattern) return "Must be a number";
-    if ((e = errs.min)) return `Specify at least ${e.min} CPUs`;
-
+    if (errs.required)
+      return this.translate.instant("formSpecs.errorCpuRequired");
+    if (errs.pattern) return this.translate.instant("formSpecs.errorCpuNumber");
+    if ((e = errs.min))
+      return this.translate.instant("formSpecs.errorCpuMin", {min: `${e.min}`});
     if (this.parentForm.hasError("maxCpu")) {
       e = this.parentForm.errors.maxCpu;
       return (
-        `Can't exceed ${e.max} CPUs` +
-        (e.gpu > 0 ? ` with ${e.gpu} GPU(s) selected` : "")
+        this.translate.instant("formSpecs.errorCpuMax", {max: `${e.max}`}) +
+        (e.gpu > 0
+          ? this.translate.instant("formSpecs.errorCpuMaxLimit", {
+              gpu: `${e.gpu}`
+            })
+          : "")
       );
     }
   }
@@ -102,14 +109,19 @@ export class FormSpecsComponent implements OnInit {
     const errs = this.parentForm.get("memory").errors || {};
 
     if (errs.required || errs.pattern)
-      return "Specify amount of memory (e.g. 2Gi)";
-    if ((e = errs.min)) return `Specify at least ${e.min}Gi of memory`;
+      return this.translate.instant("formSpecs.errorRamRequired");
+    if ((e = errs.min))
+      return this.translate.instant("formSpecs.errorRamMin", {min: `${e.min}`});
 
     if (this.parentForm.hasError("maxRam")) {
       e = this.parentForm.errors.maxRam;
       return (
-        `Can't exceed ${e.max}Gi of memory` +
-        (e.gpu > 0 ? ` with ${e.gpu} GPU(s) selected` : "")
+        this.translate.instant("formSpecs.errorRamMax", {max: `${e.max}`}) +
+        (e.gpu > 0
+          ? this.translate.instant("formSpecs.errorRamMaxLimit", {
+              gpu: `${e.gpu}`
+            })
+          : "")
       );
     }
   }

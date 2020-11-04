@@ -4,6 +4,7 @@ import {Volume} from "../../utils/types";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {first} from "rxjs/operators";
+import {TranslateService} from "@ngx-translate/core";
 
 export type PvcWithStatus = {
   pvc: Volume;
@@ -39,7 +40,7 @@ export class VolumeTableComponent implements OnChanges {
 
   deletionStatus: Set<string> = new Set<string>();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private translate: TranslateService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.pvcProperties) {
@@ -54,15 +55,16 @@ export class VolumeTableComponent implements OnChanges {
   }
 
   deletePvc(pvc: PvcWithStatus): void {
+    const yesAnswer = this.translate.instant("volumeTable.deleteDialogYes");
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "fit-content",
       data: {
-        title: "You are about to delete the volume: " + pvc.pvc.name,
-        message:
-          "Are you sure you want to delete this volume? " +
-          "This action can't be undone.",
-        yes: "delete",
-        no: "cancel"
+        title:
+          this.translate.instant("volumeTable.deleteDialogTitle") +
+          pvc.pvc.name,
+        message: this.translate.instant("volumeTable.deleteDialogMessage"),
+        yes: yesAnswer,
+        no: this.translate.instant("volumeTable.deleteDialogNo")
       }
     });
 
@@ -70,7 +72,7 @@ export class VolumeTableComponent implements OnChanges {
       .afterClosed()
       .pipe(first())
       .subscribe(result => {
-        if (result !== "delete") {
+        if (result !== yesAnswer) {
           return;
         }
         this.deletionStatus.add(pvc.pvc.name);

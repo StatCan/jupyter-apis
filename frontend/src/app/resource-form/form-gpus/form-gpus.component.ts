@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/utils/types';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-gpus',
@@ -17,7 +18,7 @@ export class FormGpusComponent implements OnInit {
   maxGPUs = 16;
   gpusCount = ['1'];
 
-  constructor() {}
+  constructor(private translate: TranslateService) {}
 
   ngOnInit() {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
@@ -44,7 +45,7 @@ export class FormGpusComponent implements OnInit {
     const vendorCtrl = this.parentForm.get('gpus').get('vendor');
 
     if (vendorCtrl.hasError('vendorNullName')) {
-      return `You must also specify the GPU Vendor for the assigned GPUs`;
+      return this.translate.instant('formGpus.errorGpuVendorRequired');
     }
   }
 

@@ -1,18 +1,18 @@
 <div class="group-wrapper" [formGroup]="parentForm">
   <h3>
     <fa-icon [icon]="['fas', 'book']" class="check"></fa-icon>
-    Name
+    {{ "formName.h3Name" | translate }}
   </h3>
   <p>
-    Specify the name of the Notebook Server and the Namespace it will belong to.
+    {{ "formName.txtName" | translate }}
   </p>
 
   <div class="inputs-wrapper">
     <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
+      <mat-label>{{ "formName.lblName" | translate }}</mat-label>
       <input
         matInput
-        placeholder="Notebook Server's Name"
+        placeholder="{{ 'formName.plhName' | translate }}"
         formControlName="name"
         #name
       />
@@ -22,14 +22,14 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Namespace</mat-label>
+      <mat-label>{{ "formName.lblNamespace" | translate }}</mat-label>
       <input
         matInput
-        placeholder="Name of Namespace"
+        placeholder="{{ 'formName.plhNamespace' | translate }}"
         formControlName="namespace"
         readonly
       />
-      <mat-error>You must enter a value</mat-error>
+      <mat-error>{{ "formName.errorNamespaceRequired" | translate }}</mat-error>
     </mat-form-field>
   </div>
 </div>

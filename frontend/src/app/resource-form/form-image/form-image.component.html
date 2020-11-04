@@ -1,15 +1,14 @@
 <div class="group-wrapper" [formGroup]="parentForm">
   <h3>
     <fa-icon [icon]="['fab', 'docker']" class="check"></fa-icon>
-    Image
+    {{ "formImage.h3Image" | translate }}
   </h3>
   <p>
-    Select the base software you want installed in your server. If you choose a
-    custom image, it must be available in the DAaaS container registry.
+    {{ "formImage.txtImage" | translate }}
   </p>
-  <mat-checkbox *ngIf="!readonly" formControlName="customImageCheck"
-    >Custom Image</mat-checkbox
-  >
+  <mat-checkbox *ngIf="!readonly" formControlName="customImageCheck">
+    {{ "formImage.ckbImage" | translate }}
+  </mat-checkbox>
 
   <mat-form-field
     class="wide"
@@ -17,8 +16,11 @@
     *ngIf="!parentForm?.value.customImageCheck"
   >
     <!-- If readonly, then make it an input element instead of select -->
-    <mat-label>Image</mat-label>
-    <mat-select placeholder="Docker Image" formControlName="image">
+    <mat-label>{{ "formImage.lblImage" | translate }}</mat-label>
+    <mat-select
+      placeholder="{{ 'formImage.plhImage' | translate }}"
+      formControlName="image"
+    >
       <mat-option *ngFor="let img of images" [value]="img">
         {{ imageDisplayName(img) }}
       </mat-option>
@@ -30,13 +32,13 @@
     appearance="outline"
     *ngIf="parentForm?.value.customImageCheck"
   >
-    <mat-label>Custom Image</mat-label>
+    <mat-label>{{ "formImage.lblCustomImage" | translate }}</mat-label>
     <input
       matInput
-      placeholder="Provide a custom Image"
+      placeholder="{{ 'formImage.plhCustomImage' | translate }}"
       formControlName="customImage"
       #cstmimg
     />
-    <mat-error>Please provide and Image to use</mat-error>
+    <mat-error>{{ "formImage.errorImageRequired" | translate }}</mat-error>
   </mat-form-field>
 </div>

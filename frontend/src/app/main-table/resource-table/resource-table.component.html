@@ -1,13 +1,13 @@
 <div class="card mat-elevation-z2">
   <div class="header">
     <mat-icon>computer</mat-icon>
-    <p>Notebook Servers</p>
+    <p>{{ "resourceTable.title" | translate }}</p>
 
     <div class="spacer"></div>
 
     <a routerLink="/new">
       <button mat-button id="add-nb" color="accent">
-        <mat-icon>add</mat-icon>NEW SERVER
+        <mat-icon>add</mat-icon>{{ "resourceTable.btnNewServer" | translate }}
       </button>
     </a>
   </div>
@@ -17,13 +17,15 @@
   <table mat-table [dataSource]="notebooks" matSort>
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thStatus" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">
         <!-- Running -->
         <mat-icon
           *ngIf="elem.status === 'running'"
           [ngClass]="['running', 'status']"
-          [matTooltip]="elem.reason"
+          matTooltip="{{ 'resourceTable.tooltipRunning' | translate }}"
           >check_circle
         </mat-icon>
 
@@ -31,7 +33,7 @@
         <mat-icon
           *ngIf="elem.status === 'warning'"
           [ngClass]="['warning', 'status']"
-          [matTooltip]="elem.reason"
+          matTooltip="{{ 'resourceTable.tooltipWarning' | translate }}"
           >warning
         </mat-icon>
 
@@ -39,14 +41,14 @@
         <mat-icon
           *ngIf="elem.status === 'error'"
           [ngClass]="['error', 'status']"
-          [matTooltip]="elem.reason"
+          matTooltip="{{ 'resourceTable.tooltipError' | translate }}"
           >clear
         </mat-icon>
 
         <!-- Waiting -->
         <mat-spinner
           *ngIf="elem.status === 'waiting'"
-          [matTooltip]="elem.reason"
+          matTooltip="{{ 'resourceTable.tooltipWaiting' | translate }}"
           diameter="24"
           class="inline"
         >
@@ -56,19 +58,25 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thName" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">{{ elem.name }}</td>
     </ng-container>
 
     <!-- Age Column -->
     <ng-container matColumnDef="age">
-      <th mat-header-cell *matHeaderCellDef>Age</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thAge" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">{{ elem.age }}</td>
     </ng-container>
 
     <!-- Image Column -->
     <ng-container matColumnDef="image">
-      <th mat-header-cell *matHeaderCellDef>Image</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thImage" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">
         <span [matTooltip]="elem.image">{{ elem.shortImage }}</span>
       </td>
@@ -76,19 +84,25 @@
 
     <!-- CPU Column -->
     <ng-container matColumnDef="cpu">
-      <th mat-header-cell *matHeaderCellDef>CPU</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thCpu" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">{{ elem.cpu }}</td>
     </ng-container>
 
     <!-- Memory Column -->
     <ng-container matColumnDef="memory">
-      <th mat-header-cell *matHeaderCellDef>Memory</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thMemory" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">{{ elem.memory }}</td>
     </ng-container>
 
     <!-- Volumes Column -->
     <ng-container matColumnDef="volumes">
-      <th mat-header-cell *matHeaderCellDef>Volumes</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "resourceTable.thVolumes" | translate }}
+      </th>
       <td mat-cell *matCellDef="let elem">
         <button mat-icon-button [matMenuTriggerFor]="volsMenu">
           <mat-icon>more_vert</mat-icon>
@@ -113,7 +127,7 @@
           color="accent"
           [disabled]="elem.status !== 'running'"
         >
-          CONNECT
+          {{ "resourceTable.btnConnect" | translate }}
         </button>
 
         <button

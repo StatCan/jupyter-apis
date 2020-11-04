@@ -52,11 +52,13 @@
       type="submit"
       [disabled]="formCtrl.invalid"
     >
-      LAUNCH
+      {{ "resourceForm.btnLaunch" | translate }}
     </button>
 
     <a routerLink="/">
-      <button mat-raised-button class="margin">CANCEL</button>
+      <button mat-raised-button class="margin">
+        {{ "resourceForm.btnCancel" | translate }}
+      </button>
     </a>
   </form>
 </div>

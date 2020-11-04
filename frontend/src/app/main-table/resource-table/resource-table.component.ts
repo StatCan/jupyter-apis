@@ -4,6 +4,7 @@ import { Resource } from "src/app/utils/types";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {first} from "rxjs/operators";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: "app-resource-table",
@@ -27,31 +28,32 @@ export class ResourceTableComponent{
   dataSource = new MatTableDataSource();
 
   constructor(
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private translate: TranslateService
+  ) { }
 
   // Resource (Notebook) Actions
   connectResource(rsrc: Resource): void {
     window.open(`/notebook/${rsrc.namespace}/${rsrc.name}/`);
   }
-  
+
   deleteResource(rsrc: Resource): void {
+    const yesAnswer = this.translate.instant("resourceTable.deleteDialogYes");
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: "fit-content",
       data: {
-        title: "You are about to delete Notebook Server: " + rsrc.name,
+        title: this.translate.instant("resourceTable.deleteDialogTitle") + rsrc.name,
         message:
-          "Are you sure you want to delete this Notebook Server? " +
-          "Your data might be lost if the Server is not backed by persistent storage.",
-        yes: "delete",
-        no: "cancel"
+          this.translate.instant("resourceTable.deleteDialogMessage"),
+        yes: yesAnswer,
+        no: this.translate.instant("resourceTable.deleteDialogNo")
       }
     });
     dialogRef
       .afterClosed()
       .pipe(first())
       .subscribe(result => {
-        if (result !== "delete") {
+        if (result !== yesAnswer) {
           return;
         }
         this.deleteNotebookEvent.emit(rsrc);

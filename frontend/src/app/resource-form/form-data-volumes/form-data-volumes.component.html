@@ -1,11 +1,11 @@
 <div class="group-wrapper" [formGroup]="parentForm">
   <h3>
     <fa-icon [icon]="['fas', 'hdd']" class="check"></fa-icon>
-    Data Volumes
+    {{ "formDataVolumes.h3DataVolumes" | translate }}
   </h3>
-  <p>Configure the Volumes to be mounted as your Datasets.</p>
+  <p>{{ "formDataVolumes.txtDataVolumes" | translate }}</p>
   <p *ngIf="readonly">
-    *The Cluster Administrator has disabled editing this Section!
+    {{ "formDataVolumes.txtDataVolumesIf" | translate }}
   </p>
   <button
     mat-stroked-button
@@ -14,7 +14,7 @@
     type="button"
     [disabled]="readonly"
   >
-    <mat-icon>add</mat-icon>ADD VOLUME
+    <mat-icon>add</mat-icon>{{ "formDataVolumes.btnAddVolume" | translate }}
   </button>
 
   <div *ngFor="let vol of datavols; let i = index" class="delible-volume">

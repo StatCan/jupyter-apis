@@ -5,7 +5,8 @@
     "thCompute": "Compute",
     "thGpus": "GPUs",
     "thStorage": "Storage",
-    "thTotal": "Total"
+    "thTotal": "Total",
+    "errMessage": "Failed to retrieve cost information"
   },
   "namespaceSelect": {
     "lblSelectNamespace": "Select Namespace",

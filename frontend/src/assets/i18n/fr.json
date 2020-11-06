@@ -5,7 +5,8 @@
     "thCompute": "Calculé",
     "thGpus": "GPUs",
     "thStorage": "Stockage",
-    "thTotal": "Total"
+    "thTotal": "Total",
+    "errMessage": "Échec de la récupération des informations des coûts."
   },
   "namespaceSelect": {
     "lblSelectNamespace": "Sélectionner l'espace de noms",

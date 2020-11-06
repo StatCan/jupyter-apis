@@ -9,7 +9,10 @@
   </p>
 
   <mat-divider></mat-divider>
-  <table style="width: auto">
+  <table
+    *ngIf="getStatus() == AsyncStatus.SUCCESS; else error"
+    style="width: auto"
+  >
     <tr class="mat-header-row" style="text-align: left">
       <th class="mat-header-cell">{{ "costTable.thCompute" | translate }}</th>
       <th class="mat-header-cell">{{ "costTable.thGpus" | translate }}</th>
@@ -18,13 +21,23 @@
         {{ "costTable.thTotal" | translate }}
       </th>
     </tr>
-    <tr *ngIf="aggregatedCost?.data[currNamespace]; let cost" class="mat-row" style="text-align: left;">
+    <tr
+      *ngIf="aggregatedCost.data[currNamespace]; let cost"
+      class="mat-row"
+      style="text-align: left"
+    >
       <td class="mat-cell">{{ formatCost(cost.cpuCost + cost.ramCost) }}</td>
       <td class="mat-cell">{{ formatCost(cost.gpuCost) }}</td>
       <td class="mat-cell">{{ formatCost(cost.pvCost) }}</td>
-      <td class="mat-cell" style="font-weight: 500;">
+      <td class="mat-cell" style="font-weight: 500">
         {{ formatCost(cost.totalCost) }}
       </td>
     </tr>
   </table>
+
+  <ng-template #error>
+    <div *ngIf="getStatus() == AsyncStatus.FAILURE" class="costerror">
+      {{ "costTable.errMessage" | translate }}
+    </div>
+  </ng-template>
 </div>

@@ -16,24 +16,22 @@
 </div>
 
 <!-- The Table showing the persistent volume claims -->
-  <div class="parent spacing">
-    <div class="spacer"></div>
-    <app-volume-table
-      [pvcProperties]="pvcProperties"
-      (deletePvcEvent)="deletePvc($event)"
-    >
-    </app-volume-table>
-    <div class="spacer"></div>
-  </div>
-  
-  <!-- The Table showing our Costs-->
-  <div class="parent spacing">
-    <div class="spacer"></div>
-    <app-cost-table
-      [aggregatedCost]="aggregatedCost"
-      [currNamespace]="currNamespace"
-      ></app-cost-table>
-    <div class="spacer"></div>
-  </div>
+<div class="parent spacing">
+  <div class="spacer"></div>
+  <app-volume-table
+    [pvcProperties]="pvcProperties"
+    (deletePvcEvent)="deletePvc($event)"
+  >
+  </app-volume-table>
+  <div class="spacer"></div>
+</div>
 
-
+<!-- The Table showing our Costs-->
+<div class="parent spacing">
+  <div class="spacer"></div>
+  <app-cost-table
+    [aggregatedCost]="aggregatedCost"
+    [currNamespace]="currNamespace"
+  ></app-cost-table>
+  <div class="spacer"></div>
+</div>

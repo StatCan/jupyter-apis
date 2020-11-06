@@ -5,11 +5,11 @@ import {KubernetesService} from "src/app/services/kubernetes.service";
 import {Subscription} from "rxjs";
 import {isEqual} from "lodash";
 import {first} from "rxjs/operators";
-import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
+import {AggregateCostResponse, KubecostService} from "src/app/services/kubecost.service";
 
 import {ExponentialBackoff} from "src/app/utils/polling";
 import {Volume, Resource} from "../utils/types";
-import {PvcWithStatus} from "./volumes-table/volume-table.component"
+import {PvcWithStatus} from "./volumes-table/volume-table.component";
 
 @Component({
   selector: "app-main-table",
@@ -24,15 +24,14 @@ export class MainTableComponent implements OnInit {
   pvcs: Volume[] = [];
   pvcProperties: PvcWithStatus[] = [];
 
-  aggregatedCost: AggregateCostResponse = null;
-
   subscriptions = new Subscription();
   poller: ExponentialBackoff;
+  aggregatedCost: AggregateCostResponse = null;
 
   constructor(
     public ns: NamespaceService,
     private k8s: KubernetesService,
-    private kubecostService: KubecostService,
+    private kubecostService: KubecostService
   ) {}
 
   ngOnInit() {
@@ -46,7 +45,10 @@ export class MainTableComponent implements OnInit {
         this.k8s.getResource(this.currNamespace).toPromise(),
         this.k8s.getVolumes(this.currNamespace).toPromise()
       ]).then(([notebooks, volumes]) => {
-        if (!isEqual(notebooks, this.resources) || !isEqual(volumes, this.pvcs)) {
+        if (
+          !isEqual(notebooks, this.resources) ||
+          !isEqual(volumes, this.pvcs)
+        ) {
           this.poller.reset();
         }
         this.resources = notebooks;
@@ -92,7 +94,8 @@ export class MainTableComponent implements OnInit {
 
   getAggregatedCost() {
     this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
-      aggCost => this.aggregatedCost = aggCost
-    )
+      aggCost => (this.aggregatedCost = aggCost),
+      error => (this.aggregatedCost = error)
+    );
   }
 }

@@ -3,7 +3,7 @@
     <mat-icon>storage</mat-icon>
     <p>{{ "volumeTable.title" | translate }}</p>
   </div>
-
+  <mat-divider></mat-divider>
   <table mat-table [dataSource]="pvcProperties" matSort>
     <!-- Status Column -->
     <ng-container matColumnDef="status">

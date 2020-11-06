@@ -9,7 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 export type PvcWithStatus = {
   pvc: Volume;
   mountedBy: string | null;
-}
+};
 
 enum PvcStatus {
   DELETING,

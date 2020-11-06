@@ -3,13 +3,21 @@ p {
   padding-right: 16px;
 }
 
+.costerror {
+  padding: 20px;
+  padding-left: 24px;
+  color: #cc0033;
+}
+
 .header p {
   padding: 12px 0 0px;
   font-weight: 400;
   font-size: 20px;
 }
 
-.mat-cell, .mat-header-cell, .mat-footer-cell {
+.mat-cell,
+.mat-header-cell,
+.mat-footer-cell {
   padding-left: 12px;
   padding-right: 195px;
 }

@@ -1,7 +1,7 @@
 {
   "costTable": {
     "title": "Cost",
-    "txtCost": "Estimated cost of notebook server resources over the last 24 hours – summed values may not",
+    "txtCost": "Approximate cost of notebook server resources over the last 24 hours – summed values may not match total due to rounding",
     "thCompute": "Compute",
     "thGpus": "GPUs",
     "thStorage": "Storage",

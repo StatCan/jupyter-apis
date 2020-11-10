@@ -1,7 +1,7 @@
 {
   "costTable": {
     "title": "Coût",
-    "txtCost": "Estimé du coût des ressources de serveur bloc-notes des dernières 24h – la somme des valeurs pourraient être différentes du total du à l'arrondissement",
+    "txtCost": "Approximation du coût des ressources de serveur bloc-notes des dernières 24h – la somme des valeurs pourraient être différentes du total du à l'arrondissement",
     "thCompute": "Calculé",
     "thGpus": "GPUs",
     "thStorage": "Stockage",

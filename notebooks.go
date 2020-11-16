@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"sort"
 	"strings"
+	"time"
 
 	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
 	"github.com/andanhm/go-prettytime"
@@ -119,12 +120,12 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Statu
 	if notebook.Status.ContainerState.Terminated != nil {
 		return StatusError, "The Pod has Terminated"
 	}
-	status, reason := StatusWarning, ""
+	status, reason := StatusWaiting, ""
 
 	if notebook.Status.ContainerState.Waiting != nil {
-		status, reason = StatusWaiting, notebook.Status.ContainerState.Waiting.Reason
-		if notebook.Status.ContainerState.Waiting.Reason == "ImagePullBackoff" {
-			status, reason = StatusError, notebook.Status.ContainerState.Waiting.Reason
+		waitingReason := notebook.Status.ContainerState.Waiting.Reason
+		if waitingReason == "ImagePullBackOff" || waitingReason == "ErrImagePull" {
+			return StatusError, waitingReason
 		}
 	} else {
 		status, reason = StatusWaiting, "Scheduling the Pod"
@@ -133,7 +134,13 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Statu
 	// Process events
 	for _, event := range events {
 		if event.Type == corev1.EventTypeWarning {
-			return StatusWarning, event.Message
+			first := event.CreationTimestamp.Time
+			age := time.Now().Sub(first).Minutes()
+			if age < 5 {
+				status, reason = StatusWaiting, "Warning...in progress"
+			} else {
+				status, reason = StatusWarning, "Warning...took too long"
+			}
 		}
 	}
 

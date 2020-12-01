@@ -48,9 +48,11 @@
     "deleteDialogNo": "Annuler"
   },
   "formAdvancedOptions": {
-    "h3MiscSettings": "Paramètres divers",
-    "txtMiscSettings": "Autres paramètres pouvant être appliqué au serveur bloc-notes.",
-    "toggleSharedMemory": "Activer la mémoire partagée"
+    "h3AdvancedSettings": "Paramètres avancés",
+    "toggleSharedMemory": "Activer la mémoire partagée",
+    "lblSystemLanguage":"Langue du système",
+    "lblEnglish": "English",
+    "lblFrench": "Français"
   },
   "formConfiguration": {
     "h3Configuration": "Configurations",

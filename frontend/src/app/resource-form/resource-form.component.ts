@@ -27,6 +27,8 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
 
   subscriptions = new Subscription();
 
+  readonlySpecs: boolean;
+
   constructor(
     private namespaceService: NamespaceService,
     private k8s: KubernetesService,
@@ -102,5 +104,16 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
           });
         }
       });
+  }
+  
+  // Automatically set values of CPU and Memory if GPU is 1
+  checkGPU(gpu: string) {
+    if (gpu == "none") {
+      this.readonlySpecs = false;
+    } else {
+      this.readonlySpecs = true;
+      this.formCtrl.get("cpu").setValue("5");
+      this.formCtrl.get("memory").setValue("96Gi");
+    }
   }
 }

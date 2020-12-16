@@ -69,7 +69,9 @@
     "lblNumGpu": "Nombre GPUs",
     "optNone": "Aucun",
     "lblGpuVendor": "Vendeur de GPU",
-    "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés"
+    "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés",
+    "specsWarningMessage": "La sélection de 1 GPU définira automatiquement 5 processeurs et 96Gi de la mémoire."
+
   },
   "formImage": {
     "h3Image": "Image",
@@ -103,13 +105,13 @@
     "errorCpuNumber": "Doit être un nombre",
     "errorCpuMin": "Spécifier au moins {{min}} CPUs",
     "errorCpuMax": "Ne peut excéder {{max}} CPUs",
-    "errorCpuMaxLimit": " avec {{gpu}} GPU(s) sélectionné",
+    "errorCpuMaxLimit": " avec {{gpu}} GPU(s) sélectionné(s)",
     "lblMemory": "Mémoire",
     "plhMemory": "Quantié de mémoire",
     "errorRamRequired": "Spécifier la quantité de mémoire (ex. 2Gi)",
     "errorRamMin": "Spécifier au moins {{min}}Gi de mémoire",
     "errorRamMax": "Ne peut excéder {{max}}Gi de mémoire",
-    "errorRamMaxLimit": " avec {{gpu}} GPU(s) sélectionné"
+    "errorRamMaxLimit": " avec {{gpu}} GPU(s) sélectionné(s)"
   },
   "formWorkspaceVolume": {
     "h3WorkspaceVolume": "Volume d'espace de travail",

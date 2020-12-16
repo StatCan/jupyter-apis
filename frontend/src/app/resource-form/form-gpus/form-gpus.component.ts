@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/utils/types';
@@ -12,11 +12,15 @@ import { TranslateService } from '@ngx-translate/core';
 export class FormGpusComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() vendors: GPUVendor[];
+  @Output() gpuValueEvent = new EventEmitter<string>();
+  
   private gpuCtrl: FormGroup;
   subscriptions = new Subscription();
 
   maxGPUs = 16;
   gpusCount = ['1'];
+
+  message: string;
 
   constructor(private translate: TranslateService) {}
 
@@ -32,10 +36,13 @@ export class FormGpusComponent implements OnInit {
     this.subscriptions.add(
       this.gpuCtrl.get('num').valueChanges.subscribe((n: string) => {
         if (n === 'none') {
+          this.message = "";
           this.gpuCtrl.get('vendor').disable();
         } else {
+          this.message = this.translate.instant('formGpus.specsWarningMessage')
           this.gpuCtrl.get('vendor').enable();
         }
+        this.gpuValueEvent.emit(n)
       }),
     );
   }

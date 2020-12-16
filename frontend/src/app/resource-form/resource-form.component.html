@@ -12,7 +12,10 @@
         [hideVersion]="config?.image?.hideVersion"
       ></app-form-image>
 
-      <app-form-specs [parentForm]="formCtrl"></app-form-specs>
+      <app-form-specs 
+        [parentForm]="formCtrl"
+        [readonlySpecs]="readonlySpecs"
+      ></app-form-specs>
 
       <app-form-workspace-volume
         [parentForm]="formCtrl"
@@ -37,6 +40,7 @@
       <app-form-gpus
         [parentForm]="formCtrl"
         [vendors]="config?.gpus?.value.vendors"
+        (gpuValueEvent)="checkGPU($event)"
       ></app-form-gpus>
 
       <app-form-advanced-options

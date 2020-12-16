@@ -12,6 +12,7 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ "formSpecs.lblCpu" | translate }}</mat-label>
       <input
+        [attr.disabled]="readonlySpecs ? '' : null"
         matInput
         placeholder="{{ 'formSpecs.plhCpu' | translate }}"
         formControlName="cpu"
@@ -23,6 +24,7 @@
     <mat-form-field appearance="outline">
       <mat-label>{{ "formSpecs.lblMemory" | translate }}</mat-label>
       <input
+        [attr.disabled]="readonlySpecs ? '' : null"
         matInput
         placeholder="{{ 'formSpecs.plhMemory' | translate }}"
         formControlName="memory"

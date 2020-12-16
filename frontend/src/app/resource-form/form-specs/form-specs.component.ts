@@ -25,15 +25,15 @@ function resourcesValidator(): ValidatorFn {
     const cpu = parseFloat(control.get("cpu").value);
     const ram = parseFloat(control.get("memory").value);
     const errors = {};
-
     const max = MAX_FOR_GPU.get(gpu);
-    if (cpu > max.cpu) {
-      errors["maxCpu"] = {max: max.cpu, gpu};
+    if (gpu == 0) {
+      if (cpu > max.cpu) {
+        errors["maxCpu"] = {max: max.cpu, gpu};
+      }
+      if (ram > max.ram) {
+        errors["maxRam"] = {max: max.ram, gpu};
+      }
     }
-    if (ram > max.ram) {
-      errors["maxRam"] = {max: max.ram, gpu};
-    }
-
     return Object.entries(errors).length > 0 ? errors : null;
   };
 }
@@ -47,8 +47,10 @@ export class FormSpecsComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
+  @Input() readonlySpecs: boolean;
 
   constructor(private translate: TranslateService) {}
+  
   ngOnInit() {
     this.parentForm
       .get("cpu")
@@ -85,7 +87,6 @@ export class FormSpecsComponent implements OnInit {
   cpuErrorMessage(): string {
     let e: any;
     const errs = this.parentForm.get("cpu").errors || {};
-
     if (errs.required)
       return this.translate.instant("formSpecs.errorCpuRequired");
     if (errs.pattern) return this.translate.instant("formSpecs.errorCpuNumber");
@@ -93,36 +94,20 @@ export class FormSpecsComponent implements OnInit {
       return this.translate.instant("formSpecs.errorCpuMin", {min: `${e.min}`});
     if (this.parentForm.hasError("maxCpu")) {
       e = this.parentForm.errors.maxCpu;
-      return (
-        this.translate.instant("formSpecs.errorCpuMax", {max: `${e.max}`}) +
-        (e.gpu > 0
-          ? this.translate.instant("formSpecs.errorCpuMaxLimit", {
-              gpu: `${e.gpu}`
-            })
-          : "")
-      );
+      return this.translate.instant("formSpecs.errorCpuMax", {max: `${e.max}`});
     }
   }
 
   memoryErrorMessage(): string {
     let e: any;
     const errs = this.parentForm.get("memory").errors || {};
-
     if (errs.required || errs.pattern)
       return this.translate.instant("formSpecs.errorRamRequired");
     if ((e = errs.min))
       return this.translate.instant("formSpecs.errorRamMin", {min: `${e.min}`});
-
     if (this.parentForm.hasError("maxRam")) {
       e = this.parentForm.errors.maxRam;
-      return (
-        this.translate.instant("formSpecs.errorRamMax", {max: `${e.max}`}) +
-        (e.gpu > 0
-          ? this.translate.instant("formSpecs.errorRamMaxLimit", {
-              gpu: `${e.gpu}`
-            })
-          : "")
-      );
+      return this.translate.instant("formSpecs.errorRamMax", {max: `${e.max}`});
     }
   }
 }

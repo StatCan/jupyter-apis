@@ -18,9 +18,10 @@
       matInput
       formControlName="name"
       *ngIf="volume.value.type == 'New'; else existingPvcControl"
+      [errorStateMatcher]="matcher"
     />
     <ng-template #existingPvcControl>
-      <mat-select formControlName="name">
+      <mat-select formControlName="name" [errorStateMatcher]="matcher">
         <mat-option *ngFor="let pvc of existingPVCs" [value]="pvc">{{
           pvc
         }}</mat-option>

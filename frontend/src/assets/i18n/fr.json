@@ -127,6 +127,7 @@
     "lblName": "Nom",
     "errorNameRequired": "Le nom du volume ne peut pas être vide",
     "errorNamePattern": "Le nom du volume ne peut contenir que des caractères alphanumériques en minuscule, '-' ou '.', et doit commencer et se terminer par un caractères alphanumériques",
+    "errorMountedVolume":"Le volume est déjà monté sur un autre bloc-notes et ne peut être sélectionné actuellement",
     "lblSize": "Taille",
     "lblMode": "Mode",
     "optReadWriteOnce": "ReadWriteOnce",

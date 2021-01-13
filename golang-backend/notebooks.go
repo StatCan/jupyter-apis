@@ -113,7 +113,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Statu
 	}
 
 	// Return Container State if it's available
-	if notebook.Status.ContainerState.Running != nil {
+	if notebook.Status.ContainerState.Running != nil && notebook.Status.ReadyReplicas != 0 {
 		return StatusRunning, "Running"
 	}
 	if notebook.Status.ContainerState.Terminated != nil {

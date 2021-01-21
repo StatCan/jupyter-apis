@@ -48,9 +48,11 @@
     "deleteDialogNo": "Cancel"
   },
   "formAdvancedOptions": {
-    "h3MiscSettings": "Miscellaneous Settings",
-    "txtMiscSettings": "Other possible settings to be applied to the Notebook Server.",
-    "toggleSharedMemory": "Enable Shared Memory"
+    "h3AdvancedSettings": "Advanced Settings",
+    "toggleSharedMemory": "Enable Shared Memory",
+    "lblSystemLanguage":"System language",
+    "lblEnglish": "English",
+    "lblFrench": "Français"
   },
   "formConfiguration": {
     "h3Configuration": "Configurations",

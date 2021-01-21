@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -23,6 +25,7 @@ import (
 const DefaultServiceAccountName string = "default-editor"
 const SharedMemoryVolumeName string = "dshm"
 const SharedMemoryVolumePath string = "/dev/shm"
+const EnvKfLanguage string = "KF_LANG"
 
 type volumetype string
 
@@ -61,6 +64,7 @@ type newnotebookrequest struct {
 	DataVolumes        []volumerequest   `json:"datavols"`
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
+	Language           string            `json:"language"`
 }
 
 type notebookresponse struct {
@@ -470,6 +474,19 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			notebook.ObjectMeta.Labels[config] = "true"
 		}
 	}
+
+	//Add Language
+	//Validate that the language format is valid (language[_territory])
+	match, err := regexp.MatchString("^[[:alpha:]]{2}(_[[:alpha:]]{2})?$", req.Language)
+		if (err != nil || !match) {
+			var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
+			s.error(w, r, errLanguageFormat)
+			return
+		}
+	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+		Name:      EnvKfLanguage,
+		Value:	   req.Language,
+	})
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)
 

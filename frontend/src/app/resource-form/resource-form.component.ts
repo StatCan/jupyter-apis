@@ -112,7 +112,7 @@ export class ResourceFormComponent implements OnInit, OnDestroy {
       this.readonlySpecs = false;
     } else {
       this.readonlySpecs = true;
-      this.formCtrl.get("cpu").setValue("5");
+      this.formCtrl.get("cpu").setValue("4");
       this.formCtrl.get("memory").setValue("96Gi");
     }
   }

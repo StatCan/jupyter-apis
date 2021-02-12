@@ -72,7 +72,7 @@
     "optNone": "None",
     "lblGpuVendor": "GPU Vendor",
     "errorGpuVendorRequired": "You must also specify the GPU Vendor for the assigned GPUs",
-    "specsWarningMessage": "Selecting 1 GPU will automatically set 5 CPUs and 96Gi of memory."
+    "specsWarningMessage": "Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory."
   },
   "formImage": {
     "h3Image": "Image",

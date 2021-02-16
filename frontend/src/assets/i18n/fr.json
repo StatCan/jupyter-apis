@@ -72,7 +72,7 @@
     "optNone": "Aucun",
     "lblGpuVendor": "Vendeur de GPU",
     "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés",
-    "specsWarningMessage": "La sélection de 1 GPU définira automatiquement 5 processeurs et 96Gi de la mémoire."
+    "specsWarningMessage": "La sélection de 1 GPU définira automatiquement 4 processeurs et 96Gi de la mémoire."
 
   },
   "formImage": {

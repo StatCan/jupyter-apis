@@ -78,6 +78,7 @@
   "formImage": {
     "h3Image": "Image",
     "txtImage": "Sélectionner les logiciels de base désirés sur votre serveur. Si vous choisissez une image personnallisée, elle doit être disponible dans le registre des conteneurs DAaaS.",
+    "txtImageLink": "Voici plus d'informations pour vous aider à sélectionner une image selon vos besoins.",    
     "ckbImage": "Image personnalisée",
     "lblImage": "Image",
     "plhImage": "Image Docker",

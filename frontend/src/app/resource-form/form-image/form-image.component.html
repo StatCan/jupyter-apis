@@ -5,6 +5,10 @@
   </h3>
   <p>
     {{ "formImage.txtImage" | translate }}
+    <a href="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image/"
+    target="_blank" style="text-decoration: none">
+      {{ "formImage.txtImageLink" | translate }}
+    </a>
   </p>
   <mat-checkbox *ngIf="!readonly" formControlName="customImageCheck">
     {{ "formImage.ckbImage" | translate }}

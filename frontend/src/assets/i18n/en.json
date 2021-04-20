@@ -77,6 +77,7 @@
   "formImage": {
     "h3Image": "Image",
     "txtImage": "Select the base software you want installed in your server. If you choose a custom image, it must be available in the DAaaS container registry.",
+    "txtImageLink": "Here's some more information to help you select an image for your requirements.",
     "ckbImage": "Custom Image",
     "lblImage": "Image",
     "plhImage": "Docker Image",

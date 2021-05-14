@@ -28,7 +28,7 @@ this is passed to the API server as an HTTP header.
 
 1. Change directory to front-end folder: `cd frontend`
 2. Install dependencies: `npm install`
-3. Run the front-end `KF_USER_ID=<profile_name> npm start`
+3. Run the front-end `KF_USER_ID=<cloud_email> npm start`
 
 The front-end is now available at `http://localhost:4200/jupyter/`. Since it is
 disconnected from the `centraldashboard` component, you need to type your

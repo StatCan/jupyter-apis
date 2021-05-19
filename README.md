@@ -42,7 +42,7 @@ context. Here are a couple options for setting that up.
 #### Local miniKF Cluster (Preferred)
 
 This deploys a Kubeflow cluster on your local machine and requires at least 50GB
-of disk space. First, create the miniKF cluster:
+of disk space and the recommanded RAM is 12 Gb. First, create the miniKF cluster:
 
 1. Install Vagrant and Virtual Box.
 2. Create a new directory and run `vagrant init arrikto/minikf` and then
@@ -64,6 +64,17 @@ cluster (typically `user`).
 
 Each time you need to start the cluster, navigate to the directory you created
 and run `vagrant up`.
+
+**Note**: after some experimentation, it was found that the vagrant file could be modified on line 57 to use 8gb instead of the default 12.
+```
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    #vb.gui = true
+  
+    # Customize the amount of memory on the VM:
+    vb.memory = "8192"
+  end
+``` 
 
 #### Remote AKS Cluster
 

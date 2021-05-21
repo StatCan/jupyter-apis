@@ -5,8 +5,11 @@
   </h3>
   <p>
     {{ "formImage.txtImage" | translate }}
-    <a href="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image/"
-    target="_blank" style="text-decoration: none">
+    <a
+      href="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image/"
+      target="_blank"
+      style="text-decoration: none"
+    >
       {{ "formImage.txtImageLink" | translate }}
     </a>
   </p>
@@ -43,6 +46,6 @@
       formControlName="customImage"
       #cstmimg
     />
-    <mat-error>{{ "formImage.errorImageRequired" | translate }}</mat-error>
+    <mat-error>{{ urlValidation() }}</mat-error>
   </mat-form-field>
 </div>

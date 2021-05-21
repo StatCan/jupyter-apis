@@ -50,7 +50,7 @@
   "formAdvancedOptions": {
     "h3AdvancedSettings": "Advanced Settings",
     "toggleSharedMemory": "Enable Shared Memory",
-    "lblSystemLanguage":"System language",
+    "lblSystemLanguage": "System language",
     "lblEnglish": "English",
     "lblFrench": "Français"
   },
@@ -83,7 +83,8 @@
     "plhImage": "Docker Image",
     "lblCustomImage": "Custom Image",
     "plhCustomImage": "Provide a custom Image",
-    "errorImageRequired": "Please provide and Image to use"
+    "errorImageRequired": "Please provide and Image to use",
+    "errorHttp": "{{scheme}} is not allowed in URLs"
   },
   "formName": {
     "h3Name": "Name",
@@ -129,7 +130,7 @@
     "lblName": "Name",
     "errorNameRequired": "The volume name can't be empty",
     "errorNamePattern": "The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character",
-    "errorMountedVolume":"The volume is already mounted to another notebook and cannot be currently selected",
+    "errorMountedVolume": "The volume is already mounted to another notebook and cannot be currently selected",
     "lblSize": "Size",
     "lblMode": "Mode",
     "optReadWriteOnce": "ReadWriteOnce",

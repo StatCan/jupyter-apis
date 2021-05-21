@@ -50,7 +50,7 @@
   "formAdvancedOptions": {
     "h3AdvancedSettings": "Paramètres avancés",
     "toggleSharedMemory": "Activer la mémoire partagée",
-    "lblSystemLanguage":"Langue du système",
+    "lblSystemLanguage": "Langue du système",
     "lblEnglish": "English",
     "lblFrench": "Français"
   },
@@ -73,18 +73,18 @@
     "lblGpuVendor": "Vendeur de GPU",
     "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés",
     "specsWarningMessage": "La sélection de 1 GPU définira automatiquement 4 processeurs et 96Gi de la mémoire."
-
   },
   "formImage": {
     "h3Image": "Image",
     "txtImage": "Sélectionner les logiciels de base désirés sur votre serveur. Si vous choisissez une image personnallisée, elle doit être disponible dans le registre des conteneurs DAaaS.",
-    "txtImageLink": "Voici plus d'informations pour vous aider à sélectionner une image selon vos besoins.",    
+    "txtImageLink": "Voici plus d'informations pour vous aider à sélectionner une image selon vos besoins.",
     "ckbImage": "Image personnalisée",
     "lblImage": "Image",
     "plhImage": "Image Docker",
     "lblCustomImage": "Image personnalisée",
     "plhCustomImage": "Fournir une image personnalisée",
-    "errorImageRequired": "Veuillez fournir une image a utiliser"
+    "errorImageRequired": "Veuillez fournir une image a utiliser",
+    "errorHttp": "{{scheme}} n'est pas autorisé dans les URLs"
   },
   "formName": {
     "h3Name": "Nom",
@@ -130,7 +130,7 @@
     "lblName": "Nom",
     "errorNameRequired": "Le nom du volume ne peut pas être vide",
     "errorNamePattern": "Le nom du volume ne peut contenir que des caractères alphanumériques en minuscule, '-' ou '.', et doit commencer et se terminer par un caractères alphanumériques",
-    "errorMountedVolume":"Le volume est déjà monté sur un autre bloc-notes et ne peut être sélectionné actuellement",
+    "errorMountedVolume": "Le volume est déjà monté sur un autre bloc-notes et ne peut être sélectionné actuellement",
     "lblSize": "Taille",
     "lblMode": "Mode",
     "optReadWriteOnce": "ReadWriteOnce",

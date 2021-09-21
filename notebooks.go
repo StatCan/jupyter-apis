@@ -232,23 +232,41 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error {
+	var pvc = corev1.PersistentVolumeClaim{}
 	if req.Type == VolumeTypeNew {
-		// Create the PVC
-		pvc := corev1.PersistentVolumeClaim{
-			ObjectMeta: v1.ObjectMeta{
-				Name:      req.Name,
-				Namespace: notebook.Namespace,
-			},
-			Spec: corev1.PersistentVolumeClaimSpec{
-				AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
-				Resources: corev1.ResourceRequirements{
-					Requests: corev1.ResourceList{
-						corev1.ResourceStorage: req.Size,
+		if _, ok := notebook.Labels["notebook.statcan.gc.ca/protected-b"]; ok {
+			pvc = corev1.PersistentVolumeClaim{
+				ObjectMeta: v1.ObjectMeta{
+					Name:      req.Name,
+					Namespace: notebook.Namespace,
+					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
+				},
+				Spec: corev1.PersistentVolumeClaimSpec{
+					AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+					Resources: corev1.ResourceRequirements{
+						Requests: corev1.ResourceList{
+							corev1.ResourceStorage: req.Size,
+						},
 					},
 				},
-			},
+			}
+		} else {
+			// Create the PVC
+			pvc = corev1.PersistentVolumeClaim{
+				ObjectMeta: v1.ObjectMeta{
+					Name:      req.Name,
+					Namespace: notebook.Namespace,
+				},
+				Spec: corev1.PersistentVolumeClaimSpec{
+					AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+					Resources: corev1.ResourceRequirements{
+						Requests: corev1.ResourceList{
+							corev1.ResourceStorage: req.Size,
+						},
+					},
+				},
+			}
 		}
-
 		// Add the storage class, if set and not set to an "empty" value
 		if req.Class != "" && req.Class != "{none}" && req.Class != "{empty}" {
 			pvc.Spec.StorageClassName = &req.Class
@@ -478,14 +496,14 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	//Add Language
 	//Validate that the language format is valid (language[_territory])
 	match, err := regexp.MatchString("^[[:alpha:]]{2}(_[[:alpha:]]{2})?$", req.Language)
-		if (err != nil || !match) {
-			var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
-			s.error(w, r, errLanguageFormat)
-			return
-		}
+	if err != nil || !match {
+		var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
+		s.error(w, r, errLanguageFormat)
+		return
+	}
 	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-		Name:      EnvKfLanguage,
-		Value:	   req.Language,
+		Name:  EnvKfLanguage,
+		Value: req.Language,
 	})
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)

@@ -234,7 +234,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error {
 	var pvc = corev1.PersistentVolumeClaim{}
 	if req.Type == VolumeTypeNew {
-		if _, ok := notebook.Labels["notebook.statcan.gc.ca/protected-b"]; ok {
+		if notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"] == "true" {
 			pvc = corev1.PersistentVolumeClaim{
 				ObjectMeta: v1.ObjectMeta{
 					Name:      req.Name,

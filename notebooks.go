@@ -234,7 +234,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error {
 	var pvc = corev1.PersistentVolumeClaim{}
 	if req.Type == VolumeTypeNew {
-		if notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"] == "true" {
+		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
 			pvc = corev1.PersistentVolumeClaim{
 				ObjectMeta: v1.ObjectMeta{
 					Name:      req.Name,
@@ -380,6 +380,17 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.Memory
 	}
 
+	// Add configuration items
+	if s.Config.SpawnerFormDefaults.Configurations.ReadOnly {
+		for _, config := range s.Config.SpawnerFormDefaults.Configurations.Value {
+			notebook.ObjectMeta.Labels[config] = "true"
+		}
+	} else {
+		for _, config := range req.Configurations {
+			notebook.ObjectMeta.Labels[config] = "true"
+		}
+	}
+
 	// Add workspace volume
 	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly {
 		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
@@ -479,17 +490,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 			notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceName(req.GPUs.Vendor)] = qty
 			notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(req.GPUs.Vendor)] = qty
-		}
-	}
-
-	// Add configuration items
-	if s.Config.SpawnerFormDefaults.Configurations.ReadOnly {
-		for _, config := range s.Config.SpawnerFormDefaults.Configurations.Value {
-			notebook.ObjectMeta.Labels[config] = "true"
-		}
-	} else {
-		for _, config := range req.Configurations {
-			notebook.ObjectMeta.Labels[config] = "true"
 		}
 	}
 

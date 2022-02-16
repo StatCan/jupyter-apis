@@ -1,0 +1,216 @@
+@import './kubeflow.css';
+@import '~@angular/material/theming';
+@import './lib/variables.scss';
+
+// always include only once per project
+@include mat-core();
+
+// Primary color is not used
+$kubeflow-theme-primary: mat-palette($mat-blue, 600, 700, 900);
+
+// Loaded from the kubeflow.css
+$kubeflow-accent: (
+  500: var(--accent-color),
+  100: var(--accent-color-light),
+  700: var(--accent-color-dark),
+  contrast: (
+    100: $dark-primary-text,
+    500: $light-primary-text,
+    700: $light-primary-text,
+  ),
+);
+$kubeflow-theme-accent: mat-palette($kubeflow-accent);
+
+// create theme (use mat-dark-theme for themes with dark backgrounds)
+$kubeflow-theme: mat-light-theme(
+  $kubeflow-theme-primary,
+  $kubeflow-theme-accent
+);
+
+@include angular-material-theme($kubeflow-theme);
+
+// Use the material icons offline
+$material-icons-font-path: '~material-icons/iconfont/';
+@import '~material-icons/iconfont/material-icons.scss';
+
+// Material Form Field error message
+mat-form-field .mat-form-field {
+  &-underline {
+    position: static;
+  }
+  &-subscript-wrapper {
+    position: static;
+  }
+}
+
+// Custom css
+html,
+body {
+  font-family: Roboto, Sans-Serif;
+  margin: 0;
+  background-color: white;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.lib-step-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.lib-step-info-wrapper {
+  width: fit-content;
+  width: -moz-fit-content;
+  flex-grow: 0;
+  margin-right: 10%;
+  display: flex;
+  flex-direction: column;
+}
+
+.fit-content {
+  width: fit-content;
+  width: -moz-fit-content;
+}
+
+.bold {
+  font-weight: 500;
+}
+
+.wide {
+  width: 100%;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.mat-tooltip-panel .mat-tooltip {
+  font-size: 14px !important;
+}
+
+.mat-snack-bar-container {
+  max-width: 100% !important;
+  width: 700px;
+}
+
+.form--container.mat-dialog-content {
+  max-height: 88vh;
+  padding: 16px;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: 0.2rem !important;
+}
+
+// Truncate text
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Form global css
+.form--dialog-padding .mat-dialog-container {
+  padding: 0 24px;
+}
+
+.mat-button-base.form--button-margin {
+  margin-right: 8px;
+}
+
+// Make the outline grey instead of black
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: rgba(0, 0, 0, 0.16);
+}
+
+.mat-checkbox-layout {
+  margin-bottom: 10px;
+}
+
+.form--input-padding .mat-form-field {
+  // Get the select and input elements have the same height
+  line-height: 0;
+}
+
+// Center an element
+.center-flex {
+  display: flex;
+  justify-content: center;
+}
+
+// Have a row of inputs
+.row {
+  display: flex;
+  flex-direction: row;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+}
+
+.column {
+  flex: 1 1 0px;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.mat-button.button-with-icon .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+// tooltips show we as wide as possible
+.custom-tooltip {
+  max-width: unset !important;
+  white-space: pre-line;
+}
+
+/*
+ * padding for the page
+ */
+.page-padding {
+  padding-left: $page-space-left;
+  padding-right: $page-space-right;
+}
+
+.page-padding-right {
+  padding-right: $page-space-right;
+}
+
+.page-padding-left {
+  padding-left: $page-space-left;
+}
+
+/*
+ * Classes for showing a Toolbar, footer and scrollable content
+ */
+.lib-content-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.lib-flex-layout-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.lib-flex-grow {
+  flex-grow: 1;
+}
+
+.lib-overflow-auto {
+  overflow: auto;
+}

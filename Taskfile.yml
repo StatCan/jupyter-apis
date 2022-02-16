@@ -12,6 +12,9 @@ vars:
 
   CLUSTER_NAME: jupyter-apis
   CONTEXT_NAME: "k3d-{{.CLUSTER_NAME}}"
+  CONTAINER_IMAGE_NAME: jupyter-apis
+  CONTAINER_IMAGE_TAG: {sh: git rev-parse HEAD}
+  CONTAINER_IMAGE: "{{.CONTAINER_IMAGE_NAME}}:{{.CONTAINER_IMAGE_TAG}}"
   KUBECTL: "kubectl --context={{.CONTEXT_NAME}}"
   KUBEAPPLY: "{{.KUBECTL}} apply"
   KUSTOMIZE: "{{.KUBEAPPLY}} --kustomize"
@@ -58,6 +61,21 @@ tasks:
     desc: Format all files
     deps:
       - task: go:format
+
+  docker:build:
+      desc: Build the container image
+      cmds:
+      - docker build -t {{.CONTAINER_IMAGE}} -f Dockerfile .
+
+  docker:enter:
+      desc: Enter into the built container
+      cmds:
+      - docker run -it --rm --entrypoint=sh {{.CONTAINER_IMAGE}}
+
+  docker:push:
+      desc: Push the built container image
+      cmds:
+      - docker push {{.CONTAINER_IMAGE}}
 
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/go-task/Taskfile.yml
   go:build:

@@ -22,16 +22,25 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 )
 
+// DefaultServiceAccountName String.
 const DefaultServiceAccountName string = "default-editor"
+
+// SharedMemoryVolumeName String.
 const SharedMemoryVolumeName string = "dshm"
+
+// SharedMemoryVolumePath String.
 const SharedMemoryVolumePath string = "/dev/shm"
+
+// EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
 type volumetype string
 
 const (
+	// VolumeTypeExisting volumetype.
 	VolumeTypeExisting volumetype = "Existing"
-	VolumeTypeNew      volumetype = "New"
+	// VolumeTypeNew volumetype.
+	VolumeTypeNew volumetype = "New"
 )
 
 type volumerequest struct {
@@ -97,17 +106,26 @@ type notebooksresponse struct {
 // STATUS_WAITING = "waiting"
 //
 
+// Status string.
 type Status string
+
+// GPUVendor string.
 type GPUVendor string
 
 const (
+	// StatusWaiting Status.
 	StatusWaiting Status = "waiting"
+	// StatusRunning Status.
 	StatusRunning Status = "running"
-	StatusError   Status = "error"
+	// StatusError Status.
+	StatusError Status = "error"
+	// StatusWarning Status.
 	StatusWarning Status = "warning"
 
+	// GPUVendorNvidia Status.
 	GPUVendorNvidia GPUVendor = "nvidia"
-	GPUVendorAMD    GPUVendor = "amd"
+	// GPUVendorAMD Status.
+	GPUVendorAMD GPUVendor = "amd"
 )
 
 func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Status, string) {

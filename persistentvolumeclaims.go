@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/mux"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	"k8s.io/apimachinery/pkg/labels"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 type pvcresponse struct {
@@ -83,4 +83,3 @@ func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
 		Success: true,
 	})
 }
-

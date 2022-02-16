@@ -1,31 +1,23 @@
 # Stage 0: UI Build Stage
-FROM node:10 as frontend
-
-WORKDIR /app
-
-COPY ./frontend/package*.json /app/
-RUN npm install
-
-COPY ./frontend/ /app/
-
-# Build the default frontends
-RUN npm run build frontend -- --output-path=./dist/out/default --configuration=production
+FROM node:12-buster-slim as frontend
+WORKDIR /src
+COPY ./jupyter/frontend/package*.json ./
+COPY ./jupyter/frontend/tsconfig*.json ./
+COPY ./jupyter/frontend/angular.json ./
+COPY ./jupyter/frontend/src ./src
+ENV NG_CLI_ANALYTICS "ci"
+RUN npm ci
+COPY --from=frontend-kubeflow-lib /src/dist/kubeflow/ ./node_modules/kubeflow/
+RUN npm run build -- --output-path=./dist/default --configuration=production
+RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
 
 # Stage 1: Build with the golang image
-FROM golang:1.14-alpine AS backend
-
-# Add git
+FROM golang:1.17-alpine AS backend
 RUN apk add git
-
-# Set workdir
 WORKDIR /go/src/github.com/StatCan/jupyter-apis
-
-# Add dependencies
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-
-# Build
 COPY . .
 RUN CGO_ENABLED=0 go install .
 

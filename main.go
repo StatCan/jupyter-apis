@@ -37,7 +37,7 @@ var spawnerConfigPath string
 var userIDHeader string
 var staticDirectory string
 var listenAddr string
-var kubecostUrl string
+var kubecostURL string
 
 type listers struct {
 	namespaces             v1listers.NamespaceLister
@@ -61,7 +61,7 @@ type server struct {
 	clientsets clientsets
 	listers    listers
 
-	kubecostUrl *url.URL
+	kubecostURL *url.URL
 }
 
 func main() {
@@ -82,7 +82,7 @@ func main() {
 	flag.StringVar(&spawnerConfigPath, "spawner-config", "/etc/config/spawner_ui_config.yaml", "path to the spawner configuration file")
 	flag.StringVar(&staticDirectory, "static-dir", "static/", "path to the static assets")
 	flag.StringVar(&listenAddr, "listen-addr", lookupEnvironment("LISTEN_ADDRESS", "127.0.0.1:5000"), "server listen address")
-	flag.StringVar(&kubecostUrl, "kubecost-url", lookupEnvironment("KUBECOST_URL", "http://127.0.0.1:9090"), "Url to connect to Kubecost API")
+	flag.StringVar(&kubecostURL, "kubecost-url", lookupEnvironment("KUBECOST_URL", "http://127.0.0.1:9090"), "Url to connect to Kubecost API")
 
 	// Parse flags
 	flag.Parse()
@@ -101,8 +101,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Parse kubecostUrl
-	s.kubecostUrl, err = url.Parse(kubecostUrl)
+	// Parse kubecostURL
+	s.kubecostURL, err = url.Parse(kubecostURL)
 	if err != nil {
 		log.Fatal(err)
 	}

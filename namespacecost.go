@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
+
+	"github.com/gorilla/mux"
 )
 
 func (s *server) GetCost(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +15,7 @@ func (s *server) GetCost(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("loading namespace costs for %q", namespace)
 
-	u, _ := s.kubecostUrl.Parse("model/aggregatedCostModel")
+	u, _ := s.kubecostURL.Parse("model/aggregatedCostModel")
 
 	params := url.Values{}
 	params.Add("namespace", namespace)

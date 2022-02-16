@@ -44,7 +44,8 @@ func (s *server) setupListers(ctx context.Context) error {
 
 	// Wait until sync
 	log.Printf("synching caches...")
-	tctx, _ := context.WithTimeout(ctx, time.Minute)
+	tctx, cancel := context.WithTimeout(ctx, time.Minute)
+	defer cancel()
 	if !cache.WaitForCacheSync(tctx.Done(), namespacesInformer.Informer().HasSynced, eventsInformer.Informer().HasSynced, storageClassesInformer.Informer().HasSynced, pvcInformer.Informer().HasSynced, podDefaultsInformer.Informer().HasSynced, notebooksInformer.Informer().HasSynced) {
 		return fmt.Errorf("timeout synching caches")
 	}

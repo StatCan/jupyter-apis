@@ -9,7 +9,9 @@ import (
 // APIResponse contains the basic fields of a response from the APIs.
 type APIResponse struct {
 	Success bool   `json:"success"`
-	Log     string `json:"log"`
+	Status  int    `json:"status"`
+	Log     string `json:"log,omitempty"`
+	User    string `json:"user"`
 }
 
 // respond response returns a JSON response to the client.

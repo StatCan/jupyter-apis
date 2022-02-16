@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
 	"github.com/andanhm/go-prettytime"
@@ -33,6 +34,9 @@ const SharedMemoryVolumePath string = "/dev/shm"
 
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
+
+// StoppedAnnotation String.
+const StoppedAnnotation string = "stopped"
 
 type volumetype string
 
@@ -94,6 +98,10 @@ type notebookresponse struct {
 type notebooksresponse struct {
 	APIResponse
 	Notebooks []notebookresponse `json:"notebooks"`
+}
+
+type updatenotebookrequest struct {
+	Stopped bool `json:"stopped"`
 }
 
 //
@@ -556,5 +564,64 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 
 	s.respond(w, r, APIResponse{
 		Success: true,
+	})
+}
+
+func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespaceName := vars["namespace"]
+	notebookName := vars["notebook"]
+
+	log.Printf("deleting notebook %q for %q", notebookName, namespaceName)
+
+	// Read the incoming notebook
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+
+	var req updatenotebookrequest
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// Read existing notebook
+	notebook, err := s.listers.notebooks.Notebooks(namespaceName).Get(notebookName)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	update := false
+	updatedNotebook := notebook.DeepCopy()
+
+	// Compare start/stopped state
+	if _, ok := notebook.Annotations[StoppedAnnotation]; ok != req.Stopped {
+		update = true
+
+		if req.Stopped {
+			// Set the stopped annotation
+			updatedNotebook.Annotations[StoppedAnnotation] = time.Now().Format(time.RFC3339)
+		} else {
+			// Remove the stopped annotation
+			delete(updatedNotebook.Annotations, StoppedAnnotation)
+		}
+	}
+
+	if update {
+		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, v1.UpdateOptions{})
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	s.respond(w, r, APIResponse{
+		Success: true,
+		Status:  http.StatusOK,
 	})
 }

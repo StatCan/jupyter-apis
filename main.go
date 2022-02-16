@@ -133,6 +133,7 @@ func main() {
 
 	// Setup route handlers
 	router.HandleFunc("/api/config", s.GetConfig).Methods("GET")
+	router.HandleFunc("/api/gpus", s.GetGPUVendors).Methods("GET")
 
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
 

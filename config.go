@@ -93,14 +93,15 @@ type Configuration struct {
 }
 
 type configresponse struct {
-	APIResponse
+	APIResponseBase
 	Config SpawnerFormDefaults `json:"config"`
 }
 
 func (s *server) GetConfig(w http.ResponseWriter, r *http.Request) {
-	s.respond(w, r, configresponse{
-		APIResponse: APIResponse{
+	s.respond(w, r, &configresponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 		Config: s.Config.SpawnerFormDefaults,
 	})

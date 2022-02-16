@@ -21,7 +21,7 @@ type pvcresponse struct {
 }
 
 type pvcsresponse struct {
-	APIResponse
+	APIResponseBase
 	PersistentVolumeClaims []pvcresponse `json:"pvcs"`
 }
 
@@ -41,8 +41,9 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 	sort.Sort(persistentVolumeClaimsByName(pvcs))
 
 	resp := pvcsresponse{
-		APIResponse: APIResponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 		PersistentVolumeClaims: make([]pvcresponse, 0),
 	}
@@ -59,7 +60,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 		})
 	}
 
-	s.respond(w, r, resp)
+	s.respond(w, r, &resp)
 }
 
 //TODO: Delete pvc
@@ -79,7 +80,8 @@ func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
+		Status:  http.StatusOK,
 	})
 }

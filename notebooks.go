@@ -35,8 +35,11 @@ const SharedMemoryVolumePath string = "/dev/shm"
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
-// StoppedAnnotation String.
-const StoppedAnnotation string = "stopped"
+// StoppedAnnotation is the annotation name present on stopped resources.
+const StoppedAnnotation string = "kubeflow-resource-stopped"
+
+// ServerTypeAnnotation is the annotation name representing the server type of the notebook.
+const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
 type volumetype string
 
@@ -80,23 +83,27 @@ type newnotebookrequest struct {
 	Language           string            `json:"language"`
 }
 
+type gpuresponse struct {
+	Count   resource.Quantity `json:"count"`
+	Message string            `json:"message"`
+}
+
 type notebookresponse struct {
 	Age        string            `json:"age"`
 	CPU        *inf.Dec          `json:"cpu"`
-	GPU        resource.Quantity `json:"gpu"`
-	GPUVendor  GPUVendor         `json:"gpuvendor"`
+	GPUs       gpuresponse       `json:"gpu"`
 	Image      string            `json:"image"`
 	Memory     resource.Quantity `json:"memory"`
 	Name       string            `json:"name"`
+	ServerType interface{}       `json:"serverType"`
 	Namespace  string            `json:"namespace"`
-	Reason     string            `json:"reason"`
 	ShortImage string            `json:"shortImage"`
-	Status     Status            `json:"status"`
+	Status     status            `json:"status"`
 	Volumes    []string          `json:"volumes"`
 }
 
 type notebooksresponse struct {
-	APIResponse
+	APIResponseBase
 	Notebooks []notebookresponse `json:"notebooks"`
 }
 
@@ -104,81 +111,119 @@ type updatenotebookrequest struct {
 	Stopped bool `json:"stopped"`
 }
 
-//
-// EVENT_TYPE_NORMAL = "Normal"
-// EVENT_TYPE_WARNING = "Warning"
-//
-// STATUS_ERROR = "error"
-// STATUS_WARNING = "warning"
-// STATUS_RUNNING = "running"
-// STATUS_WAITING = "waiting"
-//
+// notebookPhase is the phase of a notebook.
+type notebookPhase string
 
-// Status string.
-type Status string
-
-// GPUVendor string.
-type GPUVendor string
-
-const (
-	// StatusWaiting Status.
-	StatusWaiting Status = "waiting"
-	// StatusRunning Status.
-	StatusRunning Status = "running"
-	// StatusError Status.
-	StatusError Status = "error"
-	// StatusWarning Status.
-	StatusWarning Status = "warning"
-
-	// GPUVendorNvidia Status.
-	GPUVendorNvidia GPUVendor = "nvidia"
-	// GPUVendorAMD Status.
-	GPUVendorAMD GPUVendor = "amd"
-)
-
-func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Status, string) {
-	// Notebook is being deleted
-	if notebook.DeletionTimestamp != nil {
-		return StatusWaiting, "Deleting Notebook Server"
-	}
-
-	// Return Container State if it's available
-	if notebook.Status.ContainerState.Running != nil && notebook.Status.ReadyReplicas != 0 {
-		return StatusRunning, "Running"
-	}
-	if notebook.Status.ContainerState.Terminated != nil {
-		return StatusError, "The Pod has Terminated"
-	}
-	status, reason := StatusWarning, ""
-
-	if notebook.Status.ContainerState.Waiting != nil {
-		status, reason = StatusWaiting, notebook.Status.ContainerState.Waiting.Reason
-		if notebook.Status.ContainerState.Waiting.Reason == "ImagePullBackoff" {
-			status, reason = StatusError, notebook.Status.ContainerState.Waiting.Reason
-		}
-	} else {
-		status, reason = StatusWaiting, "Scheduling the Pod"
-	}
-
-	// Process events
-	for _, event := range events {
-		if event.Type == corev1.EventTypeWarning {
-			return StatusWarning, event.Message
-		}
-	}
-
-	return status, reason
-
+// status represents the status of a notebook.
+type status struct {
+	Message string        `json:"message"`
+	Phase   notebookPhase `json:"phase"`
+	State   string        `json:"state"`
 }
 
-func processGPU(notebook *kubeflowv1.Notebook) (resource.Quantity, GPUVendor) {
-	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["nvidia.com/gpu"]; ok {
-		return limit, GPUVendorNvidia
+const (
+	// NotebookPhaseReady represents the ready phase of a notebook.
+	NotebookPhaseReady notebookPhase = "ready"
+
+	// NotebookPhaseWaiting represents the waiting phase of a notebook.
+	NotebookPhaseWaiting notebookPhase = "waiting"
+
+	// NotebookPhaseWarning represents the warning phase of a notebook.
+	NotebookPhaseWarning notebookPhase = "warning"
+
+	// NotebookPhaseError represents the error phase of a notebook.
+	NotebookPhaseError notebookPhase = "error"
+
+	// NotebookPhaseUnitialized represents the uninitialized phase of a notebook.
+	NotebookPhaseUnitialized notebookPhase = "uninitialized"
+
+	// NotebookPhaseUnavailable represents the unavailable phase of a notebook.
+	NotebookPhaseUnavailable notebookPhase = "unavailable"
+
+	// NotebookPhaseTerminating represents the terminating phase of a notebook.
+	NotebookPhaseTerminating notebookPhase = "terminating"
+
+	// NotebookPhaseStopped represents the stopped phase of a notebook.
+	NotebookPhaseStopped notebookPhase = "stopped"
+)
+
+// Based on: https://github.com/kubeflow/kubeflow/blob/0e91a2b9cd0c3b6687692b1f1f09ac6070cc6c3e/components/crud-web-apps/jupyter/backend/apps/common/status.py#L9
+func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status {
+	// Check if the notebook is bing deleting
+	if notebook.DeletionTimestamp != nil {
+		return status{
+			Message: "Deleting this Notebook Server.",
+			Phase:   NotebookPhaseTerminating,
+		}
 	}
-	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["amd.com/gpu"]; ok {
-		return limit, GPUVendorAMD
+
+	// Check if the notebook is stopped
+	if _, ok := notebook.Annotations[StoppedAnnotation]; ok {
+		if notebook.Status.ReadyReplicas == 0 {
+			return status{
+				Message: "No pods are currently running for this Notebook Server.",
+				Phase:   NotebookPhaseStopped,
+			}
+		}
+
+		return status{
+			Message: "Notebook Server is stopping.",
+			Phase:   NotebookPhaseTerminating,
+		}
 	}
-	return resource.Quantity{}, ""
+
+	// Check the status
+	state := notebook.Status.ContainerState
+
+	if notebook.Status.ReadyReplicas == 1 {
+		return status{
+			Message: "Running",
+			Phase:   NotebookPhaseReady,
+		}
+	}
+
+	if state.Waiting != nil {
+		return status{
+			Message: state.Waiting.Reason,
+			Phase:   NotebookPhaseWaiting,
+		}
+	}
+
+	// Check for more detailed errors
+	for _, event := range events {
+		if event.Type == corev1.EventTypeWarning {
+			return status{
+				Message: event.Reason,
+				Phase:   NotebookPhaseWarning,
+			}
+		}
+	}
+
+	return status{
+		Message: "Scheduling the Pod",
+		Phase:   NotebookPhaseWaiting,
+	}
+}
+
+func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
+	response := gpuresponse{}
+
+	vendors := map[corev1.ResourceName]string{}
+	for _, vendor := range s.Config.SpawnerFormDefaults.GPUs.Value.Vendors {
+		vendors[corev1.ResourceName(vendor.LimitsKey)] = vendor.UIName
+	}
+
+	counts := []string{}
+	for vendorKey, vendorName := range vendors {
+		if quantity, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[vendorKey]; ok {
+			response.Count.Add(quantity)
+			counts = append(counts, fmt.Sprintf("%s %s", quantity.String(), vendorName))
+		}
+	}
+
+	response.Message = strings.Join(counts, ", ")
+
+	return response
 }
 
 func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
@@ -195,9 +240,10 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 
 	sort.Sort(notebooksByName(notebooks))
 
-	resp := notebooksresponse{
-		APIResponse: APIResponse{
+	resp := &notebooksresponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 		Notebooks: make([]notebookresponse, 0),
 	}
@@ -223,10 +269,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
 
 		// Process current status + reason
-		status, reason := processStatus(notebook, events)
-
-		// Process GPU information
-		gpu, gpuVendor := processGPU(notebook)
+		status := processStatus(notebook, events)
 
 		volumes := []string{}
 		for _, vol := range notebook.Spec.Template.Spec.Volumes {
@@ -243,14 +286,13 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 			Name:       notebook.Name,
 			Namespace:  notebook.Namespace,
 			Image:      notebook.Spec.Template.Spec.Containers[0].Image,
+			ServerType: notebook.Annotations[ServerTypeAnnotation],
 			ShortImage: imageparts[len(imageparts)-1],
 			CPU:        cpulimit,
+			GPUs:       s.processGPUs(notebook),
 			Memory:     notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
-			Reason:     reason,
 			Status:     status,
 			Volumes:    volumes,
-			GPU:        gpu,
-			GPUVendor:  gpuVendor,
 		})
 	}
 
@@ -541,8 +583,9 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
+		Status:  http.StatusOK,
 	})
 }
 
@@ -562,8 +605,9 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
+		Status:  http.StatusOK,
 	})
 }
 
@@ -605,6 +649,10 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 
 		if req.Stopped {
 			// Set the stopped annotation
+			if updatedNotebook.Annotations == nil {
+				updatedNotebook.Annotations = map[string]string{}
+			}
+
 			updatedNotebook.Annotations[StoppedAnnotation] = time.Now().Format(time.RFC3339)
 		} else {
 			// Remove the stopped annotation
@@ -620,7 +668,7 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
 		Status:  http.StatusOK,
 	})

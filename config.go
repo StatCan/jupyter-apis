@@ -1,6 +1,10 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	corev1 "k8s.io/api/core/v1"
+)
 
 type SpawnerFormDefaults struct {
 	Image            Image           `yaml:"image" json:"image"`
@@ -26,46 +30,9 @@ type AffinityConfig struct {
 }
 
 type AffinityConfigOption struct {
-	ConfigKey   string   `yaml:"configKey" json:"configKey"`
-	DisplayName string   `yaml:"displayName" json:"displayName"`
-	Affinity    Affinity `yaml:"affinity" json:"affinity"`
-}
-
-type Affinity struct {
-	NodeAffinity    NodeAffinity    `yaml:"nodeAffinity" json:"nodeAffinity"`
-	PodAntiAffinity PodAntiAffinity `yaml:"podAntiAffinity" json:"podAntiAffinity"`
-}
-
-type NodeAffinity struct {
-	RequiredDuringSchedulingIgnoredDuringExecution NodeAffinityRequiredDuringSchedulingIgnoredDuringExecution `yaml:"requiredDuringSchedulingIgnoredDuringExecution" json:"requiredDuringSchedulingIgnoredDuringExecution"`
-}
-
-type NodeAffinityRequiredDuringSchedulingIgnoredDuringExecution struct {
-	NodeSelectorTerms []NodeSelectorTerm `yaml:"nodeSelectorTerms" json:"nodeSelectorTerms"`
-}
-
-type NodeSelectorTerm struct {
-	MatchExpressions []NodeSelectorTermMatchExpression `yaml:"matchExpressions" json:"matchExpressions"`
-}
-
-type NodeSelectorTermMatchExpression struct {
-	Key      string   `yaml:"key" json:"key"`
-	Operator string   `yaml:"operator" json:"operator"`
-	Values   []string `yaml:"values" json:"values"`
-}
-
-type PodAntiAffinity struct {
-	RequiredDuringSchedulingIgnoredDuringExecution []RequiredDuringSchedulingIgnoredDuringExecutionElement `yaml:"requiredDuringSchedulingIgnoredDuringExecution" json:"requiredDuringSchedulingIgnoredDuringExecution"`
-}
-
-type RequiredDuringSchedulingIgnoredDuringExecutionElement struct {
-	LabelSelector LabelSelector `yaml:"labelSelector" json:"labelSelector"`
-	Namespaces    []interface{} `yaml:"namespaces" json:"namespaces"`
-	TopologyKey   string        `yaml:"topologyKey" json:"topologyKey"`
-}
-
-type LabelSelector struct {
-	MatchExpressions []LabelSelectorMatchExpression `yaml:"matchExpressions" json:"matchExpressions"`
+	ConfigKey   string          `yaml:"configKey" json:"configKey"`
+	DisplayName string          `yaml:"displayName" json:"displayName"`
+	Affinity    corev1.Affinity `yaml:"affinity" json:"affinity"`
 }
 
 type LabelSelectorMatchExpression struct {
@@ -147,16 +114,9 @@ type TolerationGroup struct {
 }
 
 type TolerationGroupOption struct {
-	GroupKey    string       `yaml:"groupKey" json:"groupKey"`
-	DisplayName string       `yaml:"displayName" json:"displayName"`
-	Tolerations []Toleration `yaml:"tolerations" json:"tolerations"`
-}
-
-type Toleration struct {
-	Key      string `yaml:"key" json:"key"`
-	Operator string `yaml:"operator" json:"operator"`
-	Value    string `yaml:"value" json:"value"`
-	Effect   string `yaml:"effect" json:"effect"`
+	GroupKey    string              `yaml:"groupKey" json:"groupKey"`
+	DisplayName string              `yaml:"displayName" json:"displayName"`
+	Tolerations []corev1.Toleration `yaml:"tolerations" json:"tolerations"`
 }
 
 type WorkspaceVolume struct {

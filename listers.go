@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	kubeflowinformers "github.com/StatCan/kubeflow-controller/pkg/generated/informers/externalversions"
+	kubeflowinformers "github.com/StatCan/kubeflow-apis/informers/externalversions"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/tools/cache"
 )

@@ -13,13 +13,13 @@ import (
 	"strings"
 	"time"
 
-	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
+	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
 	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 )
 
@@ -73,7 +73,9 @@ type newnotebookrequest struct {
 	CustomImage        string            `json:"customImage"`
 	CustomImageCheck   bool              `json:"customImageCheck"`
 	CPU                resource.Quantity `json:"cpu"`
+	CPULimit           resource.Quantity `json:"cpuLimit"`
 	Memory             resource.Quantity `json:"memory"`
+	MemoryLimit        resource.Quantity `json:"memoryLimit"`
 	GPUs               gpurequest        `json:"gpus"`
 	NoWorkspace        bool              `json:"noWorkspace"`
 	Workspace          volumerequest     `json:"workspace"`
@@ -81,6 +83,9 @@ type newnotebookrequest struct {
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
 	Language           string            `json:"language"`
+	ServerType         string            `json:"serverType"`
+	AffinityConfig     string            `json:"affinityConfig"`
+	TolerationGroup    string            `json:"tolerationGroup"`
 }
 
 type gpuresponse struct {
@@ -304,7 +309,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 	if req.Type == VolumeTypeNew {
 		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
 			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: v1.ObjectMeta{
+				ObjectMeta: metav1.ObjectMeta{
 					Name:      req.Name,
 					Namespace: notebook.Namespace,
 					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
@@ -321,7 +326,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 		} else {
 			// Create the PVC
 			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: v1.ObjectMeta{
+				ObjectMeta: metav1.ObjectMeta{
 					Name:      req.Name,
 					Namespace: notebook.Namespace,
 				},
@@ -340,7 +345,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 			pvc.Spec.StorageClassName = &req.Class
 		}
 
-		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, v1.CreateOptions{}); err != nil {
+		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, metav1.CreateOptions{}); err != nil {
 			return err
 		}
 	} else if req.Type != VolumeTypeExisting {
@@ -393,12 +398,14 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Setup the notebook
-	// TODO: Work with default CPU/memory limits from config
 	notebook := kubeflowv1.Notebook{
-		ObjectMeta: v1.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Name,
 			Namespace: namespace,
 			Labels:    make(map[string]string),
+			Annotations: map[string]string{
+				ServerTypeAnnotation: req.ServerType,
+			},
 		},
 		Spec: kubeflowv1.NotebookSpec{
 			Template: kubeflowv1.NotebookTemplateSpec{
@@ -431,7 +438,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = val
 	} else {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
-		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPU
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
 	}
 
 	if s.Config.SpawnerFormDefaults.Memory.ReadOnly {
@@ -445,7 +452,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = val
 	} else {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
-		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.Memory
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
 	}
 
 	// Add configuration items
@@ -561,23 +568,47 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Add tolerations
+	if req.TolerationGroup != "none" {
+		for _, tolerationGroup := range s.Config.SpawnerFormDefaults.TolerationGroup.Options {
+			if tolerationGroup.GroupKey != req.TolerationGroup {
+				continue
+			}
+
+			notebook.Spec.Template.Spec.Tolerations = tolerationGroup.Tolerations
+		}
+	}
+
+	// Add affinity
+	if req.AffinityConfig != "none" {
+		for _, affinityConfig := range s.Config.SpawnerFormDefaults.AffinityConfig.Options {
+			if affinityConfig.ConfigKey != req.AffinityConfig {
+				continue
+			}
+
+			notebook.Spec.Template.Spec.Affinity = &affinityConfig.Affinity
+		}
+	}
+
 	//Add Language
 	//Validate that the language format is valid (language[_territory])
-	match, err := regexp.MatchString("^[[:alpha:]]{2}(_[[:alpha:]]{2})?$", req.Language)
-	if err != nil || !match {
-		var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
-		s.error(w, r, errLanguageFormat)
-		return
+	if req.Language != "" {
+		match, err := regexp.MatchString("^[[:alpha:]]{2}(_[[:alpha:]]{2})?$", req.Language)
+		if err != nil || !match {
+			var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
+			s.error(w, r, errLanguageFormat)
+			return
+		}
+		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+			Name:  EnvKfLanguage,
+			Value: req.Language,
+		})
 	}
-	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-		Name:  EnvKfLanguage,
-		Value: req.Language,
-	})
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)
 
 	// Submit the notebook to the API server
-	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Create(r.Context(), &notebook, v1.CreateOptions{})
+	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Create(r.Context(), &notebook, metav1.CreateOptions{})
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -596,8 +627,8 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("deleting notebook %q for %q", notebook, namespace)
 
-	propagation := v1.DeletePropagationForeground
-	err := s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Delete(r.Context(), notebook, v1.DeleteOptions{
+	propagation := metav1.DeletePropagationForeground
+	err := s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Delete(r.Context(), notebook, metav1.DeleteOptions{
 		PropagationPolicy: &propagation,
 	})
 	if err != nil {
@@ -661,7 +692,7 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if update {
-		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, v1.UpdateOptions{})
+		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, metav1.UpdateOptions{})
 		if err != nil {
 			s.error(w, r, err)
 			return

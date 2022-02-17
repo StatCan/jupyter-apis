@@ -1,7 +1,8 @@
 # Stage 0: UI Build Stage
-FROM node:12-buster-slim as frontend
+FROM node:12-alpine as frontend
 WORKDIR /src
 ENV NG_CLI_ANALYTICS "ci"
+RUN apk add --no-cache --virtual .gyp python3 make g++
 COPY ./frontend/common/kubeflow-common-lib/package*.json ./
 RUN npm ci
 COPY ./frontend/common/kubeflow-common-lib/ .

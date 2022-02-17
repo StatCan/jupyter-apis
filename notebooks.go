@@ -13,13 +13,13 @@ import (
 	"strings"
 	"time"
 
-	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
+	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
 	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 )
 
@@ -35,8 +35,11 @@ const SharedMemoryVolumePath string = "/dev/shm"
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
-// StoppedAnnotation String.
-const StoppedAnnotation string = "stopped"
+// StoppedAnnotation is the annotation name present on stopped resources.
+const StoppedAnnotation string = "kubeflow-resource-stopped"
+
+// ServerTypeAnnotation is the annotation name representing the server type of the notebook.
+const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
 type volumetype string
 
@@ -70,7 +73,9 @@ type newnotebookrequest struct {
 	CustomImage        string            `json:"customImage"`
 	CustomImageCheck   bool              `json:"customImageCheck"`
 	CPU                resource.Quantity `json:"cpu"`
+	CPULimit           resource.Quantity `json:"cpuLimit"`
 	Memory             resource.Quantity `json:"memory"`
+	MemoryLimit        resource.Quantity `json:"memoryLimit"`
 	GPUs               gpurequest        `json:"gpus"`
 	NoWorkspace        bool              `json:"noWorkspace"`
 	Workspace          volumerequest     `json:"workspace"`
@@ -78,25 +83,32 @@ type newnotebookrequest struct {
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
 	Language           string            `json:"language"`
+	ServerType         string            `json:"serverType"`
+	AffinityConfig     string            `json:"affinityConfig"`
+	TolerationGroup    string            `json:"tolerationGroup"`
+}
+
+type gpuresponse struct {
+	Count   resource.Quantity `json:"count"`
+	Message string            `json:"message"`
 }
 
 type notebookresponse struct {
 	Age        string            `json:"age"`
 	CPU        *inf.Dec          `json:"cpu"`
-	GPU        resource.Quantity `json:"gpu"`
-	GPUVendor  GPUVendor         `json:"gpuvendor"`
+	GPUs       gpuresponse       `json:"gpu"`
 	Image      string            `json:"image"`
 	Memory     resource.Quantity `json:"memory"`
 	Name       string            `json:"name"`
+	ServerType interface{}       `json:"serverType"`
 	Namespace  string            `json:"namespace"`
-	Reason     string            `json:"reason"`
 	ShortImage string            `json:"shortImage"`
-	Status     Status            `json:"status"`
+	Status     status            `json:"status"`
 	Volumes    []string          `json:"volumes"`
 }
 
 type notebooksresponse struct {
-	APIResponse
+	APIResponseBase
 	Notebooks []notebookresponse `json:"notebooks"`
 }
 
@@ -104,81 +116,119 @@ type updatenotebookrequest struct {
 	Stopped bool `json:"stopped"`
 }
 
-//
-// EVENT_TYPE_NORMAL = "Normal"
-// EVENT_TYPE_WARNING = "Warning"
-//
-// STATUS_ERROR = "error"
-// STATUS_WARNING = "warning"
-// STATUS_RUNNING = "running"
-// STATUS_WAITING = "waiting"
-//
+// notebookPhase is the phase of a notebook.
+type notebookPhase string
 
-// Status string.
-type Status string
-
-// GPUVendor string.
-type GPUVendor string
-
-const (
-	// StatusWaiting Status.
-	StatusWaiting Status = "waiting"
-	// StatusRunning Status.
-	StatusRunning Status = "running"
-	// StatusError Status.
-	StatusError Status = "error"
-	// StatusWarning Status.
-	StatusWarning Status = "warning"
-
-	// GPUVendorNvidia Status.
-	GPUVendorNvidia GPUVendor = "nvidia"
-	// GPUVendorAMD Status.
-	GPUVendorAMD GPUVendor = "amd"
-)
-
-func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) (Status, string) {
-	// Notebook is being deleted
-	if notebook.DeletionTimestamp != nil {
-		return StatusWaiting, "Deleting Notebook Server"
-	}
-
-	// Return Container State if it's available
-	if notebook.Status.ContainerState.Running != nil && notebook.Status.ReadyReplicas != 0 {
-		return StatusRunning, "Running"
-	}
-	if notebook.Status.ContainerState.Terminated != nil {
-		return StatusError, "The Pod has Terminated"
-	}
-	status, reason := StatusWarning, ""
-
-	if notebook.Status.ContainerState.Waiting != nil {
-		status, reason = StatusWaiting, notebook.Status.ContainerState.Waiting.Reason
-		if notebook.Status.ContainerState.Waiting.Reason == "ImagePullBackoff" {
-			status, reason = StatusError, notebook.Status.ContainerState.Waiting.Reason
-		}
-	} else {
-		status, reason = StatusWaiting, "Scheduling the Pod"
-	}
-
-	// Process events
-	for _, event := range events {
-		if event.Type == corev1.EventTypeWarning {
-			return StatusWarning, event.Message
-		}
-	}
-
-	return status, reason
-
+// status represents the status of a notebook.
+type status struct {
+	Message string        `json:"message"`
+	Phase   notebookPhase `json:"phase"`
+	State   string        `json:"state"`
 }
 
-func processGPU(notebook *kubeflowv1.Notebook) (resource.Quantity, GPUVendor) {
-	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["nvidia.com/gpu"]; ok {
-		return limit, GPUVendorNvidia
+const (
+	// NotebookPhaseReady represents the ready phase of a notebook.
+	NotebookPhaseReady notebookPhase = "ready"
+
+	// NotebookPhaseWaiting represents the waiting phase of a notebook.
+	NotebookPhaseWaiting notebookPhase = "waiting"
+
+	// NotebookPhaseWarning represents the warning phase of a notebook.
+	NotebookPhaseWarning notebookPhase = "warning"
+
+	// NotebookPhaseError represents the error phase of a notebook.
+	NotebookPhaseError notebookPhase = "error"
+
+	// NotebookPhaseUnitialized represents the uninitialized phase of a notebook.
+	NotebookPhaseUnitialized notebookPhase = "uninitialized"
+
+	// NotebookPhaseUnavailable represents the unavailable phase of a notebook.
+	NotebookPhaseUnavailable notebookPhase = "unavailable"
+
+	// NotebookPhaseTerminating represents the terminating phase of a notebook.
+	NotebookPhaseTerminating notebookPhase = "terminating"
+
+	// NotebookPhaseStopped represents the stopped phase of a notebook.
+	NotebookPhaseStopped notebookPhase = "stopped"
+)
+
+// Based on: https://github.com/kubeflow/kubeflow/blob/0e91a2b9cd0c3b6687692b1f1f09ac6070cc6c3e/components/crud-web-apps/jupyter/backend/apps/common/status.py#L9
+func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status {
+	// Check if the notebook is bing deleting
+	if notebook.DeletionTimestamp != nil {
+		return status{
+			Message: "Deleting this Notebook Server.",
+			Phase:   NotebookPhaseTerminating,
+		}
 	}
-	if limit, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits["amd.com/gpu"]; ok {
-		return limit, GPUVendorAMD
+
+	// Check if the notebook is stopped
+	if _, ok := notebook.Annotations[StoppedAnnotation]; ok {
+		if notebook.Status.ReadyReplicas == 0 {
+			return status{
+				Message: "No pods are currently running for this Notebook Server.",
+				Phase:   NotebookPhaseStopped,
+			}
+		}
+
+		return status{
+			Message: "Notebook Server is stopping.",
+			Phase:   NotebookPhaseTerminating,
+		}
 	}
-	return resource.Quantity{}, ""
+
+	// Check the status
+	state := notebook.Status.ContainerState
+
+	if notebook.Status.ReadyReplicas == 1 {
+		return status{
+			Message: "Running",
+			Phase:   NotebookPhaseReady,
+		}
+	}
+
+	if state.Waiting != nil {
+		return status{
+			Message: state.Waiting.Reason,
+			Phase:   NotebookPhaseWaiting,
+		}
+	}
+
+	// Check for more detailed errors
+	for _, event := range events {
+		if event.Type == corev1.EventTypeWarning {
+			return status{
+				Message: event.Reason,
+				Phase:   NotebookPhaseWarning,
+			}
+		}
+	}
+
+	return status{
+		Message: "Scheduling the Pod",
+		Phase:   NotebookPhaseWaiting,
+	}
+}
+
+func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
+	response := gpuresponse{}
+
+	vendors := map[corev1.ResourceName]string{}
+	for _, vendor := range s.Config.SpawnerFormDefaults.GPUs.Value.Vendors {
+		vendors[corev1.ResourceName(vendor.LimitsKey)] = vendor.UIName
+	}
+
+	counts := []string{}
+	for vendorKey, vendorName := range vendors {
+		if quantity, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[vendorKey]; ok {
+			response.Count.Add(quantity)
+			counts = append(counts, fmt.Sprintf("%s %s", quantity.String(), vendorName))
+		}
+	}
+
+	response.Message = strings.Join(counts, ", ")
+
+	return response
 }
 
 func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
@@ -195,9 +245,10 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 
 	sort.Sort(notebooksByName(notebooks))
 
-	resp := notebooksresponse{
-		APIResponse: APIResponse{
+	resp := &notebooksresponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 		Notebooks: make([]notebookresponse, 0),
 	}
@@ -223,10 +274,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
 
 		// Process current status + reason
-		status, reason := processStatus(notebook, events)
-
-		// Process GPU information
-		gpu, gpuVendor := processGPU(notebook)
+		status := processStatus(notebook, events)
 
 		volumes := []string{}
 		for _, vol := range notebook.Spec.Template.Spec.Volumes {
@@ -243,14 +291,13 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 			Name:       notebook.Name,
 			Namespace:  notebook.Namespace,
 			Image:      notebook.Spec.Template.Spec.Containers[0].Image,
+			ServerType: notebook.Annotations[ServerTypeAnnotation],
 			ShortImage: imageparts[len(imageparts)-1],
 			CPU:        cpulimit,
+			GPUs:       s.processGPUs(notebook),
 			Memory:     notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
-			Reason:     reason,
 			Status:     status,
 			Volumes:    volumes,
-			GPU:        gpu,
-			GPUVendor:  gpuVendor,
 		})
 	}
 
@@ -262,7 +309,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 	if req.Type == VolumeTypeNew {
 		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
 			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: v1.ObjectMeta{
+				ObjectMeta: metav1.ObjectMeta{
 					Name:      req.Name,
 					Namespace: notebook.Namespace,
 					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
@@ -279,7 +326,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 		} else {
 			// Create the PVC
 			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: v1.ObjectMeta{
+				ObjectMeta: metav1.ObjectMeta{
 					Name:      req.Name,
 					Namespace: notebook.Namespace,
 				},
@@ -298,7 +345,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 			pvc.Spec.StorageClassName = &req.Class
 		}
 
-		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, v1.CreateOptions{}); err != nil {
+		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, metav1.CreateOptions{}); err != nil {
 			return err
 		}
 	} else if req.Type != VolumeTypeExisting {
@@ -351,12 +398,14 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Setup the notebook
-	// TODO: Work with default CPU/memory limits from config
 	notebook := kubeflowv1.Notebook{
-		ObjectMeta: v1.ObjectMeta{
+		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Name,
 			Namespace: namespace,
 			Labels:    make(map[string]string),
+			Annotations: map[string]string{
+				ServerTypeAnnotation: req.ServerType,
+			},
 		},
 		Spec: kubeflowv1.NotebookSpec{
 			Template: kubeflowv1.NotebookTemplateSpec{
@@ -389,7 +438,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = val
 	} else {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
-		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPU
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
 	}
 
 	if s.Config.SpawnerFormDefaults.Memory.ReadOnly {
@@ -403,7 +452,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = val
 	} else {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
-		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.Memory
+		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
 	}
 
 	// Add configuration items
@@ -447,7 +496,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if s.Config.SpawnerFormDefaults.DataVolumes.ReadOnly {
-		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Values {
+		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
 			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
 			if err != nil {
 				s.error(w, r, err)
@@ -455,11 +504,11 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			}
 
 			vol := volumerequest{
-				Name:  volreq.Name.Value,
+				Name:  volreq.Value.Name.Value,
 				Size:  size,
-				Path:  volreq.MountPath.Value,
-				Mode:  corev1.PersistentVolumeAccessMode(volreq.AccessModes.Value),
-				Class: volreq.Class.Value,
+				Path:  volreq.Value.MountPath.Value,
+				Mode:  corev1.PersistentVolumeAccessMode(volreq.Value.AccessModes.Value),
+				Class: volreq.Value.Class.Value,
 			}
 			err = s.handleVolume(r.Context(), vol, &notebook)
 			if err != nil {
@@ -478,7 +527,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add shared memory, if enabled
-	if (s.Config.SpawnerFormDefaults.SharedMemory.ReadOnly && s.Config.SpawnerFormDefaults.SharedMemory.Value) || (!s.Config.SpawnerFormDefaults.SharedMemory.ReadOnly && req.EnableSharedMemory) {
+	if (s.Config.SpawnerFormDefaults.Shm.ReadOnly && s.Config.SpawnerFormDefaults.Shm.Value) || (!s.Config.SpawnerFormDefaults.Shm.ReadOnly && req.EnableSharedMemory) {
 		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
 			Name: SharedMemoryVolumeName,
 			VolumeSource: corev1.VolumeSource{
@@ -496,8 +545,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Add GPU
 	if s.Config.SpawnerFormDefaults.GPUs.ReadOnly {
-		if s.Config.SpawnerFormDefaults.GPUs.Value.Quantity != "none" {
-			qty, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.GPUs.Value.Quantity)
+		if s.Config.SpawnerFormDefaults.GPUs.Value.Num != "none" {
+			qty, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.GPUs.Value.Num)
 			if err != nil {
 				s.error(w, r, err)
 				return
@@ -519,30 +568,55 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Add tolerations
+	if req.TolerationGroup != "none" {
+		for _, tolerationGroup := range s.Config.SpawnerFormDefaults.TolerationGroup.Options {
+			if tolerationGroup.GroupKey != req.TolerationGroup {
+				continue
+			}
+
+			notebook.Spec.Template.Spec.Tolerations = tolerationGroup.Tolerations
+		}
+	}
+
+	// Add affinity
+	if req.AffinityConfig != "none" {
+		for _, affinityConfig := range s.Config.SpawnerFormDefaults.AffinityConfig.Options {
+			if affinityConfig.ConfigKey != req.AffinityConfig {
+				continue
+			}
+
+			notebook.Spec.Template.Spec.Affinity = &affinityConfig.Affinity
+		}
+	}
+
 	//Add Language
 	//Validate that the language format is valid (language[_territory])
-	match, err := regexp.MatchString("^[[:alpha:]]{2}(_[[:alpha:]]{2})?$", req.Language)
-	if err != nil || !match {
-		var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
-		s.error(w, r, errLanguageFormat)
-		return
+	if req.Language != "" {
+		match, err := regexp.MatchString("^[[:alpha:]]{2}(_[[:alpha:]]{2})?$", req.Language)
+		if err != nil || !match {
+			var errLanguageFormat = errors.New("Error: the value of KF_LANG environment variable ('" + req.Language + "') is not a valid format (e.g 'en', 'en_US', ...)")
+			s.error(w, r, errLanguageFormat)
+			return
+		}
+		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+			Name:  EnvKfLanguage,
+			Value: req.Language,
+		})
 	}
-	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-		Name:  EnvKfLanguage,
-		Value: req.Language,
-	})
 
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)
 
 	// Submit the notebook to the API server
-	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Create(r.Context(), &notebook, v1.CreateOptions{})
+	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Create(r.Context(), &notebook, metav1.CreateOptions{})
 	if err != nil {
 		s.error(w, r, err)
 		return
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
+		Status:  http.StatusOK,
 	})
 }
 
@@ -553,8 +627,8 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("deleting notebook %q for %q", notebook, namespace)
 
-	propagation := v1.DeletePropagationForeground
-	err := s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Delete(r.Context(), notebook, v1.DeleteOptions{
+	propagation := metav1.DeletePropagationForeground
+	err := s.clientsets.kubeflow.KubeflowV1().Notebooks(namespace).Delete(r.Context(), notebook, metav1.DeleteOptions{
 		PropagationPolicy: &propagation,
 	})
 	if err != nil {
@@ -562,8 +636,9 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
+		Status:  http.StatusOK,
 	})
 }
 
@@ -605,6 +680,10 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 
 		if req.Stopped {
 			// Set the stopped annotation
+			if updatedNotebook.Annotations == nil {
+				updatedNotebook.Annotations = map[string]string{}
+			}
+
 			updatedNotebook.Annotations[StoppedAnnotation] = time.Now().Format(time.RFC3339)
 		} else {
 			// Remove the stopped annotation
@@ -613,14 +692,14 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if update {
-		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, v1.UpdateOptions{})
+		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, metav1.UpdateOptions{})
 		if err != nil {
 			s.error(w, r, err)
 			return
 		}
 	}
 
-	s.respond(w, r, APIResponse{
+	s.respond(w, r, &APIResponseBase{
 		Success: true,
 		Status:  http.StatusOK,
 	})

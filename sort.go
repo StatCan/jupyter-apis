@@ -1,7 +1,7 @@
 package main
 
 import (
-	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
+	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	corev1 "k8s.io/api/core/v1"
 )
 

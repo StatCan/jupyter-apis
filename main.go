@@ -14,11 +14,11 @@ import (
 	"sync"
 	"time"
 
-	kubeflowv1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1"
-	kubeflowv1alpha1 "github.com/StatCan/kubeflow-controller/pkg/apis/kubeflowcontroller/v1alpha1"
-	kubeflow "github.com/StatCan/kubeflow-controller/pkg/generated/clientset/versioned"
-	kubeflowv1listers "github.com/StatCan/kubeflow-controller/pkg/generated/listers/kubeflowcontroller/v1"
-	kubeflowv1alpha1listers "github.com/StatCan/kubeflow-controller/pkg/generated/listers/kubeflowcontroller/v1alpha1"
+	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
+	kubeflowv1alpha1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1alpha1"
+	kubeflow "github.com/StatCan/kubeflow-apis/clientset/versioned"
+	kubeflowv1listers "github.com/StatCan/kubeflow-apis/listers/kubeflow/v1"
+	kubeflowv1alpha1listers "github.com/StatCan/kubeflow-apis/listers/kubeflow/v1alpha1"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v2"
@@ -133,6 +133,7 @@ func main() {
 
 	// Setup route handlers
 	router.HandleFunc("/api/config", s.GetConfig).Methods("GET")
+	router.HandleFunc("/api/gpus", s.GetGPUVendors).Methods("GET")
 
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
 

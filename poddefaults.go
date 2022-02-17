@@ -15,7 +15,7 @@ type poddefaultresponse struct {
 }
 
 type poddefaultsresponse struct {
-	APIResponse
+	APIResponseBase
 	PodDefaults []poddefaultresponse `json:"poddefaults"`
 }
 
@@ -32,9 +32,10 @@ func (s *server) GetPodDefaults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := poddefaultsresponse{
-		APIResponse: APIResponse{
+	resp := &poddefaultsresponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 		PodDefaults: make([]poddefaultresponse, 0),
 	}

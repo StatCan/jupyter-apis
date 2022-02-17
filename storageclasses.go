@@ -10,7 +10,7 @@ import (
 )
 
 type defaultstorageclassresponse struct {
-	APIResponse
+	APIResponseBase
 	DefaultStorageClass string `json:"defaultStorageClass"`
 }
 
@@ -53,9 +53,10 @@ func (s *server) GetDefaultStorageClass(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	resp := defaultstorageclassresponse{
-		APIResponse: APIResponse{
+	resp := &defaultstorageclassresponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 	}
 

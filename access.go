@@ -49,8 +49,9 @@ func (s *server) checkAccess(subjectAccessReviewTemplate authorizationv1.Subject
 		user := r.URL.User.Username()
 		if user == "" {
 			log.Printf("no user found")
-			s.respond(w, r, APIResponse{
+			s.respond(w, r, &APIResponseBase{
 				Success: false,
+				Status:  http.StatusNotFound,
 				Log:     "no user found",
 			})
 			return
@@ -77,8 +78,9 @@ func (s *server) checkAccess(subjectAccessReviewTemplate authorizationv1.Subject
 
 			log.Println(msg)
 
-			s.respond(w, r, APIResponse{
+			s.respond(w, r, &APIResponseBase{
 				Success: false,
+				Status:  http.StatusForbidden,
 				Log:     msg,
 			})
 			return

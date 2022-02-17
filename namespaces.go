@@ -9,7 +9,7 @@ import (
 )
 
 type namespacesresponse struct {
-	APIResponse
+	APIResponseBase
 	Namespaces []string `json:"namespaces"`
 }
 
@@ -25,9 +25,10 @@ func (s *server) GetNamespaces(w http.ResponseWriter, r *http.Request) {
 
 	sort.Sort(namespacesByName(namespaces))
 
-	resp := namespacesresponse{
-		APIResponse: APIResponse{
+	resp := &namespacesresponse{
+		APIResponseBase: APIResponseBase{
 			Success: true,
+			Status:  http.StatusOK,
 		},
 		Namespaces: make([]string, 0),
 	}

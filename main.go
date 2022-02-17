@@ -236,6 +236,11 @@ func main() {
 		},
 	}, s.GetPodDefaults)).Methods("GET")
 
+	// Return the index.html page.
+	router.Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, path.Join(staticDirectory, "index.html"))
+	})
+
 	// Return the index.html page when a request for the new page is received directly.
 	router.Path("/new").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, path.Join(staticDirectory, "index.html"))

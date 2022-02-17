@@ -242,7 +242,7 @@ func main() {
 	})
 
 	// Serve the rest of the routes from the static directory.
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir(staticDirectory)))
+	router.PathPrefix("/static/").Handler(http.FileServer(http.Dir(staticDirectory)))
 
 	// Setup the server, with:
 	//  Add combined logging handler

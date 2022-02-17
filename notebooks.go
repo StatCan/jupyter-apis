@@ -489,7 +489,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if s.Config.SpawnerFormDefaults.DataVolumes.ReadOnly {
-		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Values {
+		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
 			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
 			if err != nil {
 				s.error(w, r, err)
@@ -497,11 +497,11 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			}
 
 			vol := volumerequest{
-				Name:  volreq.Name.Value,
+				Name:  volreq.Value.Name.Value,
 				Size:  size,
-				Path:  volreq.MountPath.Value,
-				Mode:  corev1.PersistentVolumeAccessMode(volreq.AccessModes.Value),
-				Class: volreq.Class.Value,
+				Path:  volreq.Value.MountPath.Value,
+				Mode:  corev1.PersistentVolumeAccessMode(volreq.Value.AccessModes.Value),
+				Class: volreq.Value.Class.Value,
 			}
 			err = s.handleVolume(r.Context(), vol, &notebook)
 			if err != nil {
@@ -520,7 +520,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add shared memory, if enabled
-	if (s.Config.SpawnerFormDefaults.SharedMemory.ReadOnly && s.Config.SpawnerFormDefaults.SharedMemory.Value) || (!s.Config.SpawnerFormDefaults.SharedMemory.ReadOnly && req.EnableSharedMemory) {
+	if (s.Config.SpawnerFormDefaults.Shm.ReadOnly && s.Config.SpawnerFormDefaults.Shm.Value) || (!s.Config.SpawnerFormDefaults.Shm.ReadOnly && req.EnableSharedMemory) {
 		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
 			Name: SharedMemoryVolumeName,
 			VolumeSource: corev1.VolumeSource{
@@ -538,8 +538,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Add GPU
 	if s.Config.SpawnerFormDefaults.GPUs.ReadOnly {
-		if s.Config.SpawnerFormDefaults.GPUs.Value.Quantity != "none" {
-			qty, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.GPUs.Value.Quantity)
+		if s.Config.SpawnerFormDefaults.GPUs.Value.Num != "none" {
+			qty, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.GPUs.Value.Num)
 			if err != nil {
 				s.error(w, r, err)
 				return

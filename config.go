@@ -2,72 +2,127 @@ package main
 
 import "net/http"
 
-// ConfigurationsConfiguration Struct.
-type ConfigurationsConfiguration struct {
+type SpawnerFormDefaults struct {
+	Image            Image           `yaml:"image" json:"image"`
+	ImageGroupOne    ImageGroup      `yaml:"imageGroupOne" json:"imageGroupOne"`
+	ImageGroupTwo    ImageGroup      `yaml:"imageGroupTwo" json:"imageGroupTwo"`
+	AllowCustomImage bool            `yaml:"allowCustomImage" json:"allowCustomImage"`
+	ImagePullPolicy  ImagePullPolicy `yaml:"imagePullPolicy" json:"imagePullPolicy"`
+	CPU              CPU             `yaml:"cpu" json:"cpu"`
+	Memory           CPU             `yaml:"memory" json:"memory"`
+	WorkspaceVolume  WorkspaceVolume `yaml:"workspaceVolume" json:"workspaceVolume"`
+	DataVolumes      DataVolumes     `yaml:"dataVolumes" json:"dataVolumes"`
+	GPUs             GPUs            `yaml:"gpus" json:"gpus"`
+	Shm              Shm             `yaml:"shm" json:"shm"`
+	Configurations   Configurations  `yaml:"configurations" json:"configurations"`
+	AffinityConfig   AffinityConfig  `yaml:"affinityConfig" json:"affinityConfig"`
+	TolerationGroup  TolerationGroup `yaml:"tolerationGroup" json:"tolerationGroup"`
+}
+
+type AffinityConfig struct {
+	Value    string                 `yaml:"value" json:"value"`
+	Options  []AffinityConfigOption `yaml:"options" json:"options"`
+	ReadOnly bool                   `yaml:"readOnly" json:"readOnly"`
+}
+
+type AffinityConfigOption struct {
+	ConfigKey   string   `yaml:"configKey" json:"configKey"`
+	DisplayName string   `yaml:"displayName" json:"displayName"`
+	Affinity    Affinity `yaml:"affinity" json:"affinity"`
+}
+
+type Affinity struct {
+	NodeAffinity    NodeAffinity    `yaml:"nodeAffinity" json:"nodeAffinity"`
+	PodAntiAffinity PodAntiAffinity `yaml:"podAntiAffinity" json:"podAntiAffinity"`
+}
+
+type NodeAffinity struct {
+	RequiredDuringSchedulingIgnoredDuringExecution NodeAffinityRequiredDuringSchedulingIgnoredDuringExecution `yaml:"requiredDuringSchedulingIgnoredDuringExecution" json:"requiredDuringSchedulingIgnoredDuringExecution"`
+}
+
+type NodeAffinityRequiredDuringSchedulingIgnoredDuringExecution struct {
+	NodeSelectorTerms []NodeSelectorTerm `yaml:"nodeSelectorTerms" json:"nodeSelectorTerms"`
+}
+
+type NodeSelectorTerm struct {
+	MatchExpressions []NodeSelectorTermMatchExpression `yaml:"matchExpressions" json:"matchExpressions"`
+}
+
+type NodeSelectorTermMatchExpression struct {
+	Key      string   `yaml:"key" json:"key"`
+	Operator string   `yaml:"operator" json:"operator"`
+	Values   []string `yaml:"values" json:"values"`
+}
+
+type PodAntiAffinity struct {
+	RequiredDuringSchedulingIgnoredDuringExecution []RequiredDuringSchedulingIgnoredDuringExecutionElement `yaml:"requiredDuringSchedulingIgnoredDuringExecution" json:"requiredDuringSchedulingIgnoredDuringExecution"`
+}
+
+type RequiredDuringSchedulingIgnoredDuringExecutionElement struct {
+	LabelSelector LabelSelector `yaml:"labelSelector" json:"labelSelector"`
+	Namespaces    []interface{} `yaml:"namespaces" json:"namespaces"`
+	TopologyKey   string        `yaml:"topologyKey" json:"topologyKey"`
+}
+
+type LabelSelector struct {
+	MatchExpressions []LabelSelectorMatchExpression `yaml:"matchExpressions" json:"matchExpressions"`
+}
+
+type LabelSelectorMatchExpression struct {
+	Key      string `yaml:"key" json:"key"`
+	Operator string `yaml:"operator" json:"operator"`
+}
+
+type CPU struct {
+	Value       string `yaml:"value" json:"value"`
+	LimitFactor string `yaml:"limitFactor" json:"limitFactor"`
+	ReadOnly    bool   `yaml:"readOnly" json:"readOnly"`
+}
+
+type Configurations struct {
 	Value    []string `yaml:"value" json:"value"`
 	ReadOnly bool     `yaml:"readOnly" json:"readOnly"`
 }
 
-// SharedMemoryConfiguration Struct.
-type SharedMemoryConfiguration struct {
-	Value    bool `yaml:"value" json:"value"`
-	ReadOnly bool `yaml:"readOnly" json:"readOnly"`
+type DataVolumes struct {
+	Value    []ValueElement `yaml:"value" json:"value"`
+	ReadOnly bool           `yaml:"readOnly" json:"readOnly"`
 }
 
-// GPUVendorConfiguration Struct.
-type GPUVendorConfiguration struct {
+type ValueElement struct {
+	Value ValueValue `yaml:"value" json:"value"`
+}
+
+type ValueValue struct {
+	Type        ImagePullPolicy `yaml:"type" json:"type"`
+	Name        ImagePullPolicy `yaml:"name" json:"name"`
+	Size        ImagePullPolicy `yaml:"size" json:"size"`
+	MountPath   ImagePullPolicy `yaml:"mountPath" json:"mountPath"`
+	AccessModes ImagePullPolicy `yaml:"accessModes" json:"accessModes"`
+	Class       ImagePullPolicy `yaml:"class" json:"class"`
+}
+
+type ImagePullPolicy struct {
+	Value string `yaml:"value" json:"value"`
+}
+
+type GPUs struct {
+	Value    GpusValue `yaml:"value" json:"value"`
+	ReadOnly bool      `yaml:"readOnly" json:"readOnly"`
+}
+
+type GpusValue struct {
+	Num     string   `yaml:"num" json:"num"`
+	Vendors []Vendor `yaml:"vendors" json:"vendors"`
+	Vendor  string   `yaml:"vendor" json:"vendor"`
+}
+
+type Vendor struct {
 	LimitsKey string `yaml:"limitsKey" json:"limitsKey"`
 	UIName    string `yaml:"uiName" json:"uiName"`
 }
 
-// GPUValueConfiguration Struct.
-type GPUValueConfiguration struct {
-	Quantity string                   `yaml:"num" json:"num"`
-	Vendors  []GPUVendorConfiguration `yaml:"vendors" json:"vendors"`
-	Vendor   string                   `yaml:"vendor" json:"vendor"`
-}
-
-// GPUConfiguration Struct.
-type GPUConfiguration struct {
-	Value    GPUValueConfiguration `yaml:"value" json:"value"`
-	ReadOnly bool                  `yaml:"readOnly" json:"readOnly"`
-}
-
-// ValueConfiguration Struct.
-type ValueConfiguration struct {
-	Value string `yaml:"value" json:"value"`
-}
-
-// VolumeValueConfiguration Struct.
-type VolumeValueConfiguration struct {
-	Type        ValueConfiguration `yaml:"type" json:"type"`
-	Name        ValueConfiguration `yaml:"name" json:"name"`
-	Size        ValueConfiguration `yaml:"size" json:"size"`
-	MountPath   ValueConfiguration `yaml:"mountPath" json:"mountPath"`
-	AccessModes ValueConfiguration `yaml:"accessModes" json:"accessModes"`
-	Class       ValueConfiguration `yaml:"class" json:"class"`
-}
-
-// DataVolumesConfiguration Struct.
-type DataVolumesConfiguration struct {
-	Values   []VolumeValueConfiguration `yaml:"value" json:"value"`
-	ReadOnly bool                       `yaml:"readOnly" json:"readOnly"`
-}
-
-// WorkspaceVolumeConfiguration Struct.
-type WorkspaceVolumeConfiguration struct {
-	Value    VolumeValueConfiguration `yaml:"value" json:"value"`
-	ReadOnly bool                     `yaml:"readOnly" json:"readOnly"`
-}
-
-// ResourceConfiguration Struct.
-type ResourceConfiguration struct {
-	Value    string `yaml:"value" json:"value"`
-	ReadOnly bool   `yaml:"readOnly" json:"readOnly"`
-}
-
-// ImageConfiguration Struct.
-type ImageConfiguration struct {
+type Image struct {
 	Value        string   `yaml:"value" json:"value"`
 	Options      []string `yaml:"options" json:"options"`
 	ReadOnly     bool     `yaml:"readOnly" json:"readOnly"`
@@ -75,19 +130,40 @@ type ImageConfiguration struct {
 	HideVersion  bool     `yaml:"hideVersion" json:"hideVersion"`
 }
 
-// SpawnerFormDefaults Struct.
-type SpawnerFormDefaults struct {
-	Image           ImageConfiguration           `yaml:"image" json:"image"`
-	CPU             ResourceConfiguration        `yaml:"cpu" json:"cpu"`
-	Memory          ResourceConfiguration        `yaml:"memory" json:"memory"`
-	WorkspaceVolume WorkspaceVolumeConfiguration `yaml:"workspaceVolume" json:"workspaceVolume"`
-	DataVolumes     DataVolumesConfiguration     `yaml:"dataVolumes" json:"dataVolumes"`
-	GPUs            GPUConfiguration             `yaml:"gpus" json:"gpus"`
-	SharedMemory    SharedMemoryConfiguration    `yaml:"shm" json:"shm"`
-	Configurations  ConfigurationsConfiguration  `yaml:"configurations" json:"configurations"`
+type ImageGroup struct {
+	Value   string   `yaml:"value" json:"value"`
+	Options []string `yaml:"options" json:"options"`
 }
 
-// Configuration Struct.
+type Shm struct {
+	Value    bool `yaml:"value" json:"value"`
+	ReadOnly bool `yaml:"readOnly" json:"readOnly"`
+}
+
+type TolerationGroup struct {
+	Value    string                  `yaml:"value" json:"value"`
+	Options  []TolerationGroupOption `yaml:"options" json:"options"`
+	ReadOnly bool                    `yaml:"readOnly" json:"readOnly"`
+}
+
+type TolerationGroupOption struct {
+	GroupKey    string       `yaml:"groupKey" json:"groupKey"`
+	DisplayName string       `yaml:"displayName" json:"displayName"`
+	Tolerations []Toleration `yaml:"tolerations" json:"tolerations"`
+}
+
+type Toleration struct {
+	Key      string `yaml:"key" json:"key"`
+	Operator string `yaml:"operator" json:"operator"`
+	Value    string `yaml:"value" json:"value"`
+	Effect   string `yaml:"effect" json:"effect"`
+}
+
+type WorkspaceVolume struct {
+	Value    ValueValue `yaml:"value" json:"value"`
+	ReadOnly bool       `yaml:"readOnly" json:"readOnly"`
+}
+
 type Configuration struct {
 	SpawnerFormDefaults SpawnerFormDefaults `yaml:"spawnerFormDefaults" json:"spawnerFormDefaults"`
 }

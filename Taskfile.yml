@@ -53,7 +53,6 @@ tasks:
   check:
     desc: Check for problems associated with the project
     deps:
-      - task: go:lint
       - task: go:vet
       - task: go:test
 

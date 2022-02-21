@@ -16,7 +16,6 @@ import {
 } from '@angular/material';
 
 import { FormSectionComponent } from './section/section.component';
-import { FormSectionImageComponent } from './section-image/section.image.component';
 
 import { NameNamespaceInputsComponent } from './name-namespace-inputs/name-namespace-inputs.component';
 import { NameInputComponent } from './name-namespace-inputs/name-input/name-input.component';
@@ -31,7 +30,6 @@ import { StepInfoComponent } from './step-info/step-info.component';
 @NgModule({
   declarations: [
     FormSectionComponent,
-    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -55,7 +53,6 @@ import { StepInfoComponent } from './step-info/step-info.component';
   ],
   exports: [
     FormSectionComponent,
-    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,

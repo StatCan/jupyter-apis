@@ -3,7 +3,19 @@
   text="Other possible settings to be applied to the Notebook Server."
   icon="fa:fas:cogs"
 >
+  <!--Enable Shared Memory-->
   <mat-slide-toggle [formControl]="parentForm.get('shm')">
     Enable Shared Memory
   </mat-slide-toggle>
+  
+  <!--Select System Language-->
+  <mat-form-field class="wide column" appearance="outline">
+    <mat-label>System Language</mat-label>
+    <mat-select [formControl]="parentForm.get('language')">
+      <mat-option *ngFor="let v of languageList" [value]="v.id">
+        {{ v.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
 </lib-form-section>

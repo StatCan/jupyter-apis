@@ -8,6 +8,10 @@ import { FormGroup } from '@angular/forms';
 })
 export class FormAdvancedOptionsComponent implements OnInit {
   @Input() parentForm: FormGroup;
+  languageList = [
+    {'id':'en', 'label':'English'},
+    {'id':'fr', 'label':'French'}    
+  ];
 
   constructor() {}
 

@@ -15,6 +15,7 @@ import { JWABackendService } from 'src/app/services/backend.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
+  defaultCostConfig,
   getDeleteDialogConfig,
   getStopDialogConfig,
 } from './config';
@@ -35,6 +36,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   subs = new Subscription();
 
   config = defaultConfig;
+  costConfig = defaultCostConfig;
   rawData: NotebookResponseObject[] = [];
   processedData: NotebookProcessedObject[] = [];
 

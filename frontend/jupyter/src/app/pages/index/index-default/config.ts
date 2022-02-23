@@ -137,3 +137,31 @@ export const defaultConfig = {
     },
   ],
 };
+
+// --- Config for the Cost Table ---
+export const defaultCostConfig = {
+  icon: 'attach_money',
+  title: 'Cost',
+  columns: [
+    {
+      matHeaderCellDef: 'Compute',
+      matColumnDef: 'compute',
+      value: new PropertyValue({ field: 'compute' }),
+    },
+    {
+      matHeaderCellDef: 'GPUs',
+      matColumnDef: 'gpus',
+      value: new PropertyValue({ field: 'gpus' }),
+    },
+    {
+      matHeaderCellDef: 'Storage',
+      matColumnDef: 'storage',
+      value: new PropertyValue({ field: 'storage' }),
+    },
+    {
+      matHeaderCellDef: 'Total',
+      matColumnDef: 'total',
+      value: new PropertyValue({ field: 'total' }),
+    },
+  ],
+};

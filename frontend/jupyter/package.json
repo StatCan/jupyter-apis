@@ -12,7 +12,8 @@
     "format:write": "prettier --write 'src/**/*.{js,ts,html,scss,css}'",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "start": "ng serve --base-href / --deploy-url / --proxy-config proxy.config.js"
   },
   "private": true,
   "dependencies": {

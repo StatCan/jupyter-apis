@@ -21,6 +21,8 @@ type SpawnerFormDefaults struct {
 	Configurations   Configurations  `yaml:"configurations" json:"configurations"`
 	AffinityConfig   AffinityConfig  `yaml:"affinityConfig" json:"affinityConfig"`
 	TolerationGroup  TolerationGroup `yaml:"tolerationGroup" json:"tolerationGroup"`
+	HideRegistry     bool            `yaml:"hideRegistry" json:"hideRegistry"`
+	HideTag          bool            `yaml:"hideTag" json:"hideTag"`
 }
 
 type AffinityConfig struct {

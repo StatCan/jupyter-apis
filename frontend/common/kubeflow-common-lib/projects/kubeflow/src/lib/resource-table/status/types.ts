@@ -7,6 +7,9 @@ export enum STATUS_TYPE {
   UNINITIALIZED = 'uninitialized',
   TERMINATING = 'terminating',
   STOPPED = 'stopped',
+  MOUNTED = 'attached',
+  UNMOUNTED = 'unattached',
+  DELETING = 'deleting,'
 }
 
 export interface Status {

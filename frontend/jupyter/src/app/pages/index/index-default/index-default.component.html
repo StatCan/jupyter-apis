@@ -6,3 +6,11 @@
   [trackByFn]="notebookTrackByFn"
   (actionsEmitter)="reactToAction($event)"
 ></lib-resource-table>
+
+<lib-resource-table
+  [config]="volumeConfig"
+  [data]="processedVolumeData"
+  [trackByFn]="pvcTrackByFn" 
+  (actionsEmitter)="reactVolumeToAction($event)"
+></lib-resource-table>
+

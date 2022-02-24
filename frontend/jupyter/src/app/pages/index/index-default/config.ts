@@ -44,6 +44,7 @@ export function getStopDialogConfig(name: string): DialogConfig {
 
 // --- Config for the Resource Table ---
 export const defaultConfig = {
+  icon: 'computer',
   title: 'Notebook Servers',
   newButtonText: 'NEW SERVER',
   columns: [
@@ -105,7 +106,6 @@ export const defaultConfig = {
       matColumnDef: 'volumes',
       value: new MenuValue({ field: 'volumes', itemsIcon: 'storage' }),
     },
-
     {
       matHeaderCellDef: '',
       matColumnDef: 'actions',
@@ -130,6 +130,50 @@ export const defaultConfig = {
           name: 'delete',
           tooltip: 'Delete this notebook server',
           color: '',
+          field: 'deleteAction',
+          iconReady: 'material:delete',
+        }),
+      ]),
+    },
+  ],
+};
+
+export const defaultVolumeConfig = {
+  icon: 'storage',
+  title: 'Notebook Volumes',
+  columns: [
+    {
+      matHeaderCellDef: 'Status',
+      matColumnDef: 'status',
+      value: new StatusValue(),
+    },
+    {
+      matHeaderCellDef: 'Name',
+      matColumnDef: 'name',
+      value: new PropertyValue({
+        field: 'name',
+        truncate: TRUNCATE_TEXT_SIZE.SMALL,
+        tooltipField: 'name',
+      }),
+    },
+    {
+      matHeaderCellDef: 'Size',
+      matColumnDef: 'size',
+      value: new PropertyValue({ field: 'size' }),
+    },
+    {
+      matHeaderCellDef: 'Used By',
+      matColumnDef: 'usedBy',
+      value: new PropertyValue({ field: 'usedBy' }),
+    },
+    {
+      matHeaderCellDef: '',
+      matColumnDef: 'actions',
+      value: new ActionListValue([
+        new ActionIconValue({
+          name: 'delete',
+          tooltip: 'Delete Volume',
+          color: 'warn',
           field: 'deleteAction',
           iconReady: 'material:delete',
         }),

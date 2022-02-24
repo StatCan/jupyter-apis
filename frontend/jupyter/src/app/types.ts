@@ -8,9 +8,13 @@ export interface JWABackendResponse extends BackendResponse {
   vendors?: string[];
 }
 
+export interface VWABackendResponse extends BackendResponse {
+  pvcs?: VolumeResponseObject[];
+}
+
 export type ServerType = 'jupyter' | 'group-one' | 'group-two';
 
-export interface NotebookResponseObject {
+export interface NotebookResponseObject { //The notebook table
   name: string;
   namespace: string;
   serverType: ServerType;
@@ -120,24 +124,6 @@ export interface GPU {
   vendors?: GPUVendor[];
 }
 
-export interface ConfigVolume {
-  type: {
-    value: string;
-  };
-  name: {
-    value: string;
-  };
-  size: {
-    value: string;
-  };
-  mountPath: {
-    value: string;
-  };
-  accessModes: {
-    value: string;
-  };
-}
-
 export interface Config {
   image?: {
     value: string;
@@ -216,4 +202,43 @@ export interface Config {
     value: string[];
     readOnly?: boolean;
   };
+}
+
+// Everything about volumes
+export interface ConfigVolume {
+  type: {
+    value: string;
+  };
+  name: {
+    value: string;
+  };
+  size: {
+    value: string;
+  };
+  mountPath: {
+    value: string;
+  };
+  accessModes: {
+    value: string;
+  };
+}
+
+export interface VolumeResponseObject {
+  name: string;
+  size: number;
+  namespace?: string;
+  extraFields?: { [key: string]: any };
+  usedBy?: string | null;
+  status?: Status;
+}
+
+
+export interface VolumeProcessedObject extends VolumeResponseObject {
+  deleteAction?: string;
+}
+
+export interface Status {
+  phase: string;
+  state: string;
+  message: string;
 }

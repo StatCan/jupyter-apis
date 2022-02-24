@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormControl, NgForm, FormGroupDirective } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Volume } from 'src/app/types';
 import { updateNonDirtyControl } from 'kubeflow';
+import {ErrorStateMatcher} from '@angular/material/core';
 
 @Component({
   selector: 'app-volume',
@@ -15,7 +16,8 @@ export class VolumeComponent implements OnInit, OnDestroy {
 
   currentPVC: Volume;
   existingPVCs: Set<string> = new Set();
-
+  // Specific error matcher for volume name field
+  matcher = new PvcErrorStateMatcher();
   subscriptions = new Subscription();
 
   // ----- @Input Parameters -----
@@ -171,4 +173,24 @@ export class VolumeComponent implements OnInit, OnDestroy {
       this.volume.controls.name.setValue(this.currentVolName);
     }
   }
+  showNameError() {
+    const volumeName = this.volume.get("name");
+    if (volumeName.hasError("required")) {
+      return "The volume name can't be empty";
+    }
+    if (volumeName.hasError("pattern")) {
+      return "The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character";
+    }
+    if (volumeName.hasError("isMounted")) {
+      return "The volume is already mounted to another notebook and cannot be currently selected";
+    }
+  }
 }
+  // Error when invalid control is dirty, touched, or submitted
+  export class PvcErrorStateMatcher implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+      const isSubmitted = form && form.submitted;
+      //Allows to control when volume is untouched but already assigned
+      return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted || !control.hasError("pattern")));
+    }
+  }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { environment } from '@app/environment';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { Config, Volume, NotebookFormObject } from 'src/app/types';
@@ -35,8 +35,9 @@ export class FormRokComponent
     public router: Router,
     public popup: SnackBarService,
     public rok: RokService,
+    public cdr: ChangeDetectorRef
   ) {
-    super(ns, backend, router, popup);
+    super(ns, backend, router, popup,cdr);
   }
 
   ngOnInit() {

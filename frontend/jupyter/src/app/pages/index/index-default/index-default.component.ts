@@ -11,7 +11,8 @@ import {
   DIALOG_RESP,
   SnackType,
 } from 'kubeflow';
-import { JWABackendService } from 'src/app/services/backend.service';
+
+import { JWABackendService, KubecostService } from 'src/app/services/backend.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
@@ -22,6 +23,7 @@ import {
 import { isEqual } from 'lodash';
 import { NotebookResponseObject, NotebookProcessedObject } from 'src/app/types';
 import { Router } from '@angular/router';
+import { AggregateCostResponse } from 'kubeflow/lib/services/kubecost.service';
 
 @Component({
   selector: 'app-index-default',
@@ -36,9 +38,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   subs = new Subscription();
 
   config = defaultConfig;
-  costConfig = defaultCostConfig;
   rawData: NotebookResponseObject[] = [];
   processedData: NotebookProcessedObject[] = [];
+
+  costConfig = defaultCostConfig;
+  rawCostData: AggregateCostResponse = null;
+  processedCostData: AggregateCostResponse[] = [];
 
   constructor(
     public ns: NamespaceService,
@@ -46,6 +51,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public confirmDialog: ConfirmDialogService,
     public snackBar: SnackBarService,
     public router: Router,
+    private kubecostService: KubecostService,
   ) {}
 
   ngOnInit(): void {
@@ -58,15 +64,24 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.backend.getNotebooks(this.currNamespace).subscribe(notebooks => {
-          if (!isEqual(this.rawData, notebooks)) {
-            this.rawData = notebooks;
-
-            // Update the frontend's state
-            this.processedData = this.processIncomingData(notebooks);
+        Promise.all([
+          this.backend.getNotebooks(this.currNamespace).toPromise(),
+          this.kubecostService.getAggregateCost(this.currNamespace).toPromise(),
+        ]).then(([notebooks, agg]) => {
+          if (
+            !isEqual(notebooks, this.rawData) ||
+            !isEqual(agg, this.rawCostData)
+          ) {
             this.poller.reset();
           }
-        });
+
+          this.rawData = notebooks;
+          this.rawCostData = agg;
+
+          this.processedData = this.processIncomingData(notebooks);
+          this.processedCostData = this.processIncomingCostData(agg);
+
+        })
       }),
     );
 
@@ -271,4 +286,18 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   public notebookTrackByFn(index: number, notebook: NotebookProcessedObject) {
     return `${notebook.name}/${notebook.image}`;
   }
+
+  public processIncomingCostData(cost: AggregateCostResponse) {
+    const costCopy = JSON.parse(
+      JSON.stringify(cost.data),
+    ) as AggregateCostResponse[];
+
+    return costCopy; 
+  }
+
+
+  public formatCost(value: number): string {
+    return "$" + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)
+  }
+
 }

@@ -34,6 +34,8 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
 
   subscriptions = new Subscription();
 
+  readonlySpecs: boolean;
+
   constructor(
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
@@ -165,6 +167,16 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     });
   }
+    // Automatically set values of CPU and Memory if GPU is 1
+    checkGPU(gpu: string) {
+      if (gpu == "none") {
+        this.readonlySpecs = false;
+      } else {
+        this.readonlySpecs = true;
+        this.formCtrl.get("cpu").setValue("4");
+        this.formCtrl.get("memory").setValue("96");
+      }
+    }
 
   onCancel() {
     this.router.navigate(['/']);

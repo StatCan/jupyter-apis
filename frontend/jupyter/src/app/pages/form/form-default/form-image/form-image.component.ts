@@ -16,7 +16,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
   @Input() imagesGroupOne: string[];
   @Input() imagesGroupTwo: string[];
   @Input() allowCustomImage: boolean;
-
+  selected = 'IfNotPresent';
   subs = new Subscription();
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {

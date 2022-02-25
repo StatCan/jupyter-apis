@@ -8,12 +8,13 @@
     <!--GPUs Number-->
     <mat-form-field class="column" appearance="outline">
       <mat-label>Number of GPUs</mat-label>
-      <mat-select matNativeControl formControlName="num">
+      <mat-select [(value)]="selected" matNativeControl formControlName="num">
         <mat-option value="none">None</mat-option>
         <mat-option *ngFor="let v of gpusCount" [value]="v">
           {{ v }}
         </mat-option>
       </mat-select>
+      <mat-hint>{{ message }}</mat-hint>
     </mat-form-field>
 
     <!--GPUs Vendor-->

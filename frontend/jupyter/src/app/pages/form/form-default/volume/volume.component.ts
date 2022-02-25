@@ -17,10 +17,11 @@ export class VolumeComponent implements OnInit, OnDestroy {
   existingPVCs: Set<string> = new Set();
 
   subscriptions = new Subscription();
-
+  selected="ReadWriteOnce"
   // ----- @Input Parameters -----
   @Input() volume: FormGroup;
   @Input() namespace: string;
+  @Input() sizes: Set<string>;
 
   @Input()
   get notebookName() {

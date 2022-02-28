@@ -9,6 +9,8 @@ import { IndexModule } from './pages/index/index.module';
 import { FormModule } from './pages/form/form.module';
 import { KubeflowModule } from 'kubeflow';
 
+import { KubecostService } from './services/kubecost.service';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -19,7 +21,7 @@ import { KubeflowModule } from 'kubeflow';
     IndexModule,
     FormModule,
   ],
-  providers: [],
+  providers: [KubecostService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

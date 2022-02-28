@@ -6,7 +6,8 @@ import {
   SnackBarService,
   ConfirmDialogService,
 } from 'kubeflow';
-import { JWABackendService, KubecostService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService } from 'src/app/services/kubecost.service'
 import { Router } from '@angular/router';
 import { IndexDefaultComponent } from '../index-default/index-default.component';
 

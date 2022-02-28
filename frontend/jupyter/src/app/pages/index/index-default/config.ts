@@ -146,22 +146,22 @@ export const defaultCostConfig = {
     {
       matHeaderCellDef: 'Compute',
       matColumnDef: 'compute',
-      value: new PropertyValue({ field: 'compute' }),
+      value: new PropertyValue({ field: 'cpuCost' }),
     },
     {
       matHeaderCellDef: 'GPUs',
       matColumnDef: 'gpus',
-      value: new PropertyValue({ field: 'gpus' }),
+      value: new PropertyValue({ field: 'gpuCost' }),
     },
     {
       matHeaderCellDef: 'Storage',
       matColumnDef: 'storage',
-      value: new PropertyValue({ field: 'storage' }),
+      value: new PropertyValue({ field: 'pvCost' }),
     },
     {
       matHeaderCellDef: 'Total',
       matColumnDef: 'total',
-      value: new PropertyValue({ field: 'total' }),
+      value: new PropertyValue({ field: 'totalCost' }),
     },
   ],
 };

@@ -217,3 +217,10 @@ export interface Config {
     readOnly?: boolean;
   };
 }
+
+export interface AggregateCostObject {
+  cpuCost?: string;
+  gpuCost?: string;
+  pvCost?: string;
+  total?: string;
+}

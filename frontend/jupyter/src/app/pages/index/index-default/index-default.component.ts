@@ -12,7 +12,8 @@ import {
   SnackType,
 } from 'kubeflow';
 
-import { JWABackendService, KubecostService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService } from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
@@ -21,9 +22,9 @@ import {
   getStopDialogConfig,
 } from './config';
 import { isEqual } from 'lodash';
-import { NotebookResponseObject, NotebookProcessedObject } from 'src/app/types';
+import { NotebookResponseObject, NotebookProcessedObject, AggregateCostObject } from 'src/app/types';
 import { Router } from '@angular/router';
-import { AggregateCostResponse } from 'kubeflow/lib/services/kubecost.service';
+import { AggregateCostResponse } from 'src/app/services/kubecost.service';
 
 @Component({
   selector: 'app-index-default',
@@ -43,7 +44,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   costConfig = defaultCostConfig;
   rawCostData: AggregateCostResponse = null;
-  processedCostData: AggregateCostResponse[] = [];
+  processedCostData: AggregateCostObject = null;
 
   constructor(
     public ns: NamespaceService,
@@ -287,14 +288,26 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${notebook.name}/${notebook.image}`;
   }
 
-  public processIncomingCostData(cost: AggregateCostResponse) {
-    const costCopy = JSON.parse(
-      JSON.stringify(cost.data),
-    ) as AggregateCostResponse[];
-
-    return costCopy; 
+  public costTrackByFn(index: number, cost: AggregateCostObject) {
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.total}`;
   }
 
+  public processIncomingCostData(cost: AggregateCostResponse) {
+    const resp = JSON.parse(
+      JSON.stringify(cost),
+    ) as AggregateCostResponse;
+
+    let costCopy: AggregateCostObject = {};
+    
+    if (resp.data[this.currNamespace]) {
+      costCopy.cpuCost = this.formatCost(resp.data[this.currNamespace].cpuCost + resp.data[this.currNamespace].ramCost);
+      costCopy.gpuCost = this.formatCost(resp.data[this.currNamespace].gpuCost);
+      costCopy.pvCost = this.formatCost(resp.data[this.currNamespace].pvCost);
+      costCopy.total = this.formatCost(resp.data[this.currNamespace].totalCost);
+    }
+
+    return costCopy;
+  }
 
   public formatCost(value: number): string {
     return "$" + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)

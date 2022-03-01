@@ -26,8 +26,6 @@ spawnerFormDefaults:
       - k8scc01covidacr.azurecr.io/jupyterlab-tensorflow:58308325
       - k8scc01covidacr.azurecr.io/remote-desktop:58308325
     readOnly: false
-    hideRegistry: true
-    hideVersion: true
   imageGroupOne:
     # The container Image for the user's Group One Server
     # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
@@ -49,6 +47,8 @@ spawnerFormDefaults:
     # The list of available standard container Images
     options:
     - k8scc01covidacr.azurecr.io/rstudio:58308325
+  hideRegistry: true
+  hideTag: true
   allowCustomImage: true
   imagePullPolicy:
     value: IfNotPresent

@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { BackendService, SnackBarService } from 'kubeflow';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
+import { environment } from "src/environments/environment";
 import {
   NotebookResponseObject,
   JWABackendResponse,
   Config,
   Volume,
+  Resource,
+  Resp,
   PodDefault,
   NotebookFormObject,
   NotebookProcessedObject,
@@ -129,4 +132,11 @@ export class JWABackendService extends BackendService {
       .delete<JWABackendResponse>(url)
       .pipe(catchError(error => this.handleError(error, false)));
   }
+
+    // ---------------------------Error Handling----------------------------------
+    private handleBackendError(response: Resp) {
+      if (!response.success) {
+        throw response;
+      }
+    }
 }

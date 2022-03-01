@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { FormGroup, Validators, ValidatorFn, AbstractControl, FormControl, FormGroupDirective, NgForm } from "@angular/forms";import { Subscription } from 'rxjs';
 import { Volume } from 'src/app/types';
 import { updateNonDirtyControl } from 'kubeflow';
-
+import { ErrorStateMatcher } from '@angular/material/core';
+import { JWABackendService } from "src/app/services/backend.service";
+import { NamespaceService } from "src/app/services/namespace.service";
 @Component({
   selector: 'app-volume',
   templateUrl: './volume.component.html',
@@ -12,15 +13,18 @@ import { updateNonDirtyControl } from 'kubeflow';
 export class VolumeComponent implements OnInit, OnDestroy {
   private notebookNamePrv = '';
   private defaultStorageClassPrv: boolean;
+  private mountedVolumes: Set<string> = new Set<string>();
 
   currentPVC: Volume;
   existingPVCs: Set<string> = new Set();
+  matcher = new PvcErrorStateMatcher();
 
   subscriptions = new Subscription();
 
   // ----- @Input Parameters -----
   @Input() volume: FormGroup;
   @Input() namespace: string;
+  @Input() sizes: Set<string>;
 
   @Input()
   get notebookName() {
@@ -110,9 +114,18 @@ export class VolumeComponent implements OnInit, OnDestroy {
   }
 
   // ----- Component Functions -----
-  constructor() {}
+  constructor(
+    private backend: JWABackendService,
+    private ns: NamespaceService) {}
 
   ngOnInit() {
+    this.volume
+      .get("name")
+      .setValidators([
+        this.isMountedValidator(),
+        Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
+      ]);
+
     // type
     this.subscriptions.add(
       this.volume.get('type').valueChanges.subscribe((type: string) => {
@@ -125,8 +138,21 @@ export class VolumeComponent implements OnInit, OnDestroy {
       this.volume.get('name').valueChanges.subscribe((name: string) => {
         // Update the fields if the volume is an existing one
         this.volume.get('name').setValue(name, { emitEvent: false });
-        this.updateVolInputFields();
+        this.updateVolInputFields();        
       }),
+    );
+
+  // Get the list of mounted volumes of the existing Notebooks in the selected Namespace
+  //This code will not work on local
+    this.subscriptions.add(
+      this.ns.getSelectedNamespace().subscribe(ns => {
+        this.backend.getNotebooks(ns).subscribe(notebooks => { //here
+          this.mountedVolumes.clear();
+          notebooks.map(nb => nb.volumes.map(v => {
+            this.mountedVolumes.add(v)
+          }));
+        });
+      })
     );
   }
 
@@ -170,5 +196,34 @@ export class VolumeComponent implements OnInit, OnDestroy {
       // Also set the selected volume
       this.volume.controls.name.setValue(this.currentVolName);
     }
+  }
+  showNameError() {
+    const volumeName = this.volume.get("name");
+
+    if (volumeName.hasError("required")) {
+      return `The volume name can't be empty`;
+    }
+    if (volumeName.hasError("pattern")) {
+      return `The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+    }
+    if (volumeName.hasError("isMounted")) {
+      return "The volume is already mounted to another notebook and cannot be currently selected";
+    }
+  }
+
+  //Method that disables selecting a mounted pvc
+  private isMountedValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      const exists = this.mountedVolumes.has(control.value);
+      return exists ? { isMounted: true } : null;
+    };
+  }
+}
+// Error when invalid control is dirty, touched, or submitted
+export class PvcErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    //Allows to control when volume is untouched but already assigned
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted || !control.hasError("pattern")));
   }
 }

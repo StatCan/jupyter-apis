@@ -21,25 +21,19 @@ export interface IValidator {
 
 export const dns1123Validator: IValidator = {
   regex: '^' + dns1123LabelFmt + '(\\.' + dns1123LabelFmt + ')*' + '$',
-  help:
-    "Name must consist of lowercase alphanumeric characters or '-', and\"" +
-    ' must start and end with an alphanumeric character',
+  help: 'commonProject.namespaceInput.namePattern',
 };
 
 // TODO(kimwnasptd): We only use this validator, do we need the others?
 export const dns1035Validator: IValidator = {
   regex: '^[a-z]([-a-z0-9]*[a-z0-9])?$',
-  help:
-    "Name must consist of lowercase alphanumeric characters or '-', " +
-    ' start with an alphabetic character, and end with an alphanumeric ' +
-    'character',
+  help: 'commonProject.namespaceInput.namePattern',
 };
 
 export const volSizeValidator: IValidator = {
   regex: '^[0-9]+(E|Ei|P|Pi|T|Ti|G|Gi|M|Mi|K|Ki)?$',
   help:
-    'Invalid volume size: Should be an integer, or integer followed ' +
-    'by a valid unit',
+    'commonProject.validation.invalidVolumeSize',
 };
 
 export const memoryValidator: IValidator = {
@@ -50,15 +44,12 @@ export const memoryValidator: IValidator = {
     '(E|Ei|P|Pi|T|Ti|G|Gi|M|Mi|K|Ki)' +
     ')?$',
   help:
-    'Invalid memory size: Should be an integer, or fixed-point integer' +
-    ' followed by a valid unit',
+    'commonProject.validation.invalidMemorySize',
 };
 
 export const cpuValidator: IValidator = {
   regex: '^[0-9]*(m|[.][0-9]+)?$',
-  help:
-    'Invalid cpu limit: Should be a fixed-point integer or an integer ' +
-    "followed by 'm'",
+  help: 'commonProject.validation.invalidCpuLimit',
 };
 
 export const DEBOUNCE_TIME = 500;
@@ -99,14 +90,20 @@ export const MAX_NAME_LENGTH = 50;
 
 export function getNameError(nameCtrl: AbstractControl, resource: string) {
   if (nameCtrl.hasError('existingName')) {
-    return `${resource} "${nameCtrl.value}" already exists`;
+    return {
+      key: 'commonProject.namespaceInput.nameAlreadyExists',
+      params: { name: nameCtrl.value },
+    };
   } else if (nameCtrl.hasError('pattern')) {
     // TODO: "pattern", is generic error, this might break in the future
-    return dns1035Validator.help;
+    return { key: dns1035Validator.help, params: {} };
   } else if (nameCtrl.hasError('maxlength')) {
-    return `Name is too long`;
+    return { key: 'commonProject.namespaceInput.nameTooLong', params: {} };
   } else {
-    return 'Name cannot be empty';
+    return {
+      key: 'commonProject.namespaceInput.nameCannotBeEmpty',
+      params: {},
+    };
   }
 }
 

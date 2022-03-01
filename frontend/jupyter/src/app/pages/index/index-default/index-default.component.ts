@@ -21,6 +21,7 @@ import {
 import { isEqual } from 'lodash';
 import { NotebookResponseObject, NotebookProcessedObject } from 'src/app/types';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-index-default',
@@ -44,6 +45,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public confirmDialog: ConfirmDialogService,
     public snackBar: SnackBarService,
     public router: Router,
+    public translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -135,7 +137,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
-        notebook.status.message = 'Preparing to delete the Notebook...';
+        notebook.status.message = this.translate.instant('jupyter.index.prepareDeleteNotebook');
         this.updateNotebookFields(notebook);
       });
     });
@@ -156,13 +158,15 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public startNotebook(notebook: NotebookProcessedObject) {
     this.snackBar.open(
-      `Starting Notebook server '${notebook.name}'...`,
+      this.translate.instant('jupyter.index.startingNotebookServer', {
+        notebookName: notebook.name,
+      }),
       SnackType.Info,
       3000,
     );
 
     notebook.status.phase = STATUS_TYPE.WAITING;
-    notebook.status.message = 'Starting the Notebook Server...';
+    notebook.status.message = this.translate.instant('startingNotebookServerMsg');
     this.updateNotebookFields(notebook);
 
     this.backend.startNotebook(notebook).subscribe(() => {
@@ -199,13 +203,15 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
 
         this.snackBar.open(
-          `Stopping Notebook server '${notebook.name}'...`,
+          this.translate.instant('jupyter.index.stoppingNotebookServer', {
+            notebookName: notebook.name,
+          }),
           SnackType.Info,
           3000,
         );
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
-        notebook.status.message = 'Preparing to stop the Notebook Server...';
+        notebook.status.message = this.translate.instant('prepareStopServer');
         this.updateNotebookFields(notebook);
       });
     });

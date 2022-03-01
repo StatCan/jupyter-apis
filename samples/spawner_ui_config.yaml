@@ -49,7 +49,7 @@ spawnerFormDefaults:
     # The list of available standard container Images
     options:
     - k8scc01covidacr.azurecr.io/rstudio:58308325
-  allowCustomImage: false
+  allowCustomImage: yes
   imagePullPolicy:
     value: IfNotPresent
   cpu:

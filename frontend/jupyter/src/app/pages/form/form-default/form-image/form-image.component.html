@@ -1,7 +1,9 @@
 <lib-form-section
   title="Image"
-  text="A started Jupyter Docker Image with a baseline deployment and typical
-  ML packages"
+  text="Select the base software you want installed in your server. If you
+  choose a custom image, it must be available in the DAaaS container registry."
+  link="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image"
+  linkText="Here's some more information to help you select an image for your requirements."
   icon="fa:fab:docker"
 >
   <div class="flex-column">
@@ -53,7 +55,7 @@
       [formControl]="parentForm.get('image')"
     >
       <mat-option *ngFor="let img of images" [value]="img">
-        {{ img }}
+        {{ imageDisplayName(img) }}
       </mat-option>
     </mat-select>
     <mat-error>Please provide and Image to use</mat-error>
@@ -115,6 +117,7 @@
     />
     <mat-error>Please provide and Image to use</mat-error>
   </mat-form-field>
+  <mat-error>{{ urlValidation() }}</mat-error>
 
   <lib-advanced-options>
     <div class="row">

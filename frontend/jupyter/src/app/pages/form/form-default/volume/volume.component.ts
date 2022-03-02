@@ -19,10 +19,11 @@ export class VolumeComponent implements OnInit, OnDestroy {
   // Specific error matcher for volume name field
   matcher = new PvcErrorStateMatcher();
   subscriptions = new Subscription();
-
+  selected="ReadWriteOnce"
   // ----- @Input Parameters -----
   @Input() volume: FormGroup;
   @Input() namespace: string;
+  @Input() sizes: Set<string>;
 
   @Input()
   get notebookName() {

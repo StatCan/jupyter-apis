@@ -1,7 +1,6 @@
 <lib-form-section
-  title="CPU / RAM"
-  text="Specify the total amount of CPU and RAM reserved by your Notebook Server.
-    For CPU-intensive workloads, you can choose more than 1 CPU (e.g. 1.5)."
+  title="{{ 'jupyter.formSpecs.cpuRam' | translate }}"
+  text="{{ 'jupyter.formSpecs.cpuDesc' | translate }}"
   icon="fa:fas:microchip"
 >
   <div class="row" [formGroup]="parentForm">
@@ -9,7 +8,7 @@
       <mat-form-field appearance="outline" class="column">
         <mat-label>Requested CPUs</mat-label>
         <input
-          label="Requested CPUs"
+          label="{{ 'jupyter.formSpecs.cpuRequested' | translate }}"
           [attr.disabled]="readonlySpecs ? '' : null"
           matInput
           formControlName="cpu"
@@ -20,7 +19,7 @@
 
     <!--RAM-->
       <mat-form-field appearance="outline" class="column">
-        <mat-label>Requested memory in Gi</mat-label>
+        <mat-label>{{ 'jupyter.formSpecs.memoryRequested' | translate }}</mat-label>
         <input
           [attr.disabled]="readonlySpecs ? '' : null"
           matInput
@@ -35,7 +34,9 @@
       <!--CPU-->
       <div class="column">
         <mat-form-field appearance="outline" class="wide">
-          <mat-label>CPU limit</mat-label>
+          <mat-label>
+            {{ 'jupyter.formSpecs.cpuLimit' | translate }}
+          </mat-label>
           <input
             matInput
             type="number"
@@ -48,7 +49,9 @@
       <!--RAM-->
       <div class="column">
         <mat-form-field appearance="outline" class="wide">
-          <mat-label>Memory limit in Gi</mat-label>
+          <mat-label>
+            {{ 'jupyter.formSpecs.memoryLimit' | translate }}
+          </mat-label>
           <input
             matInput
             type="number"

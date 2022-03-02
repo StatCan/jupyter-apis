@@ -1,11 +1,11 @@
 <lib-form-section
-  title="Miscellaneous Settings"
-  text="Other possible settings to be applied to the Notebook Server."
+  title="{{ 'jupyter.formAdvancedOptions.miscSettings' | translate }}"
+  text="{{ 'jupyter.formAdvancedOptions.miscSettingsDesc' | translate }}"
   icon="fa:fas:cogs"
 >
   <!--Enable Shared Memory-->
   <mat-slide-toggle [formControl]="parentForm.get('shm')">
-    Enable Shared Memory
+    {{ 'jupyter.formAdvancedOptions.enableSharedMemory' | translate }}
   </mat-slide-toggle>
   
   <!--Select System Language-->

@@ -65,24 +65,33 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           return;
         }
 
-        Promise.all([
-          this.backend.getNotebooks(this.currNamespace).toPromise(),
-          this.kubecostService.getAggregateCost(this.currNamespace).toPromise(),
-        ]).then(([notebooks, agg]) => {
-          if (
-            !isEqual(notebooks, this.rawData) ||
-            !isEqual(agg, this.rawCostData)
-          ) {
+        this.backend.getNotebooks(this.currNamespace).subscribe(notebooks => {
+          if (!isEqual(this.rawData, notebooks)) {
+            this.rawData = notebooks;
+
+            // Update the frontend's state
+            this.processedData = this.processIncomingData(notebooks);
             this.poller.reset();
           }
+        });
 
-          this.rawData = notebooks;
-          this.rawCostData = agg;
+        this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
+          aggCost => {
+            if (!isEqual(this.rawCostData, aggCost)) {
+              this.rawCostData = aggCost;
 
-          this.processedData = this.processIncomingData(notebooks);
-          this.processedCostData = this.processIncomingCostData(agg);
+              this.processedCostData = this.processIncomingCostData(aggCost);
+              this.poller.reset();
+              }
+            },
+          err => {
+              if (!isEqual(this.rawCostData, err)) {
+                this.rawCostData = err;
 
-        })
+                this.processedCostData = this.processIncomingCostData(err);
+                this.poller.reset();
+              }
+          });
       }),
     );
 
@@ -292,7 +301,18 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.total}`;
   }
 
+  public getCostStatus() {
+    if (this.rawCostData == null) {
+      return;
+    }
+    if (this.rawCostData instanceof Error) {
+      return false;
+    }
+    return true;
+  }
+
   public processIncomingCostData(cost: AggregateCostResponse) {
+
     const resp = JSON.parse(
       JSON.stringify(cost),
     ) as AggregateCostResponse;

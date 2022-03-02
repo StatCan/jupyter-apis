@@ -7,8 +7,14 @@
   (actionsEmitter)="reactToAction($event)"
 ></lib-resource-table>
 
-<lib-resource-table
+<lib-resource-table *ngIf="this.getCostStatus() == true; else error"
   [config]="costConfig"
   [data]="processedCostData"
   [trackByFn]="costTrackByFn"
 ></lib-resource-table>
+
+<ng-template #error>
+  <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
+    <p>Failed to retrieve cost information</p>
+  </div>
+</ng-template>

@@ -14,6 +14,7 @@ import { KubeflowModule } from 'kubeflow';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { KubecostService } from './services/kubecost.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,7 +35,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     FormModule,
     FormsModule
   ],
-  providers: [],
+  providers: [KubecostService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

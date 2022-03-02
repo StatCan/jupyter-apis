@@ -248,5 +248,11 @@ export interface Status {
   key: {
     key: string;
     params?: object;
-};
+  }
 }
+export interface AggregateCostObject {
+  cpuCost?: string;
+  gpuCost?: string;
+  pvCost?: string;
+  total?: string;
+};

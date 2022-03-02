@@ -180,6 +180,34 @@ export const defaultVolumeConfig = {
           iconReady: 'material:delete',
         }),
       ]),
+  },
+  ],
+};
+
+// --- Config for the Cost Table ---
+export const defaultCostConfig = {
+  icon: 'attach_money',
+  title: 'Cost',
+  columns: [
+    {
+      matHeaderCellDef: 'Compute',
+      matColumnDef: 'compute',
+      value: new PropertyValue({ field: 'cpuCost' }),
+    },
+    {
+      matHeaderCellDef: 'GPUs',
+      matColumnDef: 'gpus',
+      value: new PropertyValue({ field: 'gpuCost' }),
+    },
+    {
+      matHeaderCellDef: 'Storage',
+      matColumnDef: 'storage',
+      value: new PropertyValue({ field: 'pvCost' }),
+    },
+    {
+      matHeaderCellDef: 'Total',
+      matColumnDef: 'total',
+      value: new PropertyValue({ field: 'totalCost' }),
     },
   ],
 };

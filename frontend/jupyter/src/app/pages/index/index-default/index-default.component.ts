@@ -12,19 +12,23 @@ import {
   SnackType,
   StatusValue,
 } from 'kubeflow';
+
 import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService } from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
   defaultVolumeConfig,
+  defaultCostConfig,
   getDeleteDialogConfig,
   getStopDialogConfig,
 } from './config';
 import { isEqual } from 'lodash';
-import { NotebookResponseObject, NotebookProcessedObject, VolumeResponseObject, VolumeProcessedObject } from 'src/app/types';
+import { NotebookResponseObject, NotebookProcessedObject, VolumeResponseObject, VolumeProcessedObject, AggregateCostObject } from 'src/app/types';
 import { Router } from '@angular/router';
 import { Status } from '../../../types'
 import { TranslateService } from '@ngx-translate/core';
+import { AggregateCostResponse } from 'src/app/services/kubecost.service';
 
 @Component({
   selector: 'app-index-default',
@@ -46,6 +50,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   rawVolumeData: VolumeResponseObject[] = [];
   processedVolumeData: VolumeProcessedObject[] = [];
   pvcsWaitingViewer = new Set<string>();
+  costConfig = defaultCostConfig;
+  rawCostData: AggregateCostResponse = null;
+  processedCostData: AggregateCostObject = null;
 
   constructor(
     public ns: NamespaceService,
@@ -54,6 +61,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public snackBar: SnackBarService,
     public router: Router,
     public translate: TranslateService,
+    private kubecostService: KubecostService,
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +91,24 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.processedData = this.processIncomingData(notebooks);
           this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
         })
+
+        this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
+          aggCost => {
+            if (!isEqual(this.rawCostData, aggCost)) {
+              this.rawCostData = aggCost;
+
+              this.processedCostData = this.processIncomingCostData(aggCost);
+              this.poller.reset();
+              }
+            },
+          err => {
+              if (!isEqual(this.rawCostData, err)) {
+                this.rawCostData = err;
+
+                this.processedCostData = this.processIncomingCostData(err);
+                this.poller.reset();
+              }
+          });
       }),
     );
 
@@ -393,4 +419,40 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       });
     });
   }
+  public costTrackByFn(index: number, cost: AggregateCostObject) {
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.total}`;
+  }
+
+  public getCostStatus() {
+    if (this.rawCostData == null) {
+      return;
+    }
+    if (this.rawCostData instanceof Error) {
+      return false;
+    }
+    return true;
+  }
+
+  public processIncomingCostData(cost: AggregateCostResponse) {
+
+    const resp = JSON.parse(
+      JSON.stringify(cost),
+    ) as AggregateCostResponse;
+
+    let costCopy: AggregateCostObject = {};
+
+    if (resp.data[this.currNamespace]) {
+      costCopy.cpuCost = this.formatCost(resp.data[this.currNamespace].cpuCost + resp.data[this.currNamespace].ramCost);
+      costCopy.gpuCost = this.formatCost(resp.data[this.currNamespace].gpuCost);
+      costCopy.pvCost = this.formatCost(resp.data[this.currNamespace].pvCost);
+      costCopy.total = this.formatCost(resp.data[this.currNamespace].totalCost);
+    }
+
+    return costCopy;
+  }
+
+  public formatCost(value: number): string {
+    return "$" + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)
+  }
+
 }

@@ -47,8 +47,6 @@ export function getStopDialogConfig(name: string): DialogConfig {
 // --- Config for the Resource Table ---
 export const defaultConfig = {
   icon: 'computer',
-  title: 'Notebook Servers',
-  newButtonText: 'NEW SERVER',
   title: 'jupyter.index.notebookServers',
   newButtonText: 'jupyter.index.newServersCaps',
   columns: [

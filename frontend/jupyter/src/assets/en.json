@@ -28,7 +28,10 @@
       "errorGpuVendorRequired": "You must also specify the GPU Vendor for the assigned GPUs"
     },
     "formImage": {
+      "h3Image": "Image",
       "frmImageDescription": "A started Jupyter Docker Image with a baseline deployment and typical ML packages",
+      "txtImage": "Select the base software you want installed in your server. If you choose a custom image, it must be available in the DAaaS container registry.",
+      "txtImageLink": "Here's some more information to help you select an image for your requirements.",
       "customImage": "Custom Image",
       "imageDocker": "Docker Image",
       "customImagePhl": "Provide a custom Image",

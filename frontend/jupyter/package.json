@@ -10,6 +10,7 @@
     "copyLibAssets": "cp ./node_modules/kubeflow/assets/* ./src/assets/",
     "format:check": "prettier --check 'src/**/*.{js,ts,html,scss,css}' || node scripts/check-format-error.js",
     "format:write": "prettier --write 'src/**/*.{js,ts,html,scss,css}'",
+    "start": "ng serve --base-href / --deploy-url / --proxy-config proxy.config.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

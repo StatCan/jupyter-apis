@@ -37,8 +37,9 @@ export class FormRokComponent
     public popup: SnackBarService,
     public rok: RokService,
     public translate: TranslateService,
+    public cdr: ChangeDetectorRef
   ) {
-    super(ns, backend, router, popup, translate);
+    super(ns, backend, router, popup, translate, cdr);
   }
 
   ngOnInit() {

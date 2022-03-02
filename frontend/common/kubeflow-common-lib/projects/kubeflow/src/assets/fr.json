@@ -29,6 +29,8 @@
       },
       "formImage": {
         "frmImageDescription": "Une image Jupyter Docker démarrée avec un déploiement de base et des paquets ML typiques.",
+        "txtImage": "Sélectionner les logiciels de base désirés sur votre serveur. Si vous choisissez une image personnallisée, elle doit être disponible dans le registre des conteneurs DAaaS.",
+        "txtImageLink": "Voici plus d'informations pour vous aider à sélectionner une image selon vos besoins.",
         "customImage": "Image personnalisée",
         "imageDocker": "Image Docker",
         "customImagePhl": "Fournir une image personnalisée",
@@ -98,7 +100,8 @@
         "stopNotebookServer": "Arrêter ce serveur bloc-notes",
         "startingNotebookServer": "Démarer le serveur bloc-notes '{{notebookName}}'...",
         "startingNotebookServerMsg":"Démarrage du serveur bloc-notes...",
-        "stoppingNotebookServer": "Arrêter le serveur bloc-notes '{{notebookName}}'..."
+        "stoppingNotebookServer": "Arrêter le serveur bloc-notes '{{notebookName}}'...",
+        "deleteVolume": "Voulez-vous vraiment supprimer ce volume? `{{name}`"
       },
       "backend": {
         "status": {

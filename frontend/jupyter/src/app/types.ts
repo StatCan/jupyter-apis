@@ -1,4 +1,4 @@
-import { Status, BackendResponse } from 'kubeflow';
+import { BackendResponse } from 'kubeflow';
 
 export interface JWABackendResponse extends BackendResponse {
   notebooks?: NotebookResponseObject[];
@@ -140,6 +140,10 @@ export interface Config {
     options: string[];
   };
 
+  hideRegistry?: boolean;
+
+  hideTag?: boolean;
+
   allowCustomImage?: boolean;
 
   imagePullPolicy?: {
@@ -241,4 +245,8 @@ export interface Status {
   phase: string;
   state: string;
   message: string;
+  key: {
+    key: string;
+    params?: object;
+};
 }

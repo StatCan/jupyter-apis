@@ -43,6 +43,7 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
     public router: Router,
     public popup: SnackBarService,
     public translate: TranslateService,
+    public cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

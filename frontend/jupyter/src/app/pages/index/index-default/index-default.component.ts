@@ -345,7 +345,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public deletePVCClicked(pvc: VolumeProcessedObject) {
     const deleteDialogConfig: DialogConfig = {
-      title: `Are you sure you want to delete this volume? ${pvc.name}`,
+      title: {
+        key: 'jupyter.index.deleteVolume',
+        params: { name: pvc.name }
+        },
       message: 'Warning: All data in this volume will be lost.',
       accept: 'DELETE',
       confirmColor: 'warn',

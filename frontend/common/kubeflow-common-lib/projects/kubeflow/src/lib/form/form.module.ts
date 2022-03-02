@@ -16,6 +16,7 @@ import {
 } from '@angular/material';
 
 import { FormSectionComponent } from './section/section.component';
+import { FormSectionImageComponent } from './section-image/section.image.component';
 
 import { NameNamespaceInputsComponent } from './name-namespace-inputs/name-namespace-inputs.component';
 import { NameInputComponent } from './name-namespace-inputs/name-input/name-input.component';
@@ -31,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     FormSectionComponent,
+    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -55,6 +57,7 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   exports: [
     FormSectionComponent,
+    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,

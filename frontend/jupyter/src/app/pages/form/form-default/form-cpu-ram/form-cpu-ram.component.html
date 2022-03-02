@@ -6,9 +6,9 @@
   <div class="row" [formGroup]="parentForm">
     <!--CPU-->
       <mat-form-field appearance="outline" class="column">
-        <mat-label>Requested CPUs</mat-label>
+        <mat-label>{{ 'jupyter.formSpecs.cpuRequested' | translate }}</mat-label>
         <input
-          label="{{ 'jupyter.formSpecs.cpuRequested' | translate }}"
+          label="Requested CPUs"
           [attr.disabled]="readonlySpecs ? '' : null"
           matInput
           formControlName="cpu"

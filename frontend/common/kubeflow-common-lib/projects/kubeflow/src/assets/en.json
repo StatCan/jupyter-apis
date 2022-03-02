@@ -98,7 +98,8 @@
       "stopNotebookServer": "Stop this notebook server",
       "startingNotebookServer": "Starting Notebook server '{{notebookName}}'...",
       "startingNotebookServerMsg":"Starting the Notebook Server...",
-      "stoppingNotebookServer": "Stopping Notebook server '{{notebookName}}'..."
+      "stoppingNotebookServer": "Stopping Notebook server '{{notebookName}}'...",
+      "deleteVolume": "Are you sure you want to delete this volume? `{{name}`"
     },
     "backend": {
       "status": {

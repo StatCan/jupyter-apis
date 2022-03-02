@@ -28,6 +28,7 @@
       "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés"
     },
     "formImage": {
+      "h3Image": "Image",
       "frmImageDescription": "Une image Jupyter Docker démarrée avec un déploiement de base et des paquets ML typiques.",
       "customImage": "Image personnalisée",
       "imageDocker": "Image Docker",

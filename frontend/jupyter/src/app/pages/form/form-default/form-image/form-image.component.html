@@ -1,6 +1,8 @@
-<lib-form-section
+<lib-form-section-image
   title="{{ 'common.image' | translate }}"
-  text="{{ 'jupyter.formImage.frmImageDescription' | translate }}"
+  text="{{ 'jupyter.formImage.txtImage' | translate }}"
+  link="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image"
+  linkText="{{ 'jupyter.formImage.txtImageLink' | translate }}"
   icon="fa:fab:docker"
 >
   <div class="flex-column">
@@ -57,8 +59,8 @@
       placeholder="{{ 'jupyter.formImage.imageDocker' | translate }}"
       [formControl]="parentForm.get('image')"
     >
-      <mat-option *ngFor="let img of images" [value]="img">
-        {{ img }}
+      <mat-option *ngFor="let img of images" [value]="img" [matTooltip]="img">
+        {{ imageDisplayName(img) }}
       </mat-option>
     </mat-select>
     <mat-error>
@@ -80,8 +82,12 @@
       placeholder="{{ 'jupyter.formImage.imageDocker' | translate }}"
       [formControl]="parentForm.get('imageGroupOne')"
     >
-      <mat-option *ngFor="let img of imagesGroupOne" [value]="img">
-        {{ img }}
+      <mat-option
+       *ngFor="let img of imagesGroupOne"
+       [value]="img"
+       [matTooltip]="img"
+       >
+        {{ imageDisplayName(img) }}
       </mat-option>
     </mat-select>
     <mat-error>
@@ -103,8 +109,12 @@
       placeholder="{ 'jupyter.formImage.imageDocker' | translate }}"
       [formControl]="parentForm.get('imageGroupTwo')"
     >
-      <mat-option *ngFor="let img of imagesGroupTwo" [value]="img">
-        {{ img }}
+      <mat-option
+       *ngFor="let img of imagesGroupTwo"
+       [value]="img"
+       [matTooltip]="img"
+       >
+        {{ imageDisplayName(img) }}
       </mat-option>
     </mat-select>
     <mat-error>
@@ -130,6 +140,7 @@
       {{ 'jupyter.formImage.errorImageRequired' | translate }}
     </mat-error>
   </mat-form-field>
+  <mat-error>{{ urlValidation() }}</mat-error>
 
   <lib-advanced-options>
     <div class="row">
@@ -151,4 +162,4 @@
       </mat-form-field>
     </div>
   </lib-advanced-options>
-</lib-form-section>
+</lib-form-section-image>

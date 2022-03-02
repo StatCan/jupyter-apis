@@ -7,12 +7,25 @@
     </mat-select>
   </mat-form-field>
 
-  <!-- Volume Name Input -->
-  <lib-name-input
-    class="column"
-    [nameControl]="volume.get('name')"
-    id="name"
-  ></lib-name-input>
+  <mat-form-field appearance="outline" id="name">
+    <mat-label>Name</mat-label>
+    <input
+    matInput
+    formControlName="name"
+    *ngIf="volume.value.type == 'New'; else existingPvcControl"
+    [errorStateMatcher]="matcher"
+  />
+    <ng-template #existingPvcControl>
+      <mat-select formControlName="name" [errorStateMatcher]="matcher">
+        <mat-option *ngFor="let pvc of existingPVCs" [value]="pvc">{{
+          pvc
+        }}</mat-option>
+      </mat-select>
+    </ng-template>
+    <mat-error>
+      {{ showNameError() }}
+    </mat-error>
+  </mat-form-field>
 
   <!-- Size Input -->
   <lib-positive-number-input

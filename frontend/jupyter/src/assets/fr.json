@@ -111,6 +111,17 @@
         "schedulingPod": "Planification du pod",
         "waitingStatus": "Status actuel est 'en attente'. Vérifier 'kubectl describe pod' pour plus d'information"
       }
+    },
+    "volumeTable": {
+      "notebookVolumes": "Bloc-notes volumes",
+      "attached": "Attaché",
+      "deleteDialogMessage": "Attention: Toutes les données de ce volume seront perdu.",
+      "prepareDeleteVolume": "Préparation de la suppression du volume...",
+      "unattached": "Libre",
+      "toolTipDeleting": "En supression",
+      "tooltipDeleteVolume": "Supprimer le volume",
+      "usedBy": "Utilisé par",
+      "lblNone": "(aucun)"
     }
   },
   "common": {

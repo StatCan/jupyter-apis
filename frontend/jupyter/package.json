@@ -13,8 +13,7 @@
     "start": "ng serve --base-href / --deploy-url / --proxy-config proxy.config.js",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "start": "ng serve --base-href / --deploy-url / --proxy-config proxy.config.js"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {

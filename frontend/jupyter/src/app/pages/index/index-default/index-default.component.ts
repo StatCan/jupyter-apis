@@ -22,6 +22,7 @@ import {
   defaultCostConfig,
   getDeleteDialogConfig,
   getStopDialogConfig,
+  getDeleteVolumeDialogConfig,
 } from './config';
 import { isEqual } from 'lodash';
 import { NotebookResponseObject, NotebookProcessedObject, VolumeResponseObject, VolumeProcessedObject, AggregateCostObject } from 'src/app/types';
@@ -337,10 +338,18 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         element.status = {} as Status;
         element.status.message = "bound";
         element.status.phase = STATUS_TYPE.MOUNTED;
+        element.status.key = {
+					key: "jupyter.volumeTable.attached",
+					params: null,
+				};
       } else {
         element.status = {} as Status;
         element.status.message = "unbound";
         element.status.phase = STATUS_TYPE.UNMOUNTED;
+        element.status.key = {
+					key: "jupyter.volumeTable.unattached",
+					params: null,
+				};
       }
     });
 
@@ -370,19 +379,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public deletePVCClicked(pvc: VolumeProcessedObject) {
-    const deleteDialogConfig: DialogConfig = {
-      title: {
-        key: 'jupyter.index.deleteVolume',
-        params: { name: pvc.name }
-        },
-      message: 'Warning: All data in this volume will be lost.',
-      accept: 'DELETE',
-      confirmColor: 'warn',
-      cancel: 'CANCEL',
-      error: '',
-      applying: 'DELETING',
-      width: '600px',
-    };
+    const deleteDialogConfig = getDeleteVolumeDialogConfig(pvc.name);
 
     const ref = this.confirmDialog.open(pvc.name, deleteDialogConfig);
     const delSub = ref.componentInstance.applying$.subscribe(applying => {
@@ -413,7 +410,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
 
         pvc.status.phase = STATUS_TYPE.TERMINATING;
-        pvc.status.message = 'Preparing to delete the Volume...';
+        pvc.status.message = this.translate.instant('jupyter.volumeTable.prepareDeleteVolume');
         pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
         this.pvcsWaitingViewer.delete(pvc.name);
       });

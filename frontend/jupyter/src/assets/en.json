@@ -113,6 +113,17 @@
         "schedulingPod": "Scheduling the Pod",
         "waitingStatus": "Current status is waiting. Check 'kubectl describe pod' for more information"
       }
+    },
+    "volumeTable": {
+      "notebookVolumes": "Notebook Volumes",
+      "attached": "Attached",
+      "deleteDialogMessage": "Warning: All data in this volume will be lost.",
+      "prepareDeleteVolume": "Preparing to delete the Volume...",
+      "unattached": "Unattached",
+      "toolTipDeleting": "Deleting",
+      "tooltipDeleteVolume": "Delete Volume '{{name}}'",
+      "usedBy": "Used By",
+      "lblNone": "(none)"
     }
   },
   "common": {

@@ -142,15 +142,15 @@ export const defaultConfig = {
 
 export const defaultVolumeConfig = {
   icon: 'storage',
-  title: 'Notebook Volumes',
+  title: 'jupyter.volumeTable.notebookVolumes',
   columns: [
     {
-      matHeaderCellDef: 'Status',
+      matHeaderCellDef: 'common.status',
       matColumnDef: 'status',
       value: new StatusValue(),
     },
     {
-      matHeaderCellDef: 'Name',
+      matHeaderCellDef: 'common.name',
       matColumnDef: 'name',
       value: new PropertyValue({
         field: 'name',
@@ -159,12 +159,12 @@ export const defaultVolumeConfig = {
       }),
     },
     {
-      matHeaderCellDef: 'Size',
+      matHeaderCellDef: 'common.size',
       matColumnDef: 'size',
       value: new PropertyValue({ field: 'size' }),
     },
     {
-      matHeaderCellDef: 'Used By',
+      matHeaderCellDef: 'jupyter.volumeTable.usedBy',
       matColumnDef: 'usedBy',
       value: new PropertyValue({ field: 'usedBy' }),
     },
@@ -174,7 +174,7 @@ export const defaultVolumeConfig = {
       value: new ActionListValue([
         new ActionIconValue({
           name: 'delete',
-          tooltip: 'Delete Volume',
+          tooltip: 'jupyter.volumeTable.tooltipDeleteVolume',
           color: 'warn',
           field: 'deleteAction',
           iconReady: 'material:delete',
@@ -183,6 +183,22 @@ export const defaultVolumeConfig = {
   },
   ],
 };
+
+export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
+  return { // TODO key + param
+    title: {
+      key: 'jupyter.volumeTable.tooltipDeleteVolume',
+      params: { name: name }
+      },
+    message: 'jupyter.volumeTable.deleteDialogMessage',
+    accept: 'common.deleteCaps',
+    confirmColor: 'warn',
+    cancel: 'common.cancelCaps',
+    error: '',
+    applying: 'common.deletingCaps',
+    width: '600px',
+  };
+}
 
 // --- Config for the Cost Table ---
 export const defaultCostConfig = {

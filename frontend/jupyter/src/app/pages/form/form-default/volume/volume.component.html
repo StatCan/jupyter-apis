@@ -1,42 +1,70 @@
 <div *ngIf="volume" [formGroup]="volume" class="row">
   <mat-form-field class="column" appearance="outline" id="type">
-    <mat-label>Type</mat-label>
+    <mat-label>
+      {{ 'common.type' | translate }}
+    </mat-label>
     <mat-select formControlName="type">
-      <mat-option *ngIf="defaultStorageClass" value="New">New</mat-option>
-      <mat-option value="Existing">Existing</mat-option>
+      <mat-option *ngIf="defaultStorageClass" value="New">
+        {{ 'jupyter.volume.optNew' | translate }}
+      </mat-option>
+      <mat-option value="Existing">
+        {{ 'jupyter.volume.optExisting' | translate }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
-  <!-- Volume Name Input -->
-  <lib-name-input
-    class="column"
-    [nameControl]="volume.get('name')"
-    id="name"
-  ></lib-name-input>
+  <mat-form-field appearance="outline" id="name">
+    <mat-label>Name</mat-label>
+    <input
+    matInput
+    formControlName="name"
+    *ngIf="volume.value.type == 'New'; else existingPvcControl"
+    [errorStateMatcher]="matcher"
+  />
+    <ng-template #existingPvcControl>
+      <mat-select formControlName="name" [errorStateMatcher]="matcher">
+        <mat-option *ngFor="let pvc of existingPVCs" [value]="pvc">{{
+          pvc
+        }}</mat-option>
+      </mat-select>
+    </ng-template>
+    <mat-error>
+      {{ showNameError() }}
+    </mat-error>
+  </mat-form-field>
 
   <!-- Size Input -->
-  <lib-positive-number-input
-    id="size"
-    class="column"
-    min="1"
-    step="1"
-    [sizeControl]="volume.get('size')"
-    label="Size in Gi"
-  ></lib-positive-number-input>
+  <!--upstream had users choosing via input, change back to pre-populated dropdown -->
+  <mat-form-field appearance="outline" id="size">
+    <mat-label>{{ 'jupyter.volume.sizeInGi' | translate }}</mat-label>
+    <mat-select formControlName="size">
+      <mat-option *ngFor="let sizeOptions of sizes" [value]="sizeOptions">{{
+        sizeOptions
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <!-- Mode Input -->
   <mat-form-field class="column" appearance="outline" id="mode">
-    <mat-label>Mode</mat-label>
-    <mat-select formControlName="mode">
-      <mat-option value="ReadWriteOnce">ReadWriteOnce</mat-option>
-      <mat-option value="ReadOnlyMany">ReadOnlyMany</mat-option>
-      <mat-option value="ReadWriteMany">ReadWriteMany</mat-option>
+    <mat-label>{{ 'jupyter.volume.mode' | translate }}</mat-label>
+    <mat-select [(value)]="selected" formControlName="mode">
+      <mat-option value="ReadWriteOnce">
+        {{ 'common.optReadWriteOnce' | translate }}
+      </mat-option>
+      <mat-option value="ReadOnlyMany">
+        {{ 'common.optReadOnlyMany' | translate }}
+      </mat-option>
+      <mat-option value="ReadWriteMany">
+        {{ 'common.optReadWriteMany' | translate }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
   <!-- Mount Input -->
   <mat-form-field class="column" appearance="outline" id="path">
-    <mat-label>Mount Point</mat-label>
+    <mat-label>
+      {{ 'jupyter.volume.mountPoint' | translate }}
+    </mat-label>
     <input matInput formControlName="path" />
   </mat-form-field>
 </div>

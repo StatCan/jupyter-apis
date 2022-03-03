@@ -5,20 +5,27 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
+  VolumeResponseObject,
   JWABackendResponse,
+  VWABackendResponse,
   Config,
   Volume,
   PodDefault,
   NotebookFormObject,
   NotebookProcessedObject,
 } from '../types';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JWABackendService extends BackendService {
-  constructor(public http: HttpClient, public snackBar: SnackBarService) {
-    super(http, snackBar);
+  constructor(
+    public http: HttpClient,
+    public snackBar: SnackBarService,
+    public translate: TranslateService,
+  ) {
+    super(http, snackBar, translate);
   }
 
   // GET
@@ -127,6 +134,26 @@ export class JWABackendService extends BackendService {
 
     return this.http
       .delete<JWABackendResponse>(url)
+      .pipe(catchError(error => this.handleError(error, false)));
+  }
+
+  //Volumes
+  public getPVCs(namespace: string): Observable<VolumeResponseObject[]> {
+    const url = `api/namespaces/${namespace}/pvcs`;
+
+    return this.http.get<VWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: VWABackendResponse) => {
+        return resp.pvcs;
+      }),
+    );
+  }
+
+  public deletePVC(namespace: string, pvc: string){
+    const url = `api/namespaces/${namespace}/pvcs/${pvc}`;
+
+    return this.http
+      .delete<VWABackendResponse>(url)
       .pipe(catchError(error => this.handleError(error, false)));
   }
 }

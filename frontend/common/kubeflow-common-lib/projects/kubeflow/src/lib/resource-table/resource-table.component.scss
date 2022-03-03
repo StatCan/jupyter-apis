@@ -30,3 +30,18 @@ mat-toolbar {
 .mat-icon {
   line-height: 0.85;
 }
+
+th,
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+td.mat-column-image,
+td.mat-column-name {
+  max-width: 200px;
+}
+
+td.mat-column-cpu {
+  width: 40px;
+}

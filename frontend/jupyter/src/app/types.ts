@@ -31,6 +31,7 @@ export interface NotebookResponseObject { //The notebook table
   };
   environment: string;
   shortImage: string;
+  language: string;
 }
 
 export interface NotebookProcessedObject extends NotebookResponseObject {
@@ -59,6 +60,7 @@ export interface NotebookFormObject {
   noWorkspace: boolean;
   workspace: Volume;
   datavols: Volume[];
+  language: string;
   shm: boolean;
   configurations: PodDefault[];
 }
@@ -252,6 +254,10 @@ export interface ConfigVolume {
   accessModes: {
     value: string;
   };
+  language?: {
+    value: string;
+    readOnly?: boolean;
+  }
 }
 
 export interface VolumeResponseObject {

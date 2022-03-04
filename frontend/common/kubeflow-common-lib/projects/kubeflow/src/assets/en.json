@@ -3,7 +3,9 @@
     "formAdvancedOptions": {
       "miscSettings": "Miscellaneous Settings",
       "miscSettingsDesc": "Other possible settings to be applied to the Notebook Server.",
-      "enableSharedMemory": "Enable Shared Memory"
+      "enableSharedMemory": "Enable Shared Memory",
+      "lblEnglish": "English",
+      "lblFrench": "French"
     },
     "formAffinityTolerations": {
       "affinityTolerations": "Affinity / Tolerations",

@@ -3,7 +3,9 @@
     "formAdvancedOptions": {
       "miscSettings": "Paramètres divers",
       "miscSettingsDesc": "Autres paramètres pouvant être appliqué au serveur bloc-notes.",
-      "enableSharedMemory": "Activer la mémoire partagée"
+      "enableSharedMemory": "Activer la mémoire partagée",
+      "lblEnglish": "English",
+      "lblFrench": "Français"
     },
     "formAffinityTolerations": {
       "affinityTolerations": "Affinité / Tolérances",

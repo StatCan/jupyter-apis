@@ -4,7 +4,7 @@
       "miscSettings": "Paramètres divers",
       "miscSettingsDesc": "Autres paramètres pouvant être appliqué au serveur bloc-notes.",
       "enableSharedMemory": "Activer la mémoire partagée",
-      "systemLanguage": "Langue du système"
+      "systemLanguage": "Langue du système",
       "lblEnglish": "English",
       "lblFrench": "Français"
     },

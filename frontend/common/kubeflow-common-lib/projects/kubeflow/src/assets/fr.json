@@ -3,7 +3,8 @@
     "formAdvancedOptions": {
       "miscSettings": "Paramètres divers",
       "miscSettingsDesc": "Autres paramètres pouvant être appliqué au serveur bloc-notes.",
-      "enableSharedMemory": "Activer la mémoire partagée"
+      "enableSharedMemory": "Activer la mémoire partagée",
+      "systemLanguage": "Langue du système"
     },
     "formAffinityTolerations": {
       "affinityTolerations": "Affinité / Tolérances",
@@ -25,11 +26,12 @@
       "numGpus": "Nombre GPUs",
       "gpuVendor": "Vendeur de GPU",
       "errorGpuVendorNotFound": "Aucun GPU {{vendoruiName}} n’a été trouvé installé dans le cluster.",
-      "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés"
+      "errorGpuVendorRequired": "Vous devez spécifier le vendeur des GPUs assignés",
+      "warningSelectGpu": "La sélection de 1 GPU définira automatiquement 4 CPU et 96Gi de mémoire."
     },
     "formImage": {
-      "h3Image": "Image",
-      "frmImageDescription": "Une image Jupyter Docker démarrée avec un déploiement de base et des paquets ML typiques.",
+      "txtImage": "Sélectionnez le logiciel de base que vous souhaitez installer sur votre serveur. Si vous choisissez une image personnalisée, elle doit être disponible dans le registre de conteneurs DAaaS.",
+      "txtImageLink": "Voici quelques informations supplémentaires pour vous aider à sélectionner une image en fonction de vos besoins.",
       "customImage": "Image personnalisée",
       "imageDocker": "Image Docker",
       "customImagePhl": "Fournir une image personnalisée",
@@ -122,6 +124,15 @@
       "tooltipDeleteVolume": "Supprimer le volume",
       "usedBy": "Utilisé par",
       "lblNone": "(aucun)"
+    },
+    "costTable": {
+      "cost": "Coût",
+      "costDescription": "Approximation du coût des ressources de serveur bloc-notes des dernières 24h – la somme des valeurs pourraient être différentes du total du à l'arrondissement",
+      "compute": "Calculé",
+      "gpus": "GPUs",
+      "storage": "Stockage",
+      "total": "Total",
+      "errMessage": "Échec de la récupération des informations des coûts."
     }
   },
   "common": {

@@ -22,6 +22,6 @@
 
 <ng-template #error>
   <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
-    <p>Failed to retrieve cost information</p>
+    <p>{{ 'jupyter.costTable.errMessage' | translate }}</p>
   </div>
 </ng-template>

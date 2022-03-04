@@ -13,14 +13,15 @@
     </mat-select>
   </mat-form-field>
 
+  <!-- Volume Name Input -->
   <mat-form-field appearance="outline" id="name">
     <mat-label>Name</mat-label>
     <input
-    matInput
-    formControlName="name"
-    *ngIf="volume.value.type == 'New'; else existingPvcControl"
-    [errorStateMatcher]="matcher"
-  />
+      matInput
+      formControlName="name"
+      *ngIf="volume.value.type == 'New'; else existingPvcControl"
+      [errorStateMatcher]="matcher"
+    />
     <ng-template #existingPvcControl>
       <mat-select formControlName="name" [errorStateMatcher]="matcher">
         <mat-option *ngFor="let pvc of existingPVCs" [value]="pvc">{{
@@ -50,12 +51,6 @@
     <mat-select [(value)]="selected" formControlName="mode">
       <mat-option value="ReadWriteOnce">
         {{ 'common.optReadWriteOnce' | translate }}
-      </mat-option>
-      <mat-option value="ReadOnlyMany">
-        {{ 'common.optReadOnlyMany' | translate }}
-      </mat-option>
-      <mat-option value="ReadWriteMany">
-        {{ 'common.optReadWriteMany' | translate }}
       </mat-option>
     </mat-select>
   </mat-form-field>

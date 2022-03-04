@@ -75,6 +75,33 @@ export interface Volume {
   templatedName?: string;
 }
 
+// Backend response type
+export interface Resp {
+  namespaces?: string[];
+  notebooks?: Resource[];
+  storageclasses?: string[];
+  defaultStorageClass?: string;
+  pvcs?: Volume[];
+  config?: any;
+  poddefaults?: PodDefault[];
+  success: boolean;
+  log?: string;
+}
+
+// Notebooks received from backend
+export interface Resource {
+  name: string;
+  namespace: string;
+  status: string;
+  reason: string;
+  age: string;
+  image: string;
+  volumes: string[];
+  cpu: string;
+  memory: string;
+  shortImage: string;
+}
+
 export function emptyVolume(): Volume {
   return {
     type: '',

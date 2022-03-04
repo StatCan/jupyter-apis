@@ -5,6 +5,8 @@
       "miscSettingsDesc": "Autres paramètres pouvant être appliqué au serveur bloc-notes.",
       "enableSharedMemory": "Activer la mémoire partagée",
       "systemLanguage": "Langue du système"
+      "lblEnglish": "English",
+      "lblFrench": "Français"
     },
     "formAffinityTolerations": {
       "affinityTolerations": "Affinité / Tolérances",

@@ -5,6 +5,8 @@
       "miscSettingsDesc": "Other possible settings to be applied to the Notebook Server.",
       "enableSharedMemory": "Enable Shared Memory",
       "systemLanguage": "System Language"
+      "lblEnglish": "English",
+      "lblFrench": "French"
     },
     "formAffinityTolerations": {
       "affinityTolerations": "Affinity / Tolerations",

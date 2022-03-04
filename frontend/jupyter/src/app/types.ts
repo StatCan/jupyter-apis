@@ -31,6 +31,7 @@ export interface NotebookResponseObject { //The notebook table
   };
   environment: string;
   shortImage: string;
+  language: string;
 }
 
 export interface NotebookProcessedObject extends NotebookResponseObject {
@@ -59,6 +60,7 @@ export interface NotebookFormObject {
   noWorkspace: boolean;
   workspace: Volume;
   datavols: Volume[];
+  language: string;
   shm: boolean;
   configurations: PodDefault[];
 }
@@ -73,6 +75,33 @@ export interface Volume {
   path: string;
   extraFields?: { [key: string]: any };
   templatedName?: string;
+}
+
+// Backend response type
+export interface Resp {
+  namespaces?: string[];
+  notebooks?: Resource[];
+  storageclasses?: string[];
+  defaultStorageClass?: string;
+  pvcs?: Volume[];
+  config?: any;
+  poddefaults?: PodDefault[];
+  success: boolean;
+  log?: string;
+}
+
+// Notebooks received from backend
+export interface Resource {
+  name: string;
+  namespace: string;
+  status: string;
+  reason: string;
+  age: string;
+  image: string;
+  volumes: string[];
+  cpu: string;
+  memory: string;
+  shortImage: string;
 }
 
 export function emptyVolume(): Volume {
@@ -225,6 +254,10 @@ export interface ConfigVolume {
   accessModes: {
     value: string;
   };
+  language?: {
+    value: string;
+    readOnly?: boolean;
+  }
 }
 
 export interface VolumeResponseObject {

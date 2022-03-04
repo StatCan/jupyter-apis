@@ -4,6 +4,7 @@
       "miscSettings": "Miscellaneous Settings",
       "miscSettingsDesc": "Other possible settings to be applied to the Notebook Server.",
       "enableSharedMemory": "Enable Shared Memory",
+      "systemLanguage": "System Language"
       "lblEnglish": "English",
       "lblFrench": "French"
     },
@@ -27,11 +28,10 @@
       "numGpus": "Number of GPUs",
       "gpuVendor": "GPU Vendor",
       "errorGpuVendorNotFound": "No {{vendoruiName}} GPU found installed in the cluster.",
-      "errorGpuVendorRequired": "You must also specify the GPU Vendor for the assigned GPUs"
+      "errorGpuVendorRequired": "You must also specify the GPU Vendor for the assigned GPUs",
+      "warningSelectGpu": "Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory."
     },
     "formImage": {
-      "h3Image": "Image",
-      "frmImageDescription": "A started Jupyter Docker Image with a baseline deployment and typical ML packages",
       "txtImage": "Select the base software you want installed in your server. If you choose a custom image, it must be available in the DAaaS container registry.",
       "txtImageLink": "Here's some more information to help you select an image for your requirements.",
       "customImage": "Custom Image",
@@ -126,6 +126,15 @@
       "tooltipDeleteVolume": "Delete Volume '{{name}}'",
       "usedBy": "Used By",
       "lblNone": "(none)"
+    },
+    "costTable": {
+      "cost": "Cost",
+      "costDescription": "Approximate cost of notebook server resources over the last 24 hours – summed values may not match total due to rounding",
+      "compute": "Compute",
+      "gpus": "GPUs",
+      "storage": "Storage",
+      "total": "Total",
+      "errMessage": "Failed to retrieve cost information"
     }
   },
   "common": {

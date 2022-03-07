@@ -86,7 +86,7 @@ export class ActionComponent implements OnInit {
   }
 
   public isPhaseWaiting(): boolean {
-    return this.status === STATUS_TYPE.WAITING;
+    return this.status === STATUS_TYPE.WAITING || this.status === STATUS_TYPE.DELETING;
   }
 
   public isPhaseDisabled(): boolean {

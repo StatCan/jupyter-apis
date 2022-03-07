@@ -16,6 +16,7 @@ import {
 } from '@angular/material';
 
 import { FormSectionComponent } from './section/section.component';
+import { FormSectionImageComponent } from './section-image/section.image.component';
 
 import { NameNamespaceInputsComponent } from './name-namespace-inputs/name-namespace-inputs.component';
 import { NameInputComponent } from './name-namespace-inputs/name-input/name-input.component';
@@ -26,10 +27,12 @@ import { AdvancedOptionsComponent } from './advanced-options/advanced-options.co
 import { PopoverModule } from '../popover/popover.module';
 import { SubmitBarComponent } from './submit-bar/submit-bar.component';
 import { StepInfoComponent } from './step-info/step-info.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
     FormSectionComponent,
+    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -50,9 +53,11 @@ import { StepInfoComponent } from './step-info/step-info.component';
     IconModule,
     MatProgressSpinnerModule,
     PopoverModule,
+    TranslateModule.forRoot(),
   ],
   exports: [
     FormSectionComponent,
+    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -70,6 +75,7 @@ import { StepInfoComponent } from './step-info/step-info.component';
     MatTooltipModule,
     MatIconModule,
     MatDividerModule,
+    TranslateModule,
   ],
 })
 export class FormModule {}

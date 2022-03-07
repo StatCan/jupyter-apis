@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, Volume, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { environment } from '@app/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-default',
@@ -34,11 +35,15 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
 
   subscriptions = new Subscription();
 
+  readonlySpecs: boolean;
+
   constructor(
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
+    public translate: TranslateService,
+    public cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -74,8 +79,7 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       if (defaultClass.length === 0) {
         this.defaultStorageclass = false;
         this.popup.open(
-          "No default Storage Class is set. Can't create new Disks for the " +
-            'new Notebook. Please use an Existing Disk.',
+          this.translate.instant("resourceForm.msgDefaultStorageClass"),
           SnackType.Warning,
           0,
         );
@@ -83,6 +87,10 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
         this.defaultStorageclass = true;
       }
     });
+  }
+
+  ngAfterContentChecked() {
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy() {
@@ -149,6 +157,10 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       notebook.workspace.size = notebook.workspace.size.toString() + 'Gi';
     }
 
+    if (typeof notebook.language === 'string') {
+      notebook.language = notebook.language.toString()
+    }
+
     for (const vol of notebook.datavols) {
       if (vol.size) {
         vol.size = vol.size + 'Gi';
@@ -165,6 +177,16 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     });
   }
+    // Automatically set values of CPU and Memory if GPU is 1
+    checkGPU(gpu: string) {
+      if (gpu == "none") {
+        this.readonlySpecs = false;
+      } else {
+        this.readonlySpecs = true;
+        this.formCtrl.get("cpu").setValue("4");
+        this.formCtrl.get("memory").setValue("96");
+      }
+    }
 
   onCancel() {
     this.router.navigate(['/']);

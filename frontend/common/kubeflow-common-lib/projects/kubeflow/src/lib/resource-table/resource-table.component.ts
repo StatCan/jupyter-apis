@@ -56,7 +56,8 @@ export class ResourceTableComponent implements OnInit {
       return '600px';
     }
 
-    return `${this.config.columns.length * 100}px`;
+    //return `${this.config.columns.length * 100}px`;
+    return `1000px`;
   }
 
   get totalWidth() {

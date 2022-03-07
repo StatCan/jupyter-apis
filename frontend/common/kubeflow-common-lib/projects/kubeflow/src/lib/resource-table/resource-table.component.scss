@@ -23,10 +23,29 @@ mat-toolbar {
   font-size: 20px;
 }
 
+.header .mat-icon{
+  margin: 3px 10px 0 0;
+}
+
 .card-title-padding {
   padding: 0px 16px 0px 16px;
 }
 
 .mat-icon {
   line-height: 0.85;
+}
+
+th,
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+td.mat-column-image,
+td.mat-column-name {
+  max-width: 200px;
+}
+
+td.mat-column-cpu {
+  width: 40px;
 }

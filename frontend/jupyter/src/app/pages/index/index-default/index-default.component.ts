@@ -103,12 +103,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
               }
             },
           err => {
-              if (!isEqual(this.rawCostData, err)) {
-                this.rawCostData = err;
+            if (!isEqual(this.rawCostData, err)) {
+              this.rawCostData = err;
 
-                this.processedCostData = this.processIncomingCostData(err);
-                this.poller.reset();
-              }
+              this.poller.reset();
+            }
           });
       }),
     );

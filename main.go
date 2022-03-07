@@ -246,6 +246,8 @@ func main() {
 		http.ServeFile(w, r, path.Join(staticDirectory, "index.html"))
 	})
 
+	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets", http.FileServer(http.Dir(staticDirectory+"assets/"))))
+
 	// Serve the rest of the routes from the static directory.
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static", http.FileServer(http.Dir(staticDirectory))))
 

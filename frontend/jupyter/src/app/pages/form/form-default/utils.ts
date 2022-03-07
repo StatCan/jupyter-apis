@@ -41,6 +41,7 @@ export function getFormDefaults(): FormGroup {
     datavols: fb.array([]),
     shm: [true, []],
     configurations: [[], []],
+    language: ['', [Validators.required]],
   });
 }
 
@@ -102,7 +103,7 @@ export function addDataVolume(
         value: '{notebook-name}-vol-' + (l + 1),
       },
       size: {
-        value: '5',
+        value: '16',
       },
       mountPath: {
         value: '/home/jovyan/{volume-name}',

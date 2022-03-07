@@ -119,11 +119,17 @@ type updatenotebookrequest struct {
 // notebookPhase is the phase of a notebook.
 type notebookPhase string
 
+// KeyType is the type of key
+type KeyType struct {
+	Key 	string
+	Params	[]string
+}
 // status represents the status of a notebook.
 type status struct {
 	Message string        `json:"message"`
 	Phase   notebookPhase `json:"phase"`
 	State   string        `json:"state"`
+	Key		KeyType		  `json:"key"`
 }
 
 const (
@@ -159,6 +165,11 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: "Deleting this Notebook Server.",
 			Phase:   NotebookPhaseTerminating,
+			Key:	
+				KeyType{
+					Key: "jupyter.backend.status.notebookDeleting",
+					Params: []string{},
+				},
 		}
 	}
 
@@ -168,12 +179,20 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			return status{
 				Message: "No pods are currently running for this Notebook Server.",
 				Phase:   NotebookPhaseStopped,
+				Key:	KeyType{
+					Key: "jupyter.backend.status.noPodsRunning",
+					Params: []string{},
+				},
 			}
 		}
 
 		return status{
 			Message: "Notebook Server is stopping.",
 			Phase:   NotebookPhaseTerminating,
+			Key:	KeyType{
+				Key: "jupyter.backend.status.notebookStopping",
+				Params: []string{},
+			},
 		}
 	}
 
@@ -184,6 +203,10 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: "Running",
 			Phase:   NotebookPhaseReady,
+			Key: KeyType{
+				Key: "jupyter.backend.status.running",
+				Params: []string{},
+			},
 		}
 	}
 
@@ -191,6 +214,10 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: state.Waiting.Reason,
 			Phase:   NotebookPhaseWaiting,
+			Key: KeyType{
+				Key: "jupyter.backend.status.waitingStatus",
+				Params: []string{},
+			},
 		}
 	}
 
@@ -200,6 +227,10 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			return status{
 				Message: event.Reason,
 				Phase:   NotebookPhaseWarning,
+				Key: KeyType{
+					Key: "jupyter.backend.status.errorEvent",
+					Params: []string{},
+				},
 			}
 		}
 	}
@@ -207,6 +238,10 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 	return status{
 		Message: "Scheduling the Pod",
 		Phase:   NotebookPhaseWaiting,
+		Key: KeyType{
+			Key: "jupyter.backend.status.schedulingPod",
+			Params: []string{},
+		},
 	}
 }
 

@@ -123,6 +123,7 @@
       "prepareDeleteVolume": "Préparation de la suppression du volume...",
       "unattached": "Libre",
       "toolTipDeleting": "En supression",
+      "tooltipDeleteVolumeName": "Supprimer le volume '{{name}}'",
       "tooltipDeleteVolume": "Supprimer le volume",
       "usedBy": "Utilisé par",
       "lblNone": "(aucun)"

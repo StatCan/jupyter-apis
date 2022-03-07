@@ -187,7 +187,7 @@ export const defaultVolumeConfig = {
 export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
   return { // TODO key + param
     title: {
-      key: 'jupyter.volumeTable.tooltipDeleteVolume',
+      key: 'jupyter.volumeTable.tooltipDeleteVolumeName',
       params: { name: name }
       },
     message: 'jupyter.volumeTable.deleteDialogMessage',

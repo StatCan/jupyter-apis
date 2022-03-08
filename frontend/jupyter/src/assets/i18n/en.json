@@ -79,7 +79,10 @@
       "errorMountedVolume": "The volume is already mounted to another notebook and cannot be currently selected",
       "sizeInGi": "Size in Gi",
       "mode": "Mode",
-      "mountPoint": "Mount Point"
+      "mountPoint": "Mount Point",
+      "errorNameRequired": "The volume name can't be empty",
+      "errorNamePattern": "The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character"
+
     },
     "resourceForm": {
       "msgDefaultStorageClass": "No default Storage Class is set. Can't create new Disks for the new Notebook. Please use an Existing Disk."

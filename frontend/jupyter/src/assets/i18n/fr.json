@@ -79,7 +79,9 @@
       "errorMountedVolume": "Le volume est déjà monté sur un autre bloc-notes et ne peut être sélectionné actuellement",
       "sizeInGi": "Taille en Gi",
       "mode": "Mode",
-      "mountPoint": "Point de montage"
+      "mountPoint": "Point de montage",
+      "errorNameRequired": "Le nom du volume ne peut pas être vide",
+      "errorNamePattern": "Le nom du volume ne peut contenir que des caractères alphanumériques en minuscule, '-' ou '.', et doit commencer et se terminer par un caractères alphanumériques"
     },
     "resourceForm": {
       "msgDefaultStorageClass": "Aucun stockage par default n'est définie. Impossible de créer un nouveau disque pour le nouveau bloc-notes. Veuillez utiliser un disque existant."

@@ -7,7 +7,7 @@
     <mat-checkbox formControlName="noWorkspace">
       {{ 'jupyter.formWorkspaceVolume.ckbNoPersistent' | translate }}
     </mat-checkbox>
-    
+
     <app-volume
       [volume]="parentForm.get('workspace')"
       [notebookName]="parentForm.value.name"
@@ -15,7 +15,7 @@
       [ephemeral]="parentForm.value.noWorkspace"
       [namespace]="parentForm.value.namespace"
       [defaultStorageClass]="defaultStorageClass"
-      [sizes]="['4Gi', '8Gi', '16Gi', '32Gi']"
+      [sizes]="['4', '8', '16', '32']"
     >
     </app-volume>
   </div>

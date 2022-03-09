@@ -103,12 +103,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
               }
             },
           err => {
-              if (!isEqual(this.rawCostData, err)) {
-                this.rawCostData = err;
+            if (!isEqual(this.rawCostData, err)) {
+              this.rawCostData = err;
 
-                this.processedCostData = this.processIncomingCostData(err);
-                this.poller.reset();
-              }
+              this.poller.reset();
+            }
           });
       }),
     );
@@ -339,16 +338,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         element.status.message = "bound";
         element.status.phase = STATUS_TYPE.MOUNTED;
         element.status.key = {
-					key: "jupyter.volumeTable.attached",
-					params: null,
+					Key: "jupyter.volumeTable.attached",
+					Params: null,
 				};
       } else {
         element.status = {} as Status;
         element.status.message = "unbound";
         element.status.phase = STATUS_TYPE.UNMOUNTED;
         element.status.key = {
-					key: "jupyter.volumeTable.unattached",
-					params: null,
+					Key: "jupyter.volumeTable.unattached",
+					Params: null,
 				};
       }
     });

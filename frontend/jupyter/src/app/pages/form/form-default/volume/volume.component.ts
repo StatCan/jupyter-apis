@@ -5,6 +5,7 @@ import { Volume } from 'src/app/types';
 import { updateNonDirtyControl, NamespaceService } from 'kubeflow';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { JWABackendService } from "src/app/services/backend.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: 'app-volume',
@@ -116,6 +117,7 @@ export class VolumeComponent implements OnInit, OnDestroy {
 
   // ----- Component Functions -----
   constructor(
+    private translate: TranslateService,
     private backend: JWABackendService,
     private ns: NamespaceService) {}
 
@@ -140,7 +142,7 @@ export class VolumeComponent implements OnInit, OnDestroy {
       this.volume.get('name').valueChanges.subscribe((name: string) => {
         // Update the fields if the volume is an existing one
         this.volume.get('name').setValue(name, { emitEvent: false });
-        this.updateVolInputFields();        
+        this.updateVolInputFields();
       }),
     );
   // Get the list of mounted volumes of the existing Notebooks in the selected Namespace
@@ -201,13 +203,13 @@ export class VolumeComponent implements OnInit, OnDestroy {
     const volumeName = this.volume.get("name");
 
     if (volumeName.hasError("required")) {
-      return `The volume name can't be empty`;
+      return this.translate.instant("jupyter.volume.errorNameRequired");
     }
     if (volumeName.hasError("pattern")) {
-      return `The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+      return this.translate.instant("jupyter.volume.errorNamePattern");
     }
     if (volumeName.hasError("isMounted")) {
-      return "The volume is already mounted to another notebook and cannot be currently selected";
+      return this.translate.instant("jupyter.volume.errorMountedVolume");
     }
   }
 

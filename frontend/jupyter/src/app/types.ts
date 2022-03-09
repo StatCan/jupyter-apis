@@ -279,8 +279,8 @@ export interface Status {
   state: string;
   message: string;
   key: {
-    key: string;
-    params?: string[];
+    Key: string;
+    Params?: string[];
   }
 }
 export interface AggregateCostObject {

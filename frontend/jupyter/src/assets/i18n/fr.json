@@ -137,7 +137,8 @@
       "gpus": "GPUs",
       "storage": "Stockage",
       "total": "Total",
-      "errMessage": "Échec de la récupération des informations des coûts."
+      "errMessage": "Échec de la récupération des informations des coûts.",
+      "kubeCostError": "Les informations sur les coûts sont temporairement non disponible"
     }
   },
   "common": {

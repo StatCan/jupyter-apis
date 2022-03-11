@@ -138,7 +138,8 @@
       "gpus": "GPUs",
       "storage": "Storage",
       "total": "Total",
-      "errMessage": "Failed to retrieve cost information"
+      "errMessage": "Failed to retrieve cost information",
+      "kubeCostError": "Cost information is temporarily unavailable"
     }
   },
   "common": {

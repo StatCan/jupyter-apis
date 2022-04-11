@@ -25,15 +25,9 @@ The front-end is configured to proxy requests to the local API server. It
 requires an environment variable (`KF_USER_ID`) to specify the current user –
 this is passed to the API server as an HTTP header.
 
-1. Change directory to front-end folder: `cd frontend`
-2. Install dependencies: `npm install`
-3. Run the front-end `KF_USER_ID=<cloud_email> npm start`
 
-The front-end is now available at `http://localhost:4200/jupyter/`. Since it is
-disconnected from the `centraldashboard` component, you need to type your
-desired namespace in the UI rather than selecting it from a dropdown.
-
-### Run Front-end: Another way -possibly more up to date
+The following can be pasted in a script and executed.
+**NOTE**: `user` is when using vagrant. Use the email adress if pokind dev cluser
 ```
 cd frontend/common/kubeflow-common-lib
 npm i 
@@ -44,8 +38,17 @@ npm link
 cd ../../../../jupyter
 npm i
 npm link kubeflow
-ng serve
+KF_USER_ID=user npm start
 ```
+
+### Older instructions
+1. ~Change directory to front-end folder: `cd frontend`~
+2. ~Install dependencies: `npm install`~
+3. ~Run the front-end `KF_USER_ID=<cloud_email> npm start`~
+
+~The front-end is now available at `http://localhost:4200/jupyter/`. Since it is
+disconnected from the `centraldashboard` component, you need to type your
+desired namespace in the UI rather than selecting it from a dropdown.~
 
 ### Connecting a Kubeflow Cluster
 

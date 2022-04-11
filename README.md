@@ -33,6 +33,20 @@ The front-end is now available at `http://localhost:4200/jupyter/`. Since it is
 disconnected from the `centraldashboard` component, you need to type your
 desired namespace in the UI rather than selecting it from a dropdown.
 
+### Run Front-end: Another way -possibly more up to date
+```
+cd frontend/common/kubeflow-common-lib
+npm i 
+npm run build
+cd dist/kubeflow
+npm link
+
+cd ../../../../jupyter
+npm i
+npm link kubeflow
+ng serve
+```
+
 ### Connecting a Kubeflow Cluster
 
 The API server will connect to the Kubeflow cluster from your current `kubectl`

@@ -27,7 +27,7 @@ this is passed to the API server as an HTTP header.
 
 
 The following can be pasted in a script and executed.
-**NOTE**: `user` is when using vagrant. Use the email adress if pokind dev cluser
+**NOTE**: `user` is when using vagrant. Use the email adress if it is the dev cluser (please never connect to prod directly)
 ```
 cd frontend/common/kubeflow-common-lib
 npm i 

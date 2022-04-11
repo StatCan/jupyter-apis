@@ -3,7 +3,7 @@ import { FormGroup, AbstractControl, Validators, ValidatorFn, ControlContainer, 
 import {TranslateService} from "@ngx-translate/core";
 
 const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
-  [0, {cpu: 15, ram: 48, cpulimit: 15, ramlimit: 48}],
+  [0, {cpu: 14, ram: 48, cpulimit: 14, ramlimit: 48}],
   [1, {cpu: 4, ram: 96, cpulimit: 4, ramlimit: 96}]
 ]);
 type MaxResourceSpec = {cpu: number; ram: number, cpulimit: number, ramlimit: number};

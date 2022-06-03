@@ -83,6 +83,7 @@ type newnotebookrequest struct {
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
 	Language           string            `json:"language"`
+	ImagePullPolicy    string            `json:"imagePullPolicy"`
 	ServerType         string            `json:"serverType"`
 	AffinityConfig     string            `json:"affinityConfig"`
 	TolerationGroup    string            `json:"tolerationGroup"`
@@ -121,15 +122,16 @@ type notebookPhase string
 
 // KeyType is the type of key
 type KeyType struct {
-	Key 	string
-	Params	[]string
+	Key    string
+	Params []string
 }
+
 // status represents the status of a notebook.
 type status struct {
 	Message string        `json:"message"`
 	Phase   notebookPhase `json:"phase"`
 	State   string        `json:"state"`
-	Key		KeyType		  `json:"key"`
+	Key     KeyType       `json:"key"`
 }
 
 const (
@@ -165,11 +167,10 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: "Deleting this Notebook Server.",
 			Phase:   NotebookPhaseTerminating,
-			Key:	
-				KeyType{
-					Key: "jupyter.backend.status.notebookDeleting",
-					Params: []string{},
-				},
+			Key: KeyType{
+				Key:    "jupyter.backend.status.notebookDeleting",
+				Params: []string{},
+			},
 		}
 	}
 
@@ -179,8 +180,8 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			return status{
 				Message: "No pods are currently running for this Notebook Server.",
 				Phase:   NotebookPhaseStopped,
-				Key:	KeyType{
-					Key: "jupyter.backend.status.noPodsRunning",
+				Key: KeyType{
+					Key:    "jupyter.backend.status.noPodsRunning",
 					Params: []string{},
 				},
 			}
@@ -189,8 +190,8 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: "Notebook Server is stopping.",
 			Phase:   NotebookPhaseTerminating,
-			Key:	KeyType{
-				Key: "jupyter.backend.status.notebookStopping",
+			Key: KeyType{
+				Key:    "jupyter.backend.status.notebookStopping",
 				Params: []string{},
 			},
 		}
@@ -204,7 +205,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			Message: "Running",
 			Phase:   NotebookPhaseReady,
 			Key: KeyType{
-				Key: "jupyter.backend.status.running",
+				Key:    "jupyter.backend.status.running",
 				Params: []string{},
 			},
 		}
@@ -215,7 +216,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			Message: state.Waiting.Reason,
 			Phase:   NotebookPhaseWaiting,
 			Key: KeyType{
-				Key: "jupyter.backend.status.waitingStatus",
+				Key:    "jupyter.backend.status.waitingStatus",
 				Params: []string{},
 			},
 		}
@@ -228,7 +229,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 				Message: event.Reason,
 				Phase:   NotebookPhaseWarning,
 				Key: KeyType{
-					Key: "jupyter.backend.status.errorEvent",
+					Key:    "jupyter.backend.status.errorEvent",
 					Params: []string{},
 				},
 			}
@@ -239,7 +240,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		Message: "Scheduling the Pod",
 		Phase:   NotebookPhaseWaiting,
 		Key: KeyType{
-			Key: "jupyter.backend.status.schedulingPod",
+			Key:    "jupyter.backend.status.schedulingPod",
 			Params: []string{},
 		},
 	}
@@ -640,6 +641,10 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
+	// Add imagePullPolicy
+	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {
+		notebook.Spec.Template.Spec.Containers[0].ImagePullPolicy = corev1.PullPolicy(req.ImagePullPolicy)
+	}
 	log.Printf("creating notebook %q for %q", notebook.ObjectMeta.Name, namespace)
 
 	// Submit the notebook to the API server

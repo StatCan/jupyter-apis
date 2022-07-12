@@ -159,6 +159,17 @@ func main() {
 		},
 	}, s.GetNamespaces)).Methods("GET")
 
+	router.HandleFunc("/api/namespaces/{namespace}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "pods",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetNamespaceMetadata)).Methods("GET")
+
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

@@ -15,8 +15,9 @@ import {
   Resp,
   PodDefault,
   NotebookFormObject,
-  NotebookProcessedObject,
+  NotebookProcessedObject
 } from '../types';
+import { V1Namespace } from '@kubernetes/client-node';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
@@ -39,6 +40,17 @@ export class JWABackendService extends BackendService {
       catchError(error => this.handleError(error)),
       map((resp: JWABackendResponse) => {
         return resp.notebooks;
+      }),
+    );
+  }
+ 
+  public getNSMetadata(namespace: string): Observable<V1Namespace> {
+    const url = `api/namespaces/${namespace}`;
+
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map(data => {
+        return data.namespace;
       }),
     );
   }

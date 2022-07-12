@@ -1,4 +1,5 @@
 import { BackendResponse } from 'kubeflow';
+import { V1Namespace } from '@kubernetes/client-node';
 
 export interface JWABackendResponse extends BackendResponse {
   notebooks?: NotebookResponseObject[];
@@ -6,13 +7,14 @@ export interface JWABackendResponse extends BackendResponse {
   config?: Config;
   poddefaults?: PodDefault[];
   vendors?: string[];
+  namespace?: V1Namespace;
 }
 
 export interface VWABackendResponse extends BackendResponse {
   pvcs?: VolumeResponseObject[];
 }
 
-export type ServerType = 'jupyter' | 'group-one' | 'group-two';
+export type ServerType = 'jupyter' | 'group-one' | 'group-two' | 'group-three';
 
 export interface NotebookResponseObject { //The notebook table
   name: string;
@@ -46,6 +48,7 @@ export interface NotebookFormObject {
   image: string;
   imageGroupOne: string;
   imageGroupTwo: string;
+  imageGroupThree: string;
   allowCustomImage: boolean;
   imagePullPolicy: string;
   customImage?: string;
@@ -160,11 +163,22 @@ export interface Config {
   };
 
   imageGroupOne?: {
+    disabledMessage?: Map<string, string>;
+    enabledCondition?: Map<string, string>;
     value: string;
     options: string[];
   };
 
   imageGroupTwo?: {
+    disabledMessage?: Map<string, string>;
+    enabledCondition?: Map<string, string>;
+    value: string;
+    options: string[];
+  };
+
+  imageGroupThree?: {
+    disabledMessage?: Map<string, string>;
+    enabledCondition?: Map<string, string>;
     value: string;
     options: string[];
   };

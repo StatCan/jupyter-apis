@@ -45,7 +45,8 @@
       "serverType": "Type de serveur",
       "useJupyterLabBasedServer": "Utiliser le serveur basé sur JupyterLab",
       "useGroupOneBasedServer": "Utiliser le serveur basé sur le groupe un",
-      "useGroupTwoBasedServer": "Utiliser le serveur basé sur le groupe deux"
+      "useGroupTwoBasedServer": "Utiliser le serveur basé sur le groupe deux",
+      "useGroupThreeBasedServer": "Utiliser le serveur basé sur le groupe trois"
     },
     "formName": {
       "nameDesc": "Spécifier le nom du serveur bloc-notes et l'espace de noms dont il fera partie."

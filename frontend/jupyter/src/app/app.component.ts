@@ -8,9 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent {
   constructor(private translate: TranslateService) {
-    const currentLanguage = this.translate.getBrowserLang();
-    const lang = currentLanguage.match(/en|fr/)? currentLanguage : 'en';
-    translate.setDefaultLang(lang);
+    translate.setDefaultLang('en');
+    translate.use(this.translate.getBrowserLang()); 
   }
   title = 'frontend';
 }

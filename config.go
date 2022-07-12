@@ -10,6 +10,7 @@ type SpawnerFormDefaults struct {
 	Image            Image           `yaml:"image" json:"image"`
 	ImageGroupOne    ImageGroup      `yaml:"imageGroupOne" json:"imageGroupOne"`
 	ImageGroupTwo    ImageGroup      `yaml:"imageGroupTwo" json:"imageGroupTwo"`
+	ImageGroupThree  ImageGroup      `yaml:"imageGroupThree" json:"imageGroupThree"`
 	AllowCustomImage bool            `yaml:"allowCustomImage" json:"allowCustomImage"`
 	ImagePullPolicy  ImagePullPolicy `yaml:"imagePullPolicy" json:"imagePullPolicy"`
 	CPU              CPU             `yaml:"cpu" json:"cpu"`
@@ -100,8 +101,14 @@ type Image struct {
 }
 
 type ImageGroup struct {
-	Value   string   `yaml:"value" json:"value"`
-	Options []string `yaml:"options" json:"options"`
+	DisabledMessage  map[string]string `yaml:"disabledMessage" json:"disabledMessage,omitempty"`
+	EnabledCondition *EnabledCondition `yaml:"enabledCondition" json:"enabledCondition,omitempty"`
+	Value            string            `yaml:"value" json:"value"`
+	Options          []string          `yaml:"options" json:"options"`
+}
+
+type EnabledCondition struct {
+	Labels map[string]string `yaml:"labels" json:"labels,omitempty"`
 }
 
 type Shm struct {

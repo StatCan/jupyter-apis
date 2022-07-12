@@ -31,6 +31,9 @@
         attr.aria-label="{{
           'jupyter.formImage.useGroupOneBasedServer' | translate
         }}"
+        [disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
+        [matTooltip]="!shouldEnable(imagesGroupOne?.enabledCondition) ? getDisabledMessage('group-one') : ''"
+        [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
       >
         <mat-icon class="server-type" svgIcon="group-one"></mat-icon>
       </mat-button-toggle>
@@ -39,8 +42,22 @@
         attr.aria-label="{{
           'jupyter.formImage.useGroupTwoBasedServer' | translate
         }}"
+        [disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
+        [matTooltip]="!shouldEnable(imagesGroupTwo?.enabledCondition) ? getDisabledMessage('group-two') : ''"
+        [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
       >
         <mat-icon class="server-type" svgIcon="group-two"></mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle
+        value="group-three"
+        attr.aria-label="{{
+          'jupyter.formImage.useGroupThreeBasedServer' | translate
+        }}"
+        [disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"
+        [matTooltip]="!shouldEnable(imagesGroupThree?.enabledCondition) ? getDisabledMessage('group-three') : ''"
+        [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"
+      >
+        <mat-icon class="server-type" svgIcon="group-three"></mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </div>
@@ -83,7 +100,7 @@
       [formControl]="parentForm.get('imageGroupOne')"
     >
       <mat-option
-       *ngFor="let img of imagesGroupOne"
+       *ngFor="let img of imagesGroupOne.options"
        [value]="img"
        [matTooltip]="img"
        >
@@ -110,10 +127,37 @@
       [formControl]="parentForm.get('imageGroupTwo')"
     >
       <mat-option
-       *ngFor="let img of imagesGroupTwo"
+       *ngFor="let img of imagesGroupTwo.options"
        [value]="img"
        [matTooltip]="img"
        >
+        {{ imageDisplayName(img) }}
+      </mat-option>
+    </mat-select>
+    <mat-error>
+      {{ 'jupyter.formImage.errorImageRequired' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field
+    class="wide"
+    appearance="outline"
+    *ngIf="
+    !parentForm?.value.customImageCheck &&
+    parentForm?.value.serverType === 'group-three'
+  "
+  >
+    <!-- If readonly, then make it an input element instead of select -->
+    <mat-label>{{ 'common.image' | translate }}</mat-label>
+    <mat-select
+      placeholder="{ 'jupyter.formImage.imageDocker' | translate }}"
+      [formControl]="parentForm.get('imageGroupThree')"
+    >
+      <mat-option
+      *ngFor="let img of imagesGroupThree.options"
+      [value]="img"
+      [matTooltip]="img"
+      >
         {{ imageDisplayName(img) }}
       </mat-option>
     </mat-select>

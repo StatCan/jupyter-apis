@@ -45,7 +45,8 @@
       "serverType": "Server Type",
       "useJupyterLabBasedServer": "Use JupyterLab based server",
       "useGroupOneBasedServer": "Use Group One based server",
-      "useGroupTwoBasedServer": "Use Group Two based server"
+      "useGroupTwoBasedServer": "Use Group Two based server",
+      "useGroupThreeBasedServer": "Use Group Three based server"
     },
     "formName": {
       "nameDesc": "Specify the name of the Notebook Server and the Namespace it will belong to."

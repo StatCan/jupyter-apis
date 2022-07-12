@@ -44,6 +44,20 @@ spawnerFormDefaults:
     # The list of available standard container Images
     options:
     - k8scc01covidacr.azurecr.io/remote-desktop:58308325
+  imageGroupThree:
+    # The container Image for the user's Group Three Server (SAS)
+    # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
+    # is applied to notebook in this group, configuring
+    # the Istio rewrite for containers that host their web UI at `/`
+    enabledCondition:
+      labels:
+        state.aaw.statcan.gc.ca/non-employee-users: false
+    disabledMessage:
+      en: "SAS is unavailable while non-employees have access to this profile."
+      fr: "SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."
+    value: k8scc01covidacr.azurecr.io/sas:latest    # The list of available standard container Images
+    options:
+    - k8scc01covidacr.azurecr.io/sas:latest
   hideRegistry: true
   hideTag: true
   allowCustomImage: true

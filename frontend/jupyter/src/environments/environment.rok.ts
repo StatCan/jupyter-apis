@@ -12,6 +12,8 @@ export const environment = {
   groupOneIcon: 'static/assets/group-one-icon.svg',
   groupTwoLogo: 'static/assets/group-two-logo.svg',
   groupTwoIcon: 'static/assets/group-two-icon.svg',
+  groupThreeLogo: 'static/assets/group-three-logo.svg',
+  groupThreeIcon: 'static/assets/group-three-icon.svg',
 };
 /*
  * For easier debugging in development mode, you can import the following file

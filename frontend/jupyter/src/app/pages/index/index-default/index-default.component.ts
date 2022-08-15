@@ -53,7 +53,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   pvcsWaitingViewer = new Set<string>();
   costConfig = defaultCostConfig;
   rawCostData: AggregateCostResponse = null;
-  processedCostData: AggregateCostObject = null;
+  processedCostData: AggregateCostObject[] = [];
 
   constructor(
     public ns: NamespaceService,
@@ -98,7 +98,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
             if (!isEqual(this.rawCostData, aggCost)) {
               this.rawCostData = aggCost;
 
-              this.processedCostData = this.processIncomingCostData(aggCost);
+              this.processedCostData = [this.processIncomingCostData(aggCost)];
               this.poller.reset();
               }
             },
@@ -416,7 +416,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     });
   }
   public costTrackByFn(index: number, cost: AggregateCostObject) {
-    return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.total}`;
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.totalCost}`;
   }
 
   public getCostStatus() {
@@ -434,14 +434,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     const resp = JSON.parse(
       JSON.stringify(cost),
     ) as AggregateCostResponse;
-
+    
     let costCopy: AggregateCostObject = {};
 
     if (resp.data[this.currNamespace]) {
       costCopy.cpuCost = this.formatCost(resp.data[this.currNamespace].cpuCost + resp.data[this.currNamespace].ramCost);
       costCopy.gpuCost = this.formatCost(resp.data[this.currNamespace].gpuCost);
       costCopy.pvCost = this.formatCost(resp.data[this.currNamespace].pvCost);
-      costCopy.total = this.formatCost(resp.data[this.currNamespace].totalCost);
+      costCopy.totalCost = this.formatCost(resp.data[this.currNamespace].totalCost);
     }
 
     return costCopy;

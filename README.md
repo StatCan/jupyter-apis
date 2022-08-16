@@ -26,20 +26,22 @@ requires an environment variable (`KF_USER_ID`) to specify the current user –
 this is passed to the API server as an HTTP header.
 
 
-The following can be pasted in a script and executed.
+The following can be pasted in a script and executed. This uses the latest node lts version(v16.16.0).
 **NOTE**: `user` is when using vagrant. Use the email adress if it is the dev cluser (please never connect to prod directly)
 ```
 cd frontend/common/kubeflow-common-lib
-npm i 
+npm i
 npm run build
 cd dist/kubeflow
 npm link
 
 cd ../../../../jupyter
 npm i
-npm link kubeflow
+npm link kubeflow --legacy-peer-deps
 KF_USER_ID=user npm start
 ```
+
+For the kubecost data to be retrievable, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
 
 ### Older instructions
 1. ~Change directory to front-end folder: `cd frontend`~

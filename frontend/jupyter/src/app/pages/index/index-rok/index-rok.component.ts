@@ -7,10 +7,8 @@ import {
   ConfirmDialogService,
 } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { KubecostService } from 'src/app/services/kubecost.service'
 import { Router } from '@angular/router';
 import { IndexDefaultComponent } from '../index-default/index-default.component';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-index-rok',
@@ -25,10 +23,8 @@ export class IndexRokComponent extends IndexDefaultComponent implements OnInit {
     public confirmDialog: ConfirmDialogService,
     public popup: SnackBarService,
     public router: Router,
-    public translate: TranslateService,
-    public cost: KubecostService,
   ) {
-    super(ns, backend, confirmDialog, popup, router, translate, cost);
+    super(ns, backend, confirmDialog, popup, router);
 
     this.rok.initCSRF();
   }

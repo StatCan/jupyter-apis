@@ -1,11 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup, Validators, ValidatorFn, AbstractControl, FormControl, FormGroupDirective, NgForm } from "@angular/forms";
+import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Volume } from 'src/app/types';
-import { updateNonDirtyControl, NamespaceService } from 'kubeflow';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { JWABackendService } from "src/app/services/backend.service";
-import { TranslateService } from "@ngx-translate/core";
+import { updateNonDirtyControl } from 'kubeflow';
 
 @Component({
   selector: 'app-volume',
@@ -15,18 +12,15 @@ import { TranslateService } from "@ngx-translate/core";
 export class VolumeComponent implements OnInit, OnDestroy {
   private notebookNamePrv = '';
   private defaultStorageClassPrv: boolean;
-  private mountedVolumes: Set<string> = new Set<string>();
 
   currentPVC: Volume;
   existingPVCs: Set<string> = new Set();
-  // Specific error matcher for volume name field
-  matcher = new PvcErrorStateMatcher();
+
   subscriptions = new Subscription();
-  selected="ReadWriteOnce"
+
   // ----- @Input Parameters -----
   @Input() volume: FormGroup;
   @Input() namespace: string;
-  @Input() sizes: Set<string>;
 
   @Input()
   get notebookName() {
@@ -116,20 +110,9 @@ export class VolumeComponent implements OnInit, OnDestroy {
   }
 
   // ----- Component Functions -----
-  constructor(
-    private translate: TranslateService,
-    private backend: JWABackendService,
-    private ns: NamespaceService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.volume
-      .get("name")
-      .setValidators([
-        Validators.required,
-        this.isMountedValidator(),
-        Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
-      ]);
-
     // type
     this.subscriptions.add(
       this.volume.get('type').valueChanges.subscribe((type: string) => {
@@ -144,17 +127,6 @@ export class VolumeComponent implements OnInit, OnDestroy {
         this.volume.get('name').setValue(name, { emitEvent: false });
         this.updateVolInputFields();
       }),
-    );
-  // Get the list of mounted volumes of the existing Notebooks in the selected Namespace
-    this.subscriptions.add(
-      this.ns.getSelectedNamespace().subscribe(ns => {
-        this.backend.getNotebooks(ns).subscribe(notebooks => {
-          this.mountedVolumes.clear();
-          notebooks.map(nb => nb.volumes.map(v => {
-            this.mountedVolumes.add(v)
-          }));
-        });
-      })
     );
   }
 
@@ -198,34 +170,5 @@ export class VolumeComponent implements OnInit, OnDestroy {
       // Also set the selected volume
       this.volume.controls.name.setValue(this.currentVolName);
     }
-  }
-  showNameError() {
-    const volumeName = this.volume.get("name");
-
-    if (volumeName.hasError("required")) {
-      return this.translate.instant("jupyter.volume.errorNameRequired");
-    }
-    if (volumeName.hasError("pattern")) {
-      return this.translate.instant("jupyter.volume.errorNamePattern");
-    }
-    if (volumeName.hasError("isMounted")) {
-      return this.translate.instant("jupyter.volume.errorMountedVolume");
-    }
-  }
-
-  //Method that disables selecting a mounted pvc
-  private isMountedValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-      const exists = this.mountedVolumes.has(control.value);
-      return exists ? { isMounted: true } : null;
-    };
-  }
-}
-// Error when invalid control is dirty, touched, or submitted
-export class PvcErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    //Allows to control when volume is untouched but already assigned
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted || !control.hasError("pattern")));
   }
 }

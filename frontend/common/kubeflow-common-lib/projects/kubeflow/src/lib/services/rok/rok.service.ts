@@ -12,19 +12,14 @@ import { Observable, throwError } from 'rxjs';
 import { RokSettings } from './types';
 import { BackendResponse } from '../backend/types';
 
-import { TranslateService } from '@ngx-translate/core';
-
 @Injectable({
   providedIn: 'root',
 })
 export class RokService extends BackendService {
   private csrfToken = '';
 
-  constructor(
-    public http: HttpClient,
-    public dialog: SnackBarService,
-    public translate: TranslateService) {
-    super(http, dialog, translate);
+  constructor(public http: HttpClient, public dialog: SnackBarService) {
+    super(http, dialog);
   }
 
   public initCSRF() {

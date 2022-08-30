@@ -9,13 +9,11 @@
         <app-form-image
           [parentForm]="formCtrl"
           [images]="config?.image?.options"
-          [imagesGroupOne]="config?.imageGroupOne"
-          [imagesGroupTwo]="config?.imageGroupTwo"
-          [imagesGroupThree]="config?.imageGroupThree"
+          [imagesGroupOne]="config?.imageGroupOne?.options"
+          [imagesGroupTwo]="config?.imageGroupTwo?.options"
           [allowCustomImage]="config?.allowCustomImage"
           [hideRegistry]="config?.hideRegistry"
           [hideTag]="config?.hideTag"
-          [nsMetadata]="nsMetadata"
         ></app-form-image>
 
         <app-form-cpu-ram
@@ -24,13 +22,11 @@
           [readonlyMemory]="config?.memory?.readOnly"
           [cpuLimitFactor]="config?.cpu?.limitFactor"
           [memoryLimitFactor]="config?.memory?.limitFactor"
-          [readonlySpecs]="readonlySpecs"
         ></app-form-cpu-ram>
 
         <app-form-gpus
           [parentForm]="formCtrl"
           [vendors]="config?.gpus?.value.vendors"
-          (gpuValueEvent)="checkGPU($event)"
         ></app-form-gpus>
 
         <app-form-workspace-volume
@@ -71,12 +67,13 @@
       class="form--button-margin"
       (click)="onSubmit()"
       [disabled]="!formCtrl.valid || blockSubmit"
+      i18n
     >
-      {{ 'common.launchCaps' | translate }}
+      LAUNCH
     </button>
 
-    <button mat-raised-button type="button" (click)="onCancel()">
-      {{ 'common.cancelCaps' | translate }}
+    <button mat-raised-button type="button" (click)="onCancel()" i18n>
+      CANCEL
     </button>
   </div>
 </div>

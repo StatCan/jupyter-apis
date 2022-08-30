@@ -1,23 +1,11 @@
 <lib-form-section
-  title="{{ 'jupyter.formAdvancedOptions.miscSettings' | translate }}"
-  text="{{ 'jupyter.formAdvancedOptions.miscSettingsDesc' | translate }}"
+  title="Miscellaneous Settings"
+  text="Other possible settings to be applied to the Notebook Server."
   icon="fa:fas:cogs"
+  i18n-title
+  i18n-text
 >
-  <!--Enable Shared Memory-->
-  <mat-slide-toggle [formControl]="parentForm.get('shm')">
-    {{ 'jupyter.formAdvancedOptions.enableSharedMemory' | translate }}
+  <mat-slide-toggle [formControl]="parentForm.get('shm')" i18n>
+    Enable Shared Memory
   </mat-slide-toggle>
-
-  <!--Select System Language-->
-  <mat-form-field class="wide column" appearance="outline">
-    <mat-label>
-      {{ 'jupyter.formAdvancedOptions.systemLanguage' | translate}}
-    </mat-label>
-    <mat-select [formControl]="parentForm.get('language')">
-      <mat-option *ngFor="let v of languageList" [value]="v.id">
-        {{ v.label | translate  }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
 </lib-form-section>

@@ -2,21 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule,
   MatSpinner,
   MatProgressSpinnerModule,
-  MatDialogModule,
-  MatTooltipModule,
-  MatDividerModule,
-  MatIconModule,
-} from '@angular/material';
+} from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FormSectionComponent } from './section/section.component';
-import { FormSectionImageComponent } from './section-image/section.image.component';
 
 import { NameNamespaceInputsComponent } from './name-namespace-inputs/name-namespace-inputs.component';
 import { NameInputComponent } from './name-namespace-inputs/name-input/name-input.component';
@@ -27,12 +26,10 @@ import { AdvancedOptionsComponent } from './advanced-options/advanced-options.co
 import { PopoverModule } from '../popover/popover.module';
 import { SubmitBarComponent } from './submit-bar/submit-bar.component';
 import { StepInfoComponent } from './step-info/step-info.component';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
     FormSectionComponent,
-    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -53,11 +50,9 @@ import { TranslateModule } from '@ngx-translate/core';
     IconModule,
     MatProgressSpinnerModule,
     PopoverModule,
-    TranslateModule.forRoot(),
   ],
   exports: [
     FormSectionComponent,
-    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -75,7 +70,6 @@ import { TranslateModule } from '@ngx-translate/core';
     MatTooltipModule,
     MatIconModule,
     MatDividerModule,
-    TranslateModule,
   ],
 })
 export class FormModule {}

@@ -1,5 +1,4 @@
-import { BackendResponse } from 'kubeflow';
-import { V1Namespace } from '@kubernetes/client-node';
+import { Status, BackendResponse } from 'kubeflow';
 
 export interface JWABackendResponse extends BackendResponse {
   notebooks?: NotebookResponseObject[];
@@ -7,16 +6,11 @@ export interface JWABackendResponse extends BackendResponse {
   config?: Config;
   poddefaults?: PodDefault[];
   vendors?: string[];
-  namespace?: V1Namespace;
 }
 
-export interface VWABackendResponse extends BackendResponse {
-  pvcs?: VolumeResponseObject[];
-}
+export type ServerType = 'jupyter' | 'group-one' | 'group-two';
 
-export type ServerType = 'jupyter' | 'group-one' | 'group-two' | 'group-three';
-
-export interface NotebookResponseObject { //The notebook table
+export interface NotebookResponseObject {
   name: string;
   namespace: string;
   serverType: ServerType;
@@ -33,7 +27,6 @@ export interface NotebookResponseObject { //The notebook table
   };
   environment: string;
   shortImage: string;
-  language: string;
 }
 
 export interface NotebookProcessedObject extends NotebookResponseObject {
@@ -48,7 +41,6 @@ export interface NotebookFormObject {
   image: string;
   imageGroupOne: string;
   imageGroupTwo: string;
-  imageGroupThree: string;
   allowCustomImage: boolean;
   imagePullPolicy: string;
   customImage?: string;
@@ -63,7 +55,6 @@ export interface NotebookFormObject {
   noWorkspace: boolean;
   workspace: Volume;
   datavols: Volume[];
-  language: string;
   shm: boolean;
   configurations: PodDefault[];
 }
@@ -78,33 +69,6 @@ export interface Volume {
   path: string;
   extraFields?: { [key: string]: any };
   templatedName?: string;
-}
-
-// Backend response type
-export interface Resp {
-  namespaces?: string[];
-  notebooks?: Resource[];
-  storageclasses?: string[];
-  defaultStorageClass?: string;
-  pvcs?: Volume[];
-  config?: any;
-  poddefaults?: PodDefault[];
-  success: boolean;
-  log?: string;
-}
-
-// Notebooks received from backend
-export interface Resource {
-  name: string;
-  namespace: string;
-  status: string;
-  reason: string;
-  age: string;
-  image: string;
-  volumes: string[];
-  cpu: string;
-  memory: string;
-  shortImage: string;
 }
 
 export function emptyVolume(): Volume {
@@ -156,6 +120,24 @@ export interface GPU {
   vendors?: GPUVendor[];
 }
 
+export interface ConfigVolume {
+  type: {
+    value: string;
+  };
+  name: {
+    value: string;
+  };
+  size: {
+    value: string;
+  };
+  mountPath: {
+    value: string;
+  };
+  accessModes: {
+    value: string;
+  };
+}
+
 export interface Config {
   image?: {
     value: string;
@@ -163,22 +145,11 @@ export interface Config {
   };
 
   imageGroupOne?: {
-    disabledMessage?: Map<string, string>;
-    enabledCondition?: Map<string, string>;
     value: string;
     options: string[];
   };
 
   imageGroupTwo?: {
-    disabledMessage?: Map<string, string>;
-    enabledCondition?: Map<string, string>;
-    value: string;
-    options: string[];
-  };
-
-  imageGroupThree?: {
-    disabledMessage?: Map<string, string>;
-    enabledCondition?: Map<string, string>;
     value: string;
     options: string[];
   };
@@ -250,56 +221,3 @@ export interface Config {
     readOnly?: boolean;
   };
 }
-
-// Everything about volumes
-export interface ConfigVolume {
-  type: {
-    value: string;
-  };
-  name: {
-    value: string;
-  };
-  size: {
-    value: string;
-  };
-  mountPath: {
-    value: string;
-  };
-  accessModes: {
-    value: string;
-  };
-  language?: {
-    value: string;
-    readOnly?: boolean;
-  }
-}
-
-export interface VolumeResponseObject {
-  name: string;
-  size: number;
-  namespace?: string;
-  extraFields?: { [key: string]: any };
-  usedBy?: string | null;
-  status?: Status;
-}
-
-
-export interface VolumeProcessedObject extends VolumeResponseObject {
-  deleteAction?: string;
-}
-
-export interface Status {
-  phase: string;
-  state: string;
-  message: string;
-  key: {
-    Key: string;
-    Params?: string[];
-  }
-}
-export interface AggregateCostObject {
-  cpuCost?: string;
-  gpuCost?: string;
-  pvCost?: string;
-  totalCost?: string;
-};

@@ -13,50 +13,45 @@ import { ServerTypeComponent } from './server-type/server-type.component';
 
 // --- Configs for the Confirm Dialogs ---
 export function getDeleteDialogConfig(name: string): DialogConfig {
-  return { // TODO key + param
-    title: {
-      key: 'jupyter.dialog.deleteDialogTitle',
-      params: { name: name }
-      },
-    message: 'jupyter.dialog.deleteDialogMessage',
-    accept: 'common.deleteCaps',
+  return {
+    title: $localize`Are you sure you want to delete this notebook server? ${name}`,
+    message: $localize`Warning: Your data might be lost if the notebook server
+                       is not backed by persistent storage`,
+    accept: $localize`DELETE`,
     confirmColor: 'warn',
-    cancel: 'common.cancelCaps',
+    cancel: $localize`CANCEL`,
     error: '',
-    applying: 'common.deletingCaps',
+    applying: $localize`DELETING`,
     width: '600px',
   };
 }
 
 export function getStopDialogConfig(name: string): DialogConfig {
-  return { // TODO key + param
-    title: {
-      key: 'jupyter.dialog.stopDialogTitle',
-      params: { name: name },
-    },
-    message: 'jupyter.dialog.stopDialogMessage',
-    accept: 'common.stopCaps',
+  return {
+    title: $localize`Are you sure you want to stop this notebook server? ${name}`,
+    message: $localize`Warning: Your data might be lost if the notebook server
+                       is not backed by persistent storage.`,
+    accept: $localize`STOP`,
     confirmColor: 'primary',
-    cancel: 'common.cancelCaps',
+    cancel: $localize`CANCEL`,
     error: '',
-    applying: 'common.stoppingCaps',
+    applying: $localize`STOPPING`,
     width: '600px',
   };
 }
 
 // --- Config for the Resource Table ---
 export const defaultConfig = {
-  icon: 'computer',
-  title: 'jupyter.index.notebookServers',
-  newButtonText: 'jupyter.index.newServersCaps',
+  title: $localize`Notebooks`,
+  newButtonText: $localize`NEW NOTEBOOK`,
   columns: [
     {
-      matHeaderCellDef: 'common.status',
+      matHeaderCellDef: $localize`Status`,
       matColumnDef: 'status',
       value: new StatusValue(),
     },
     {
-      matHeaderCellDef: 'common.name',
+      matHeaderCellDef: $localize`Name`,
       matColumnDef: 'name',
       value: new PropertyValue({
         field: 'name',
@@ -65,19 +60,19 @@ export const defaultConfig = {
       }),
     },
     {
-      matHeaderCellDef: 'common.type',
+      matHeaderCellDef: $localize`Type`,
       matColumnDef: 'type',
       value: new ComponentValue({
         component: ServerTypeComponent,
       }),
     },
     {
-      matHeaderCellDef: 'common.age',
+      matHeaderCellDef: $localize`Age`,
       matColumnDef: 'age',
       value: new PropertyValue({ field: 'age' }),
     },
     {
-      matHeaderCellDef: 'common.image',
+      matHeaderCellDef: $localize`Image`,
       matColumnDef: 'image',
       value: new PropertyValue({
         field: 'shortImage',
@@ -86,7 +81,7 @@ export const defaultConfig = {
       }),
     },
     {
-      matHeaderCellDef: 'common.gpus',
+      matHeaderCellDef: $localize`GPUs`,
       matColumnDef: 'gpus',
       value: new PropertyValue({
         field: 'gpus.count',
@@ -94,35 +89,36 @@ export const defaultConfig = {
       }),
     },
     {
-      matHeaderCellDef: 'jupyter.index.cpus',
+      matHeaderCellDef: $localize`CPUs`,
       matColumnDef: 'cpu',
       value: new PropertyValue({ field: 'cpu' }),
     },
     {
-      matHeaderCellDef: 'jupyter.index.memory',
+      matHeaderCellDef: $localize`Memory`,
       matColumnDef: 'memory',
       value: new PropertyValue({ field: 'memory' }),
     },
     {
-      matHeaderCellDef: 'common.volumes',
+      matHeaderCellDef: $localize`Volumes`,
       matColumnDef: 'volumes',
       value: new MenuValue({ field: 'volumes', itemsIcon: 'storage' }),
     },
+
     {
       matHeaderCellDef: '',
       matColumnDef: 'actions',
       value: new ActionListValue([
         new ActionButtonValue({
           name: 'connect',
-          tooltip: 'jupyter.index.connectTooltip',
+          tooltip: $localize`Connect to this notebook server`,
           color: 'primary',
           field: 'connectAction',
-          text: 'common.connectCaps',
+          text: $localize`CONNECT`,
         }),
         new ActionIconValue({
           name: 'start-stop',
-          tooltipInit: 'jupyter.index.stopNotebookServer',
-          tooltipReady: 'jupyter.index.startNotebookServer',
+          tooltipInit: $localize`Stop this notebook server`,
+          tooltipReady: $localize`Start this notebook server`,
           color: '',
           field: 'startStopAction',
           iconInit: 'material:stop',
@@ -130,100 +126,12 @@ export const defaultConfig = {
         }),
         new ActionIconValue({
           name: 'delete',
-          tooltip: 'jupyter.index.deleteTooltip',
+          tooltip: $localize`Delete this notebook server`,
           color: '',
           field: 'deleteAction',
           iconReady: 'material:delete',
         }),
       ]),
-    },
-  ],
-};
-
-export const defaultVolumeConfig = {
-  icon: 'storage',
-  title: 'jupyter.volumeTable.notebookVolumes',
-  columns: [
-    {
-      matHeaderCellDef: 'common.status',
-      matColumnDef: 'status',
-      value: new StatusValue(),
-    },
-    {
-      matHeaderCellDef: 'common.name',
-      matColumnDef: 'name',
-      value: new PropertyValue({
-        field: 'name',
-        truncate: TRUNCATE_TEXT_SIZE.SMALL,
-        tooltipField: 'name',
-      }),
-    },
-    {
-      matHeaderCellDef: 'common.size',
-      matColumnDef: 'size',
-      value: new PropertyValue({ field: 'size' }),
-    },
-    {
-      matHeaderCellDef: 'jupyter.volumeTable.usedBy',
-      matColumnDef: 'usedBy',
-      value: new PropertyValue({ field: 'usedBy' }),
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'actions',
-      value: new ActionListValue([
-        new ActionIconValue({
-          name: 'delete',
-          tooltip: 'jupyter.volumeTable.tooltipDeleteVolume',
-          color: 'warn',
-          field: 'deleteAction',
-          iconReady: 'material:delete',
-        }),
-      ]),
-  },
-  ],
-};
-
-export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
-  return { // TODO key + param
-    title: {
-      key: 'jupyter.volumeTable.tooltipDeleteVolumeName',
-      params: { name: name }
-      },
-    message: 'jupyter.volumeTable.deleteDialogMessage',
-    accept: 'common.deleteCaps',
-    confirmColor: 'warn',
-    cancel: 'common.cancelCaps',
-    error: '',
-    applying: 'common.deletingCaps',
-    width: '600px',
-  };
-}
-
-// --- Config for the Cost Table ---
-export const defaultCostConfig = {
-  icon: 'attach_money',
-  title: 'Cost',
-  columns: [
-    {
-      matHeaderCellDef: 'Compute',
-      matColumnDef: 'compute',
-      value: new PropertyValue({ field: 'cpuCost' }),
-    },
-    {
-      matHeaderCellDef: 'GPUs',
-      matColumnDef: 'gpus',
-      value: new PropertyValue({ field: 'gpuCost' }),
-    },
-    {
-      matHeaderCellDef: 'Storage',
-      matColumnDef: 'storage',
-      value: new PropertyValue({ field: 'pvCost' }),
-    },
-    {
-      matHeaderCellDef: 'Total',
-      matColumnDef: 'total',
-      value: new PropertyValue({ field: 'totalCost' }),
     },
   ],
 };

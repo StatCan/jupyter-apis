@@ -6,7 +6,6 @@ import {
   NamespaceSelectModule,
   ConfirmDialogModule,
 } from 'kubeflow';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [IndexDefaultComponent],
@@ -15,11 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ResourceTableModule,
     NamespaceSelectModule,
     ConfirmDialogModule,
-    TranslateModule.forRoot(),
   ],
-  exports: [
-    IndexDefaultComponent,
-    TranslateModule,
-  ],
+  exports: [IndexDefaultComponent],
 })
 export class IndexDefaultModule {}

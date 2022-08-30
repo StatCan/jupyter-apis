@@ -27,7 +27,6 @@ export interface TableColumn {
 }
 
 export interface TableConfig {
-  icon?: string;
   columns: TableColumn[];
   title: string;
   newButtonText?: string;

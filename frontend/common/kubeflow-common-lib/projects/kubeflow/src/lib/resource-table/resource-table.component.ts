@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   TableConfig,
   ActionEvent,
@@ -56,8 +56,7 @@ export class ResourceTableComponent implements OnInit {
       return '600px';
     }
 
-    //return `${this.config.columns.length * 100}px`;
-    return `1000px`;
+    return `${this.config.columns.length * 100}px`;
   }
 
   get totalWidth() {

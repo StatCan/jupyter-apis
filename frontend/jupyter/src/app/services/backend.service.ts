@@ -2,34 +2,22 @@ import { Injectable } from '@angular/core';
 import { BackendService, SnackBarService } from 'kubeflow';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { environment } from "src/environments/environment";
+import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
-  VolumeResponseObject,
   JWABackendResponse,
-  VWABackendResponse,
   Config,
   Volume,
-  Resource,
-  Resp,
   PodDefault,
   NotebookFormObject,
-  NotebookProcessedObject
+  NotebookProcessedObject,
 } from '../types';
-import { V1Namespace } from '@kubernetes/client-node';
-import { TranslateService } from '@ngx-translate/core';
-
 @Injectable({
   providedIn: 'root',
 })
 export class JWABackendService extends BackendService {
-  constructor(
-    public http: HttpClient,
-    public snackBar: SnackBarService,
-    public translate: TranslateService,
-  ) {
-    super(http, snackBar, translate);
+  constructor(public http: HttpClient, public snackBar: SnackBarService) {
+    super(http, snackBar);
   }
 
   // GET
@@ -40,17 +28,6 @@ export class JWABackendService extends BackendService {
       catchError(error => this.handleError(error)),
       map((resp: JWABackendResponse) => {
         return resp.notebooks;
-      }),
-    );
-  }
- 
-  public getNSMetadata(namespace: string): Observable<V1Namespace> {
-    const url = `api/namespaces/${namespace}`;
-
-    return this.http.get<JWABackendResponse>(url).pipe(
-      catchError(error => this.handleError(error)),
-      map(data => {
-        return data.namespace;
       }),
     );
   }
@@ -118,14 +95,12 @@ export class JWABackendService extends BackendService {
     const namespace = notebook.namespace;
     const url = `api/namespaces/${namespace}/notebooks/${name}`;
 
-    return this.http
-      .patch<JWABackendResponse>(url, { stopped: false })
-      .pipe(
-        catchError(error => this.handleError(error)),
-        map(_ => {
-          return 'started';
-        }),
-      );
+    return this.http.patch<JWABackendResponse>(url, { stopped: false }).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => {
+        return 'started';
+      }),
+    );
   }
 
   public stopNotebook(notebook: NotebookProcessedObject): Observable<string> {
@@ -133,14 +108,12 @@ export class JWABackendService extends BackendService {
     const namespace = notebook.namespace;
     const url = `api/namespaces/${namespace}/notebooks/${name}`;
 
-    return this.http
-      .patch<JWABackendResponse>(url, { stopped: true })
-      .pipe(
-        catchError(error => this.handleError(error, false)),
-        map(_ => {
-          return 'stopped';
-        }),
-      );
+    return this.http.patch<JWABackendResponse>(url, { stopped: true }).pipe(
+      catchError(error => this.handleError(error, false)),
+      map(_ => {
+        return 'stopped';
+      }),
+    );
   }
 
   // DELETE
@@ -151,30 +124,4 @@ export class JWABackendService extends BackendService {
       .delete<JWABackendResponse>(url)
       .pipe(catchError(error => this.handleError(error, false)));
   }
-
-  //Volumes
-  public getPVCs(namespace: string): Observable<VolumeResponseObject[]> {
-    const url = `api/namespaces/${namespace}/pvcs`;
-
-    return this.http.get<VWABackendResponse>(url).pipe(
-      catchError(error => this.handleError(error)),
-      map((resp: VWABackendResponse) => {
-        return resp.pvcs;
-      }),
-    );
-  }
-
-  public deletePVC(namespace: string, pvc: string){
-    const url = `api/namespaces/${namespace}/pvcs/${pvc}`;
-
-    return this.http
-      .delete<VWABackendResponse>(url)
-      .pipe(catchError(error => this.handleError(error, false)));
-  }
-    // ---------------------------Error Handling----------------------------------
-    private handleBackendError(response: Resp) {
-      if (!response.success) {
-        throw response;
-      }
-    }
 }

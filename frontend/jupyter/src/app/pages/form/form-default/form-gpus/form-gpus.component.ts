@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/types';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-gpus',
@@ -13,20 +12,15 @@ import { TranslateService } from '@ngx-translate/core';
 export class FormGpusComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() vendors: GPUVendor[] = [];
-  @Output() gpuValueEvent = new EventEmitter<string>();
 
   private gpuCtrl: FormGroup;
   public installedVendors = new Set<string>();
-  public selected = 'none';
+
   subscriptions = new Subscription();
   maxGPUs = 16;
-  gpusCount = ['1'];
-  message: string;
+  gpusCount = ['1', '2', '4', '8'];
 
-  constructor(
-    public backend: JWABackendService,
-    private translate: TranslateService,
-  ) {}
+  constructor(public backend: JWABackendService) {}
 
   ngOnInit() {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
@@ -40,13 +34,10 @@ export class FormGpusComponent implements OnInit {
     this.subscriptions.add(
       this.gpuCtrl.get('num').valueChanges.subscribe((n: string) => {
         if (n === 'none') {
-          this.message = "";
           this.gpuCtrl.get('vendor').disable();
         } else {
-          this.message = this.translate.instant('jupyter.formGpus.warningSelectGpu');
           this.gpuCtrl.get('vendor').enable();
         }
-        this.gpuValueEvent.emit(n)
       }),
     );
 
@@ -56,15 +47,9 @@ export class FormGpusComponent implements OnInit {
   }
 
   // Vendor handling
-  public vendorIsDisabled(vendor: GPUVendor) {
-    return !this.installedVendors.has(vendor.limitsKey);
-  }
-
   public vendorTooltip(vendor: GPUVendor) {
     return !this.installedVendors.has(vendor.limitsKey)
-      ? this.translate.instant('jupyter.formGpus.errorGpuVendorNotFound', {
-        vendoruiName: `${vendor.uiName}`,
-      })
+      ? $localize`There are currently no ${vendor.uiName} GPUs in you cluster.`
       : '';
   }
 
@@ -73,7 +58,7 @@ export class FormGpusComponent implements OnInit {
     const vendorCtrl = this.parentForm.get('gpus').get('vendor');
 
     if (vendorCtrl.hasError('vendorNullName')) {
-      return this.translate.instant('jupyter.formGpus.errorGpuVendorRequired');
+      return $localize`You must also specify the GPU Vendor for the assigned GPUs`;
     }
   }
 

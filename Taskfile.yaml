@@ -66,7 +66,7 @@ tasks:
         wget https://github.com/kubeflow/manifests/archive/refs/tags/v{{.KUBEFLOW_VERSION}}.zip
         unzip v{{.KUBEFLOW_VERSION}}.zip -d k8s
         rm v{{.KUBEFLOW_VERSION}}.zip
-  
+
   # TODO: the central dashboard deployment changes after v1.4.0, so we need to refactor the below task
   kf:apply:
     prefix: ⚙️ > apply kf manifests
@@ -75,3 +75,37 @@ tasks:
       - |
         cd k8s/manifests-{{.KUBEFLOW_VERSION}}
         while ! kustomize build example | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 10; done
+
+  #   __                 _                       _ 
+  #  / _|_ __ ___  _ __ | |_       ___ _ __   __| |
+  # | |_| '__/ _ \| '_ \| __|____ / _ \ '_ \ / _` |
+  # |  _| | | (_) | | | | ||_____|  __/ | | | (_| |
+  # |_| |_|  \___/|_| |_|\__|     \___|_| |_|\__,_|
+
+  local:front-end:
+    prefix: ⚙️ > front-end
+    desc: Run Jupyter-APIs front-end locally
+    cmds:
+      - |
+        cd frontend/common/kubeflow-common-lib
+        npm i
+        npm run build
+        cd dist/kubeflow
+        sudo npm link
+
+        cd ../../../../jupyter
+        npm i
+        npm link kubeflow --legacy-peer-deps
+        KF_USER_ID=user@example.com npm start
+  #  _                _                        _ 
+  # | |__   __ _  ___| | __      ___ _ __   __| |
+  # | '_ \ / _` |/ __| |/ /____ / _ \ '_ \ / _` |
+  # | |_) | (_| | (__|   <_____|  __/ | | | (_| |
+  # |_.__/ \__,_|\___|_|\_\     \___|_| |_|\__,_|
+
+  local:back-end:
+    prefix: ⚙️ > front-end
+    desc: Run Jupyter-APIs back-end locally
+    cmds:
+      - |
+        go run . -spawner-config samples/spawner_ui_config.yaml

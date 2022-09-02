@@ -1,0 +1,77 @@
+# Instructions
+#
+# This taskfile closely follows https://github.com/kubeflow/manifests#installation
+# for the relevant kubeflow manifests and https://istio.io/latest/docs/setup/install/operator/
+# for the istio manifests.
+
+version: "3"
+dotenv: [".env"]
+output: prefixed
+silent: true
+
+vars:
+  # Versions of major platform components
+  KUBEFLOW_VERSION: "1.4.0"
+  K8S_VERSION: "v1.21.9"
+  ISTIO_VERSION: "1.12.9"
+  CLUSTER_NAME: kubeflow-local
+  CONTEXT_NAME: "k3d-{{.CLUSTER_NAME}}"
+  K3S_VERSION: rancher/k3s:{{.K8S_VERSION}}-k3s1
+  K3S_IMAGE: rancher/{{.K3S_VERSION}}
+  ISTIOCTL: "istioctl --context={{.CONTEXT_NAME}}"
+  KUBECTL: "kubectl --context={{.CONTEXT_NAME}}"
+
+tasks:
+  #  _    _____     _
+  # | | _|___ /  __| |
+  # | |/ / |_ \ / _` |
+  # |   < ___) | (_| |
+  # |_|\_\____/ \__,_|
+
+  k3d:create:
+    prefix: ⚙️ > create k3d cluster
+    desc: create k3d cluster
+    cmds:
+      - k3d cluster create --config=k8s/k3d.config.yaml
+
+  k3d:destroy:
+    prefix: ⚙️ > destroy
+    desc: destroy k3d cluster
+    cmds:
+      - "k3d cluster delete {{.CLUSTER_NAME}}"
+
+  k3d:start:
+    prefix: ⚙️ > start
+    desc: starts k3d cluster
+    cmds:
+      - "k3d cluster start {{.CLUSTER_NAME}}"
+
+  k3d:stop:
+    prefix: ⚙️ > stop
+    desc: stops k3d cluster
+    cmds:
+      - "k3d cluster stop {{.CLUSTER_NAME}}"
+
+  #  _          _           __ _
+  # | | ___   _| |__   ___ / _| | _____      __
+  # | |/ / | | | '_ \ / _ \ |_| |/ _ \ \ /\ / /
+  # |   <| |_| | |_) |  __/  _| | (_) \ V  V /
+  # |_|\_\\__,_|_.__/ \___|_| |_|\___/ \_/\_/
+
+  kf:manifests:
+    prefix: ⚙️ > install kf manifests
+    desc: Download a specific version of upstream kubeflow manifests locally.
+    cmds:
+      - |
+        wget https://github.com/kubeflow/manifests/archive/refs/tags/v{{.KUBEFLOW_VERSION}}.zip
+        unzip v{{.KUBEFLOW_VERSION}}.zip -d k8s
+        rm v{{.KUBEFLOW_VERSION}}.zip
+  
+  # TODO: the central dashboard deployment changes after v1.4.0, so we need to refactor the below task
+  kf:apply:
+    prefix: ⚙️ > apply kf manifests
+    desc: Apply the manifests to the k3d cluster
+    cmds:
+      - |
+        cd k8s/manifests-{{.KUBEFLOW_VERSION}}
+        while ! kustomize build example | kubectl apply -f -; do echo "Retrying to apply resources"; sleep 10; done

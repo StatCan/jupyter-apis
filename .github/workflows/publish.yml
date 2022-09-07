@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - feat-upgrade-1.4
 env:
   REGISTRY_NAME: k8scc01covidacr
 

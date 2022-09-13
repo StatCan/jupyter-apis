@@ -103,3 +103,31 @@ and run `vagrant up`.
 
 [go]: https://golang.org/dl/
 [kubeflow]: https://github.com/kubeflow/kubeflow
+
+## Whats Different?
+
+Routes are defined in this repository [here](./main.go).
+
+[Upstream](https://github.com/kubeflow/kubeflow/tree/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes), the endpoints are structures via request type (e.g. `GET`, `PUT`, `DELETE`).
+
+*Note*
+ - *that not all endpoints are included in the golang implementation*
+ - *to find the upstream endpoint, load the [Upstream](https://github.com/kubeflow/kubeflow/tree/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes)
+  and use search with the endpoint text!*
+
+
+| Request Type | Golang Endpoint                                  | Upstream Python Endpoint    | Purpose                                 |
+| ------------ | ------------------------------------------------ | --------------------------- | --------------------------------------- |
+| GET          | /api/config                                      | /api/config                 |                                         |
+| GET          | /api/gpus                                        | /api/gpus                   |                                         |
+| GET          | /api/storageclasses/default                      | /api/storageclasses/default |                                         |
+| GET          | /api/namespaces/{namespace}/cost/aggregated      | Not found                   | Get the aggreated cost pods             |
+| GET          | /api/namespaces                                  |                             | Get the list of namespaces              |
+| GET          | /api/namespaces/{namespace}                      |                             | Get namespace metadata                  |
+| GET          | /api/namespaces/{namespace}/notebooks            |                             | Get the list of notebooks               |
+| POST         | /api/namespaces/{namespace}/notebooks            |                             | Create a notebook                       |
+| PATCH        | /api/namespaces/{namespace}/notebooks/{notebook} |                             | Update a notebook                       |
+| DELETE       | /api/namespaces/{namespace}/notebooks/{notebook} |                             | Delete a notebook                       |
+| GET          | /api/namespaces/{namespace}/pvcs                 |                             | List `PVC`s                             |
+| DELETE       | /api/namespaces/{namespace}/pvcs/{pvc}           |                             | Delete a `PVC`                          |
+| GET          | /api/namespaces/{namespace}/poddefaults          |                             | Get `PodDefault`s for a given namespace |

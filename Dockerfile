@@ -12,6 +12,9 @@ COPY ./frontend/jupyter/tsconfig*.json ./
 COPY ./frontend/jupyter/angular.json ./
 COPY ./frontend/jupyter/src ./src
 RUN npm ci
+#Build both locales:
+# Possibly need to move to jupyter folder before doing the ngbuild
+RUN ./node_modules/.bin/ng build --configuration production --localize
 RUN cp -R /src/dist/kubeflow/ ./node_modules/kubeflow/
 RUN npm run build -- --output-path=./dist/default --configuration=production
 RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
@@ -27,9 +30,13 @@ COPY . .
 RUN CGO_ENABLED=0 go install .
 
 # Stage 2: Generate final image
-FROM scratch
+FROM alpine:3.16.2
 COPY --from=frontend /src/dist/default /static/
 COPY --from=backend /go/bin/jupyter-apis /jupyter-apis
 ENV LISTEN_ADDRESS 0.0.0.0:5000
 EXPOSE 5000
 ENTRYPOINT [ "/jupyter-apis" ]
+
+
+
+## Will need to mount the static logo files too

@@ -11,7 +11,6 @@
         }
       },
       "root": "",
-      "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
         "sourceLocale": "en-US",

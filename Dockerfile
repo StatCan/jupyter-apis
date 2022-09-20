@@ -11,7 +11,10 @@ COPY ./frontend/jupyter/package*.json ./
 COPY ./frontend/jupyter/tsconfig*.json ./
 COPY ./frontend/jupyter/angular.json ./
 COPY ./frontend/jupyter/src ./src
-COPY ./frontend/jupyter/i18n ./src
+#COPY ./frontend/jupyter/i18n ./src/i18n
+# test this thing below
+COPY ./frontend/jupyter/i18n /src/i18n
+
 RUN npm ci
 
 RUN cp -R /src/dist/kubeflow/ ./node_modules/kubeflow/

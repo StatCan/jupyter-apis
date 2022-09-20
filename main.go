@@ -9,7 +9,6 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
-	"path"
 	"path/filepath"
 	"sync"
 	"time"

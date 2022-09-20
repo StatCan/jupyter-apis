@@ -11,13 +11,15 @@ COPY ./frontend/jupyter/package*.json ./
 COPY ./frontend/jupyter/tsconfig*.json ./
 COPY ./frontend/jupyter/angular.json ./
 COPY ./frontend/jupyter/src ./src
+COPY ./frontend/jupyter/i18n ./src
 RUN npm ci
-#Build both locales:
-# Possibly need to move to jupyter folder before doing the ngbuild
-RUN ./node_modules/.bin/ng build --configuration production --localize
+
 RUN cp -R /src/dist/kubeflow/ ./node_modules/kubeflow/
 RUN npm run build -- --output-path=./dist/default --configuration=production
 RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
+#Build both locales:
+# Possibly need to move to jupyter folder before doing the ngbuild
+RUN ./node_modules/.bin/ng build --configuration production --localize
 
 # Stage 1: Build with the golang image
 FROM golang:1.17-alpine AS backend

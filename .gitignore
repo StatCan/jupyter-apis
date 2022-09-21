@@ -1,2 +1,5 @@
 coverage_unit.txt
 jupyter-apis
+.vscode
+.env
+.task

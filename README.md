@@ -19,15 +19,19 @@ context. See _Connecting a Kubeflow cluster_ below for options.
 2. Change directory to project root: `cd jupyter-apis`
 3. Run `go run . -spawner-config samples/spawner_ui_config.yaml`
 
+Alternatively,
+
+1. `task go:dev -w -- -spawner-config samples/spawner_ui_config.yaml` will live-reload the Go server upon changes.
+
 ### Run Front-End
 
 The front-end is configured to proxy requests to the local API server. It
 requires an environment variable (`KF_USER_ID`) to specify the current user –
 this is passed to the API server as an HTTP header.
 
-
 The following can be pasted in a script and executed. This uses the latest node lts version(v16.16.0).
 **NOTE**: `user` is when using vagrant. Use the email adress if it is the dev cluser (please never connect to prod directly)
+
 ```
 cd frontend/common/kubeflow-common-lib
 npm i
@@ -44,6 +48,7 @@ KF_USER_ID=user npm start
 For the kubecost data to be retrievable, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
 
 ### Older instructions
+
 1. ~Change directory to front-end folder: `cd frontend`~
 2. ~Install dependencies: `npm install`~
 3. ~Run the front-end `KF_USER_ID=<cloud_email> npm start`~
@@ -110,24 +115,24 @@ Routes are defined in this repository [here](./main.go).
 
 [Upstream](https://github.com/kubeflow/kubeflow/tree/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes), the endpoints are structures via request type (e.g. `GET`, `PUT`, `DELETE`).
 
-*Note*
- - *that not all endpoints are included in the golang implementation*
- - *to find the upstream endpoint, load the [Upstream](https://github.com/kubeflow/kubeflow/tree/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes)
-  and use search with the endpoint text!*
+_Note_
 
+- _that not all endpoints are included in the golang implementation_
+- _to find the upstream endpoint, load the [Upstream](https://github.com/kubeflow/kubeflow/tree/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes)
+  and use search with the endpoint text!_
 
-| Request Type | Golang Endpoint                                  | Upstream Python Endpoint    | Purpose                                 |
-| ------------ | ------------------------------------------------ | --------------------------- | --------------------------------------- |
-| GET          | /api/config                                      | /api/config                 |                                         |
-| GET          | /api/gpus                                        | /api/gpus                   |                                         |
-| GET          | /api/storageclasses/default                      | /api/storageclasses/default |                                         |
-| GET          | /api/namespaces/{namespace}/cost/aggregated      | Not found                   | Get the aggreated cost pods             |
-| GET          | /api/namespaces                                  |                             | Get the list of namespaces              |
-| GET          | /api/namespaces/{namespace}                      |                             | Get namespace metadata                  |
-| GET          | /api/namespaces/{namespace}/notebooks            |                             | Get the list of notebooks               |
-| POST         | /api/namespaces/{namespace}/notebooks            |                             | Create a notebook                       |
-| PATCH        | /api/namespaces/{namespace}/notebooks/{notebook} |                             | Update a notebook                       |
-| DELETE       | /api/namespaces/{namespace}/notebooks/{notebook} |                             | Delete a notebook                       |
-| GET          | /api/namespaces/{namespace}/pvcs                 |                             | List `PVC`s                             |
-| DELETE       | /api/namespaces/{namespace}/pvcs/{pvc}           |                             | Delete a `PVC`                          |
-| GET          | /api/namespaces/{namespace}/poddefaults          |                             | Get `PodDefault`s for a given namespace |
+| Request Type | Golang Endpoint                                  | Upstream Python Endpoint                                                                                                                                                      | Purpose                                 |
+| ------------ | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| GET          | /api/config                                      | [/api/config](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/get.py#L9)                                         |                                         |
+| GET          | /api/gpus                                        | [/api/gpus](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/get.py#L52)                                          |                                         |
+| GET          | /api/storageclasses/default                      | [/api/storageclasses/default](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/common/backend/kubeflow/kubeflow/crud_backend/routes/get.py#L26)      |                                         |
+| GET          | /api/namespaces/{namespace}/cost/aggregated      | Not found                                                                                                                                                                     | Get the aggregated kubecost              |
+| GET          | /api/namespaces                                  | [/api/namespaces](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/common/backend/kubeflow/kubeflow/crud_backend/routes/get.py#L10)                  | Get the list of namespaces              |
+| GET          | /api/namespaces/{namespace}                      | Not found                                                                                                                                                                     | Get namespace metadata                  |
+| GET          | /api/namespaces/{namespace}/notebooks            | [/api/namespaces/\<namespace\>/notebooks](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/get.py#L44)              | Get the list of notebooks               |
+| POST         | /api/namespaces/{namespace}/notebooks            | [/api/namespaces/\<namespace\>/notebooks](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/default/routes/post.py#L11)            | Create a notebook                       |
+| DELETE       | /api/namespaces/{namespace}/notebooks/{notebook} | [/api/namespaces/\<namespace\>/notebooks/<notebook>](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/delete.py#L9) | Update a notebook                       |
+| PATCH        | /api/namespaces/{namespace}/notebooks/{notebook} | [/api/namespaces/\<namespace\>/notebooks/<notebook](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/patch.py#L19)  | Delete a notebook                       |
+| GET          | /api/namespaces/{namespace}/pvcs                 | [/api/namespaces/\<namespace\>/pvc](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/get.py#L15)                    | List `PVC`s                             |
+| DELETE       | /api/namespaces/{namespace}/pvcs/{pvc}           | [/api/namespaces/\<namespace\>/pvcs/<pvc>](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/volumes/backend/apps/default/routes/delete.py#L11)         | Delete a `PVC`                          |
+| GET          | /api/namespaces/{namespace}/poddefaults          | [/api/namespaces/\<namespace\>/poddefaults](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/get.py#L25)            | Get `PodDefault`s for a given namespace |

@@ -51,7 +51,7 @@ tasks:
     prefix: ⚙️ > k8sapply
     desc: Apply manifest to k3d cluster
     cmds:
-      - "kubectl apply -f k8s/manifests/"
+      - "kustomize build k8s/manifests/ | kubectl apply -f -"
     sources:
       - k8s/manifests/*.yaml
 

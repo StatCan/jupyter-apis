@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { environment } from '@app/environment';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -39,15 +39,25 @@ export class FormImageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(
       this.parentForm.get('customImageCheck').valueChanges.subscribe(check => {
+        //disable custom image input when not being used, so errors are ignored
+        this.parentForm.get("customImageCheck")
+        .valueChanges.subscribe((b: boolean) => {
+          if (b) {
+            this.parentForm.controls.customImage.enable();
+          } else {
+            this.parentForm.controls.customImage.disable();
+          }
+        })
         // Make sure that the use will insert and Image value
         if (check) {
-          this.parentForm.get('customImage').setValidators(Validators.required);
+          this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]);
           this.parentForm.get('image').setValidators([]);
           this.parentForm.get('imageGroupOne').setValidators([]);
           this.parentForm.get('imageGroupTwo').setValidators([]);
         }
         this.parentForm.get('serverType').valueChanges.subscribe(selection => {
           if (selection === 'jupyter') {
+            // Do i need the this.urlValidator here (and below) as well?? 
             this.parentForm.get('customImage').setValidators([]);
             this.parentForm.get('image').setValidators(Validators.required);
             this.parentForm.get('imageGroupOne').setValidators([]);
@@ -77,18 +87,40 @@ export class FormImageComponent implements OnInit, OnDestroy {
     );
   }
 
+  urlValidation(): string {
+    const url = this.parentForm.get("customImage");
+
+    if (url.hasError("invalidUrl")) {
+      let urlBeginning = "https://";
+      const schemeReg = /^http:\/\//i;
+
+      if (schemeReg.test(url.value)) {
+        urlBeginning = "http://";
+      }
+
+      return `${ urlBeginning } is not allowed in URLs, to TRANSLATE`;
+    }
+  }
+
+  private urlValidator(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} => {
+      const schemeReg = /^http[s]?:\/\//i;
+      return schemeReg.test(control.value) ? {invalidUrl: true} : null;
+    };
+  }
+
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
   imageDisplayName(image: string): string {
-    const [name, tag = null] = image.split(':');
-    let tokens = name.split('/');
+    const [name, tag = null] = image.split(":");
+    let tokens = name.split("/");
 
-    if (this.hideRegistry && tokens.length > 1 && tokens[0].includes('.')) {
+    if (this.hideRegistry && tokens.length > 1 && tokens[0].includes(".")) {
       tokens.shift();
     }
 
-    let displayName = tokens.join('/');
+    let displayName = tokens.join("/");
 
     if (!this.hideTag && tag !== null) {
       displayName = `${displayName}:${tag}`;

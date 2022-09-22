@@ -1,6 +1,8 @@
 <lib-form-section
   title="Docker Image"
   i18n-title="Title for the Image section of the form"
+  link="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image"
+  linkText="translate me link text"
 >
   <div class="flex-column">
     <mat-checkbox
@@ -130,7 +132,7 @@
       [formControl]="parentForm.get('customImage')"
       #cstmimg
     />
-    <mat-error i18n>Please provide an Image to use</mat-error>
+    <mat-error>{{ urlValidation() }}</mat-error>
   </mat-form-field>
 
   <lib-advanced-options>

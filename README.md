@@ -23,6 +23,32 @@ Alternatively,
 
 1. `task go:dev -w -- -spawner-config samples/spawner_ui_config.yaml` will live-reload the Go server upon changes.
 
+_Recommended_
+
+You can use the vscode debugger to run the backend, just copy the below contents to a file at path `.vscode/launch.json`, replacing
+`kubeflow.user` with your cloud email.
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug jupyter-api backend",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": ".",
+            "args": [
+                "-spawner-config",
+                "samples/spawner_ui_config.yaml",
+                "-userid-header",
+                "kubeflow.user@cloud.statcan.ca"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
+```
+
 ### Run Front-End
 
 The front-end is configured to proxy requests to the local API server. It

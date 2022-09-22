@@ -9,6 +9,8 @@ A Golang replacement for the **[Kubeflow][kubeflow]** Jupyter Web APIs.
 See **[CONTRIBUTING.md](CONTRIBUTING.md)**
 
 ## Development Environment
+***Note that the frontend will report errors when calling `/api/namespaces` when run locally. This***
+***issue does not arise in production, as the `/api/namespaces` endpoint is unused.***
 
 ### Run API Server
 
@@ -25,8 +27,7 @@ Alternatively,
 
 _Recommended_
 
-You can use the vscode debugger to run the backend, just copy the below contents to a file at path `.vscode/launch.json`, replacing
-`kubeflow.user` with your cloud email.
+You can use the vscode debugger to run the backend, just copy the below contents to a file at path `.vscode/launch.json`.
 ```json
 {
     "version": "0.2.0",
@@ -40,8 +41,6 @@ You can use the vscode debugger to run the backend, just copy the below contents
             "args": [
                 "-spawner-config",
                 "samples/spawner_ui_config.yaml",
-                "-userid-header",
-                "kubeflow.user@cloud.statcan.ca"
             ],
             "envFile": "${workspaceFolder}/.env"
         }

@@ -74,7 +74,7 @@ func (s *server) checkAccess(subjectAccessReviewTemplate authorizationv1.Subject
 
 		// If the user is not permitted, log and return the error and do not process the request
 		if !resp.Status.Allowed {
-			msg := fmt.Sprintf("User %s is not permitted to %s %s.%s.%s for namespace: %s", sar.Spec.User, sar.Spec.ResourceAttributes.Verb, sar.Spec.ResourceAttributes.Group, sar.Spec.ResourceAttributes.Version, sar.Spec.ResourceAttributes.Resource, sar.Spec.ResourceAttributes.Namespace)
+			msg := fmt.Sprintf("User %s is not permitted to %s %s.%s.%s for namespace: '%s'", sar.Spec.User, sar.Spec.ResourceAttributes.Verb, sar.Spec.ResourceAttributes.Group, sar.Spec.ResourceAttributes.Version, sar.Spec.ResourceAttributes.Resource, sar.Spec.ResourceAttributes.Namespace)
 
 			log.Println(msg)
 

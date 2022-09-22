@@ -1,4 +1,5 @@
 import { V1PersistentVolumeClaim, V1Volume } from '@kubernetes/client-node';
+import { Status } from 'kubeflow';
 
 export interface PvcResponseObject {
   name: string;
@@ -11,12 +12,6 @@ export interface Volume {
   mount: string;
   newPvc?: V1PersistentVolumeClaim;
   existingSource?: V1Volume;
-}
-
-export interface Status {
-  phase: string;
-  state: string;
-  message: string;
 }
 
 export interface VolumeResponseObject {

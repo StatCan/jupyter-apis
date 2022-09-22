@@ -5,6 +5,7 @@ import {
   ExponentialBackoff,
   ActionEvent,
   STATUS_TYPE,
+  Status,
   DialogConfig,
   ConfirmDialogService,
   SnackBarService,
@@ -26,7 +27,6 @@ import { NotebookResponseObject,
   NotebookProcessedObject, 
   VolumeResponseObject, 
   VolumeProcessedObject,
-  Status,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 
@@ -49,7 +49,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   volumeConfig= defaultVolumeConfig;
   rawVolumeData: VolumeResponseObject[] = [];
   processedVolumeData: VolumeProcessedObject[] = [];
-  pvcsWaitingViewer = new Set<string>();
 
   buttons: ToolbarButton[] = [
     new ToolbarButton({
@@ -300,7 +299,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public parseIncomingData(pvcs: VolumeResponseObject[], notebooks: NotebookResponseObject[]) {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as VolumeProcessedObject[];
-
+    
     //Check which notebooks are mounted
     let mounts = Object.fromEntries(
       notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
@@ -378,7 +377,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         pvc.status.phase = STATUS_TYPE.TERMINATING;
         pvc.status.message = "Preparing to delete the Volume...";
         pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
-        this.pvcsWaitingViewer.delete(pvc.name);
       });
     });
   }

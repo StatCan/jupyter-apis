@@ -12,4 +12,16 @@
       (actionsEmitter)="reactToAction($event)"
     ></lib-table>
   </div>
+
+  <lib-title-actions-toolbar title="Volumes" i18n-title>
+  </lib-title-actions-toolbar>
+  <!--scrollable page content-->
+  <div class="page-padding lib-flex-grow lib-overflow-auto">
+    <lib-table
+      [config]="volumeConfig"
+      [data]="processedVolumeData"
+      [trackByFn]="pvcTrackByFn"
+      (actionsEmitter)="reactVolumeToAction($event)"
+    ></lib-table>
+  </div>
 </div>

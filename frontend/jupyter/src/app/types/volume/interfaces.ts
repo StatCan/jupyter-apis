@@ -12,3 +12,23 @@ export interface Volume {
   newPvc?: V1PersistentVolumeClaim;
   existingSource?: V1Volume;
 }
+
+export interface Status {
+  phase: string;
+  state: string;
+  message: string;
+}
+
+export interface VolumeResponseObject {
+  name: string;
+  size: number;
+  namespace?: string;
+  extraFields?: { [key: string]: any };
+  usedBy?: string | null;
+  status?: Status;
+}
+
+
+export interface VolumeProcessedObject extends VolumeResponseObject {
+  deleteAction?: string;
+}

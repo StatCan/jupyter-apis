@@ -10,6 +10,7 @@ import { FormModule } from './pages/form/form.module';
 import { KubeflowModule } from 'kubeflow';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { KubecostService } from './services/kubecost.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     IndexModule,
     FormModule,
   ],
-  providers: [],
+  providers: [KubecostService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

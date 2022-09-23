@@ -207,3 +207,29 @@ export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
     width: '600px',
   };
 }
+
+// --- Config for the Cost Table ---
+export const defaultCostConfig = {
+  columns: [
+    {
+      matHeaderCellDef: $localize`Compute`,
+      matColumnDef: 'compute',
+      value: new PropertyValue({ field: 'cpuCost' }),
+    },
+    {
+      matHeaderCellDef: $localize`GPUs`,
+      matColumnDef: 'gpus',
+      value: new PropertyValue({ field: 'gpuCost' }),
+    },
+    {
+      matHeaderCellDef: $localize`Storage`,
+      matColumnDef: 'storage',
+      value: new PropertyValue({ field: 'pvCost' }),
+    },
+    {
+      matHeaderCellDef: $localize`Total`,
+      matColumnDef: 'total',
+      value: new PropertyValue({ field: 'totalCost' }),
+    },
+  ],
+};

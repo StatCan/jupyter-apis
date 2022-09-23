@@ -12,6 +12,11 @@ See **[CONTRIBUTING.md](CONTRIBUTING.md)**
 ***Note that the frontend will report errors when calling `/api/namespaces` when run locally. This***
 ***issue does not arise in production, as the `/api/namespaces` endpoint is unused.***
 
+To initialize the `.env` file for the development environment, use `task env`.
+You will need to fill out your kubeflow cloud account and kubeflow namespace information manually.
+The `thunder-tests` folder contains configuration for testing requests against the backend. Use the `vscode`
+`THUNDER CLIENT` extension to load the tests.
+
 ### Run API Server
 
 The API server will connect to the Kubeflow cluster from your current `kubectl`

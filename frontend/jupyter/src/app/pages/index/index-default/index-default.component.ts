@@ -52,7 +52,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   buttons: ToolbarButton[] = [
     new ToolbarButton({
-      text: `New Notebook`,
+      text: $localize`New Notebook`,
       icon: 'add',
       stroked: true,
       fn: () => {

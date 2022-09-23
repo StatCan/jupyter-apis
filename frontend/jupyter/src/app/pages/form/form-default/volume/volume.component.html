@@ -1,7 +1,8 @@
 <div *ngIf="volume" [formGroup]="volume" class="row">
   <mat-form-field class="column" appearance="outline" id="type">
     <mat-label i18n>Type</mat-label>
-    <mat-select formControlName="type">
+    <!--AAW errorStateMatcher, unsure about its placement-->
+    <mat-select formControlName="type" [errorStateMatcher]="matcher">
       <mat-option *ngIf="defaultStorageClass" value="New" i18n>
         New
       </mat-option>
@@ -10,10 +11,12 @@
   </mat-form-field>
 
   <!-- Volume Name Input -->
+  <!--Errorstatematcher is AAW, I may need help here-->
   <lib-name-input
     class="column"
     [nameControl]="volume.get('name')"
     id="name"
+    [errorStateMatcher]="matcher"
   ></lib-name-input>
 
   <!-- Size Input -->
@@ -32,8 +35,9 @@
     <mat-label i18n>Mode</mat-label>
     <mat-select formControlName="mode">
       <mat-option value="ReadWriteOnce" i18n>ReadWriteOnce</mat-option>
-      <mat-option value="ReadOnlyMany" i18n>ReadOnlyMany </mat-option>
-      <mat-option value="ReadWriteMany" i18n>ReadWriteMany </mat-option>
+      <!--AAW, we don't have these options, only the one-->
+      <!-- <mat-option value="ReadOnlyMany" i18n>ReadOnlyMany </mat-option>
+      <mat-option value="ReadWriteMany" i18n>ReadWriteMany </mat-option> -->
     </mat-select>
   </mat-form-field>
 

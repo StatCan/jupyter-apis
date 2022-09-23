@@ -13,6 +13,8 @@ export const environment = {
   groupOneIcon: 'assets/logos/group-one-icon.svg',
   groupTwoLogo: 'assets/logos/group-two-logo.svg',
   groupTwoIcon: 'assets/logos/group-two-icon.svg',
+  groupThreeLogo: 'assets/logos/group-three-logo.svg',
+  groupThreeIcon: 'assets/logos/group-three-icon.svg',
 
   // Rok specifics
   rokUrl: '',

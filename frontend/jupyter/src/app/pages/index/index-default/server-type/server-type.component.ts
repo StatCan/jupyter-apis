@@ -24,6 +24,10 @@ export class ServerTypeComponent implements TableColumnComponent {
       'group-two-icon',
       sanitizer.bypassSecurityTrustResourceUrl(environment.groupTwoIcon),
     );
+    iconRegistry.addSvgIcon(
+      'group-three-icon',
+      sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeIcon),
+    );
   }
 
   notebookServerType: string;

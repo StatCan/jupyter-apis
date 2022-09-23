@@ -12,6 +12,7 @@ export function getFormDefaults(): FormGroup {
     image: ['', [Validators.required]],
     imageGroupOne: ['', [Validators.required]],
     imageGroupTwo: ['', [Validators.required]],
+    imageGroupThree: ['', [Validators.required]],
     allowCustomImage: [true, []],
     imagePullPolicy: ['IfNotPresent', [Validators.required]],
     customImage: ['', []],
@@ -130,6 +131,12 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
     formCtrl.controls.imageGroupTwo.setValue(config.imageGroupTwo.value);
   } else {
     formCtrl.controls.imageGroupTwo.disable();
+  }
+
+  if (config.imageGroupThree?.value) {
+    formCtrl.controls.imageGroupThree.setValue(config.imageGroupThree.value);
+  } else {
+    formCtrl.controls.imageGroupThree.disable();
   }
 
   formCtrl.controls.imagePullPolicy.setValue(config.imagePullPolicy.value);

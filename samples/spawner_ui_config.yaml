@@ -51,7 +51,7 @@ spawnerFormDefaults:
     # the Istio rewrite for containers that host their web UI at `/`
     enabledCondition:
       labels:
-        state.aaw.statcan.gc.ca/non-employee-users: false
+        state.aaw.statcan.gc.ca/exists-non-sas-notebook-user: false
     disabledMessage:
       en: "SAS is unavailable while non-employees have access to this profile."
       fr: "SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."

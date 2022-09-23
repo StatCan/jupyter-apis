@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { environment } from '@app/environment';
+import { V1Namespace } from '@kubernetes/client-node';
 
 @Component({
   selector: 'app-form-default',
@@ -32,6 +33,8 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   existingNotebooks = new Set<string>();
 
   subscriptions = new Subscription();
+  
+  nsMetadata: V1Namespace;
 
   constructor(
     public namespaceService: NamespaceService,
@@ -60,8 +63,14 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       this.namespaceService.getSelectedNamespace().subscribe(namespace => {
         this.currNamespace = namespace;
         this.formCtrl.controls.namespace.setValue(this.currNamespace);
+
+        this.backend.getNSMetadata(namespace).subscribe(nsMetadata => {
+          this.nsMetadata = nsMetadata;
+        });
+        
       }),
     );
+
 
     // Check if a default StorageClass is set
     this.backend.getDefaultStorageClass().subscribe(defaultClass => {
@@ -106,11 +115,15 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
     } else if (notebook.serverType === 'group-two') {
       // Set notebook image from imageGroupTwo
       notebook.image = notebook.imageGroupTwo;
+    } else if (notebook.serverType === 'group-three') {
+      // Set notebook image from imageGroupThree
+      notebook.image = notebook.imageGroupThree;
     }
 
     // Remove unnecessary images from the request sent to the backend
     delete notebook.imageGroupOne;
     delete notebook.imageGroupTwo;
+    delete notebook.imageGroupThree;
 
     // Ensure CPU input is a string
     if (typeof notebook.cpu === 'number') {

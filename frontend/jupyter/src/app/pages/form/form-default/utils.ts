@@ -13,7 +13,7 @@ export function getFormDefaults(): FormGroup {
     imageGroupOne: ['', [Validators.required]],
     imageGroupTwo: ['', [Validators.required]],
     allowCustomImage: [true, []],
-    imagePullPolicy: ['IfNotPresent', [Validators.required]],
+    imagePullPolicy: ['Always', [Validators.required]],
     customImage: ['', []],
     customImageCheck: [false, []],
     serverType: ['jupyter', [Validators.required]],

@@ -42,6 +42,7 @@ export class NewVolumeComponent implements OnInit {
 
   @Input() volGroup: FormGroup;
   @Input() externalName: string;
+  @Input() sizes: Set<string>; // AAW change, this appears to be where you input your chosen size anyways
 
   yamlPrv = '';
   errorParsingYaml = '';

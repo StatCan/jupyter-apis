@@ -68,15 +68,18 @@
       </mat-expansion-panel-header>
 
       <div [class.readonly]="readonly">
+        <!-- Might want to revert this???-->
         <app-existing-volume
           *ngIf="volGroup.get('existingSource')"
           [volGroup]="volGroup"
         ></app-existing-volume>
 
+        <!--Might want to revert this??? to use app-volume?-->
         <app-new-volume
           *ngIf="volGroup.get('newPvc')"
           [volGroup]="volGroup"
           [externalName]="externalName"
+          [sizes]="['4', '8', '16', '32']"
         ></app-new-volume>
 
         <app-volume-mount [volGroup]="volGroup"></app-volume-mount>

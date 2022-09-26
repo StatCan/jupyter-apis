@@ -31,7 +31,8 @@
 ></app-rok-url>
 
 <ng-container [ngSwitch]="volumeType">
-  <!-- Custom (YAML editor) -->
+  <!-- Custom (YAML editor)
+  We (AAW) likely want to get rid of this custom -->
   <ng-container *ngSwitchCase="NEW_VOLUME_TYPE.CUSTOM">
     <ng-container i18n>Check the </ng-container>
     <a
@@ -52,8 +53,10 @@
       [externalName]="externalName"
     ></app-volume-name>
 
+    <!--Sizes is an AAW specific change-->
     <app-volume-size
       [sizeCtrl]="volGroup.get('newPvc.spec.resources.requests.storage')"
+      [sizes]="['4', '8', '16', '32']"
     ></app-volume-size>
 
     <app-storage-class

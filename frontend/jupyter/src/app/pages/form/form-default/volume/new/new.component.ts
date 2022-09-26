@@ -42,7 +42,7 @@ export class NewVolumeComponent implements OnInit {
 
   @Input() volGroup: FormGroup;
   @Input() externalName: string;
-  @Input() sizes: Set<string>; // AAW change, this appears to be where you input your chosen size anyways
+  @Input() sizes: Set<string>; // AAW change, has to take place here to control difference between workspace and data vol sizes.
 
   yamlPrv = '';
   errorParsingYaml = '';

@@ -68,13 +68,12 @@
       </mat-expansion-panel-header>
 
       <div [class.readonly]="readonly">
-        <!-- Might want to revert this???-->
         <app-existing-volume
           *ngIf="volGroup.get('existingSource')"
           [volGroup]="volGroup"
         ></app-existing-volume>
 
-        <!--Might want to revert this??? to use app-volume?-->
+        <!--AAW: sizes here has to get passed down because size options for workspace vol and data vol are not the same-->
         <app-new-volume
           *ngIf="volGroup.get('newPvc')"
           [volGroup]="volGroup"

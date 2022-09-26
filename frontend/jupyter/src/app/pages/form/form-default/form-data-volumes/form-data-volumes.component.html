@@ -73,6 +73,7 @@
           [volGroup]="volGroup"
         ></app-existing-volume>
 
+        <!--AAW: sizes here has to get passed down because size options for workspace vol and data vol are not the same-->
         <app-new-volume
           *ngIf="volGroup.get('newPvc')"
           [volGroup]="volGroup"

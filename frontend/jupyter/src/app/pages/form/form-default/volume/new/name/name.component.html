@@ -11,6 +11,7 @@
     autocomplete="off"
     matInput
     [formControl]="metadataGroup.get('name')"
+    [errorStateMatcher]="matcher"
   />
 </mat-form-field>
 
@@ -24,7 +25,6 @@
     autocomplete="off"
     matInput
     [formControl]="metadataGroup.get('generateName')"
-    [errorStateMatcher]="matcher"
   />
   <mat-icon
     matSuffix

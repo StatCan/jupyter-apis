@@ -1,0 +1,13 @@
+<div class="form--section-bottom">
+  <div class="header">
+    <lib-icon *ngIf="icon" [icon]="icon"></lib-icon>{{ title }}
+  </div>
+  <p>{{ text }}</p>
+  <a href="{{ link }}" target="_blank" style="text-decoration: none">
+    {{ linkText }}
+  </a>
+  <p *ngIf="readOnly">
+    *The cluster admin has disabled setting this section!
+  </p>
+  <ng-content></ng-content>
+</div>

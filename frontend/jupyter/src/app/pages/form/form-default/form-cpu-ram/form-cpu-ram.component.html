@@ -11,7 +11,9 @@
       [sizeControl]="parentForm.get('cpu')"
       label="Requested CPUs"
       i18n-label
+      [errorStateMatcher]="parentErrorKeysErrorStateMatcher('cpuLimit')"
     ></lib-positive-number-input>
+    <mat-error>{{getCPULimitError()}}</mat-error>
 
     <!--RAM-->
     <lib-positive-number-input
@@ -21,7 +23,9 @@
       [sizeControl]="parentForm.get('memory')"
       label="Requested memory in Gi"
       i18n-label
+      [errorStateMatcher]="parentErrorKeysErrorStateMatcher('memoryLimit')"
     ></lib-positive-number-input>
+    <mat-error>{{getMemoryLimitError()}}</mat-error>
   </div>
 
   <lib-advanced-options>
@@ -36,7 +40,9 @@
             min="0.1"
             step="0.1"
             [formControl]="parentForm.get('cpuLimit')"
+            [errorStateMatcher]="parentErrorKeysErrorStateMatcher('cpuLimit')"
           />
+          <mat-error>{{getCPULimitError()}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -50,7 +56,9 @@
             min="0.1"
             step="0.1"
             [formControl]="parentForm.get('memoryLimit')"
+            [errorStateMatcher]="parentErrorKeysErrorStateMatcher('memoryLimit')"
           />
+          <mat-error>{{getMemoryLimitError()}}</mat-error>
         </mat-form-field>
       </div>
     </div>

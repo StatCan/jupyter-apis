@@ -3,29 +3,33 @@
   i18n-title="Title for the CPU/RAM form section"
 >
   <div class="row">
-    <!--CPU-->
-    <lib-positive-number-input
-      class="column"
-      min="0"
-      step="0.1"
-      [sizeControl]="parentForm.get('cpu')"
-      label="Requested CPUs"
-      i18n-label
-      [errorStateMatcher]="parentErrorKeysErrorStateMatcher('cpuLimit')"
-    ></lib-positive-number-input>
-    <mat-error>{{getCPULimitError()}}</mat-error>
+    <!--CPU AAW, do not take their lib-positive-input -->
+    <mat-form-field appearance="outline" class="column">
+      <mat-label>CPU Request</mat-label>
+      <input
+        label="Requested CPUs"
+        i18n-label
+        [attr.disabled]="readonlySpecs ? '' : null"
+        matInput
+        formControlName="cpu"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxCpu')"
+      />
+      <mat-error>{{getCPULimitError()}}</mat-error>
+    </mat-form-field>
 
-    <!--RAM-->
-    <lib-positive-number-input
-      class="column"
-      min="0"
-      step="0.1"
-      [sizeControl]="parentForm.get('memory')"
-      label="Requested memory in Gi"
-      i18n-label
-      [errorStateMatcher]="parentErrorKeysErrorStateMatcher('memoryLimit')"
-    ></lib-positive-number-input>
-    <mat-error>{{getMemoryLimitError()}}</mat-error>
+    <!--RAM AAW, do not take their lib-positive-input-->
+    <mat-form-field appearance="outline" class="column">
+      <mat-label>Memory requests</mat-label>
+      <input
+        [attr.disabled]="readonlySpecs ? '' : null"
+        matInput
+        i18n-label
+        formControlName="memory"
+        label="Requested memory in Gi"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('memoryLimit')"
+      />
+      <mat-error>{{getRAMError()}}</mat-error>
+    </mat-form-field>
   </div>
 
   <lib-advanced-options>

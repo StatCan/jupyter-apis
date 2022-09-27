@@ -68,9 +68,8 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.templatedName = this.getNameCtrl(this.metadataGroup).value as string;
-    this.group //should this be this.group???? should it be externalNamePrv / getNameCtrl?
-      .get("name")
-      .setValidators([
+    //error messages not showing up
+    this.getNameCtrl(this.metadataGroup).setValidators([
         Validators.required,
         this.isMountedValidator(),
         Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
@@ -93,7 +92,7 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
 
   // AAW specific
   showNameError() {
-    const volumeName = this.group.get("name"); // should this be like the getNameCtrl?
+    const volumeName = this.getNameCtrl(this.metadataGroup); // should this be like the getNameCtrl?
 
     if (volumeName.hasError("required")) {
       return `Name is required`;

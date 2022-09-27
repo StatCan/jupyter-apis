@@ -13,6 +13,9 @@
     [formControl]="metadataGroup.get('name')"
     [errorStateMatcher]="matcher"
   />
+  <mat-error>
+    {{ showNameError() }}
+  </mat-error>
 </mat-form-field>
 
 <mat-form-field
@@ -33,7 +36,4 @@
     i18n-matTooltip
     >info</mat-icon
   >
-  <mat-error>
-    {{ showNameError() }}
-  </mat-error>
 </mat-form-field>

@@ -51,22 +51,19 @@ export class FormCpuRamComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    // AAW VALIDATIONS
-    // is there a reason why some of these 
+    // AAW VALIDATIONS NOTE: tried removing duplicate code, previously had something for each field
     this.parentForm
       .get('cpu')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPUValidator()]);
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPULimitValidator()]);
     this.parentForm
       .get('memory')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryValidator()]);
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryLimitValidator()]);
     this.parentForm
       .get('cpuLimit')
-      //checking for dead duplicated code
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPUValidator()])
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPULimitValidator()])
     this.parentForm
       .get('memoryLimit')
-      //had a limit before
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryValidator()])
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryLimitValidator()])
     this.parentForm.setValidators(resourcesValidator());
     // end AAW validations
 
@@ -121,8 +118,7 @@ export class FormCpuRamComponent implements OnInit {
   getCPUError() {}
 
   // AAW changes
-  // is this duplicated code?
-  getRAMError() {
+  getRAMLimitError() {
     let e: any;
     const errs = this.parentForm.get("memory").errors || {};
     if (errs.required || errs.pattern)
@@ -135,18 +131,7 @@ export class FormCpuRamComponent implements OnInit {
       return `WAM IS MAXED`;
     }
   }
-  // duplicated code?
-  private maxCPULimitValidator(): ValidatorFn
-  {
-    return (control: AbstractControl): { [key: string]: any} | null => {
-      var max: number;
-      const gpus = this.parentForm.get('gpus').get('num').value;
-      gpus == 'none' ? max = 15 : max = 4;
-      return control.value>max ? { maxCPU: true } : null
-    }
-  }
-
-  // duplicated code?
+  
   private maxMemoryLimitValidator(): ValidatorFn
   {
     return (control: AbstractControl): { [key: string]: any} | null => {
@@ -155,25 +140,30 @@ export class FormCpuRamComponent implements OnInit {
       gpus == 'none' ? max = 48 : max = 96;
       return control.value>max ? { maxMemory: true } : null
 
-    }  }
+    }  
+  }
 
-  private maxCPUValidator(): ValidatorFn
+  getCPULimitError() {
+    let e: any;
+    const errs = this.parentForm.get("cpuLimit").errors || {};
+    if (errs.required || errs.pattern )
+      return `YOU NEED CPU `;
+    if (e = errs.min){
+      return `CPU MIN NOT MET`;
+    }
+    if (this.parentForm.hasError("cpuLimit")) {
+      e = this.parentForm.errors.cpuLimit;
+      return `CPU MAXED`;
+    }
+  }
+
+  private maxCPULimitValidator(): ValidatorFn
   {
     return (control: AbstractControl): { [key: string]: any} | null => {
       var max: number;
       const gpus = this.parentForm.get('gpus').get('num').value;
       gpus == 'none' ? max = 15 : max = 4;
-      return control.value>max ? { maxCPULimit: true } : null
-    }
-  }
-
-  private maxMemoryValidator(): ValidatorFn
-  {
-    return (control: AbstractControl): { [key: string]: any} | null => {
-      var max: number;
-      const gpus = this.parentForm.get('gpus').get('num').value;
-      gpus == 'none' ? max = 48 : max = 96;
-      return control.value>max ? { maxMemory: true } : null
+      return control.value>max ? { maxCPU: true } : null
     }
   }
 
@@ -190,44 +180,5 @@ export class FormCpuRamComponent implements OnInit {
         );
       }
     };
-  }
-  // is this duplicated code?
-  cpuErrorMessage() {
-    let e: any;
-    const errs = this.parentForm.get("cpu").errors || {};
-    if (errs.required || errs.pattern )
-      return `cpu needed`;
-    if ((e = errs.min))
-      return `cpu min `;
-    if (this.parentForm.hasError("maxCpu")) {
-      e = this.parentForm.errors.maxCpu;
-      return `cpu maxed`;
-    }
-  }
-  getCPULimitError() {
-    let e: any;
-    const errs = this.parentForm.get("cpuLimit").errors || {};
-    if (errs.required || errs.pattern )
-      return `YOU NEED CPU `;
-    if (e = errs.min){
-      return `CPU MIN NOT MET`;
-    }
-    if (this.parentForm.hasError("cpuLimit")) {
-      e = this.parentForm.errors.cpuLimit;
-      return `CPU MAXED`;
-    }
-  }
-
-  getMemoryLimitError() {
-    let e: any;
-    const errs = this.parentForm.get("memoryLimit").errors || {};
-    if (errs.required || errs.pattern)
-    return `YOU BUFOON RAM IS REQUIRED`;
-    if ((e = errs.min))
-      return `MIN IS BLAH`;
-    if (this.parentForm.hasError("ramLimit")) {
-      e = this.parentForm.errors.ramLimit;
-      return `MAX IS BLAH`;
-    }
   }
 }

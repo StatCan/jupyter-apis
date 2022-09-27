@@ -24,6 +24,7 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
   private group: FormGroup;
   private externalNamePrv = '';
   private mountedVolumes: Set<string> = new Set<string>();
+  matcher = new PvcErrorStateMatcher();
 
   @Input()
   get metadataGroup(): FormGroup {

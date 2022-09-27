@@ -24,6 +24,7 @@
     autocomplete="off"
     matInput
     [formControl]="metadataGroup.get('generateName')"
+    [errorStateMatcher]="matcher"
   />
   <mat-icon
     matSuffix
@@ -32,4 +33,7 @@
     i18n-matTooltip
     >info</mat-icon
   >
+  <mat-error>
+    {{ showNameError() }}
+  </mat-error>
 </mat-form-field>

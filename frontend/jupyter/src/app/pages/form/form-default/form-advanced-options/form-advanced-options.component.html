@@ -2,4 +2,17 @@
   <mat-slide-toggle [formControl]="parentForm.get('shm')" i18n>
     Enable Shared Memory
   </mat-slide-toggle>
+
+  <!--Select System Language-->
+  <mat-form-field class="wide column" appearance="outline">
+    <mat-label i18n>
+      System Language
+    </mat-label>
+    <mat-select [formControl]="parentForm.get('language')">
+      <mat-option *ngFor="let v of languageList" [value]="v.id">
+        {{ v.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
 </lib-form-section>

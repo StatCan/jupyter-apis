@@ -57,20 +57,19 @@ export class FormImageComponent implements OnInit, OnDestroy {
         }
         this.parentForm.get('serverType').valueChanges.subscribe(selection => {
           if (selection === 'jupyter') {
-            // Do i need the this.urlValidator here (and below) as well?? 
-            this.parentForm.get('customImage').setValidators([]);
+            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
             this.parentForm.get('image').setValidators(Validators.required);
             this.parentForm.get('imageGroupOne').setValidators([]);
             this.parentForm.get('imageGroupTwo').setValidators([]);
           } else if (selection === 'group-one') {
-            this.parentForm.get('customImage').setValidators([]);
+            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm
               .get('imageGroupOne')
               .setValidators(Validators.required);
             this.parentForm.get('imageGroupTwo').setValidators([]);
           } else if (selection === 'group-two') {
-            this.parentForm.get('customImage').setValidators([]);
+            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm.get('imageGroupOne').setValidators([]);
             this.parentForm

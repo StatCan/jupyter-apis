@@ -324,7 +324,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public parseIncomingData(pvcs: VolumeResponseObject[], notebooks: NotebookResponseObject[]) {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as VolumeProcessedObject[];
-
     //Check which notebooks are mounted
     let mounts = Object.fromEntries(
       notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))

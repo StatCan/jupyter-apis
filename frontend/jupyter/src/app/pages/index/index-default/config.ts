@@ -151,3 +151,59 @@ export const defaultConfig: TableConfig = {
     },
   ],
 };
+
+export const defaultVolumeConfig = {
+  columns: [
+    {
+      matHeaderCellDef: $localize`Status`,
+      matColumnDef: 'status',
+      value: new StatusValue(),
+    },
+    {
+      matHeaderCellDef: $localize`Name`,
+      matColumnDef: 'name',
+      style: { width: '25%' },
+      value: new PropertyValue({
+        field: 'name',
+        tooltipField: 'name',
+        truncate: true,
+      }),
+    },
+    {
+      matHeaderCellDef: $localize`Size`,
+      matColumnDef: 'size',
+      value: new PropertyValue({ field: 'size' }),
+    },
+    {
+      matHeaderCellDef: $localize`Used By`,
+      matColumnDef: 'usedBy',
+      value: new PropertyValue({ field: 'usedBy' }),
+    },
+    {
+      matHeaderCellDef: '',
+      matColumnDef: 'actions',
+      value: new ActionListValue([
+        new ActionIconValue({
+          name: 'delete',
+          tooltip: $localize`Delete Volume`,
+          color: 'warn',
+          field: 'deleteAction',
+          iconReady: 'material:delete',
+        }),
+      ]),
+  },
+  ],
+};
+
+export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
+  return { // TODO key + param
+    title: $localize`Delete Volume '${name}'`,
+    message: $localize`Warning: All data in this volume will be lost.`,
+    accept: $localize`DELETE`,
+    confirmColor: 'warn',
+    cancel: $localize`CANCEL`,
+    error: '',
+    applying: $localize`DELETING`,
+    width: '600px',
+  };
+}

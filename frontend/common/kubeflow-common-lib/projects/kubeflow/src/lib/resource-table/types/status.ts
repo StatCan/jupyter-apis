@@ -85,6 +85,12 @@ export class StatusValue {
       case STATUS_TYPE.ERROR: {
         return 'error';
       }
+      case STATUS_TYPE.MOUNTED: {
+        return 'link';
+      }
+      case STATUS_TYPE.UNMOUNTED: {
+        return 'link_off';
+      }
       default: {
         return 'warning';
       }

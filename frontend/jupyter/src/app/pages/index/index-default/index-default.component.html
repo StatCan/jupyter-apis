@@ -24,4 +24,19 @@
       (actionsEmitter)="reactVolumeToAction($event)"
     ></lib-table>
   </div>
+
+  <lib-title-actions-toolbar title="Cost" i18n-title>
+  </lib-title-actions-toolbar>
+  <div class="page-padding lib-flex-grow lib-overflow-auto">
+    <lib-table *ngIf="this.getCostStatus() == true; else error"
+      [config]="costConfig"
+      [data]="processedCostData"
+      [trackByFn]="costTrackByFn"
+    ></lib-table>
+  </div>
+  <ng-template #error>
+    <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
+      <p>Failed to retrieve cost information</p>
+    </div>
+  </ng-template>
 </div>

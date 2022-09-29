@@ -14,10 +14,12 @@ import {
   ToolbarButton,
 } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
   defaultVolumeConfig,
+  defaultCostConfig,
   getDeleteDialogConfig,
   getStopDialogConfig,
   getDeleteVolumeDialogConfig,
@@ -27,6 +29,7 @@ import { NotebookResponseObject,
   NotebookProcessedObject, 
   VolumeResponseObject, 
   VolumeProcessedObject,
+  AggregateCostObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 
@@ -50,6 +53,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   rawVolumeData: VolumeResponseObject[] = [];
   processedVolumeData: VolumeProcessedObject[] = [];
 
+  costConfig = defaultCostConfig;
+  rawCostData: AggregateCostResponse = null;
+  processedCostData: AggregateCostObject[] = [];
+
   buttons: ToolbarButton[] = [
     new ToolbarButton({
       text: $localize`New Notebook`,
@@ -67,6 +74,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public confirmDialog: ConfirmDialogService,
     public snackBar: SnackBarService,
     public router: Router,
+    private kubecostService: KubecostService,
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +104,23 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.processedData = this.processIncomingData(notebooks);
           this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
         })
+
+        this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
+          aggCost => {
+            if (!isEqual(this.rawCostData, aggCost)) {
+              this.rawCostData = aggCost;
+
+              this.processedCostData = [this.processIncomingCostData(aggCost)];
+              this.poller.reset();
+              }
+            },
+          err => {
+            if (!isEqual(this.rawCostData, err)) {
+              this.rawCostData = err;
+
+              this.poller.reset();
+            }
+          });
       }),
     );
 
@@ -299,7 +324,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public parseIncomingData(pvcs: VolumeResponseObject[], notebooks: NotebookResponseObject[]) {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as VolumeProcessedObject[];
-    
     //Check which notebooks are mounted
     let mounts = Object.fromEntries(
       notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
@@ -380,4 +404,41 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+  public costTrackByFn(index: number, cost: AggregateCostObject) {
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.totalCost}`;
+  }
+
+  public getCostStatus() {
+    if (this.rawCostData == null) {
+      return;
+    }
+    if (this.rawCostData instanceof Error) {
+      return false;
+    }
+    return true;
+  }
+
+  public processIncomingCostData(cost: AggregateCostResponse) {
+
+    const resp = JSON.parse(
+      JSON.stringify(cost),
+    ) as AggregateCostResponse;
+    
+    let costCopy: AggregateCostObject = {};
+
+    if (resp.data[this.currNamespace]) {
+      costCopy.cpuCost = this.formatCost(resp.data[this.currNamespace].cpuCost + resp.data[this.currNamespace].ramCost);
+      costCopy.gpuCost = this.formatCost(resp.data[this.currNamespace].gpuCost);
+      costCopy.pvCost = this.formatCost(resp.data[this.currNamespace].pvCost);
+      costCopy.totalCost = this.formatCost(resp.data[this.currNamespace].totalCost);
+    }
+
+    return costCopy;
+  }
+
+  public formatCost(value: number): string {
+    return "$" + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)
+  }
+
 }

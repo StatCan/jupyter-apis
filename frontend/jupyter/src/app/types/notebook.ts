@@ -2,7 +2,7 @@ import { Status } from 'kubeflow';
 import { PodDefault } from './poddefault';
 import { GPU } from './gpu';
 
-export type ServerType = 'jupyter' | 'group-one' | 'group-two';
+export type ServerType = 'jupyter' | 'group-one' | 'group-two'| 'group-three';
 
 export interface NotebookResponseObject {
   name: string;
@@ -35,6 +35,7 @@ export interface NotebookFormObject {
   image: string;
   imageGroupOne: string;
   imageGroupTwo: string;
+  imageGroupThree: string;
   allowCustomImage: boolean;
   imagePullPolicy: string;
   customImage?: string;

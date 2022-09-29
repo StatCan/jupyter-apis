@@ -47,6 +47,7 @@ export function getFormDefaults(): FormGroup {
     datavols: fb.array([]),
     shm: [true, []],
     configurations: [[], []],
+    language: ['', [Validators.required]],
   });
 }
 

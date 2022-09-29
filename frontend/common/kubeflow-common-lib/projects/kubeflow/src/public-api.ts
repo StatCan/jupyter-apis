@@ -44,6 +44,7 @@ export * from './lib/title-actions-toolbar/types';
 
 export * from './lib/form/form.module';
 export * from './lib/form/section/section.component';
+export * from './lib/form/section-image/section.image.component';
 export * from './lib/form/rok-url-input/rok-url-input.component';
 
 export * from './lib/resource-table/types';

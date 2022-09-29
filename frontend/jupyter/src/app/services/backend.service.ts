@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
+  VolumeResponseObject,
   JWABackendResponse,
+  VWABackendResponse,
   Config,
   PodDefault,
   NotebookFormObject,
@@ -122,6 +124,26 @@ export class JWABackendService extends BackendService {
 
     return this.http
       .delete<JWABackendResponse>(url)
+      .pipe(catchError(error => this.handleError(error, false)));
+  }
+
+  //Volumes
+  public getPVCs(namespace: string): Observable<VolumeResponseObject[]> {
+    const url = `api/namespaces/${namespace}/pvcs`;
+
+    return this.http.get<VWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: VWABackendResponse) => {
+        return resp.pvcs;
+      }),
+    );
+  }
+
+  public deletePVC(namespace: string, pvc: string){
+    const url = `api/namespaces/${namespace}/pvcs/${pvc}`;
+
+    return this.http
+      .delete<VWABackendResponse>(url)
       .pipe(catchError(error => this.handleError(error, false)));
   }
 }

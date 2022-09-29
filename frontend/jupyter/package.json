@@ -13,6 +13,7 @@
     "format:check": "prettier --check 'src/**/*.{js,ts,html,scss,css}' || node scripts/check-format-error.js",
     "format:write": "prettier --write 'src/**/*.{js,ts,html,scss,css}'",
     "start": "ng serve --base-href / --deploy-url / --proxy-config proxy.config.js",
+    "start:fr": "ng serve --configuration=fr --base-href / --deploy-url / --proxy-config proxy.config.js",
     "i18n:extract": "ng extract-i18n --output-path i18n",
     "test": "ng test",
     "e2e": "cypress open .",

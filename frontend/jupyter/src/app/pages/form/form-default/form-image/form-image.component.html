@@ -1,6 +1,10 @@
-<lib-form-section
-  title="Docker Image"
-  i18n-title="Title for the Image section of the form"
+<lib-form-section-image
+  title="Image"
+  text="Select the base software you want installed in your server. If you choose a custom image, it must be available in the DAaaS container registry."
+  link="https://statcan.github.io/daaas/en/1-Experiments/Selecting-an-Image"
+  linkText="Here's some more information to help you select an image for your requirements."
+  icon="fa:fab:docker"
+  i18n-title
 >
   <div class="flex-column">
     <mat-checkbox
@@ -195,4 +199,4 @@
       </mat-form-field>
     </div>
   </lib-advanced-options>
-</lib-form-section>
+</lib-form-section-image>

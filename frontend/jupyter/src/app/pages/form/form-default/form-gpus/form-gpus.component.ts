@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/types';
@@ -12,13 +12,15 @@ import { JWABackendService } from 'src/app/services/backend.service';
 export class FormGpusComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() vendors: GPUVendor[] = [];
+  @Output() gpuValueEvent = new EventEmitter<string>();
 
   private gpuCtrl: FormGroup;
   public installedVendors = new Set<string>();
 
   subscriptions = new Subscription();
-  maxGPUs = 16;
-  gpusCount = ['1', '2', '4', '8'];
+  gpusCount = ['1'];
+
+  message: string;
 
   constructor(public backend: JWABackendService) {}
 
@@ -34,10 +36,13 @@ export class FormGpusComponent implements OnInit {
     this.subscriptions.add(
       this.gpuCtrl.get('num').valueChanges.subscribe((n: string) => {
         if (n === 'none') {
+          this.message = "";
           this.gpuCtrl.get('vendor').disable();
         } else {
+          this.message = "Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.";
           this.gpuCtrl.get('vendor').enable();
         }
+        this.gpuValueEvent.emit(n);
       }),
     );
 

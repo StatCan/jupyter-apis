@@ -10,6 +10,7 @@
     <mat-form-field appearance="outline" class="column">
       <mat-label>CPU Request</mat-label>
       <input
+        [attr.disabled]="readonlySpecs ? '' : null"
         label="Requested CPUs"
         i18n-label
         matInput
@@ -23,6 +24,7 @@
     <mat-form-field appearance="outline" class="column">
       <mat-label>Memory requests</mat-label>
       <input
+        [attr.disabled]="readonlySpecs ? '' : null"
         matInput
         i18n-label
         formControlName="memory"

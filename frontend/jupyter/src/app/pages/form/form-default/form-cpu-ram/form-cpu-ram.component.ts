@@ -45,6 +45,7 @@ export class FormCpuRamComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
+  @Input() readonlySpecs: boolean;
   @Input() cpuLimitFactor: string;
   @Input() memoryLimitFactor: string;
 
@@ -114,8 +115,6 @@ export class FormCpuRamComponent implements OnInit {
         .setValue(calculateLimits(memory, this.memoryLimitFactor));
     });
   }
-
-  getCPUError() {}
 
   // AAW changes
   getRAMLimitError() {

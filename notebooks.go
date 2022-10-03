@@ -35,6 +35,13 @@ const SharedMemoryVolumePath string = "/dev/shm"
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
+// node name metadata String.
+const EnvNodeName string = "NODE_NAME"
+
+const EnvNotebookType string = "NB_TYPE"
+
+const ProtectedBLabel string = "data.statcan.gc.ca/classification"
+
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
 
@@ -640,6 +647,25 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			Value: req.Language,
 		})
 	}
+
+	//Add pod metadata using Downward API
+	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+		Name: EnvNodeName,
+		ValueFrom: &corev1.EnvVarSource{
+			FieldRef: &corev1.ObjectFieldSelector{
+				FieldPath: notebook.Spec.Template.Spec.NodeName,
+			},
+		},
+	})
+
+	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+		Name: EnvNotebookType,
+		ValueFrom: &corev1.EnvVarSource{
+			FieldRef: &corev1.ObjectFieldSelector{
+				FieldPath: notebook.ObjectMeta.Labels[ProtectedBLabel],
+			},
+		},
+	})
 
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {

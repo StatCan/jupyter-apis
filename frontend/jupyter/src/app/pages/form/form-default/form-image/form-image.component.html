@@ -178,7 +178,7 @@
       [formControl]="parentForm.get('customImage')"
       #cstmimg
     />
-    <mat-error i18n>Please provide an Image to use</mat-error>
+    <mat-error>{{ urlValidation() }}</mat-error>
   </mat-form-field>
 
   <lib-advanced-options>

@@ -36,7 +36,7 @@ export function getFormDefaults(): FormGroup {
           accessModes: [['ReadWriteOnce']],
           resources: fb.group({
             requests: fb.group({
-              storage: ['10Gi'],
+              storage: ['16Gi'], //AAW default storage set, don't remove
             }),
           }),
         }),

@@ -5,6 +5,7 @@
       Kubernetes Volume
     </mat-option>
 
+    <!-- We at the AAW definitely do not want this
     <mat-option
       [value]="EXISTING_VOLUME_TYPE.CUSTOM"
       matTooltip="Insert your custom K8s volume spec."
@@ -13,6 +14,7 @@
     >
       Custom (Advanced)
     </mat-option>
+  -->
   </mat-select>
 </mat-form-field>
 
@@ -21,7 +23,8 @@
   <app-existing-pvc [pvcGroup]="getPvcFormGroup()"> </app-existing-pvc>
 </ng-container>
 
-<!--YAML editor-->
+<!--YAML editor
+AAW definitely does not want this, can keep it as we just comment out the opton set-->
 <ng-template #customSrc>
   <ng-container i18n>Check the </ng-container>
   <a

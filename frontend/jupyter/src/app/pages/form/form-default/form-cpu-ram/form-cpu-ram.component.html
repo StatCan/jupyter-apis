@@ -5,26 +5,32 @@
   i18n-text
   icon="fa:fas:microchip"
 >
-  <div class="row">
-    <!--CPU-->
-    <lib-positive-number-input
-      class="column"
-      min="0"
-      step="0.1"
-      [sizeControl]="parentForm.get('cpu')"
-      label="Requested CPUs"
-      i18n-label
-    ></lib-positive-number-input>
+  <div class="row" [formGroup]="parentForm">
+    <!--CPU AAW, do not take their lib-positive-input -->
+    <mat-form-field appearance="outline" class="column">
+      <mat-label>CPU Request</mat-label>
+      <input
+        label="Requested CPUs"
+        i18n-label
+        matInput
+        formControlName="cpu"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxCpu')"
+      />
+      <mat-error>{{getCPULimitError()}}</mat-error>
+    </mat-form-field>
 
-    <!--RAM-->
-    <lib-positive-number-input
-      class="column"
-      min="0"
-      step="0.1"
-      [sizeControl]="parentForm.get('memory')"
-      label="Requested memory in Gi"
-      i18n-label
-    ></lib-positive-number-input>
+    <!--RAM AAW, do not take their lib-positive-input-->
+    <mat-form-field appearance="outline" class="column">
+      <mat-label>Memory requests</mat-label>
+      <input
+        matInput
+        i18n-label
+        formControlName="memory"
+        label="Requested memory in Gi"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxRam')"
+      />
+      <mat-error>{{getRAMLimitError()}}</mat-error>
+    </mat-form-field>
   </div>
 
   <lib-advanced-options>
@@ -39,7 +45,9 @@
             min="0.1"
             step="0.1"
             [formControl]="parentForm.get('cpuLimit')"
+            [errorStateMatcher]="parentErrorKeysErrorStateMatcher('cpuLimit')"
           />
+          <mat-error>{{getCPULimitError()}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -53,7 +61,9 @@
             min="0.1"
             step="0.1"
             [formControl]="parentForm.get('memoryLimit')"
+            [errorStateMatcher]="parentErrorKeysErrorStateMatcher('memoryLimit')"
           />
+          <mat-error>{{getRAMLimitError()}}</mat-error>
         </mat-form-field>
       </div>
     </div>

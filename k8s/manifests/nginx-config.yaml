@@ -37,6 +37,10 @@ data:
         # The permanent keyword ensured that the redirect will be a 301 Moved Permanently 
         # HTTP redirect, which means that the old address is no longer valid and will not come back online.
         rewrite ^/$ /$accept_language;
+        
+        location ~ ^/(fr|en)/api/.*$ {
+          rewrite $1 (/api/.*)
+        }
 
         # Everything under the Angular application is always redirected to Angular in the
         # correct language
@@ -44,6 +48,11 @@ data:
             try_files $uri /$1/index.html?$args;
         }
         # ...
+
+        location ~ ^/api/.*$ {
+          proxy_pass http://0.0.0.0:5000;
+        }
+
       }
     }
     

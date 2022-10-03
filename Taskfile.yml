@@ -75,7 +75,13 @@ tasks:
       desc: Push the built container image
       cmds:
       - docker push {{.CONTAINER_IMAGE}}
-
+  go:dev:
+    desc: run go code locally for development
+    cmds:
+      - go run . {{.CLI_ARGS}}
+      - sleep 1
+    sources:
+      - "*.go"
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/go-task/Taskfile.yml
   go:build:
     desc: Build the Go code
@@ -163,3 +169,14 @@ tasks:
     desc: stop knative environment
     cmds:
     - "k3d cluster stop {{.CLUSTER_NAME}}"
+
+  env:
+    prefix: ⚙ > env  
+    desc: setup dev environment
+    cmds:
+    - echo "KF_NAMESPACE=">>.env
+    - echo "KF_USER_ID=">>.env
+    - echo "KF_NOTEBOOK_NAME=swag">>.env
+    - echo "KF_PVC_NAME=swag">>.env
+    sources:
+      - .env

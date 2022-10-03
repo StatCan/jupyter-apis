@@ -11,7 +11,6 @@ import (
 	"os/signal"
 	"path"
 	"path/filepath"
-	"sync"
 	"time"
 
 	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
@@ -54,8 +53,6 @@ type clientsets struct {
 }
 
 type server struct {
-	mux sync.Mutex
-
 	Config Configuration
 
 	clientsets clientsets
@@ -126,7 +123,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = s.setupListers(gctx)
+	_ = s.setupListers(gctx)
 
 	// Generate the Gorilla Mux router
 	router := mux.NewRouter()
@@ -163,8 +160,8 @@ func main() {
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Group:    corev1.SchemeGroupVersion.Group,
-				Verb:     "list",
-				Resource: "pods",
+				Verb:     "get",
+				Resource: "namespaces",
 				Version:  corev1.SchemeGroupVersion.Version,
 			},
 		},

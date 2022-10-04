@@ -40,7 +40,7 @@ const EnvNodeName string = "NODE_NAME"
 
 const EnvNotebookType string = "NB_TYPE"
 
-const ProtectedBLabel string = "data.statcan.gc.ca/classification"
+const ProtectedBLabel string = "protected-b"
 
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
@@ -366,10 +366,6 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 					},
 				},
 			}
-			notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-				Name:  EnvNotebookType,
-				Value: ProtectedBLabel,
-			})
 		} else {
 			// Create the PVC
 			pvc = corev1.PersistentVolumeClaim{
@@ -649,6 +645,13 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
 			Name:  EnvKfLanguage,
 			Value: req.Language,
+		})
+	}
+	// Add notebook type env var on protected-b notebooks
+	if _, ok := notebook.GetObjectMeta().GetLabels()["data.statcan.gc.ca/classification"]; ok {
+		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+			Name:  EnvNotebookType,
+			Value: ProtectedBLabel,
 		})
 	}
 

@@ -38,9 +38,9 @@ const EnvKfLanguage string = "KF_LANG"
 // node name metadata String.
 const EnvNodeName string = "NODE_NAME"
 
-const EnvNotebookType string = "NB_TYPE"
+const EnvNotebookType string = "NB_PROTB"
 
-const ProtectedBLabel string = "protected-b"
+const ProtectedBLabel string = "true"
 
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
@@ -648,7 +648,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	// Add notebook type env var on protected-b notebooks
-	if _, ok := notebook.GetObjectMeta().GetLabels()["data.statcan.gc.ca/classification"]; ok {
+	if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
 		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
 			Name:  EnvNotebookType,
 			Value: ProtectedBLabel,

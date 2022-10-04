@@ -662,7 +662,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		Name: EnvNotebookType,
 		ValueFrom: &corev1.EnvVarSource{
 			FieldRef: &corev1.ObjectFieldSelector{
-				FieldPath: notebook.ObjectMeta.Labels[ProtectedBLabel],
+				FieldPath: notebook.Labels["data.statcan.gc.ca/classification"],
 			},
 		},
 	})

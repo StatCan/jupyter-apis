@@ -33,6 +33,8 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   existingNotebooks = new Set<string>();
 
   subscriptions = new Subscription();
+
+  readonlySpecs: boolean;
   
   nsMetadata: V1Namespace;
 
@@ -178,6 +180,17 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       );
       this.router.navigate(['/']);
     });
+  }
+  
+  // Automatically set values of CPU and Memory if GPU is 1
+  checkGPU(gpu: string) {
+    if (gpu == "none") {
+      this.readonlySpecs = false;
+    } else {
+      this.readonlySpecs = true;
+      this.formCtrl.get("cpu").setValue("4");
+      this.formCtrl.get("memory").setValue("96");
+    }
   }
 
   onCancel() {

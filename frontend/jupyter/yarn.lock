@@ -5641,6 +5641,12 @@
   "resolved" "https://registry.npmjs.org/klona/-/klona-2.0.5.tgz"
   "version" "2.0.5"
 
+"kubeflow@file:../common/kubeflow-common-lib/dist/kubeflow":
+  "resolved" "file:../common/kubeflow-common-lib/dist/kubeflow"
+  "version" "0.0.4"
+  dependencies:
+    "tslib" "^2.0.0"
+
 "lazy-ass@^1.6.0":
   "integrity" "sha1-eZllXoZGwX8In90YfRUNMyTVRRM="
   "resolved" "https://registry.npmjs.org/lazy-ass/-/lazy-ass-1.6.0.tgz"

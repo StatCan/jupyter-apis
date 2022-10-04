@@ -60,6 +60,7 @@ tasks:
   #  / _` |/ _ \ / __| |/ / _ \ '__|
   # | (_| | (_) | (__|   <  __/ |
   #  \__,_|\___/ \___|_|\_\___|_|
+  # k3d image import nginx-test-dev:latest -c nginx-test
   build:dev-image:
     prefix: build dev image
     desc: build development image

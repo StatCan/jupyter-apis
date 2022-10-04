@@ -38,9 +38,8 @@ data:
         # HTTP redirect, which means that the old address is no longer valid and will not come back online.
         rewrite ^/$ /$accept_language;
         
-        location ~ ^/(fr|en)/api/.*$ {
-          rewrite $1 (/api/.*)
-        }
+        # Rewrite 
+        rewrite ^/(fr|en)/api/(.*)$ /api/$2;
 
         # Everything under the Angular application is always redirected to Angular in the
         # correct language

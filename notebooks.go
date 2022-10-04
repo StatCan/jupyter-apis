@@ -35,6 +35,10 @@ const SharedMemoryVolumePath string = "/dev/shm"
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
+const EnvNotebookType string = "NB_PROTB"
+
+const ProtectedBLabel string = "true"
+
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
 
@@ -638,6 +642,13 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
 			Name:  EnvKfLanguage,
 			Value: req.Language,
+		})
+	}
+	// Add notebook type env var on protected-b notebooks
+	if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
+		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+			Name:  EnvNotebookType,
+			Value: ProtectedBLabel,
 		})
 	}
 

@@ -366,6 +366,10 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 					},
 				},
 			}
+			notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+				Name:  EnvNotebookType,
+				Value: ProtectedBLabel,
+			})
 		} else {
 			// Create the PVC
 			pvc = corev1.PersistentVolumeClaim{
@@ -647,25 +651,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			Value: req.Language,
 		})
 	}
-
-	//Add pod metadata using Downward API
-	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-		Name: EnvNodeName,
-		ValueFrom: &corev1.EnvVarSource{
-			FieldRef: &corev1.ObjectFieldSelector{
-				FieldPath: notebook.Spec.Template.Spec.NodeName,
-			},
-		},
-	})
-
-	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-		Name: EnvNotebookType,
-		ValueFrom: &corev1.EnvVarSource{
-			FieldRef: &corev1.ObjectFieldSelector{
-				FieldPath: notebook.Labels["data.statcan.gc.ca/classification"],
-			},
-		},
-	})
 
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {

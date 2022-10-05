@@ -43,7 +43,7 @@ data:
 
         # Everything under the Angular application is always redirected to Angular in the
         # correct language
-        location ~ ^/(fr|en) {
+        location ~ ^/(fr|en)$ {
             try_files $uri /$1/index.html?$args;
         }
         # ...

@@ -1,10 +1,10 @@
 <mat-form-field appearance="outline" class="wide">
   <mat-label i18n>Size in Gi</mat-label>
-  <input
-    autocomplete="off"
-    matInput
-    type="number"
-    min="1"
-    [formControl]="sizeNum"
-  />
+  <!--AAW specific, we want to control the size options users have
+  https://github.com/StatCan/jupyter-apis/issues/7#issuecomment-687249223-->
+  <mat-select [formControl]="sizeNum">
+    <mat-option *ngFor="let sizeOptions of sizes" [value]="sizeOptions">{{
+      sizeOptions
+    }}</mat-option>
+  </mat-select>
 </mat-form-field>

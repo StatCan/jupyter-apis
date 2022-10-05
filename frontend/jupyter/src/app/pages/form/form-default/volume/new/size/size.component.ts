@@ -12,6 +12,7 @@ export class VolumeSizeComponent implements OnInit {
   private sub: Subscription;
   public sizeNum = new FormControl(1, Validators.required);
 
+  @Input() sizes: Set<string>; // AAW change, this appears to be where you input your chosen size anyways
   @Input()
   get sizeCtrl(): FormControl {
     return this.ctrl;

@@ -1,8 +1,9 @@
 <lib-form-section
   title="Workspace Volume"
   i18n-title
-  text="Volume that will be mounted in you home directory."
+  text="Configure the Volume to be mounted as your personal Workspace."
   i18n-text
+  icon="fa:fas:laptop-code"
 >
   <mat-accordion>
     <mat-expansion-panel
@@ -73,10 +74,12 @@
           [volGroup]="volGroup"
         ></app-existing-volume>
 
+        <!--AAW: sizes here has to get passed down because size options for workspace vol and data vol are not the same-->
         <app-new-volume
           *ngIf="volGroup.get('newPvc')"
           [volGroup]="volGroup"
           [externalName]="externalName"
+          [sizes]="['4', '8', '16', '32']"
         ></app-new-volume>
 
         <app-volume-mount [volGroup]="volGroup"></app-volume-mount>

@@ -5,13 +5,17 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
+  VolumeResponseObject,
   JWABackendResponse,
+  VWABackendResponse,
   Config,
   PodDefault,
   NotebookFormObject,
   NotebookProcessedObject,
   PvcResponseObject,
 } from '../types';
+import { V1Namespace } from '@kubernetes/client-node';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -28,6 +32,17 @@ export class JWABackendService extends BackendService {
       catchError(error => this.handleError(error)),
       map((resp: JWABackendResponse) => {
         return resp.notebooks;
+      }),
+    );
+  }
+
+  public getNSMetadata(namespace: string): Observable<V1Namespace> {
+    const url = `api/namespaces/${namespace}`;
+
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map(data => {
+        return data.namespace;
       }),
     );
   }
@@ -122,6 +137,26 @@ export class JWABackendService extends BackendService {
 
     return this.http
       .delete<JWABackendResponse>(url)
+      .pipe(catchError(error => this.handleError(error, false)));
+  }
+
+  //Volumes
+  public getPVCs(namespace: string): Observable<VolumeResponseObject[]> {
+    const url = `api/namespaces/${namespace}/pvcs`;
+
+    return this.http.get<VWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: VWABackendResponse) => {
+        return resp.pvcs;
+      }),
+    );
+  }
+
+  public deletePVC(namespace: string, pvc: string){
+    const url = `api/namespaces/${namespace}/pvcs/${pvc}`;
+
+    return this.http
+      .delete<VWABackendResponse>(url)
       .pipe(catchError(error => this.handleError(error, false)));
   }
 }

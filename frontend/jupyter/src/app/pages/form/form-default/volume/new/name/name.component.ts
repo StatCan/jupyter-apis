@@ -4,8 +4,12 @@ import {
   FormControl,
   FormGroup,
   Validators,
+  ValidatorFn,
+  FormGroupDirective,
+  NgForm
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 const NB_NAME_SUBST = '{notebook-name}';
 
@@ -19,6 +23,8 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
   private subs = new Subscription();
   private group: FormGroup;
   private externalNamePrv = '';
+  private mountedVolumes: Set<string> = new Set<string>();
+  matcher = new PvcErrorStateMatcher();
 
   @Input()
   get metadataGroup(): FormGroup {
@@ -62,6 +68,12 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.templatedName = this.getNameCtrl(this.metadataGroup).value as string;
+    //error messages not showing up
+    this.getNameCtrl(this.metadataGroup).setValidators([
+        Validators.required,
+        this.isMountedValidator(),
+        Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
+      ]);
   }
 
   ngOnDestroy(): void {
@@ -76,5 +88,36 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
     if (metadata.contains('generateName')) {
       return metadata.get('generateName');
     }
+  }
+
+  // AAW specific
+  showNameError() {
+    const volumeName = this.getNameCtrl(this.metadataGroup); // should this be like the getNameCtrl?
+
+    if (volumeName.hasError("required")) {
+      return `Name is required`;
+    }
+    if (volumeName.hasError("pattern")) {
+      return `The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+    }
+    if (volumeName.hasError("isMounted")) {
+      return `Already mounted xd`;
+    }
+  }
+
+  //Method that disables selecting a mounted pvc, AAW specific
+  private isMountedValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      const exists = this.mountedVolumes.has(control.value);
+      return exists ? { isMounted: true } : null;
+    };
+  }
+}
+// Error when invalid control is dirty, touched, or submitted, AAW Specific
+export class PvcErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    //Allows to control when volume is untouched but already assigned
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted || !control.hasError("pattern")));
   }
 }

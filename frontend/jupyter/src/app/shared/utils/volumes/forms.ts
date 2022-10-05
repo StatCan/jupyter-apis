@@ -80,7 +80,7 @@ export function createNewPvcFormGroup(
       accessModes: new FormControl(['ReadWriteOnce']),
       resources: new FormGroup({
         requests: new FormGroup({
-          storage: new FormControl('10Gi', []),
+          storage: new FormControl('16Gi', []), //AAW change, do not remove
         }),
       }),
       storageClassName: new FormControl({

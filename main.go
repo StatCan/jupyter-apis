@@ -131,6 +131,7 @@ func main() {
 	router.HandleFunc("/api/config", s.GetConfig).Methods("GET")
 	router.HandleFunc("/api/gpus", s.GetGPUVendors).Methods("GET")
 
+	router.HandleFunc("/api/storageclasses", s.GetStorageClasses).Methods("GET")
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
 
 	router.HandleFunc("/api/namespaces/{namespace}/cost/aggregated", s.checkAccess(authorizationv1.SubjectAccessReview{

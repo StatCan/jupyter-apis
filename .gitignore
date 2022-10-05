@@ -4,4 +4,5 @@ crud-web-apps
 .task/
 .vscode
 .env
+.task
 __debug_bin

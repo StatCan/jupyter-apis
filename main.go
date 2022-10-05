@@ -9,7 +9,6 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
-	"path"
 	"path/filepath"
 	"sync"
 	"time"
@@ -246,21 +245,6 @@ func main() {
 			},
 		},
 	}, s.GetPodDefaults)).Methods("GET")
-
-	// Return the index.html page.
-	router.Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, path.Join(staticDirectory, "index.html"))
-	})
-
-	// Return the index.html page when a request for the new page is received directly.
-	router.Path("/new").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, path.Join(staticDirectory, "index.html"))
-	})
-
-	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets", http.FileServer(http.Dir(staticDirectory+"assets/"))))
-
-	// Serve the rest of the routes from the static directory.
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static", http.FileServer(http.Dir(staticDirectory))))
 
 	// Setup the server, with:
 	//  Add combined logging handler

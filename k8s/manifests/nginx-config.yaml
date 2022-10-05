@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jwa-nginx-configuration
+data:
+  nginx.conf: |
+    worker_processes  3;
+    pid /tmp/nginx.pid; # Changed from /var/run/nginx.pid
+    error_log  /var/log/nginx/error.log;
+    events {
+      worker_connections  1024;
+    }
+    http {
+      types {
+        module;
+      }
+      include /etc/nginx/mime.types;
+      include mime.types;
+
+      # Browser preferred language detection ( does NOT require     
+      # AcceptLanguageModule)
+      map $http_accept_language $accept_language {
+          ~*^fr fr;
+          ~*^en en;
+      }
+      server {
+        listen 8080;
+        server_name localhost;
+        root /etc/nginx/html/;
+
+        # Fallback to default language if no preference defined by browser
+        if ($accept_language ~ "^$") {
+            set $accept_language "en";
+        }
+
+        # Redirect "/" to Angular application in the preferred language of the browser
+        # The permanent keyword ensured that the redirect will be a 301 Moved Permanently 
+        # HTTP redirect, which means that the old address is no longer valid and will not come back online.
+        rewrite ^/$ /$accept_language;
+        
+        # Rewrite 
+        rewrite ^/(fr|en)/api/(.*)$ /api/$2;
+
+        # Everything under the Angular application is always redirected to Angular in the
+        # correct language
+        location ~ ^/(fr|en) {
+            try_files $uri /$1/index.html?$args;
+        }
+        # ...
+
+        location ~ ^/api/.*$ {
+          proxy_pass http://0.0.0.0:5000;
+        }
+
+      }
+    }
+    

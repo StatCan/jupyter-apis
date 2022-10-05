@@ -1,0 +1,258 @@
+[
+  {
+    "_id": "5f88a11f-dc74-4074-8ad4-d82893376a09",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/config",
+    "url": "/api/config",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-09-23T13:47:44.950Z",
+    "modified": "2022-09-23T13:47:44.950Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "9f5dd3ac-6dfa-4463-aac3-b641d7eb583d",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/gpus",
+    "url": "/api/gpus",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2022-09-23T13:47:44.951Z",
+    "modified": "2022-09-23T13:47:44.951Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "2b047a64-db79-4a13-afb6-4c6e82453c98",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/storageclasses/default",
+    "url": "http://localhost:5000/api/storageclasses/default",
+    "method": "GET",
+    "sortNum": 16250,
+    "created": "2022-09-23T13:47:44.952Z",
+    "modified": "2022-09-23T13:47:44.952Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "74116746-f35f-4308-8f2a-e588b21d0c0e",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/cost/aggregated",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/cost/aggregated",
+    "method": "GET",
+    "sortNum": 17500,
+    "created": "2022-09-23T13:47:44.953Z",
+    "modified": "2022-09-23T13:47:44.953Z",
+    "headers": [
+      {
+        "name": "KF_USER_ID",
+        "value": "christian.boin@cloud.statcan.ca"
+      }
+    ],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "b330877f-f4e1-4ebe-8e18-ff1e63c0bd90",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces",
+    "url": "/api/namespaces",
+    "method": "GET",
+    "sortNum": 18750,
+    "created": "2022-09-23T13:47:44.954Z",
+    "modified": "2022-09-23T13:47:44.954Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "82282dcc-de4e-41ce-aeb6-9e293478a60c",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}",
+    "url": "/api/namespaces/{namespace}",
+    "method": "GET",
+    "sortNum": 60000,
+    "created": "2022-09-23T13:47:44.955Z",
+    "modified": "2022-09-23T13:47:44.955Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "237a4715-fe2f-4092-a206-fad69c9c6d23",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks",
+    "url": "/api/namespaces/{namespace}/notebooks",
+    "method": "GET",
+    "sortNum": 65000,
+    "created": "2022-09-23T13:47:44.956Z",
+    "modified": "2022-09-23T13:47:44.956Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "a3f525e5-fb55-4543-a038-ea845d980a2a",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks",
+    "method": "POST",
+    "sortNum": 70000,
+    "created": "2022-09-23T13:47:44.957Z",
+    "modified": "2022-09-23T13:47:44.957Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "712b4552-8b7c-482b-8c93-58975015eced",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook}",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}",
+    "method": "DELETE",
+    "sortNum": 80000,
+    "created": "2022-09-23T13:47:44.958Z",
+    "modified": "2022-09-23T13:50:19.620Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "notebook",
+        "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "c99b0b2b-a7c7-432e-b111-1d6c94b4db0c",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook}",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}",
+    "method": "PATCH",
+    "sortNum": 120000,
+    "created": "2022-09-23T13:47:44.959Z",
+    "modified": "2022-09-23T13:50:14.465Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "notebook",
+        "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "cfa60ce5-8b79-4e60-80ce-dc47bdc629e1",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/pvcs",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/pvcs",
+    "method": "GET",
+    "sortNum": 130000,
+    "created": "2022-09-23T13:47:44.960Z",
+    "modified": "2022-09-23T13:47:44.960Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "9afbb86c-68a3-488d-bd6d-d84d79ac7dbf",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/pvcs/{pvc}",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/pvcs/{pvc}",
+    "method": "DELETE",
+    "sortNum": 140000,
+    "created": "2022-09-23T13:47:44.961Z",
+    "modified": "2022-09-23T13:49:54.989Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "pvc",
+        "value": "{{KF_PVC_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "1147c8d9-3ae9-4865-b1c9-509d617bbd58",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/poddefaults",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/poddefaults",
+    "method": "GET",
+    "sortNum": 150000,
+    "created": "2022-09-23T13:47:44.962Z",
+    "modified": "2022-09-23T13:47:44.962Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  }
+]

@@ -1123,7 +1123,7 @@
       </trans-unit>
       <trans-unit id="4872314094100927318" datatype="html">
         <source>Starting Notebook server &apos;<x id="PH" equiv-text="notebook.name"/>&apos;...</source>
-        <target>Démarer le serveur bloc-notes  '<x id="PH" equiv-text="notebook.name"/>'...</target>
+        <target>Démarer le serveur bloc-notes &apos;<x id="PH" equiv-text="notebook.name"/>&apos;...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">207</context>
@@ -1131,7 +1131,7 @@
       </trans-unit>
       <trans-unit id="9162667715823767475" datatype="html">
         <source>Stopping Notebook server &apos;<x id="PH" equiv-text="notebook.name"/>&apos;...</source>
-        <target>Arrêter le serveur bloc-notes '<x id="PH" equiv-text="notebook.name"/>'...</target>
+        <target>Arrêter le serveur bloc-notes &apos;<x id="PH" equiv-text="notebook.name"/>&apos;...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">250</context>

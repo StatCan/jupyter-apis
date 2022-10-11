@@ -412,20 +412,20 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7d29fd9b58f20844e50d2e06dbeb9a9d5b6cb648" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ message }}"/></source>
-        <target><x id="INTERPOLATION" equiv-text="{{ message }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-default/form-gpus/form-gpus.component.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f49d3e9fe3286f0f5d07d5323db3cd6333331489" datatype="html">
         <source>GPU Vendor</source>
         <target>Vendeur de GPU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-gpus/form-gpus.component.html</context>
           <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="355498740929071390" datatype="html">
+        <source>Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.</source>
+        <target>La sélection de 1 GPU définira automatiquement 4 CPU et 96Gi de mémoire.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-gpus/form-gpus.component.ts</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5474468673828369277" datatype="html">

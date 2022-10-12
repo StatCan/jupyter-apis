@@ -9,9 +9,41 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 )
 
+type storageclassesresponse struct {
+	APIResponseBase
+	StorageClasses []string `json:"storageClasses"`
+}
+
 type defaultstorageclassresponse struct {
 	APIResponseBase
 	DefaultStorageClass string `json:"defaultStorageClass"`
+}
+
+// GetStorageClasses returns the list of storage classes for the cluster
+func (s *server) GetStorageClasses(w http.ResponseWriter, r *http.Request) {
+	scs, err := s.listers.storageClasses.List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	var storageclasses []string
+
+	// Identify the default storage class based on the annotations
+	for _, sc := range scs {
+		storageclasses = append(storageclasses, sc.Name)
+	}
+
+	log.Printf("found storage classes")
+	resp := &storageclassesresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		StorageClasses: storageclasses,
+	}
+
+	s.respond(w, r, resp)
 }
 
 // GetDefaultStorageClass returns the default storage class for the cluster.

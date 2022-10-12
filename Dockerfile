@@ -36,8 +36,8 @@ FROM alpine:3.16.2
 COPY --from=frontend /src/dist/frontend /static
 COPY --from=frontend /src/dist/default /static
 COPY --from=backend /go/bin/jupyter-apis /jupyter-apis
-ENV LISTEN_ADDRESS 0.0.0.0:5000
-EXPOSE 5000
+ENV LISTEN_ADDRESS 0.0.0.0:5001
+EXPOSE 5001
 ENTRYPOINT [ "/jupyter-apis" ]
 
 # TODO Will need to mount the static logo files too

@@ -249,11 +249,18 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7b496b721f36311f5d18fd5f52c1b42d84d20919" datatype="html">
+        <source>Extra layers of configurations that will be applied to the new Notebook. (e.g. Insert credentials as Secrets, set Environment Variables.)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-configurations/form-configurations.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a76f7ebd6eb4f4afd7109e574dc617f858cd2d80" datatype="html">
         <source> Configurations </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-configurations/form-configurations.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f22f0cf2e9846ef910c72864e8d5b62b36b81c86" datatype="html">
@@ -274,28 +281,28 @@
         <source>Requested CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c35a751936ff43637e90b7a97c69939364e32a2f" datatype="html">
         <source>Requested memory in Gi</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b236d0d38ab7c46409b041002e008f28ade48e54" datatype="html">
         <source>CPU limit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="393e204f9358a7b2bb54c23a1dd6fda2d3a20fe0" datatype="html">
         <source> Memory limit in Gi </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cbe5b11222992396a96e6d3d8ba3e9af4cbbdd92" datatype="html">
@@ -460,32 +467,6 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">76</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">98</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">124</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">150</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="059242c0f52aaeff3ed373739d818de15acc9751" datatype="html">
-        <source> Custom Image </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">15,16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1f35754236a77f283c76f144f8ca55a2590b2897" datatype="html">
-        <source>Docker Image</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
         <context-group purpose="location">
@@ -501,47 +482,87 @@
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="59d809cdc85110d7959687522ca681374096ba02" datatype="html">
+        <source>Select the base software you want installed in your server. If you choose a custom image, it must be available in the DAaaS container registry.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c99db5201b6066f035a661d5ba053aac552a240b" datatype="html">
+        <source>Here&apos;s some more information to help you select an image for your requirements.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="059242c0f52aaeff3ed373739d818de15acc9751" datatype="html">
+        <source> Custom Image </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f35754236a77f283c76f144f8ca55a2590b2897" datatype="html">
+        <source>Docker Image</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">128</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
+          <context context-type="linenumber">154</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="817830b30c16a82f008858d8f7a6d64e7826a2b2" datatype="html">
         <source>Please provide an Image to use</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">114</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="09b17c15b684399384cd047164e028517bc52435" datatype="html">
         <source> Please provide an Image to use </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">165,166</context>
+          <context context-type="linenumber">167,168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f0e016d5caf4e42f1b6f60dc9fe80e2b98f5287" datatype="html">
         <source>Custom Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">174</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d8aa5559daf4007f0eff2ea4e5ea28d1ac49e105" datatype="html">
         <source>Image pull policy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6408a210e22cb458fc925aad796666f5a1198662" datatype="html">
         <source> Always </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">190,191</context>
+          <context context-type="linenumber">192,193</context>
         </context-group>
         <note priority="1" from="description">ImagePullPolicy: Always</note>
       </trans-unit>
@@ -549,7 +570,7 @@
         <source> IfNotPresent </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">193,194</context>
+          <context context-type="linenumber">195,196</context>
         </context-group>
         <note priority="1" from="description">ImagePullPolicy: IfNotPresent</note>
       </trans-unit>
@@ -557,7 +578,7 @@
         <source> Never </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
-          <context context-type="linenumber">196,197</context>
+          <context context-type="linenumber">198,199</context>
         </context-group>
         <note priority="1" from="description">ImagePullPolicy: Never</note>
       </trans-unit>
@@ -1084,6 +1105,31 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">340</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1256341028296687638" datatype="html">
+        <source>Existing volume</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/volumes/panel.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8469744337819005905" datatype="html">
+        <source>New volume</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/volumes/panel.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5097538314697730110" datatype="html">
+        <source>Custom (Advanced)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/volumes/panel.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/utils/volumes/panel.ts</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
     </body>

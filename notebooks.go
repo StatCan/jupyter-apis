@@ -50,29 +50,6 @@ const (
 	VolumeTypeNew volumetype = "New"
 )
 
-// outdated struct, but keep until final commit
-type volumerequest struct {
-	// this has to change, also weird because the struct that is returned changes depending on the button pressed / type
-	// of volume requested.
-	// I could maybe just have this have both newPvc and existingSource?
-	// and then check if the field newPvc exists, if it does not then check if other type, is this feasible? something like
-	// struct is outdated
-	/*
-		    newPvc        newPVCtype       `json:"newPvc"`
-			existingPvc   existingPVCtype  `json:"existingPvc"`
-	*/
-
-	Type          volumetype                        `json:"type"`
-	Name          string                            `json:"name"` //this is fine, can use this to check for existence? on a newPvc they seem to only have `name` at the newPvc level
-	TemplatedName string                            `json:"templatedName"`
-	Class         string                            `json:"class"`
-	ExtraFields   map[string]interface{}            `json:"extraFields"`
-	Path          string                            `json:"path"`
-	Size          resource.Quantity                 `json:"size"`
-	Mode          corev1.PersistentVolumeAccessMode `json:"mode"`
-	Mount         string                            `json:"mount"`
-}
-
 // Auto generated using the datavolume, this is what the new volumerequest looks like.
 // initially all had omit empty, but just keep for some where existingpvc / newpvc which may or may not be empty
 // depending on the type of volume wanted
@@ -90,7 +67,7 @@ type volrequest struct {
 			Name *string `json:"name"` //https://stackoverflow.com/a/31505089
 		} `json:"metadata"`
 		Spec struct {
-			AccessModes corev1.PersistentVolumeAccessMode `json:"accessModes"`
+			AccessModes []corev1.PersistentVolumeAccessMode `json:"accessModes"`
 			Resources   struct {
 				Requests struct {
 					Storage resource.Quantity `json:"storage"`
@@ -396,7 +373,9 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: []corev1.PersistentVolumeAccessMode{req.NewPvc.Spec.AccessModes},
+					// Really we only use ReadWriteOnce
+					AccessModes: req.NewPvc.Spec.AccessModes,
+					//AccessModes: []corev1.PersistentVolumeAccessMode{"ReadWriteOnce"},
 					Resources: corev1.ResourceRequirements{
 						Requests: corev1.ResourceList{
 							corev1.ResourceStorage: req.NewPvc.Spec.Resources.Requests.Storage,
@@ -412,7 +391,8 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 					Namespace: notebook.Namespace,
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: []corev1.PersistentVolumeAccessMode{req.NewPvc.Spec.AccessModes},
+					//AccessModes: []corev1.PersistentVolumeAccessMode{req.NewPvc.Spec.AccessModes},
+					AccessModes: req.NewPvc.Spec.AccessModes,
 					Resources: corev1.ResourceRequirements{
 						Requests: corev1.ResourceList{
 							corev1.ResourceStorage: req.NewPvc.Spec.Resources.Requests.Storage,

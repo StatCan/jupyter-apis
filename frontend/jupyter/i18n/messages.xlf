@@ -82,6 +82,55 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4743002849260529978" datatype="html">
+        <source>Items per page:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3337301694210287595" datatype="html">
+        <source>Next page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3629960544875360046" datatype="html">
+        <source>Previous page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8642445555713453888" datatype="html">
+        <source>First page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6784758141439994527" datatype="html">
+        <source>Last page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3522470007354852946" datatype="html">
+        <source>0 of <x id="PH" equiv-text="length"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6884890780315204652" datatype="html">
+        <source><x id="PH" equiv-text="startIndex+1"/> - <x id="PH_1" equiv-text="endIndex"/> of <x id="PH_2" equiv-text="length"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3862207452684082108" datatype="html">
         <source>An error occurred: <x id="PH" equiv-text="error"/></source>
         <context-group purpose="location">

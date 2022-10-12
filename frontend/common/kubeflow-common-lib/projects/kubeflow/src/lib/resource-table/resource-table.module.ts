@@ -7,7 +7,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
+import { PaginatorIntlComponent } from './paginator/paginator.component';
 import { StatusComponent } from './status/status.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -54,5 +55,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ComponentValueComponent,
   ],
   exports: [ResourceTableComponent, TableComponent],
+  providers: [{provide: MatPaginatorIntl, useClass: PaginatorIntlComponent}],
 })
 export class ResourceTableModule {}

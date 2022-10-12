@@ -640,6 +640,22 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			Value: req.Language,
 		})
 	}
+	// Add empty dir on protected-b notebooks
+	if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
+
+		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: "protb-nb",
+			VolumeSource: corev1.VolumeSource{
+				EmptyDir: &corev1.EmptyDirVolumeSource{
+					Medium: corev1.StorageMediumMemory,
+				},
+			},
+		})
+		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      "protb-nb",
+			MountPath: "/etc/protb",
+		})
+	}
 
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {

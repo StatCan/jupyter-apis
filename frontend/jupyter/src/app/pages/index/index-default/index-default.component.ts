@@ -333,11 +333,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       if(mounts[element.name]){
         element.usedBy = mounts[element.name].name;
         element.status = {} as Status;
-        element.status.message = "Attached";
+        element.status.message = $localize`Attached`;
         element.status.phase = STATUS_TYPE.MOUNTED;
       } else {
         element.status = {} as Status;
-        element.status.message = "Unattached";
+        element.status.message = $localize`Unattached`;
         element.status.phase = STATUS_TYPE.UNMOUNTED;
       }
     });

@@ -96,7 +96,7 @@
         <target>Éléments par page:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3337301694210287595" datatype="html">
@@ -104,7 +104,7 @@
         <target>Page suivante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3629960544875360046" datatype="html">
@@ -112,7 +112,7 @@
         <target>Page précédente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8642445555713453888" datatype="html">
@@ -120,7 +120,7 @@
         <target>Première page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6784758141439994527" datatype="html">
@@ -128,7 +128,7 @@
         <target>Dernière page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3522470007354852946" datatype="html">
@@ -136,7 +136,7 @@
         <target>0 de <x id="PH" equiv-text="length"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6884890780315204652" datatype="html">
@@ -144,7 +144,7 @@
         <target><x id="PH" equiv-text="startIndex+1"/> - <x id="PH_1" equiv-text="endIndex"/> de <x id="PH_2" equiv-text="length"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/paginator.component.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3862207452684082108" datatype="html">
@@ -412,12 +412,20 @@
           <context context-type="linenumber">110,111</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f6a53f97f76c47911a5b3128a4a34cc2995b3878" datatype="html">
+        <source>New notebook</source>
+        <target>Nouveau bloc-notes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-default.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="426440b9cd9f72a1537050344630be55c8d96aa8" datatype="html">
         <source> LAUNCH </source>
         <target> LANCER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-default.component.html</context>
-          <context context-type="linenumber">86,87</context>
+          <context context-type="linenumber">87,88</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-rok/form-rok.component.html</context>
@@ -429,7 +437,7 @@
         <target>ANNULER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-default.component.html</context>
-          <context context-type="linenumber">90,91</context>
+          <context context-type="linenumber">91,92</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-rok/form-rok.component.html</context>
@@ -1111,7 +1119,7 @@
       </trans-unit>
       <trans-unit id="1368650342006604903" datatype="html">
         <source>Compute</source>
-        <target>Évaluer</target>
+        <target>Calculé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
           <context context-type="linenumber">215</context>
@@ -1191,6 +1199,22 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">250</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6425333040033977991" datatype="html">
+        <source>Attached</source>
+        <target>Attaché</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">336</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="810251571194206100" datatype="html">
+        <source>Unattached</source>
+        <target>Libre</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">340</context>
         </context-group>
       </trans-unit>
     </body>

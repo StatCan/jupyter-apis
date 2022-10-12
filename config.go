@@ -64,6 +64,7 @@ type ValueElement struct {
 }
 
 type ValueValue struct {
+	//this has to change
 	Type        ImagePullPolicy `yaml:"type" json:"type"`
 	Name        ImagePullPolicy `yaml:"name" json:"name"`
 	Size        ImagePullPolicy `yaml:"size" json:"size"`
@@ -129,6 +130,7 @@ type TolerationGroupOption struct {
 }
 
 type WorkspaceVolume struct {
+	// this has to change
 	Value    ValueValue `yaml:"value" json:"value"`
 	ReadOnly bool       `yaml:"readOnly" json:"readOnly"`
 }

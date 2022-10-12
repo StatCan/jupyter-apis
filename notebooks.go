@@ -50,15 +50,55 @@ const (
 	VolumeTypeNew volumetype = "New"
 )
 
+// outdated struct, but keep until final commit
 type volumerequest struct {
+	// this has to change, also weird because the struct that is returned changes depending on the button pressed / type
+	// of volume requested.
+	// I could maybe just have this have both newPvc and existingSource?
+	// and then check if the field newPvc exists, if it does not then check if other type, is this feasible? something like
+	// struct is outdated
+	/*
+		    newPvc        newPVCtype       `json:"newPvc"`
+			existingPvc   existingPVCtype  `json:"existingPvc"`
+	*/
+
 	Type          volumetype                        `json:"type"`
-	Name          string                            `json:"name"`
+	Name          string                            `json:"name"` //this is fine, can use this to check for existence? on a newPvc they seem to only have `name` at the newPvc level
 	TemplatedName string                            `json:"templatedName"`
 	Class         string                            `json:"class"`
 	ExtraFields   map[string]interface{}            `json:"extraFields"`
 	Path          string                            `json:"path"`
 	Size          resource.Quantity                 `json:"size"`
 	Mode          corev1.PersistentVolumeAccessMode `json:"mode"`
+	Mount         string                            `json:"mount"`
+}
+
+// Auto generated using the datavolume, this is what the new volumerequest looks like.
+// initially all had omit empty, but just keep for some where existingpvc / newpvc which may or may not be empty
+// depending on the type of volume wanted
+type volrequest struct {
+	Name           string `json:"name,omitempty"`
+	Mount          string `json:"mount,omitempty"`
+	ExistingSource struct {
+		PersistentVolumeClaim struct {
+			ReadOnly  bool    `json:"readOnly"`
+			ClaimName *string `json:"claimName"` //https://stackoverflow.com/a/31505089
+		} `json:"persistentVolumeClaim"`
+	} `json:"existingSource,omitempty"`
+	NewPvc struct {
+		Metadata struct {
+			Name *string `json:"name"` //https://stackoverflow.com/a/31505089
+		} `json:"metadata"`
+		Spec struct {
+			AccessModes corev1.PersistentVolumeAccessMode `json:"accessModes"`
+			Resources   struct {
+				Requests struct {
+					Storage resource.Quantity `json:"storage"`
+				} `json:"requests"`
+			} `json:"resources"`
+			StorageClassName string `json:"storageClassName,omitempty"`
+		} `json:"spec"`
+	} `json:"newPvc,omitempty"`
 }
 
 type gpurequest struct {
@@ -67,26 +107,28 @@ type gpurequest struct {
 }
 
 type newnotebookrequest struct {
-	Name               string            `json:"name"`
-	Namespace          string            `json:"namespace"`
-	Image              string            `json:"image"`
-	CustomImage        string            `json:"customImage"`
-	CustomImageCheck   bool              `json:"customImageCheck"`
-	CPU                resource.Quantity `json:"cpu"`
-	CPULimit           resource.Quantity `json:"cpuLimit"`
-	Memory             resource.Quantity `json:"memory"`
-	MemoryLimit        resource.Quantity `json:"memoryLimit"`
-	GPUs               gpurequest        `json:"gpus"`
-	NoWorkspace        bool              `json:"noWorkspace"`
-	Workspace          volumerequest     `json:"workspace"`
-	DataVolumes        []volumerequest   `json:"datavols"`
-	EnableSharedMemory bool              `json:"shm"`
-	Configurations     []string          `json:"configurations"`
-	Language           string            `json:"language"`
-	ImagePullPolicy    string            `json:"imagePullPolicy"`
-	ServerType         string            `json:"serverType"`
-	AffinityConfig     string            `json:"affinityConfig"`
-	TolerationGroup    string            `json:"tolerationGroup"`
+	Name             string            `json:"name"`
+	Namespace        string            `json:"namespace"`
+	Image            string            `json:"image"`
+	CustomImage      string            `json:"customImage"`
+	CustomImageCheck bool              `json:"customImageCheck"`
+	CPU              resource.Quantity `json:"cpu"`
+	CPULimit         resource.Quantity `json:"cpuLimit"`
+	Memory           resource.Quantity `json:"memory"`
+	MemoryLimit      resource.Quantity `json:"memoryLimit"`
+	GPUs             gpurequest        `json:"gpus"`
+	NoWorkspace      bool              `json:"noWorkspace"`
+	//Workspace          volumerequest     `json:"workspace"` //this has to change
+	//DataVolumes        []volumerequest   `json:"datavols"` // change to use new struct
+	Workspace          volrequest   `json:"workspace"`
+	DataVolumes        []volrequest `json:"datavols"`
+	EnableSharedMemory bool         `json:"shm"`
+	Configurations     []string     `json:"configurations"`
+	Language           string       `json:"language"`
+	ImagePullPolicy    string       `json:"imagePullPolicy"`
+	ServerType         string       `json:"serverType"`
+	AffinityConfig     string       `json:"affinityConfig"`
+	TolerationGroup    string       `json:"tolerationGroup"`
 }
 
 type gpuresponse struct {
@@ -340,9 +382,12 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error {
+//func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error { //old definition
+func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
 	var pvc = corev1.PersistentVolumeClaim{}
-	if req.Type == VolumeTypeNew {
+	// Check if it is a new PVC by checking if the value exists https://stackoverflow.com/a/31505089
+	// so now to access Metadata.Name must use *req.NewPvc.Metadata.Name
+	if req.NewPvc.Metadata.Name != nil {
 		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
 			pvc = corev1.PersistentVolumeClaim{
 				ObjectMeta: metav1.ObjectMeta{
@@ -351,10 +396,10 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+					AccessModes: []corev1.PersistentVolumeAccessMode{req.NewPvc.Spec.AccessModes},
 					Resources: corev1.ResourceRequirements{
 						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.Size,
+							corev1.ResourceStorage: req.NewPvc.Spec.Resources.Requests.Storage,
 						},
 					},
 				},
@@ -367,25 +412,27 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 					Namespace: notebook.Namespace,
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+					AccessModes: []corev1.PersistentVolumeAccessMode{req.NewPvc.Spec.AccessModes},
 					Resources: corev1.ResourceRequirements{
 						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.Size,
+							corev1.ResourceStorage: req.NewPvc.Spec.Resources.Requests.Storage,
 						},
 					},
 				},
 			}
 		}
 		// Add the storage class, if set and not set to an "empty" value
-		if req.Class != "" && req.Class != "{none}" && req.Class != "{empty}" {
-			pvc.Spec.StorageClassName = &req.Class
+		if req.NewPvc.Spec.StorageClassName != "" &&
+			req.NewPvc.Spec.StorageClassName != "{none}" && req.NewPvc.Spec.StorageClassName != "{empty}" {
+			pvc.Spec.StorageClassName = &req.NewPvc.Spec.StorageClassName
 		}
 
 		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, metav1.CreateOptions{}); err != nil {
 			return err
 		}
-	} else if req.Type != VolumeTypeExisting {
-		return fmt.Errorf("unknown volume type %q", req.Type)
+	} else if req.ExistingSource.PersistentVolumeClaim.ClaimName != nil {
+		// else check that it is an existing volume
+		return fmt.Errorf("unknown volume type; does not match existingSource or newPvc expected response structure")
 	}
 
 	// Add the volume and volume mount ot the notebook spec
@@ -400,7 +447,7 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 
 	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
 		Name:      req.Name,
-		MountPath: req.Path,
+		MountPath: req.Mount,
 	})
 
 	return nil
@@ -419,7 +466,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	var req newnotebookrequest
-	err = json.Unmarshal(body, &req)
+	err = json.Unmarshal(body, &req) // puts the json request into into req,but returns an error here if error
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -503,13 +550,15 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add workspace volume
-	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly {
+	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly { //only gets hit on readonly.
+		/* uncomment and fix
 		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
 		if err != nil {
 			s.error(w, r, err)
 			return
 		}
 
+		/* uncomment and fix this
 		workspaceVol := volumerequest{
 			Name:  s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Name.Value,
 			Size:  size,
@@ -522,8 +571,9 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			s.error(w, r, err)
 			return
 		}
+		*/
 	} else if !req.NoWorkspace {
-		req.Workspace.Path = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value
+		req.Workspace.Mount = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value
 		err = s.handleVolume(r.Context(), req.Workspace, &notebook)
 		if err != nil {
 			s.error(w, r, err)
@@ -532,12 +582,14 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if s.Config.SpawnerFormDefaults.DataVolumes.ReadOnly {
+		/* uncomment and fix this
 		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
 			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
 			if err != nil {
 				s.error(w, r, err)
 				return
 			}
+
 
 			vol := volumerequest{
 				Name:  volreq.Value.Name.Value,
@@ -551,7 +603,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				s.error(w, r, err)
 				return
 			}
-		}
+
+		}*/
 	} else {
 		for _, volreq := range req.DataVolumes {
 			err = s.handleVolume(r.Context(), volreq, &notebook)

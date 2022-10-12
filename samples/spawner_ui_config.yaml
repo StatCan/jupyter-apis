@@ -81,6 +81,7 @@ spawnerFormDefaults:
     # Workspace Volume to be attached to user's Notebook
     # Each Workspace Volume is declared with the following attributes:
     # Type, Name, Size, MountPath and Access Mode
+    #This is different now, but can take care of this later
     value:
       type:
         # The Type of the Workspace Volume

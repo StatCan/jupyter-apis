@@ -2,7 +2,7 @@ name: publish
 on:
   push:
     branches:
-      - downward-api
+      - main
 env:
   REGISTRY_NAME: k8scc01covidacr
 

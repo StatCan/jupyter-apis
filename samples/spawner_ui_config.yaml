@@ -17,21 +17,21 @@
 spawnerFormDefaults:
   image:
     # The container Image for the user's Jupyter Notebook
-    value: k8scc01covidacr.azurecr.io/jupyterlab-cpu:58308325
+    value: k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1
     # The list of available standard container Images
     options:
-      - k8scc01covidacr.azurecr.io/jupyterlab-cpu:58308325
-      - k8scc01covidacr.azurecr.io/jupyterlab-pytorch:58308325
-      - k8scc01covidacr.azurecr.io/jupyterlab-tensorflow:58308325
+      - k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1
+      - k8scc01covidacr.azurecr.io/jupyterlab-pytorch:v1
+      - k8scc01covidacr.azurecr.io/jupyterlab-tensorflow:v1
     readOnly: false
   imageGroupOne:
     # The container Image for the user's Group One Server
     # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
     # is applied to notebook in this group, configuring
     # the Istio rewrite for containers that host their web UI at `/`
-    value: k8scc01covidacr.azurecr.io/rstudio:58308325    # The list of available standard container Images
+    value: k8scc01covidacr.azurecr.io/rstudio:v1    # The list of available standard container Images
     options:
-    - k8scc01covidacr.azurecr.io/rstudio:58308325
+    - k8scc01covidacr.azurecr.io/rstudio:v1
   imageGroupTwo:
     # The container Image for the user's Group Two Server
     # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
@@ -40,10 +40,10 @@ spawnerFormDefaults:
     # The annotation `notebooks.kubeflow.org/http-headers-request-set`
     # is applied to notebook in this group, configuring Istio
     # to add the `X-RStudio-Root-Path` header to requests
-    value: k8scc01covidacr.azurecr.io/remote-desktop:58308325
+    value: k8scc01covidacr.azurecr.io/remote-desktop:v1
     # The list of available standard container Images
     options:
-    - k8scc01covidacr.azurecr.io/remote-desktop:58308325
+    - k8scc01covidacr.azurecr.io/remote-desktop:v1
   imageGroupThree:
     # The container Image for the user's Group Three Server (SAS)
     # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
@@ -55,9 +55,9 @@ spawnerFormDefaults:
     disabledMessage:
       en: "SAS is unavailable while non-employees have access to this profile."
       fr: "SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."
-    value: k8scc01covidacr.azurecr.io/sas:latest    # The list of available standard container Images
+    value: k8scc01covidacr.azurecr.io/sas:v1    # The list of available standard container Images
     options:
-    - k8scc01covidacr.azurecr.io/sas:latest
+    - k8scc01covidacr.azurecr.io/sas:v1
   hideRegistry: true
   hideTag: true
   allowCustomImage: true
@@ -79,35 +79,18 @@ spawnerFormDefaults:
     readOnly: false
   workspaceVolume:
     # Workspace Volume to be attached to user's Notebook
-    # Each Workspace Volume is declared with the following attributes:
-    # Type, Name, Size, MountPath and Access Mode
-    #This is different now, but can take care of this later
+    # This must be updated in dev and prod to reflect new config.go
     value:
-      type:
-        # The Type of the Workspace Volume
-        # Supported values: 'New', 'Existing'
-        value: New
-      name:
-        # The Name of the Workspace Volume
-        # Note that this is a templated value. Special values:
-        # {notebook-name}: Replaced with the name of the Notebook. The frontend
-        #                  will replace this value as the user types the name
-        value: 'workspace-{notebook-name}'
-      size:
-        # The Size of the Workspace Volume (in Gi)
-        value: '16Gi'
-      mountPath:
-        # The Path that the Workspace Volume will be mounted
-        value: /home/jovyan
-      accessModes:
-        # The Access Mode of the Workspace Volume
-        # Supported values: 'ReadWriteOnce', 'ReadWriteMany', 'ReadOnlyMany'
-        value: ReadWriteOnce
-      class:
-        # The StorageClass the PVC will use if type is New. Special values are:
-        # {none}: default StorageClass
-        # {empty}: empty string ""
-        value: '{none}'
+      mount: /home/jovyan
+      newPvc:
+        metadata:
+          name: '{notebook-name}-workspace'
+        spec:
+          resources:
+            requests:
+              storage: 16Gi
+          accessModes:
+            - ReadWriteOnce
     readOnly: false
   dataVolumes:
     # List of additional Data Volumes to be attached to the user's Notebook

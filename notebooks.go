@@ -525,45 +525,38 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add workspace volume
-	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly { //only gets hit on readonly, I don't think we have this on often.
-		/*
-			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
-				if err != nil {
-					s.error(w, r, err)
-					return
-				}
+	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly { //only gets hit on readonly in spawner config, don't have this on often.
+		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
 
-
-					workspaceVol := volrequest{
-						Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value,
-						NewPvc: {
-							Metadata: {
-								Name: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Name.Value,
-							},
-							Spec: {
-								Resources: {
-									Requests: {
-										Storage: size,
-									},
-								},
-								AccessModes:      corev1.PersistentVolumeAccessMode(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.AccessModes.Value),
-								StorageClassName: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Class.Value,
-							},
+		workspaceVol := &volrequest{
+			Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount,
+			NewPvc: NewPvc{
+				NewPvcMetadata: NewPvcMetadata{
+					Name: &s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Metadata.Name,
+				},
+				NewPvcSpec: NewPvcSpec{
+					Resources: Resources{
+						Requests: Requests{
+							Storage: size,
 						},
-						//Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Name.Value,
-						//Mount: size,
-						//Path:  s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value,
-						//Mode:  corev1.PersistentVolumeAccessMode(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.AccessModes.Value),
-						//Class: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Class.Value,
-					}
-					err = s.handleVolume(r.Context(), workspaceVol, &notebook)
-					if err != nil {
-						s.error(w, r, err)
-						return
-					}
-		*/
+					},
+					AccessModes:      s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.AccessModes,
+					StorageClassName: "{none}",
+				},
+			},
+		}
+		err = s.handleVolume(r.Context(), *workspaceVol, &notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
 	} else if !req.NoWorkspace {
-		req.Workspace.Mount = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value
+		req.Workspace.Mount = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount
 		err = s.handleVolume(r.Context(), req.Workspace, &notebook)
 		if err != nil {
 			s.error(w, r, err)
@@ -572,21 +565,28 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if s.Config.SpawnerFormDefaults.DataVolumes.ReadOnly {
-		/* uncomment and fix this
 		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
-			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
+			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
 			if err != nil {
 				s.error(w, r, err)
 				return
 			}
-
-
-			vol := volumerequest{
-				Name:  volreq.Value.Name.Value,
-				Size:  size,
-				Path:  volreq.Value.MountPath.Value,
-				Mode:  corev1.PersistentVolumeAccessMode(volreq.Value.AccessModes.Value),
-				Class: volreq.Value.Class.Value,
+			vol := volrequest{
+				Mount: volreq.Value.Mount,
+				NewPvc: NewPvc{
+					NewPvcMetadata: NewPvcMetadata{
+						Name: &volreq.Value.NewPvc.Metadata.Name,
+					},
+					NewPvcSpec: NewPvcSpec{
+						Resources: Resources{
+							Requests: Requests{
+								Storage: size,
+							},
+						},
+						AccessModes:      req.Workspace.NewPvc.NewPvcSpec.AccessModes,
+						StorageClassName: "{none}",
+					},
+				},
 			}
 			err = s.handleVolume(r.Context(), vol, &notebook)
 			if err != nil {
@@ -594,7 +594,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-		}*/
+		}
 	} else {
 		for _, volreq := range req.DataVolumes {
 			err = s.handleVolume(r.Context(), volreq, &notebook)

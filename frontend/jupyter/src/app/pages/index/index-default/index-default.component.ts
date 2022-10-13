@@ -259,6 +259,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     });
   }
 
+  //gets internationalized status messageks based on status key message values from backend
   getStatusMessage(notebook: NotebookProcessedObject) {
     switch(notebook.status.key){
       case "notebookDeleting":

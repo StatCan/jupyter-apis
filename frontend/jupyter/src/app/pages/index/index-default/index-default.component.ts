@@ -253,10 +253,31 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         );
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
-        notebook.status.message = 'Preparing to stop the Notebook Server...';
+        notebook.status.message = $localize`Preparing to stop the Notebook Server...`;
         this.updateNotebookFields(notebook);
       });
     });
+  }
+
+  getStatusMessage(notebook: NotebookProcessedObject) {
+    switch(notebook.status.key){
+      case "notebookDeleting":
+        return $localize`Deleting this notebook server`;
+      case "noPodsRunning":
+        return $localize`No Pods are currently running for this Notebook Server`;
+      case "notebookStopping":
+        return $localize`Notebook Server is stopping`;
+      case "running":
+        return $localize`Running`;
+      case "waitingStatus":
+        return $localize`Current status is waiting. Check 'kubectl describe pod' for more information`;
+      case "errorEvent":
+        return $localize`An error has occured. Check 'kubectl describe pod' for more information`;
+      case "schedulingPod":
+        return $localize`Scheduling the Pod`;
+      default:
+        return "";
+    }
   }
 
   // Data processing functions
@@ -264,6 +285,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     notebook.deleteAction = this.processDeletionActionStatus(notebook);
     notebook.connectAction = this.processConnectActionStatus(notebook);
     notebook.startStopAction = this.processStartStopActionStatus(notebook);
+    notebook.status.message = this.getStatusMessage(notebook);
   }
 
   processIncomingData(notebooks: NotebookResponseObject[]) {

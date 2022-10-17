@@ -1,15 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
+import { notebook } from 'cypress/fixtures/notebook';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,
   getNewVolumeSize,
   getNewVolumeType,
-  getVolumeDesc,
   getVolumeName,
   getVolumeTitle,
 } from 'src/app/shared/utils/volumes';
-import { Volume } from 'src/app/types';
 
 @Component({
   selector: 'app-form-data-volumes',
@@ -40,8 +39,18 @@ export class FormDataVolumesComponent implements OnInit {
 
   addNewVolume() {
     const volId = this.volsArray.length + 1;
+    //console.log(notebook.name); // const test-notebook
+    // console.log(`{notebook-name}`); // just prints out {notebook-name}, i don't even think that this way of getting the value works
+    //console.log(`{DOESNTEXIST}`);
+    // this is not getting `notebook-name` properly cannot pass it down, it gets ${volId} just fine, oh because its here...
+    const actualName = '{notebook-name}';
+    console.log(actualName);
     const volGroup = createNewPvcVolumeFormGroup(
-      `{notebook-name}-datavol-${volId}`,
+    //const volGroup = createNewPvcFormGroup(
+      //`{notebook-name}-datavol-${volId}`, //this is what needs to work, somwhow {notebook-name} is evaluating to an object
+      actualName+`-datavol-${volId}` // it will flash as {notebook-name} for a second and then go to object
+      // huh even if you dont pass anything down it gives object object
+      //`{DOESNTEXIST}-datavol-${volId}`, // this gives out {DOESNTEXIST}-datavol-1
     );
 
     this.volsArray.push(volGroup);

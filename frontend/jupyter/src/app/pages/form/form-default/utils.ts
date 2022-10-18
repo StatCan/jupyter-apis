@@ -26,13 +26,11 @@ export function getFormDefaults(): FormGroup {
       vendor: ['', []],
       num: ['none', []], //AAW, choose no gpu by default
     }),
-    // this workspace fb.group is what is controlling the default for the workspace, I need to see how the '{notebook-name}' here is working
-    // when it does not work when we are working with the other forms.ts
     workspace: fb.group({
       mount: ['/home/jovyan', [Validators.required]],
       newPvc: fb.group({
         metadata: fb.group({
-          name: ['{notebook-name}-volume', [Validators.required]], 
+          name: ['{notebook-name}-volume', [Validators.required]],
         }),
         spec: fb.group({
           accessModes: [['ReadWriteOnce']],

@@ -13,18 +13,6 @@
     >
       Rok snapshot
     </mat-option>
-
-    <!-- AAW change, keep custom yaml out
-    <mat-option
-      [value]="NEW_VOLUME_TYPE.CUSTOM"
-      matTooltip="Edit the K8s PVC full spec"
-      i18n-matTooltip
-      i18n
-    >
-      Custom (Advanced)
-    </mat-option>
-  </mat-select>
-  -->
 </mat-form-field>
 
 <app-rok-url
@@ -33,8 +21,7 @@
 ></app-rok-url>
 
 <ng-container [ngSwitch]="volumeType">
-  <!-- Custom (YAML editor)
-  We (AAW) likely want to get rid of this custom -->
+  <!-- Custom (YAML editor)removed via removing code above-->
   <ng-container *ngSwitchCase="NEW_VOLUME_TYPE.CUSTOM">
     <ng-container i18n>Check the </ng-container>
     <a

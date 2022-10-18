@@ -39,7 +39,7 @@ export class FormGpusComponent implements OnInit {
           this.message = "";
           this.gpuCtrl.get('vendor').disable();
         } else {
-          this.message = "Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.";
+          this.message = $localize`Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.`;
           this.gpuCtrl.get('vendor').enable();
         }
         this.gpuValueEvent.emit(n);

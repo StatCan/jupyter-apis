@@ -30,7 +30,7 @@ function getVolumeType(pvc: V1PersistentVolumeClaim): NEW_VOLUME_TYPE {
 }
 
 export function getVolumeTitle(vol: Volume) {
-  return vol.existingSource ? 'Existing volume' : 'New volume';
+  return vol.existingSource ? $localize`Existing volume` : $localize`New volume`;
 }
 
 export function getVolumeName(vol: Volume): string {
@@ -45,7 +45,7 @@ export function getVolumeName(vol: Volume): string {
   if (vol.existingSource) {
     const source = vol.existingSource;
     if (!source.persistentVolumeClaim) {
-      return 'Custom (Advanced)';
+      return $localize`Custom (Advanced)`;
     }
 
     name = source.persistentVolumeClaim.claimName;
@@ -98,7 +98,7 @@ function getExistingVolumeDesc(vol: Volume): string {
 
   const source = vol.existingSource;
   if (!source.persistentVolumeClaim) {
-    return 'Custom (Advanced)';
+    return $localize`Custom (Advanced)`;
   }
 
   const name = source.persistentVolumeClaim.claimName;

@@ -8,11 +8,9 @@
   <div class="row" [formGroup]="parentForm">
     <!--CPU AAW, do not take their lib-positive-input -->
     <mat-form-field appearance="outline" class="column">
-      <mat-label>CPU Request</mat-label>
+      <mat-label i18n>Requested CPUs</mat-label>
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
-        label="Requested CPUs"
-        i18n-label
         matInput
         formControlName="cpu"
         [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxCpu')"
@@ -22,13 +20,11 @@
 
     <!--RAM AAW, do not take their lib-positive-input-->
     <mat-form-field appearance="outline" class="column">
-      <mat-label>Memory requests</mat-label>
+      <mat-label i18n>Requested memory in Gi</mat-label>
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
         matInput
-        i18n-label
         formControlName="memory"
-        label="Requested memory in Gi"
         [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxRam')"
       />
       <mat-error>{{getRAMLimitError()}}</mat-error>

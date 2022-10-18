@@ -121,13 +121,13 @@ export class FormCpuRamComponent implements OnInit {
     let e: any;
     const errs = this.parentForm.get("memory").errors || {};
     if (errs.required || errs.pattern)
-    return `pls give wam`;
+    return `Please provide ram`;
     if (e = errs.min){
-      return `NEED MORE WAM`;
+      return `Needs more ram`;
     }
     if (this.parentForm.hasError("maxRam")) {
       e = this.parentForm.errors.maxRam;
-      return `WAM IS MAXED`;
+      return `Too much ram`;
     }
   }
   

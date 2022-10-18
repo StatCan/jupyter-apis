@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
-import { notebook } from 'cypress/fixtures/notebook';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,

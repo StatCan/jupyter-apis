@@ -75,14 +75,12 @@ export function createNewPvcFormGroup(
   return new FormGroup({
     metadata: new FormGroup({
       name: new FormControl(name, Validators.required), 
-      // this works fine when used with form-workspace-volume
-      // poops the bed when used with datavolume
     }),
     spec: new FormGroup({
       accessModes: new FormControl(['ReadWriteOnce']),
       resources: new FormGroup({
         requests: new FormGroup({
-          storage: new FormControl('1Gi', []), //AAW change, do not remove
+          storage: new FormControl('16Gi', []), //AAW change, do not remove
         }),
       }),
       storageClassName: new FormControl({

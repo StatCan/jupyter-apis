@@ -39,18 +39,8 @@ export class FormDataVolumesComponent implements OnInit {
 
   addNewVolume() {
     const volId = this.volsArray.length + 1;
-    //console.log(notebook.name); // const test-notebook
-    // console.log(`{notebook-name}`); // just prints out {notebook-name}, i don't even think that this way of getting the value works
-    //console.log(`{DOESNTEXIST}`);
-    // this is not getting `notebook-name` properly cannot pass it down, it gets ${volId} just fine, oh because its here...
-    const actualName = '{notebook-name}';
-    console.log(actualName);
     const volGroup = createNewPvcVolumeFormGroup(
-    //const volGroup = createNewPvcFormGroup(
-      //`{notebook-name}-datavol-${volId}`, //this is what needs to work, somwhow {notebook-name} is evaluating to an object
-      actualName+`-datavol-${volId}` // it will flash as {notebook-name} for a second and then go to object
-      // huh even if you dont pass anything down it gives object object
-      //`{DOESNTEXIST}-datavol-${volId}`, // this gives out {DOESNTEXIST}-datavol-1
+      `{notebook-name}-datavol-${volId}`, //this is what needs to work, somwhow {notebook-name} is evaluating to an object
     );
 
     this.volsArray.push(volGroup);

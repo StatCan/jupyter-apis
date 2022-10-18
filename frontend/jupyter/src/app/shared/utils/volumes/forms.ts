@@ -74,7 +74,7 @@ export function createNewPvcFormGroup(
 ): FormGroup {
   return new FormGroup({
     metadata: new FormGroup({
-      name: new FormControl(name, Validators.required),
+      name: new FormControl(name, Validators.required), 
     }),
     spec: new FormGroup({
       accessModes: new FormControl(['ReadWriteOnce']),

@@ -60,17 +60,33 @@ type DataVolumes struct {
 }
 
 type ValueElement struct {
-	Value ValueValue `yaml:"value" json:"value"`
+	Value VolumeValues `yaml:"value" json:"value"`
 }
 
-type ValueValue struct {
-	Type        ImagePullPolicy `yaml:"type" json:"type"`
-	Name        ImagePullPolicy `yaml:"name" json:"name"`
-	Size        ImagePullPolicy `yaml:"size" json:"size"`
-	MountPath   ImagePullPolicy `yaml:"mountPath" json:"mountPath"`
-	AccessModes ImagePullPolicy `yaml:"accessModes" json:"accessModes"`
-	Class       ImagePullPolicy `yaml:"class" json:"class"`
+// Structs for the yaml versions of definitions, minimalistic as it is just a default
+//can't re-use structs from go since this is yaml and not json
+type VolumeValues struct {
+	Mount  string     `yaml:"mount"`
+	NewPvc NewPvcYaml `yaml:"newPvc"`
 }
+
+type NewPvcMetadataYaml struct {
+	Name string `yaml:"name"`
+}
+type NewPvcRequestsYaml struct {
+	Storage string `yaml:"storage"`
+}
+type NewPvcResourcesYaml struct {
+	Requests NewPvcRequestsYaml `yaml:"requests"`
+}
+type NewPvcSpecYaml struct {
+	Resources   NewPvcResourcesYaml                 `yaml:"resources"`
+	AccessModes []corev1.PersistentVolumeAccessMode `yaml:"accessModes"`
+}
+type NewPvcYaml struct {
+	Metadata NewPvcMetadataYaml `yaml:"metadata"`
+	Spec     NewPvcSpecYaml     `yaml:"spec"`
+} // last struct for yaml versions
 
 type ImagePullPolicy struct {
 	Value string `yaml:"value" json:"value"`
@@ -129,8 +145,8 @@ type TolerationGroupOption struct {
 }
 
 type WorkspaceVolume struct {
-	Value    ValueValue `yaml:"value" json:"value"`
-	ReadOnly bool       `yaml:"readOnly" json:"readOnly"`
+	Value    VolumeValues `yaml:"value" json:"value"`
+	ReadOnly bool         `yaml:"readOnly" json:"readOnly"`
 }
 
 type Configuration struct {

@@ -1,15 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
+import { notebook } from 'cypress/fixtures/notebook';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,
   getNewVolumeSize,
   getNewVolumeType,
-  getVolumeDesc,
   getVolumeName,
   getVolumeTitle,
 } from 'src/app/shared/utils/volumes';
-import { Volume } from 'src/app/types';
 
 @Component({
   selector: 'app-form-data-volumes',
@@ -41,7 +40,7 @@ export class FormDataVolumesComponent implements OnInit {
   addNewVolume() {
     const volId = this.volsArray.length + 1;
     const volGroup = createNewPvcVolumeFormGroup(
-      `{notebook-name}-datavol-${volId}`,
+      `{notebook-name}-datavol-${volId}`, //this is what needs to work, somwhow {notebook-name} is evaluating to an object
     );
 
     this.volsArray.push(volGroup);

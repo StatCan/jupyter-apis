@@ -41,24 +41,38 @@ const StoppedAnnotation string = "kubeflow-resource-stopped"
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
-type volumetype string
+// Begin structs necessary for handling volumes
+type volrequest struct {
+	Mount          string         `json:"mount,omitempty"`
+	ExistingSource ExistingSource `json:"existingSource,omitempty"`
+	NewPvc         NewPvc         `json:"newPvc,omitempty"`
+}
 
-const (
-	// VolumeTypeExisting volumetype.
-	VolumeTypeExisting volumetype = "Existing"
-	// VolumeTypeNew volumetype.
-	VolumeTypeNew volumetype = "New"
-)
+type PersistentVolumeClaim struct {
+	ReadOnly  bool    `json:"readOnly"`
+	ClaimName *string `json:"claimName"` //https://stackoverflow.com/a/31505089
+}
+type ExistingSource struct {
+	PersistentVolumeClaim PersistentVolumeClaim `json:"persistentVolumeClaim"`
+}
 
-type volumerequest struct {
-	Type          volumetype                        `json:"type"`
-	Name          string                            `json:"name"`
-	TemplatedName string                            `json:"templatedName"`
-	Class         string                            `json:"class"`
-	ExtraFields   map[string]interface{}            `json:"extraFields"`
-	Path          string                            `json:"path"`
-	Size          resource.Quantity                 `json:"size"`
-	Mode          corev1.PersistentVolumeAccessMode `json:"mode"`
+type NewPvcMetadata struct {
+	Name *string `json:"name"` //https://stackoverflow.com/a/31505089
+}
+type Requests struct {
+	Storage resource.Quantity `json:"storage"`
+}
+type Resources struct {
+	Requests Requests `json:"requests"`
+}
+type NewPvcSpec struct {
+	AccessModes      []corev1.PersistentVolumeAccessMode `json:"accessModes"`
+	Resources        Resources                           `json:"resources"`
+	StorageClassName string                              `json:"storageClassName,omitempty"`
+}
+type NewPvc struct {
+	NewPvcMetadata NewPvcMetadata `json:"metadata"`
+	NewPvcSpec     NewPvcSpec     `json:"spec"`
 }
 
 type gpurequest struct {
@@ -78,8 +92,8 @@ type newnotebookrequest struct {
 	MemoryLimit        resource.Quantity `json:"memoryLimit"`
 	GPUs               gpurequest        `json:"gpus"`
 	NoWorkspace        bool              `json:"noWorkspace"`
-	Workspace          volumerequest     `json:"workspace"`
-	DataVolumes        []volumerequest   `json:"datavols"`
+	Workspace          volrequest        `json:"workspace"`
+	DataVolumes        []volrequest      `json:"datavols"`
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
 	Language           string            `json:"language"`
@@ -313,21 +327,24 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *kubeflowv1.Notebook) error {
+func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
 	var pvc = corev1.PersistentVolumeClaim{}
-	if req.Type == VolumeTypeNew {
+	var pvcClaimName string = ""
+	// Check if it is a new PVC by checking if the value exists https://stackoverflow.com/a/31505089
+	if req.NewPvc.NewPvcMetadata.Name != nil {
+		pvcClaimName = *req.NewPvc.NewPvcMetadata.Name
 		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
 			pvc = corev1.PersistentVolumeClaim{
 				ObjectMeta: metav1.ObjectMeta{
-					Name:      req.Name,
+					Name:      *req.NewPvc.NewPvcMetadata.Name,
 					Namespace: notebook.Namespace,
 					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
 					Resources: corev1.ResourceRequirements{
 						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.Size,
+							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 						},
 					},
 				},
@@ -336,44 +353,49 @@ func (s *server) handleVolume(ctx context.Context, req volumerequest, notebook *
 			// Create the PVC
 			pvc = corev1.PersistentVolumeClaim{
 				ObjectMeta: metav1.ObjectMeta{
-					Name:      req.Name,
+					Name:      *req.NewPvc.NewPvcMetadata.Name,
 					Namespace: notebook.Namespace,
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: []corev1.PersistentVolumeAccessMode{req.Mode},
+					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
 					Resources: corev1.ResourceRequirements{
 						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.Size,
+							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 						},
 					},
 				},
 			}
 		}
 		// Add the storage class, if set and not set to an "empty" value
-		if req.Class != "" && req.Class != "{none}" && req.Class != "{empty}" {
-			pvc.Spec.StorageClassName = &req.Class
+		if req.NewPvc.NewPvcSpec.StorageClassName != "" &&
+			req.NewPvc.NewPvcSpec.StorageClassName != "{none}" &&
+			req.NewPvc.NewPvcSpec.StorageClassName != "{empty}" {
+			pvc.Spec.StorageClassName = &req.NewPvc.NewPvcSpec.StorageClassName
 		}
 
 		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, metav1.CreateOptions{}); err != nil {
 			return err
 		}
-	} else if req.Type != VolumeTypeExisting {
-		return fmt.Errorf("unknown volume type %q", req.Type)
+	} else if req.ExistingSource.PersistentVolumeClaim.ClaimName != nil {
+		pvcClaimName = *req.ExistingSource.PersistentVolumeClaim.ClaimName
+	} else {
+		// both newPvc and existingSource don't exist in the request
+		return fmt.Errorf("unknown volume type; does not match existingSource or newPvc expected response structure")
 	}
 
-	// Add the volume and volume mount ot the notebook spec
+	// Add the volume and volume mount to the notebook spec
 	notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-		Name: req.Name,
+		Name: pvcClaimName,
 		VolumeSource: corev1.VolumeSource{
 			PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-				ClaimName: req.Name,
+				ClaimName: pvcClaimName,
 			},
 		},
 	})
 
 	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-		Name:      req.Name,
-		MountPath: req.Path,
+		Name:      pvcClaimName,
+		MountPath: req.Mount,
 	})
 
 	return nil
@@ -476,27 +498,38 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add workspace volume
-	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly {
-		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
+	if s.Config.SpawnerFormDefaults.WorkspaceVolume.ReadOnly { //only gets hit on readonly in spawner config, don't have this on often.
+		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
 		if err != nil {
 			s.error(w, r, err)
 			return
 		}
 
-		workspaceVol := volumerequest{
-			Name:  s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Name.Value,
-			Size:  size,
-			Path:  s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value,
-			Mode:  corev1.PersistentVolumeAccessMode(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.AccessModes.Value),
-			Class: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Class.Value,
+		workspaceVol := &volrequest{
+			Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount,
+			NewPvc: NewPvc{
+				NewPvcMetadata: NewPvcMetadata{
+					Name: &s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Metadata.Name,
+				},
+				NewPvcSpec: NewPvcSpec{
+					Resources: Resources{
+						Requests: Requests{
+							Storage: size,
+						},
+					},
+					AccessModes:      s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.AccessModes,
+					StorageClassName: "{none}",
+				},
+			},
 		}
-		err = s.handleVolume(r.Context(), workspaceVol, &notebook)
+		err = s.handleVolume(r.Context(), *workspaceVol, &notebook)
 		if err != nil {
 			s.error(w, r, err)
 			return
 		}
+
 	} else if !req.NoWorkspace {
-		req.Workspace.Path = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.MountPath.Value
+		req.Workspace.Mount = s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount
 		err = s.handleVolume(r.Context(), req.Workspace, &notebook)
 		if err != nil {
 			s.error(w, r, err)
@@ -506,24 +539,34 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	if s.Config.SpawnerFormDefaults.DataVolumes.ReadOnly {
 		for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
-			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Size.Value)
+			size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
 			if err != nil {
 				s.error(w, r, err)
 				return
 			}
-
-			vol := volumerequest{
-				Name:  volreq.Value.Name.Value,
-				Size:  size,
-				Path:  volreq.Value.MountPath.Value,
-				Mode:  corev1.PersistentVolumeAccessMode(volreq.Value.AccessModes.Value),
-				Class: volreq.Value.Class.Value,
+			vol := volrequest{
+				Mount: volreq.Value.Mount,
+				NewPvc: NewPvc{
+					NewPvcMetadata: NewPvcMetadata{
+						Name: &volreq.Value.NewPvc.Metadata.Name,
+					},
+					NewPvcSpec: NewPvcSpec{
+						Resources: Resources{
+							Requests: Requests{
+								Storage: size,
+							},
+						},
+						AccessModes:      req.Workspace.NewPvc.NewPvcSpec.AccessModes,
+						StorageClassName: "{none}",
+					},
+				},
 			}
 			err = s.handleVolume(r.Context(), vol, &notebook)
 			if err != nil {
 				s.error(w, r, err)
 				return
 			}
+
 		}
 	} else {
 		for _, volreq := range req.DataVolumes {

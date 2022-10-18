@@ -24,7 +24,7 @@ export function getFormDefaults(): FormGroup {
     memoryLimit: ['', []],
     gpus: fb.group({
       vendor: ['', []],
-      num: ['', []],
+      num: ['none', []], //AAW, choose no gpu by default
     }),
     workspace: fb.group({
       mount: ['/home/jovyan', [Validators.required]],

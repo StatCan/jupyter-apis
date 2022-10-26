@@ -4,7 +4,7 @@
   </lib-title-actions-toolbar>
 
   <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow lib-overflow-auto">
+  <div class="page-padding lib-flex-grow">
     <lib-table
       [config]="config"
       [data]="processedData"
@@ -16,7 +16,7 @@
   <lib-title-actions-toolbar title="Volumes" i18n-title>
   </lib-title-actions-toolbar>
   <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow lib-overflow-auto">
+  <div class="page-padding lib-flex-grow">
     <lib-table
       [config]="volumeConfig"
       [data]="processedVolumeData"
@@ -27,7 +27,7 @@
 
   <lib-title-actions-toolbar title="Cost" i18n-title>
   </lib-title-actions-toolbar>
-  <div class="page-padding lib-flex-grow lib-overflow-auto">
+  <div class="page-padding lib-flex-grow">
     <lib-table *ngIf="this.getCostStatus() == true; else error"
       [config]="costConfig"
       [data]="processedCostData"

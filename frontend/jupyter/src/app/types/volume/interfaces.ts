@@ -21,9 +21,11 @@ export interface VolumeResponseObject {
   extraFields?: { [key: string]: any };
   usedBy?: string | null;
   status?: Status;
+  labels?: { [key: string]: any };
 }
 
 
 export interface VolumeProcessedObject extends VolumeResponseObject {
   deleteAction?: string;
+  protB?: boolean;
 }

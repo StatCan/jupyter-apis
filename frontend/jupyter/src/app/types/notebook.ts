@@ -21,12 +21,14 @@ export interface NotebookResponseObject {
   };
   environment: string;
   shortImage: string;
+  labels?: { [key: string]: any };
 }
 
 export interface NotebookProcessedObject extends NotebookResponseObject {
   deleteAction?: string;
   connectAction?: string;
   startStopAction?: string;
+  protB?: boolean;
 }
 
 export interface NotebookFormObject {

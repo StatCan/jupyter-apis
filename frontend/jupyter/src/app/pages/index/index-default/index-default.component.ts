@@ -296,8 +296,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
+      nb.protB = this.parseProtBNotebook(nb);
     }
     return notebooksCopy;
+  }
+
+  parseProtBNotebook(notebook: NotebookProcessedObject) {
+    if(notebook.labels?.["notebook.statcan.gc.ca/protected-b"] === "true") {
+      return true;
+    }
+    return false;
   }
 
   // Action handling functions
@@ -367,6 +375,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
+      pvc.protB = this.parseProtBVolume(pvc);
     }
 
     return pvcsCopy;
@@ -380,6 +389,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
     return STATUS_TYPE.READY;
 
+  }
+
+  parseProtBVolume(pvc: VolumeProcessedObject) {
+    if(pvc.labels?.["data.statcan.gc.ca/classification"] === "protected-b") {
+      return true;
+    }
+    return false;
   }
 
   public reactVolumeToAction(a: ActionEvent) {

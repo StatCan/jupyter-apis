@@ -120,6 +120,7 @@ type notebookresponse struct {
 	ShortImage string            `json:"shortImage"`
 	Status     status            `json:"status"`
 	Volumes    []string          `json:"volumes"`
+	Labels     map[string]string `json:"labels"`
 }
 
 type notebooksresponse struct {
@@ -139,7 +140,7 @@ type status struct {
 	Message string        `json:"message"`
 	Phase   notebookPhase `json:"phase"`
 	State   string        `json:"state"`
-	Key     string       `json:"key"`
+	Key     string        `json:"key"`
 }
 
 const (
@@ -175,7 +176,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: "Deleting this Notebook Server.",
 			Phase:   NotebookPhaseTerminating,
-			Key: "notebookDeleting",
+			Key:     "notebookDeleting",
 		}
 	}
 
@@ -185,14 +186,14 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			return status{
 				Message: "No pods are currently running for this Notebook Server.",
 				Phase:   NotebookPhaseStopped,
-				Key: "noPodsRunning",
+				Key:     "noPodsRunning",
 			}
 		}
 
 		return status{
 			Message: "Notebook Server is stopping.",
 			Phase:   NotebookPhaseTerminating,
-			Key: "notebookStopping",
+			Key:     "notebookStopping",
 		}
 	}
 
@@ -203,7 +204,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: "Running",
 			Phase:   NotebookPhaseReady,
-			Key: "running",
+			Key:     "running",
 		}
 	}
 
@@ -211,7 +212,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 		return status{
 			Message: state.Waiting.Reason,
 			Phase:   NotebookPhaseWaiting,
-			Key: "waitingStatus",
+			Key:     "waitingStatus",
 		}
 	}
 
@@ -221,7 +222,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 			return status{
 				Message: event.Reason,
 				Phase:   NotebookPhaseWarning,
-				Key: "errorEvent",
+				Key:     "errorEvent",
 			}
 		}
 	}
@@ -229,7 +230,7 @@ func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status
 	return status{
 		Message: "Scheduling the Pod",
 		Phase:   NotebookPhaseWaiting,
-		Key: "schedulingPod",
+		Key:     "schedulingPod",
 	}
 }
 
@@ -321,6 +322,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 			Memory:     notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
 			Status:     status,
 			Volumes:    volumes,
+			Labels:     notebook.Labels,
 		})
 	}
 

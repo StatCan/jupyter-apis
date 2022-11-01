@@ -12,6 +12,7 @@ import {
   DateTimeValue,
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
+import { ProtBComponent } from './protb-icon/protb-icon.component';
 
 // --- Configs for the Confirm Dialogs ---
 export function getDeleteDialogConfig(name: string): DialogConfig {
@@ -58,6 +59,13 @@ export const defaultConfig: TableConfig = {
         field: 'name',
         tooltipField: 'name',
         truncate: true,
+      }),
+    },
+    {
+      matHeaderCellDef: '',
+      matColumnDef: 'prot-b',
+      value: new ComponentValue({
+        component: ProtBComponent,
       }),
     },
     {
@@ -167,6 +175,13 @@ export const defaultVolumeConfig = {
         field: 'name',
         tooltipField: 'name',
         truncate: true,
+      }),
+    },
+    {
+      matHeaderCellDef: '',
+      matColumnDef: 'prot-b',
+      value: new ComponentValue({
+        component: ProtBComponent,
       }),
     },
     {

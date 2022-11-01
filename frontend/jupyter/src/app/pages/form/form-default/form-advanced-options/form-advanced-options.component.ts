@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewChecked, OnInit, ChangeDetectorRef} from "@angular/core";
+import { Component, Input, AfterViewChecked, OnInit, ChangeDetectorRef, LOCALE_ID, Inject} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 @Component({
@@ -12,7 +12,7 @@ export class FormAdvancedOptionsComponent implements AfterViewChecked, OnInit{
     {'id':'en', 'label':'English'},
     {'id':'fr', 'label':'Français'}
   ];
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(@Inject(LOCALE_ID) public localeId: string, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.parentForm = this.fb.group({
       language: new FormControl(),
       shm: new FormControl()
@@ -20,7 +20,7 @@ export class FormAdvancedOptionsComponent implements AfterViewChecked, OnInit{
   }
 
   ngOnInit(){
-    this.parentForm.get('language').setValue("en")
+    this.parentForm.get('language').setValue(this.localeId)
   }
 
   ngAfterViewChecked(){

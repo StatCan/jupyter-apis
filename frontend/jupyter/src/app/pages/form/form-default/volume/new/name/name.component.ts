@@ -95,13 +95,13 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
     const volumeName = this.getNameCtrl(this.metadataGroup); // should this be like the getNameCtrl?
 
     if (volumeName.hasError("required")) {
-      return `Name is required`;
+      return $localize`Name is required`;
     }
     if (volumeName.hasError("pattern")) {
-      return `The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+      return $localize`The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
     }
     if (volumeName.hasError("isMounted")) {
-      return `Already mounted xd`;
+      return $localize`Already mounted`;
     }
   }
 

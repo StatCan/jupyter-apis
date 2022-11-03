@@ -121,13 +121,13 @@ export class FormCpuRamComponent implements OnInit {
     let e: any;
     const errs = this.parentForm.get("memory").errors || {};
     if (errs.required || errs.pattern)
-    return $localize`Please provide ram`;
+    return $localize`Specify amount of memory (e.g. 2Gi) `;
     if (e = errs.min){
-      return $localize`Please provide a minimum of 1 for ram`;
+      return $localize`Specify at least ${e.min}Gi of memory`;
     }
     if (this.parentForm.hasError("maxRam")) {
       e = this.parentForm.errors.maxRam;
-      return $localize`Too much ram`;
+      return $localize`Can't exceed ${e.max}Gi of memory`;
     }
   }
   
@@ -146,13 +146,13 @@ export class FormCpuRamComponent implements OnInit {
     let e: any;
     const errs = this.parentForm.get("cpuLimit").errors || {};
     if (errs.required || errs.pattern )
-      return $localize`Please provide cpu`;
+      return $localize`Specify number of CPUs`;
     if (e = errs.min){
-      return $localize`Please provide a minimum of 0.5 for cpu`;
+      return $localize`Specify at least ${e.min} CPUs`;
     }
     if (this.parentForm.hasError("cpuLimit")) {
       e = this.parentForm.errors.cpuLimit;
-      return $localize`cpu maxed`;
+      return $localize`Can't exceed ${e.max} CPUs`;
     }
   }
 

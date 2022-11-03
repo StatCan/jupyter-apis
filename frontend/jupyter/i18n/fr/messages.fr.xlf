@@ -344,6 +344,54 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5722803560382570905" datatype="html">
+        <source>Please provide ram</source>
+        <target>Veuillez spécifier le ram</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8461970264513913984" datatype="html">
+        <source>Please provide a minimum of 1 for ram</source>
+        <target>Veuillez spécifier un minimum de 1 pour le ram</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3953720892285768988" datatype="html">
+        <source>Too much ram</source>
+        <target>Trop de ram</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1036284129489699405" datatype="html">
+        <source>Please provide cpu</source>
+        <target>Veuillez spécifier le cpu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8033234426869060003" datatype="html">
+        <source>Please provide a minimum of 0.5 for cpu</source>
+        <target>Veuillez spécifier un minimum de 0.5 pour le cpu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1073561839970915996" datatype="html">
+        <source>cpu maxed</source>
+        <target>cpu au maximum</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cbe5b11222992396a96e6d3d8ba3e9af4cbbdd92" datatype="html">
         <source>Data Volumes</source>
         <target>Volumes de données</target>
@@ -651,6 +699,14 @@
         </context-group>
         <note priority="1" from="description">ImagePullPolicy: Never</note>
       </trans-unit>
+      <trans-unit id="6343667331017090565" datatype="html">
+        <source><x id="PH" equiv-text="urlBeginning"/> is not allowed in URLs</source>
+        <target><x id="PH" equiv-text="urlBeginning"/> n'est pas permis dans les URLs</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7769611021004782223" datatype="html">
         <source>This workspace type is disabled for profile &quot;<x id="PH" equiv-text="this.nsMetadata.metadata.name"/>&quot;.</source>
         <target>Cet espace de travail est désactivé pour le profile &quot;<x id="PH" equiv-text="this.nsMetadata.metadata.name"/>&quot;.</target>
@@ -781,6 +837,30 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.html</context>
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3833692663709091545" datatype="html">
+        <source>Name is required</source>
+        <target>Nom est obligatoire</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4132137222488891883" datatype="html">
+        <source>The volume name can only contain lowercase alphanumeric characters, &apos;-&apos; or &apos;.&apos;, and must start and end with an alphanumeric character</source>
+        <target>Le nom du volume peut seulement contenir des caractères alphanumériques minuscules, &apos;-&apos; ou &apos;.&apos;, et doit commencer et terminer avec un caractère alphanumérique</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4810876179563414983" datatype="html">
+        <source>Already mounted</source>
+        <target>Déjà monté</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3cee9bf23fd146de773f2eb0215e36d2ba8241bc" datatype="html">

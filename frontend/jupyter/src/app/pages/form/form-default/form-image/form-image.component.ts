@@ -117,7 +117,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
         urlBeginning = "http://";
       }
 
-      return `${ urlBeginning } is not allowed in URLs, to TRANSLATE`;
+      return $localize`${ urlBeginning } is not allowed in URLs`;
     }
   }
 

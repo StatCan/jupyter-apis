@@ -1,0 +1,8 @@
+# k3d cluster create --config=k3d/config.yaml
+apiVersion: k3d.io/v1alpha3
+kind: Simple
+name: nginx-test
+# When connecting  to the host network, k3d only allows a single server node.
+servers: 1
+image: rancher/k3s:v1.21.9-k3s1
+network: host

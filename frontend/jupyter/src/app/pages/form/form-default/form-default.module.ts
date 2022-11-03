@@ -5,6 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { FormDefaultComponent } from './form-default.component';
 import { FormNameComponent } from './form-name/form-name.component';
@@ -15,17 +16,13 @@ import { FormAdvancedOptionsComponent } from './form-advanced-options/form-advan
 
 import {
   FormModule as KfFormModule,
-  ImmediateErrorStateMatcher,
+  TitleActionsToolbarModule,
 } from 'kubeflow';
 import { FormWorkspaceVolumeComponent } from './form-workspace-volume/form-workspace-volume.component';
-import { VolumeComponent } from './volume/volume.component';
 import { FormDataVolumesComponent } from './form-data-volumes/form-data-volumes.component';
 import { FormConfigurationsComponent } from './form-configurations/form-configurations.component';
 import { FormAffinityTolerationsComponent } from './form-affinity-tolerations/form-affinity-tolerations.component';
-
-import { TranslateLoader, TranslateModule} from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { HttpClient } from "@angular/common/http";
+import { VolumeModule } from './volume/volume.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +32,6 @@ import { HttpClient } from "@angular/common/http";
     FormCpuRamComponent,
     FormWorkspaceVolumeComponent,
     FormDataVolumesComponent,
-    VolumeComponent,
     FormGpusComponent,
     FormAdvancedOptionsComponent,
     FormConfigurationsComponent,
@@ -46,15 +42,11 @@ import { HttpClient } from "@angular/common/http";
     KfFormModule,
     MatCheckboxModule,
     MatSlideToggleModule,
+    MatExpansionModule,
     MatIconModule,
     MatButtonToggleModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
+    TitleActionsToolbarModule,
+    VolumeModule,
   ],
   exports: [
     FormDefaultComponent,
@@ -63,7 +55,6 @@ import { HttpClient } from "@angular/common/http";
     FormCpuRamComponent,
     FormWorkspaceVolumeComponent,
     FormDataVolumesComponent,
-    VolumeComponent,
     FormGpusComponent,
     FormAdvancedOptionsComponent,
     FormConfigurationsComponent,
@@ -71,8 +62,3 @@ import { HttpClient } from "@angular/common/http";
   ],
 })
 export class FormDefaultModule {}
-
-// AOT compilation support
-export function httpTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-}

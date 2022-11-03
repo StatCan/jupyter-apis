@@ -5,16 +5,16 @@ import {
   ExponentialBackoff,
   ActionEvent,
   STATUS_TYPE,
+  Status,
   DialogConfig,
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
   SnackType,
-  StatusValue,
+  ToolbarButton,
 } from 'kubeflow';
-
 import { JWABackendService } from 'src/app/services/backend.service';
-import { KubecostService } from 'src/app/services/kubecost.service';
+import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
@@ -25,11 +25,13 @@ import {
   getDeleteVolumeDialogConfig,
 } from './config';
 import { isEqual } from 'lodash';
-import { NotebookResponseObject, NotebookProcessedObject, VolumeResponseObject, VolumeProcessedObject, AggregateCostObject } from 'src/app/types';
+import { NotebookResponseObject, 
+  NotebookProcessedObject, 
+  VolumeResponseObject, 
+  VolumeProcessedObject,
+  AggregateCostObject,
+} from 'src/app/types';
 import { Router } from '@angular/router';
-import { Status } from '../../../types'
-import { TranslateService } from '@ngx-translate/core';
-import { AggregateCostResponse } from 'src/app/services/kubecost.service';
 
 @Component({
   selector: 'app-index-default',
@@ -50,10 +52,21 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   volumeConfig= defaultVolumeConfig;
   rawVolumeData: VolumeResponseObject[] = [];
   processedVolumeData: VolumeProcessedObject[] = [];
-  pvcsWaitingViewer = new Set<string>();
+
   costConfig = defaultCostConfig;
   rawCostData: AggregateCostResponse = null;
   processedCostData: AggregateCostObject[] = [];
+
+  buttons: ToolbarButton[] = [
+    new ToolbarButton({
+      text: $localize`New Notebook`,
+      icon: 'add',
+      stroked: true,
+      fn: () => {
+        this.router.navigate(['/new']);
+      },
+    }),
+  ];
 
   constructor(
     public ns: NamespaceService,
@@ -61,7 +74,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public confirmDialog: ConfirmDialogService,
     public snackBar: SnackBarService,
     public router: Router,
-    public translate: TranslateService,
     private kubecostService: KubecostService,
   ) {}
 
@@ -129,9 +141,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // Event handling functions
   reactToAction(a: ActionEvent) {
     switch (a.action) {
-      case 'newResourceButton': // TODO: could also use enums here
-        this.newResourceClicked();
-        break;
       case 'delete':
         this.deleteVolumeClicked(a.data);
         break;
@@ -142,11 +151,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         this.startStopClicked(a.data);
         break;
     }
-  }
-
-  public newResourceClicked() {
-    // Redirect to form page
-    this.router.navigate(['/new']);
   }
 
   public deleteVolumeClicked(notebook: NotebookProcessedObject) {
@@ -179,7 +183,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
-        notebook.status.message = this.translate.instant('jupyter.index.prepareDeleteNotebook');
+        notebook.status.message = 'Preparing to delete the Notebook...';
         this.updateNotebookFields(notebook);
       });
     });
@@ -200,15 +204,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public startNotebook(notebook: NotebookProcessedObject) {
     this.snackBar.open(
-      this.translate.instant('jupyter.index.startingNotebookServer', {
-        notebookName: notebook.name,
-      }),
+      $localize`Starting Notebook server '${notebook.name}'...`,
       SnackType.Info,
       3000,
     );
 
     notebook.status.phase = STATUS_TYPE.WAITING;
-    notebook.status.message = this.translate.instant('startingNotebookServerMsg');
+    notebook.status.message = 'Starting the Notebook Server...';
     this.updateNotebookFields(notebook);
 
     this.backend.startNotebook(notebook).subscribe(() => {
@@ -245,18 +247,38 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
 
         this.snackBar.open(
-          this.translate.instant('jupyter.index.stoppingNotebookServer', {
-            notebookName: notebook.name,
-          }),
+          $localize`Stopping Notebook server '${notebook.name}'...`,
           SnackType.Info,
           3000,
         );
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
-        notebook.status.message = this.translate.instant('prepareStopServer');
+        notebook.status.message = $localize`Preparing to stop the Notebook Server...`;
         this.updateNotebookFields(notebook);
       });
     });
+  }
+
+  //gets internationalized status messageks based on status key message values from backend
+  getStatusMessage(notebook: NotebookProcessedObject) {
+    switch(notebook.status.key){
+      case "notebookDeleting":
+        return $localize`Deleting this notebook server`;
+      case "noPodsRunning":
+        return $localize`No Pods are currently running for this Notebook Server`;
+      case "notebookStopping":
+        return $localize`Notebook Server is stopping`;
+      case "running":
+        return $localize`Running`;
+      case "waitingStatus":
+        return $localize`Current status is waiting. Check 'kubectl describe pod' for more information`;
+      case "errorEvent":
+        return $localize`An error has occured. Check 'kubectl describe pod' for more information`;
+      case "schedulingPod":
+        return $localize`Scheduling the Pod`;
+      default:
+        return "";
+    }
   }
 
   // Data processing functions
@@ -264,6 +286,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     notebook.deleteAction = this.processDeletionActionStatus(notebook);
     notebook.connectAction = this.processConnectActionStatus(notebook);
     notebook.startStopAction = this.processStartStopActionStatus(notebook);
+    notebook.status.message = this.getStatusMessage(notebook);
   }
 
   processIncomingData(notebooks: NotebookResponseObject[]) {
@@ -273,8 +296,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
+      nb.protB = this.parseProtBNotebook(nb);
     }
     return notebooksCopy;
+  }
+
+  parseProtBNotebook(notebook: NotebookProcessedObject) {
+    if(notebook.labels?.["notebook.statcan.gc.ca/protected-b"] === "true") {
+      return true;
+    }
+    return false;
   }
 
   // Action handling functions
@@ -318,14 +349,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${notebook.name}/${notebook.image}`;
   }
 
-
   public pvcTrackByFn(index: number, pvc: VolumeProcessedObject) {
     return `${pvc.name}/${pvc.namespace}/${pvc.size}`;
   }
 
   public parseIncomingData(pvcs: VolumeResponseObject[], notebooks: NotebookResponseObject[]) {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as VolumeProcessedObject[];
-
     //Check which notebooks are mounted
     let mounts = Object.fromEntries(
       notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
@@ -335,25 +364,18 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       if(mounts[element.name]){
         element.usedBy = mounts[element.name].name;
         element.status = {} as Status;
-        element.status.message = "bound";
+        element.status.message = $localize`Attached`;
         element.status.phase = STATUS_TYPE.MOUNTED;
-        element.status.key = {
-					Key: "jupyter.volumeTable.attached",
-					Params: null,
-				};
       } else {
         element.status = {} as Status;
-        element.status.message = "unbound";
+        element.status.message = $localize`Unattached`;
         element.status.phase = STATUS_TYPE.UNMOUNTED;
-        element.status.key = {
-					Key: "jupyter.volumeTable.unattached",
-					Params: null,
-				};
       }
     });
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
+      pvc.protB = this.parseProtBVolume(pvc);
     }
 
     return pvcsCopy;
@@ -367,6 +389,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
     return STATUS_TYPE.READY;
 
+  }
+
+  parseProtBVolume(pvc: VolumeProcessedObject) {
+    if(pvc.labels?.["data.statcan.gc.ca/classification"] === "protected-b") {
+      return true;
+    }
+    return false;
   }
 
   public reactVolumeToAction(a: ActionEvent) {
@@ -409,12 +438,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
 
         pvc.status.phase = STATUS_TYPE.TERMINATING;
-        pvc.status.message = this.translate.instant('jupyter.volumeTable.prepareDeleteVolume');
+        pvc.status.message = "Preparing to delete the Volume...";
         pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
-        this.pvcsWaitingViewer.delete(pvc.name);
       });
     });
   }
+
   public costTrackByFn(index: number, cost: AggregateCostObject) {
     return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.totalCost}`;
   }

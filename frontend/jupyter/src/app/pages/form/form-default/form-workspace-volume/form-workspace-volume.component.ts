@@ -1,9 +1,19 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SnackBarService, SnackType } from 'kubeflow';
-import { Volume } from 'src/app/types';
-import { TranslateService } from '@ngx-translate/core';
+
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import {
+  createExistingSourceFormGroup,
+  createNewPvcFormGroup,
+  createNewPvcVolumeFormGroup,
+  getNewVolumeSize,
+  getNewVolumeType,
+  getVolumeDesc,
+  getVolumeName,
+  getVolumeTitle,
+} from 'src/app/shared/utils/volumes';
+import { EXISTING_SOURCE, Volume } from 'src/app/types';
 
 @Component({
   selector: 'app-form-workspace-volume',
@@ -11,47 +21,54 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./form-workspace-volume.component.scss'],
 })
 export class FormWorkspaceVolumeComponent implements OnInit, OnDestroy {
+  panelOpen = false;
   subscriptions = new Subscription();
-  private readOnlyPrv = false;
+  getVolumeTitle = getVolumeTitle;
 
-  @Input() parentForm: FormGroup;
-  @Input() pvcs: Volume[];
-  @Input() storageClasses: string[];
-  @Input() defaultStorageClass: boolean;
-  @Input()
-  get readonly() {
-    return this.readOnlyPrv;
-  }
-  set readonly(b) {
-    this.readOnlyPrv = b;
-  }
+  getVolumeName = getVolumeName;
+  getNewVolumeSize = getNewVolumeSize;
+  getNewVolumeType = getNewVolumeType;
 
-  constructor(
-    private snackBar: SnackBarService,
-    private translate: TranslateService,
-  ) {}
+  @Input() readonly: boolean;
+  @Input() volGroup: FormGroup;
+  @Input() externalName: string;
 
-  ngOnInit() {
-    // Show a warning if no persistent storage is provided
-    this.subscriptions.add(
-      this.parentForm
-        .get('noWorkspace')
-        .valueChanges.subscribe((b: boolean) => {
-          // close the snackbar if deselected
-          if (!b) {
-            this.snackBar.close();
-          } else {
-            const msg = this.translate.instant(
-              'jupyter.formWorkspaceVolume.msgNoPersistent',
-            );
-            this.snackBar.open(msg, SnackType.Warning, 0);
-          }
-        }),
-    );
-  }
+  constructor(private snackBar: SnackBarService) {}
+
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
     this.snackBar.close();
+  }
+
+  onDelete(event: PointerEvent) {
+    event.stopPropagation();
+    this.removeVolumeFields(this.volGroup);
+    this.volGroup.disable();
+    this.panelOpen = false;
+  }
+
+  addNewVolume() {
+    this.volGroup.addControl('newPvc', createNewPvcFormGroup());
+    this.volGroup.get('mount').setValue('/home/jovyan');
+    this.volGroup.enable();
+    this.volGroup.get('newPvc.spec.storageClassName').disable();
+  }
+
+  attachExistingVolume() {
+    this.volGroup.addControl('existingSource', createExistingSourceFormGroup());
+    this.volGroup.get('mount').setValue('/home/jovyan');
+    this.volGroup.enable();
+  }
+
+  private removeVolumeFields(vol: FormGroup) {
+    if (vol.get('newPvc')) {
+      vol.removeControl('newPvc');
+    }
+
+    if (vol.get('existingSource')) {
+      vol.removeControl('existingSource');
+    }
   }
 }

@@ -1,27 +1,42 @@
-<lib-namespace-select *ngIf="!env.production"></lib-namespace-select>
+<div class="lib-content-wrapper">
+  <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>
+    <lib-namespace-select *ngIf="!env.production"></lib-namespace-select>
+  </lib-title-actions-toolbar>
 
-<lib-resource-table
-  [config]="config"
-  [data]="processedData"
-  [trackByFn]="notebookTrackByFn"
-  (actionsEmitter)="reactToAction($event)"
-></lib-resource-table>
-
-<lib-resource-table
-  [config]="volumeConfig"
-  [data]="processedVolumeData"
-  [trackByFn]="pvcTrackByFn"
-  (actionsEmitter)="reactVolumeToAction($event)"
-></lib-resource-table>
-
-<lib-resource-table *ngIf="this.getCostStatus() == true; else error"
-  [config]="costConfig"
-  [data]="processedCostData"
-  [trackByFn]="costTrackByFn"
-></lib-resource-table>
-
-<ng-template #error>
-  <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
-    <p>{{ 'jupyter.costTable.errMessage' | translate }}</p>
+  <!--scrollable page content-->
+  <div class="page-padding lib-flex-grow">
+    <lib-table
+      [config]="config"
+      [data]="processedData"
+      [trackByFn]="notebookTrackByFn"
+      (actionsEmitter)="reactToAction($event)"
+    ></lib-table>
   </div>
-</ng-template>
+
+  <lib-title-actions-toolbar title="Volumes" i18n-title>
+  </lib-title-actions-toolbar>
+  <!--scrollable page content-->
+  <div class="page-padding lib-flex-grow">
+    <lib-table
+      [config]="volumeConfig"
+      [data]="processedVolumeData"
+      [trackByFn]="pvcTrackByFn"
+      (actionsEmitter)="reactVolumeToAction($event)"
+    ></lib-table>
+  </div>
+
+  <lib-title-actions-toolbar title="Cost" i18n-title>
+  </lib-title-actions-toolbar>
+  <div class="page-padding lib-flex-grow">
+    <lib-table *ngIf="this.getCostStatus() == true; else error"
+      [config]="costConfig"
+      [data]="processedCostData"
+      [trackByFn]="costTrackByFn"
+    ></lib-table>
+  </div>
+  <ng-template #error>
+    <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
+      <p>Failed to retrieve cost information</p>
+    </div>
+  </ng-template>
+</div>

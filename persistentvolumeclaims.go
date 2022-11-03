@@ -17,6 +17,7 @@ type pvcresponse struct {
 	Mode      corev1.PersistentVolumeAccessMode `json:"mode"`
 	Name      string                            `json:"name"`
 	Namespace string                            `json:"namespace"`
+	Labels    map[string]string                 `json:"labels"`
 	Size      resource.Quantity                 `json:"size"`
 }
 
@@ -56,6 +57,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			Mode:      pvc.Spec.AccessModes[0],
 			Name:      pvc.Name,
 			Namespace: pvc.Namespace,
+			Labels:    pvc.Labels,
 			Size:      *size,
 		})
 	}
@@ -63,7 +65,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 	s.respond(w, r, &resp)
 }
 
-//TODO: Delete pvc
+// TODO: Delete pvc
 func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]

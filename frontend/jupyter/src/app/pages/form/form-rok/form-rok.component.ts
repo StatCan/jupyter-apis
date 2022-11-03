@@ -1,33 +1,25 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { environment } from '@app/environment';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { Config, Volume, NotebookFormObject } from 'src/app/types';
-import {
-  NamespaceService,
-  BackendService,
-  SnackBarService,
-  SnackType,
-  getNameError,
-  rokUrlValidator,
-  RokService,
-} from 'kubeflow';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Config } from 'src/app/types';
+import { NamespaceService, SnackBarService, RokService } from 'kubeflow';
 import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from '../form-default/utils';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { FormDefaultComponent } from '../form-default/form-default.component';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-form-rok',
   templateUrl: './form-rok.component.html',
   styleUrls: [
-    './form-rok.component.scss',
     '../form-default/form-default.component.scss',
+    './form-rok.component.scss',
   ],
 })
 export class FormRokComponent
   extends FormDefaultComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   env = environment;
 
   constructor(
@@ -36,10 +28,9 @@ export class FormRokComponent
     public router: Router,
     public popup: SnackBarService,
     public rok: RokService,
-    public translate: TranslateService,
     public cdr: ChangeDetectorRef
   ) {
-    super(ns, backend, router, popup, translate, cdr);
+    super(ns, backend, router, popup, cdr);
   }
 
   ngOnInit() {
@@ -59,12 +50,6 @@ export class FormRokComponent
       new FormControl('', [Validators.required]),
     );
 
-    // Add the rokUrl control
-    const wsExtras: FormGroup = formCtrl.get(
-      'workspace.extraFields',
-    ) as FormGroup;
-    wsExtras.addControl('rokUrl', new FormControl('', []));
-
     return formCtrl;
   }
 
@@ -82,19 +67,6 @@ export class FormRokComponent
     }
     if (config.environment && config.environment.readOnly) {
       formCtrl.controls.environment.disable();
-    }
-
-    // Configure workspace control with rokUrl
-    const extraFields: FormGroup = formCtrl
-      .get('workspace')
-      .get('extraFields') as FormGroup;
-    extraFields.addControl('rokUrl', new FormControl('', []));
-
-    // Add rok url control to the data volumes
-    const array = formCtrl.get('datavols') as FormArray;
-    for (let i = 0; i < this.config.dataVolumes.value.length; i++) {
-      const extra = array.at(i).get('extraFields') as FormGroup;
-      extra.addControl('rokUrl', new FormControl('', []));
     }
   }
 }

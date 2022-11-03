@@ -1,6 +1,13 @@
 <div class="form--section-bottom">
-  <h3><lib-icon *ngIf="icon" [icon]="icon"></lib-icon>{{ title }}</h3>
+  <div class="header">
+    <lib-icon *ngIf="icon" [icon]="icon"></lib-icon>{{ title }}
+  </div>
   <p>{{ text }}</p>
+  <!--our changes, for selecting a custom image-->
+  <a href="{{ link }}" target="_blank" style="text-decoration: none">
+    {{ linkText }}
+  </a>
+  <!--need to check if this change messes with the other things, else just restore old file-->
   <p *ngIf="readOnly">*The cluster admin has disabled setting this section!</p>
 
   <ng-content></ng-content>

@@ -1,5 +1,7 @@
 coverage_unit.txt
 jupyter-apis
+crud-web-apps
+.task/
 .vscode
 .env
 .task

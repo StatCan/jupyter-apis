@@ -6,14 +6,14 @@ export const environment = {
   production: false,
   resource: 'notebooks',
   ui: 'rok',
-  jupyterlabLogo: 'static/assets/jupyterlab-logo.svg',
-  jupyterIcon: 'static/assets/jupyter-icon.svg',
-  groupOneLogo: 'static/assets/group-one-logo.svg',
-  groupOneIcon: 'static/assets/group-one-icon.svg',
-  groupTwoLogo: 'static/assets/group-two-logo.svg',
-  groupTwoIcon: 'static/assets/group-two-icon.svg',
-  groupThreeLogo: 'static/assets/group-three-logo.svg',
-  groupThreeIcon: 'static/assets/group-three-icon.svg',
+  jupyterlabLogo: 'assets/logos/jupyterlab-logo.svg',
+  jupyterIcon: 'assets/logos/jupyter-icon.svg',
+  groupOneLogo: 'assets/logos/group-one-logo.svg',
+  groupOneIcon: 'assets/logos/group-one-icon.svg',
+  groupTwoLogo: 'assets/logos/group-two-logo.svg',
+  groupTwoIcon: 'assets/logos/group-two-icon.svg',
+  groupThreeLogo: 'assets/logos/group-three-logo.svg',
+  groupThreeIcon: 'assets/logos/group-three-icon.svg',
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -22,4 +22,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

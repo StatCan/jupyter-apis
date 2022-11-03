@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, LOCALE_ID, Inject } from '@angular/core';
 import { FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { environment } from '@app/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { V1Namespace } from '@kubernetes/client-node';
-import { TranslateService } from "@ngx-translate/core";
 import { Config } from 'src/app/types';
 
 @Component({
@@ -26,7 +25,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
 
   subs = new Subscription();
 
-  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer, private translate: TranslateService) {
+  constructor(@Inject(LOCALE_ID) public localeId: string, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon(
       'jupyterlab',
       sanitizer.bypassSecurityTrustResourceUrl(environment.jupyterlabLogo),
@@ -59,20 +58,21 @@ export class FormImageComponent implements OnInit, OnDestroy {
         })
         // Make sure that the use will insert and Image value
         if (check) {
+          this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]);
           this.parentForm.get('image').setValidators([]);
-          //Add validator for custom image urls (no http[s]://)
-          this.parentForm.get("customImage").setValidators([this.urlValidator(), Validators.required]);
           this.parentForm.get('imageGroupOne').setValidators([]);
           this.parentForm.get('imageGroupTwo').setValidators([]);
           this.parentForm.get('imageGroupThree').setValidators([]);
         }
         this.parentForm.get('serverType').valueChanges.subscribe(selection => {
           if (selection === 'jupyter') {
+            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
             this.parentForm.get('image').setValidators(Validators.required);
             this.parentForm.get('imageGroupOne').setValidators([]);
             this.parentForm.get('imageGroupTwo').setValidators([]);
             this.parentForm.get('imageGroupThree').setValidators([]);
           } else if (selection === 'group-one') {
+            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm
               .get('imageGroupOne')
@@ -80,6 +80,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
             this.parentForm.get('imageGroupTwo').setValidators([]);
             this.parentForm.get('imageGroupThree').setValidators([]);
           } else if (selection === 'group-two') {
+            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm.get('imageGroupOne').setValidators([]);
             this.parentForm
@@ -116,7 +117,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
         urlBeginning = "http://";
       }
 
-      return `${ urlBeginning } is not allowed in URLs`;
+      return $localize`${ urlBeginning } is not allowed in URLs`;
     }
   }
 
@@ -126,7 +127,11 @@ export class FormImageComponent implements OnInit, OnDestroy {
       return schemeReg.test(control.value) ? {invalidUrl: true} : null;
     };
   }
-  
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
   imageDisplayName(image: string): string {
     const [name, tag = null] = image.split(":");
     let tokens = name.split("/");
@@ -134,11 +139,13 @@ export class FormImageComponent implements OnInit, OnDestroy {
     if (this.hideRegistry && tokens.length > 1 && tokens[0].includes(".")) {
       tokens.shift();
     }
+
     let displayName = tokens.join("/");
 
     if (!this.hideTag && tag !== null) {
       displayName = `${displayName}:${tag}`;
     }
+
     return displayName;
   }
 
@@ -146,7 +153,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
     if (imageGroup == null || this.nsMetadata == null) {
       return true;
     }
-    
+
     const conditionLabels = Object.entries(imageGroup["labels"]);
     const namespaceLabelMetadata = (this.nsMetadata.metadata || {}).labels;
     for (const [key, val] of conditionLabels) {
@@ -160,7 +167,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
   getDisabledMessage(serverType: string): string {
     // Get the current browser language, if the error message isn't given in that language (in the config), 
     // return the default disabled message
-    const currentLanguage =  this.translate.currentLang;
+    const currentLanguage =  this.localeId;
 
     var msg = {
       'group-one': this.imagesGroupOne.disabledMessage, 
@@ -174,13 +181,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
     if (typeof(message) == 'string') {
       return message;
     }
-    return this.translate.instant('jupyter.formImage.enabledConditionUnmet', {
-      profile: this.nsMetadata.metadata.name,
-    });
 
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
+    return $localize`This workspace type is disabled for profile "${this.nsMetadata.metadata.name}".`
   }
 }

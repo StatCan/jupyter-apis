@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Config, Volume, NotebookFormObject } from 'src/app/types';
+import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import {
   NamespaceService,
@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { environment } from '@app/environment';
-import { TranslateService } from '@ngx-translate/core';
 import { V1Namespace } from '@kubernetes/client-node';
 
 @Component({
@@ -31,12 +30,12 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
 
   blockSubmit = false;
   formReady = false;
-  pvcs: Volume[] = [];
   existingNotebooks = new Set<string>();
 
   subscriptions = new Subscription();
 
   readonlySpecs: boolean;
+  
   nsMetadata: V1Namespace;
 
   constructor(
@@ -44,7 +43,6 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
-    public translate: TranslateService,
     public cdr: ChangeDetectorRef
   ) {}
 
@@ -69,24 +67,20 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
         this.currNamespace = namespace;
         this.formCtrl.controls.namespace.setValue(this.currNamespace);
 
-        // Get the PVCs of the new Namespace
-        this.backend.getVolumes(namespace).subscribe(pvcs => {
-          this.pvcs = pvcs;
-        });
-
         this.backend.getNSMetadata(namespace).subscribe(nsMetadata => {
           this.nsMetadata = nsMetadata;
         });
-
+        
       }),
     );
+
 
     // Check if a default StorageClass is set
     this.backend.getDefaultStorageClass().subscribe(defaultClass => {
       if (defaultClass.length === 0) {
         this.defaultStorageclass = false;
         this.popup.open(
-          this.translate.instant("resourceForm.msgDefaultStorageClass"),
+          $localize`No default Storage Class is set. Can't create new Disks for the new Notebook. Please use an Existing Disk.`,
           SnackType.Warning,
           0,
         );
@@ -143,6 +137,11 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       notebook.cpu = notebook.cpu.toString();
     }
 
+    // Ensure GPU input is a string
+    if (typeof notebook.gpus.num === 'number') {
+      notebook.gpus.num = notebook.gpus.num.toString();
+    }
+
     // Remove cpuLimit from request if null
     if (notebook.cpuLimit == null) {
       delete notebook.cpuLimit;
@@ -164,14 +163,6 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       notebook.memory = notebook.memory.toString() + 'Gi';
     }
 
-    if (notebook.workspace.size) {
-      notebook.workspace.size = notebook.workspace.size.toString() + 'Gi';
-    }
-
-    if (typeof notebook.language === 'string') {
-      notebook.language = notebook.language.toString()
-    }
-
     for (const vol of notebook.datavols) {
       if (vol.size) {
         vol.size = vol.size + 'Gi';
@@ -182,9 +173,16 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.popup.open('Submitting new Notebook...', SnackType.Info, 3000);
+
     const notebook = this.getSubmitNotebook();
     this.backend.createNotebook(notebook).subscribe(() => {
       this.popup.close();
+      this.popup.open(
+        'Notebook created successfully.',
+        SnackType.Success,
+        3000,
+      );
       this.router.navigate(['/']);
     });
   }

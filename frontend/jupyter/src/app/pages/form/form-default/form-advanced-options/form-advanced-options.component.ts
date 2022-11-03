@@ -1,20 +1,18 @@
-import { Component, Input, AfterViewChecked, OnInit, ChangeDetectorRef} from "@angular/core";
+import { Component, Input, AfterViewChecked, OnInit, ChangeDetectorRef, LOCALE_ID, Inject} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup } from "@angular/forms";
-import {TranslateService} from "@ngx-translate/core";
+
 @Component({
-  selector: "app-form-advanced-options",
-  templateUrl: "./form-advanced-options.component.html",
-  styleUrls: [
-    "./form-advanced-options.component.scss"
-  ]
+  selector: 'app-form-advanced-options',
+  templateUrl: './form-advanced-options.component.html',
+  styleUrls: ['./form-advanced-options.component.scss'],
 })
 export class FormAdvancedOptionsComponent implements AfterViewChecked, OnInit{
   @Input() parentForm: FormGroup;
   languageList = [
-    {'id':'en', 'label':'jupyter.formAdvancedOptions.lblEnglish'},
-    {'id':'fr', 'label':'jupyter.formAdvancedOptions.lblFrench'}
+    {'id':'en', 'label':'English'},
+    {'id':'fr', 'label':'Français'}
   ];
-  constructor(private translate: TranslateService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(@Inject(LOCALE_ID) public localeId: string, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.parentForm = this.fb.group({
       language: new FormControl(),
       shm: new FormControl()
@@ -22,8 +20,7 @@ export class FormAdvancedOptionsComponent implements AfterViewChecked, OnInit{
   }
 
   ngOnInit(){
-    this.parentForm.get('language').setValue(this.translate.defaultLang)
-
+    this.parentForm.get('language').setValue(this.localeId)
   }
 
   ngAfterViewChecked(){

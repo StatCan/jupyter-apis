@@ -65,6 +65,7 @@ tasks:
       desc: Build the container image
       cmds:
       - docker build -t {{.CONTAINER_IMAGE}} -f Dockerfile .
+      - "k3d image import {{.CONTAINER_IMAGE}} -c nginx-test"
 
   docker:enter:
       desc: Enter into the built container

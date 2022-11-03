@@ -1,13 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, AbstractControl, Validators, ValidatorFn, ControlContainer, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
-import {TranslateService} from "@ngx-translate/core";
+import { calculateLimits } from '../utils';
 
-const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
-  [0, {cpu: 14, ram: 48, cpulimit: 14, ramlimit: 48}],
-  [1, {cpu: 4, ram: 96, cpulimit: 4, ramlimit: 96}]
-]);
+
+// AAW
 type MaxResourceSpec = {cpu: number; ram: number, cpulimit: number, ramlimit: number};
-
+  const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
+   [0, {cpu: 14, ram: 48, cpulimit: 14, ramlimit: 48}],
+    [1, {cpu: 4, ram: 96, cpulimit: 4, ramlimit: 96}]
+]);
 function resourcesValidator(): ValidatorFn {
   return function (control: AbstractControl): ValidationErrors | null {
     const gpuNumValue = control.get("gpus").get("num").value;
@@ -34,7 +35,7 @@ function resourcesValidator(): ValidatorFn {
     }
     return Object.entries(errors).length > 0 ? errors : null;
   };
-}
+} // End aaw
 @Component({
   selector: 'app-form-cpu-ram',
   templateUrl: './form-cpu-ram.component.html',
@@ -44,64 +45,92 @@ export class FormCpuRamComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
+  @Input() readonlySpecs: boolean;
   @Input() cpuLimitFactor: string;
   @Input() memoryLimitFactor: string;
-  @Input() readonlySpecs: boolean;
 
-  constructor(private translate: TranslateService) {}
+  constructor() {}
 
   ngOnInit() {
+    // AAW VALIDATIONS NOTE: tried removing duplicate code, previously had something for each field
     this.parentForm
       .get('cpu')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPUValidator()]);
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPULimitValidator()]);
     this.parentForm
       .get('memory')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryValidator()]);
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryLimitValidator()]);
     this.parentForm
       .get('cpuLimit')
       .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxCPULimitValidator()])
     this.parentForm
       .get('memoryLimit')
       .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxMemoryLimitValidator()])
-      this.parentForm.setValidators(resourcesValidator());
+    this.parentForm.setValidators(resourcesValidator());
+    // end AAW validations
 
-      this.parentForm.get('cpu').valueChanges.subscribe(val => {
-        //set cpu limit when value of the cpu request changes
-        if (this.cpuLimitFactor !== null) {
-          this.parentForm
-            .get('cpuLimit')
-            .setValue(
-              (
-                parseFloat(this.cpuLimitFactor) * this.parentForm.get('cpu').value
-              ).toFixed(1),
-            );
-        }
-      });
-      this.parentForm.get('memory').valueChanges.subscribe(val => {
-        //set memory limit when value of the memory request changes
-        if (this.memoryLimitFactor !== null) {
-          this.parentForm
-            .get('memoryLimit')
-            .setValue(
-              (
-                parseFloat(this.memoryLimitFactor) *
-                this.parentForm.get('memory').value
-              ).toFixed(1),
-            );
+    this.parentForm.get('cpu').valueChanges.subscribe(val => {
+      // AAW 
+      if (this.cpuLimitFactor !== null) {
+        this.parentForm
+          .get('cpuLimit')
+          .setValue(
+            (
+              parseFloat(this.cpuLimitFactor) * this.parentForm.get('cpu').value
+            ).toFixed(1),
+          );
+      } // AAW end
 
-        }
-      });
+      // set cpu limit when value of the cpu request changes
+      if (this.parentForm.get('cpuLimit').dirty) {
+        return;
+      }
+
+      const cpu = this.parentForm.get('cpu').value;
+      this.parentForm
+        .get('cpuLimit')
+        .setValue(calculateLimits(cpu, this.cpuLimitFactor));
+    });
+
+    this.parentForm.get('memory').valueChanges.subscribe(val => {
+      //AAW start
+      if (this.memoryLimitFactor !== null) {
+        this.parentForm
+          .get('memoryLimit')
+          .setValue(
+            (
+              parseFloat(this.memoryLimitFactor) *
+              this.parentForm.get('memory').value
+            ).toFixed(1),
+          );
+
+      } //  AAW end
+      // set memory limit when value of the memory request changes
+      if (this.parentForm.get('memoryLimit').dirty) {
+        return;
+      }
+
+      const memory = this.parentForm.get('memory').value;
+      this.parentForm
+        .get('memoryLimit')
+        .setValue(calculateLimits(memory, this.memoryLimitFactor));
+    });
   }
-  private maxCPULimitValidator(): ValidatorFn
-  {
-    return (control: AbstractControl): { [key: string]: any} | null => {
-      var max: number;
-      const gpus = this.parentForm.get('gpus').get('num').value;
-      gpus == 'none' ? max = 15 : max = 4;
-      return control.value>max ? { maxCPU: true } : null
+
+  // AAW changes
+  getRAMLimitError() {
+    let e: any;
+    const errs = this.parentForm.get("memory").errors || {};
+    if (errs.required || errs.pattern)
+    return $localize`Specify amount of memory (e.g. 2Gi) `;
+    if (e = errs.min){
+      return $localize`Specify at least ${e.min}Gi of memory`;
+    }
+    if (this.parentForm.hasError("maxRam")) {
+      e = this.parentForm.errors.maxRam;
+      return $localize`Can't exceed ${e.max}Gi of memory`;
     }
   }
-
+  
   private maxMemoryLimitValidator(): ValidatorFn
   {
     return (control: AbstractControl): { [key: string]: any} | null => {
@@ -110,25 +139,30 @@ export class FormCpuRamComponent implements OnInit {
       gpus == 'none' ? max = 48 : max = 96;
       return control.value>max ? { maxMemory: true } : null
 
-    }  }
+    }  
+  }
 
-  private maxCPUValidator(): ValidatorFn
+  getCPULimitError() {
+    let e: any;
+    const errs = this.parentForm.get("cpuLimit").errors || {};
+    if (errs.required || errs.pattern )
+      return $localize`Specify number of CPUs`;
+    if (e = errs.min){
+      return $localize`Specify at least ${e.min} CPUs`;
+    }
+    if (this.parentForm.hasError("cpuLimit")) {
+      e = this.parentForm.errors.cpuLimit;
+      return $localize`Can't exceed ${e.max} CPUs`;
+    }
+  }
+
+  private maxCPULimitValidator(): ValidatorFn
   {
     return (control: AbstractControl): { [key: string]: any} | null => {
       var max: number;
       const gpus = this.parentForm.get('gpus').get('num').value;
       gpus == 'none' ? max = 15 : max = 4;
-      return control.value>max ? { maxCPULimit: true } : null
-    }
-  }
-
-  private maxMemoryValidator(): ValidatorFn
-  {
-    return (control: AbstractControl): { [key: string]: any} | null => {
-      var max: number;
-      const gpus = this.parentForm.get('gpus').get('num').value;
-      gpus == 'none' ? max = 48 : max = 96;
-      return control.value>max ? { maxMemory: true } : null
+      return control.value>max ? { maxCPU: true } : null
     }
   }
 
@@ -146,59 +180,4 @@ export class FormCpuRamComponent implements OnInit {
       }
     };
   }
-
-  cpuErrorMessage() {
-    let e: any;
-    const errs = this.parentForm.get("cpu").errors || {};
-    if (errs.required || errs.pattern )
-      return this.translate.instant("jupyter.formSpecs.errorCpuRequired");
-    if ((e = errs.min))
-      return this.translate.instant("jupyter.formSpecs.errorCpuMin", {min: `${e.min}`});
-    if (this.parentForm.hasError("maxCpu")) {
-      e = this.parentForm.errors.maxCpu;
-      return this.translate.instant("jupyter.formSpecs.errorCpuMax", {max: `${e.max}`});
-    }
-  }
-
-  getRAMError() {
-    let e: any;
-    const errs = this.parentForm.get("memory").errors || {};
-    if (errs.required || errs.pattern)
-    return this.translate.instant("jupyter.formSpecs.errorRamRequired");
-    if (e = errs.min){
-      return this.translate.instant("jupyter.formSpecs.errorRamMin", {min: `${e.min}`});
-    }
-    if (this.parentForm.hasError("maxRam")) {
-      e = this.parentForm.errors.maxRam;
-      return this.translate.instant("jupyter.formSpecs.errorRamMax", {max: `${e.max}`});
-    }
-  }
-
-  getCPULimitError() {
-    let e: any;
-    const errs = this.parentForm.get("cpuLimit").errors || {};
-    if (errs.required || errs.pattern )
-      return this.translate.instant("jupyter.formSpecs.errorCpuRequired");
-    if (e = errs.min){
-      return this.translate.instant("jupyter.formSpecs.errorCpuMin", {min: `${e.min}`});
-    }
-    if (this.parentForm.hasError("cpuLimit")) {
-      e = this.parentForm.errors.cpuLimit;
-      return this.translate.instant("jupyter.formSpecs.errorCpuMax", {max: `${e.max}`});
-    }
-  }
-
-  getMemoryLimitError() {
-    let e: any;
-    const errs = this.parentForm.get("memoryLimit").errors || {};
-    if (errs.required || errs.pattern)
-    return this.translate.instant("jupyter.formSpecs.errorRamRequired");;
-    if ((e = errs.min))
-      return this.translate.instant("jupyter.formSpecs.errorRamMin", {min: `${e.min}`});
-    if (this.parentForm.hasError("ramLimit")) {
-      e = this.parentForm.errors.ramLimit;
-      return this.translate.instant("jupyter.formSpecs.errorRamMax", {max: `${e.max}`});
-    }
-  }
-
 }

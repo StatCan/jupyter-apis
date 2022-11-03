@@ -1,0 +1,82 @@
+version: "3"
+dotenv: [".env"]
+output: prefixed
+silent: true
+
+vars:
+  CLUSTER_NAME: nginx-test
+  CONTEXT_NAME: "k3d-{{.CLUSTER_NAME}}"
+  AGENT_NODE_NAME: k3d-{{.CLUSTER_NAME}}-agent
+  SERVER_NODE_NAME: k3d-{{.CLUSTER_NAME}}-server
+  ISTIO_VERSION: "1.7.8" # Match istio control plane version
+  ISTIOCTL: "istioctl --context={{.CONTEXT_NAME}}"
+  KUBECTL: "kubectl --context={{.CONTEXT_NAME}}"
+  REGISTRY_NAME: "{{.CLUSTER_NAME}}-registry"
+  REGISTRY_PORT: "5050"
+  DEV_CONTAINER_TAG: "{{.CLUSTER_NAME}}-dev"
+
+tasks:
+  #  _    _____     _
+  # | | _|___ /  __| |
+  # | |/ / |_ \ / _` |
+  # |   < ___) | (_| |
+  # |_|\_\____/ \__,_|
+
+  k3d:cluster:create:
+    prefix: ⚙️ > create k3d cluster
+    desc: create k3d cluster
+    cmds:
+      - k3d cluster create --config=k8s/k3d/config.yaml
+
+  k3d:cluster:destroy:
+    prefix: ⚙️ > destroy
+    desc: destroy k3d cluster
+    cmds:
+      - "k3d cluster delete {{.CLUSTER_NAME}}"
+
+  k3d:start:
+    prefix: ⚙️ > start
+    desc: starts k3d cluster
+    cmds:
+      - "k3d cluster start {{.CLUSTER_NAME}}"
+
+  k3d:stop:
+    prefix: ⚙️ > stop
+    desc: stops k3d cluster
+    cmds:
+      - "k3d cluster stop {{.CLUSTER_NAME}}"
+
+# K8s manifest 
+  k8s:manifest:apply:
+    prefix: ⚙️ > k8sapply
+    desc: Apply manifest to k3d cluster
+    cmds:
+      - "kustomize build k8s/manifests/ | kubectl apply -f -"
+    sources:
+      - k8s/manifests/*.yaml
+
+  #      _            _
+  #   __| | ___   ___| | _____ _ __
+  #  / _` |/ _ \ / __| |/ / _ \ '__|
+  # | (_| | (_) | (__|   <  __/ |
+  #  \__,_|\___/ \___|_|\_\___|_|
+  # k3d image import nginx-test-dev:latest -c nginx-test
+  build:dev-image:
+    prefix: build dev image
+    desc: build development image
+    cmds:
+      - "docker build . -t {{.DEV_CONTAINER_TAG}}"
+      - "k3d image import {{.DEV_CONTAINER_TAG}}:latest -c {{.CLUSTER_NAME}}"
+    sources:
+      - Dockerfile
+  #   ____ ___    ______ ____  
+  #  / ___|_ _|  / / ___|  _ \ 
+  # | |    | |  / / |   | | | |
+  # | |___ | | / /| |___| |_| |
+  #  \____|___/_/  \____|____/ 
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/go-task/Taskfile.yml
+  go:build:
+    desc: Build the Go code
+    cmds:
+      - go build -v {{.LDFLAGS}}
+                           

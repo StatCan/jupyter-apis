@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - upgrade-frontend-1.6
 env:
   REGISTRY_NAME: k8scc01covidacr
 

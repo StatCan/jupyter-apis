@@ -378,24 +378,38 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 		if _, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(notebook.Namespace).Create(ctx, &pvc, metav1.CreateOptions{}); err != nil {
 			return err
 		}
+		// Add the volume and volume mount to the notebook spec
+		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: pvcClaimName,
+			VolumeSource: corev1.VolumeSource{
+				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+					ClaimName: pvcClaimName,
+				},
+			},
+		})
+
+		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      pvcClaimName,
+			MountPath: req.Mount,
+		})
+
 	} else if req.ExistingSource.PersistentVolumeClaim.ClaimName != nil {
 		pvcClaimName = *req.ExistingSource.PersistentVolumeClaim.ClaimName
-	}
-
-	// Add the volume and volume mount to the notebook spec
-	notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-		Name: pvcClaimName,
-		VolumeSource: corev1.VolumeSource{
-			PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
-				ClaimName: pvcClaimName,
+		// Add the volume and volume mount to the notebook spec
+		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: pvcClaimName,
+			VolumeSource: corev1.VolumeSource{
+				PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{
+					ClaimName: pvcClaimName,
+				},
 			},
-		},
-	})
+		})
 
-	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-		Name:      pvcClaimName,
-		MountPath: req.Mount,
-	})
+		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      pvcClaimName,
+			MountPath: req.Mount,
+		})
+	}
 
 	return nil
 }

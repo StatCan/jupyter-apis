@@ -380,9 +380,6 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 		}
 	} else if req.ExistingSource.PersistentVolumeClaim.ClaimName != nil {
 		pvcClaimName = *req.ExistingSource.PersistentVolumeClaim.ClaimName
-	} else {
-		// both newPvc and existingSource don't exist in the request
-		return fmt.Errorf("unknown volume type; does not match existingSource or newPvc expected response structure")
 	}
 
 	// Add the volume and volume mount to the notebook spec

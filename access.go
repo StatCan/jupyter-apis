@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/gorilla/mux"
 	authorizationv1 "k8s.io/api/authorization/v1"
@@ -46,7 +47,7 @@ func (s *server) checkAccess(subjectAccessReviewTemplate authorizationv1.Subject
 
 		// Load the user from kubeflow-userid. If there is no user provided,
 		// then do not continue to process the request.
-		user := r.URL.User.Username()
+		user := strings.ToLower(r.URL.User.Username())
 		if user == "" {
 			log.Printf("no user found")
 			s.respond(w, r, &APIResponseBase{

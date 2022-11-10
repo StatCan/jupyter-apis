@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - lowercase-acces
 env:
   REGISTRY_NAME: k8scc01covidacr
 

@@ -64,7 +64,9 @@ func (s *server) checkAccess(subjectAccessReviewTemplate authorizationv1.Subject
 		} else {
 			sar.Spec.ResourceAttributes.Namespace = ""
 		}
-		sar.Spec.User = user
+		//sar.Spec.User = user
+		// let me test not lowercasing or modifying SubjectAccessReview
+		sar.Spec.User = r.URL.User.Username()
 
 		// Submit the SubjectAccessReview to the Kubernetes API server
 		resp, err := s.clientsets.kubernetes.AuthorizationV1().SubjectAccessReviews().Create(r.Context(), sar, v1.CreateOptions{})

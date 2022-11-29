@@ -16,7 +16,7 @@
   <lib-title-actions-toolbar title="Volumes" i18n-title>
   </lib-title-actions-toolbar>
   <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow">
+  <div class="page-padding lib-flex-grow">    
     <lib-table
       [config]="volumeConfig"
       [data]="processedVolumeData"
@@ -28,6 +28,8 @@
   <lib-title-actions-toolbar title="Cost" i18n-title>
   </lib-title-actions-toolbar>
   <div class="page-padding lib-flex-grow">
+    <p i18n>Approximate cost of notebook server resources over the last 24 hours – summed values may not match total due to rounding</p>
+    <mat-divider></mat-divider>
     <lib-table *ngIf="this.getCostStatus() == true; else error"
       [config]="costConfig"
       [data]="processedCostData"
@@ -36,7 +38,7 @@
   </div>
   <ng-template #error>
     <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
-      <p>Failed to retrieve cost information</p>
+      <p i18n>Failed to retrieve cost information</p>
     </div>
   </ng-template>
 </div>

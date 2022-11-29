@@ -1233,6 +1233,30 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0c3f32420e8b9671ee635913db7a36da114f526f" datatype="html">
+        <source>Approximate cost of notebook server resources over the last 24 hours – summed values may not match total due to rounding</source>
+        <target>Approximation du coût des ressources de serveur bloc-notes des dernières 24h – la somme des valeurs pourraient être différentes du total du à l'arrondissement</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c21a87cc7ca0bdc315d2ae3987102a9c357e4e6e" datatype="html">
+        <source>Failed to retrieve cost information</source>
+        <target>Échec de la récupération des informations des coûts</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4872314094100927318" datatype="html">
         <source>Starting Notebook server &apos;<x id="PH" equiv-text="notebook.name"/>&apos;...</source>
         <target>Démarer le serveur bloc-notes &apos;<x id="PH" equiv-text="notebook.name"/>&apos;...</target>

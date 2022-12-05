@@ -1,7 +1,7 @@
 <lib-form-section
   title="CPU / RAM"
   i18n-title
-  text="Specify the total amount of CPU and RAM reserved by your Notebook Server. For CPU-intensive workloads, you can choose more than 1 CPU (e.g. 1.5)."
+  text="Specify the minimum guaranteed CPU and RAM reserved by your Notebook Server. You will pay for at least this much. Unless you are running a multithreaded workload, it is recommended to request a maximum of one CPU (e.g. 0.5)."
   i18n-text
   icon="fa:fas:microchip"
 >
@@ -32,6 +32,7 @@
   </div>
 
   <lib-advanced-options>
+    <p i18n>These limits determine the maximum amount of CPU and RAM to be used by your Notebook Server, which may be used to scale up the server if available.</p>
     <div class="row">
       <!--CPU-->
       <div class="column">

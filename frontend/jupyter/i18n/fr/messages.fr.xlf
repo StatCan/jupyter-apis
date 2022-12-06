@@ -304,9 +304,9 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4bc60e281d28abf5a5008332e13cfb6e8c926882" datatype="html">
-        <source>Specify the total amount of CPU and RAM reserved by your Notebook Server. For CPU-intensive workloads, you can choose more than 1 CPU (e.g. 1.5).</source>
-        <target>Spécifier le nombre total de CPU et mémoire vive reservé pour votre serveur bloc-notes. Pour les charges de travail lourde pour le CPU, vous pouvez choisir plus d'un CPU (ex. 1.5).</target>
+      <trans-unit id="2d6e66b037ae212b1c3680b3107057a213abdfda" datatype="html">
+        <source>Specify the minimum guaranteed CPU and RAM reserved by your Notebook Server. You will pay for at least this much. Unless you are running a multithreaded workload, it is recommended to request a maximum of one CPU (e.g. 0.5).</source>
+        <target>Spécifier le montant minimum garanti de CPU et mémoire vive reservé pour votre serveur bloc-notes. Vous allez payer pour au moins ce montant. À moins que vous feser du travail multithread, il est recommandé de choisir un maximum de 1 CPU (ex. 0.5).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
           <context context-type="linenumber">4</context>
@@ -328,12 +328,20 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1251b85307adc77a2b9c2b83da23657dc18ee14a" datatype="html">
+        <source>These limits determine the maximum amount of CPU and RAM to be used by your Notebook Server, which may be utilised to scale up the server if available.</source>
+        <target>Ces limites déterminent le montant maximum de CPU et de mémoire qui peut être utilisé par votre serveur Bloc-Notes, qui pourait être exploité pour augmenter le serveur si possible.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b236d0d38ab7c46409b041002e008f28ade48e54" datatype="html">
         <source>CPU limit</source>
         <target>Limite du CPU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="393e204f9358a7b2bb54c23a1dd6fda2d3a20fe0" datatype="html">
@@ -341,7 +349,7 @@
         <target>Limite pour la mémoire, en Gi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7116806989868355164" datatype="html">
@@ -1250,11 +1258,11 @@
         <target>Échec de la récupération des informations des coûts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4872314094100927318" datatype="html">

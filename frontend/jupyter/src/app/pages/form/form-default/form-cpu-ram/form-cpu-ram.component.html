@@ -12,10 +12,13 @@
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
         matInput
+        type="number"
+        min="0.5"
+        step="0.1"
         formControlName="cpu"
-        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxCpu')"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
       />
-      <mat-error>{{getCPULimitError()}}</mat-error>
+      <mat-error>{{getCPULimitError('cpu')}}</mat-error>
     </mat-form-field>
 
     <!--RAM AAW, do not take their lib-positive-input-->
@@ -24,10 +27,13 @@
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
         matInput
+        type="number"
+        min="1"
+        step="0.1"
         formControlName="memory"
-        [errorStateMatcher]="parentErrorKeysErrorStateMatcher('maxRam')"
+        [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
       />
-      <mat-error>{{getRAMLimitError()}}</mat-error>
+      <mat-error>{{getRAMLimitError('memory')}}</mat-error>
     </mat-form-field>
   </div>
 
@@ -41,12 +47,12 @@
           <input
             matInput
             type="number"
-            min="0.1"
+            min="0.5"
             step="0.1"
             [formControl]="parentForm.get('cpuLimit')"
-            [errorStateMatcher]="parentErrorKeysErrorStateMatcher('cpuLimit')"
+            [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
           />
-          <mat-error>{{getCPULimitError()}}</mat-error>
+          <mat-error>{{getCPULimitError('cpuLimit')}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -57,12 +63,12 @@
           <input
             matInput
             type="number"
-            min="0.1"
+            min="1"
             step="0.1"
             [formControl]="parentForm.get('memoryLimit')"
-            [errorStateMatcher]="parentErrorKeysErrorStateMatcher('memoryLimit')"
+            [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
           />
-          <mat-error>{{getRAMLimitError()}}</mat-error>
+          <mat-error>{{getRAMLimitError('memoryLimit')}}</mat-error>
         </mat-form-field>
       </div>
     </div>

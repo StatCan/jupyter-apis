@@ -9,6 +9,8 @@ import {
   NgForm
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { NamespaceService } from 'kubeflow';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 const NB_NAME_SUBST = '{notebook-name}';
@@ -64,11 +66,26 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor() {}
+  constructor(
+    private backend: JWABackendService,
+    private ns: NamespaceService,
+  ) {}
 
   ngOnInit(): void {
     this.templatedName = this.getNameCtrl(this.metadataGroup).value as string;
-    //error messages not showing up
+    
+    // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
+    this.subs.add(
+      this.ns.getSelectedNamespace().subscribe(ns => {
+        this.backend.getNotebooks(ns).subscribe(notebooks => {
+          this.mountedVolumes.clear();
+          notebooks.map(nb => nb.volumes.map(v => {
+            this.mountedVolumes.add(v)
+          }));
+        });
+      })
+    );
+
     this.getNameCtrl(this.metadataGroup).setValidators([
         Validators.required,
         this.isMountedValidator(),

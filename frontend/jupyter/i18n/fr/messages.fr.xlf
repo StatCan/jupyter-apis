@@ -325,7 +325,7 @@
         <target>Mémoire demandé en Gi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1251b85307adc77a2b9c2b83da23657dc18ee14a" datatype="html">
@@ -333,7 +333,7 @@
         <target>Ces limites déterminent le montant maximum de CPU et de mémoire qui peut être utilisé par votre serveur Bloc-Notes, qui pourait être exploité pour augmenter le serveur si possible.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b236d0d38ab7c46409b041002e008f28ade48e54" datatype="html">
@@ -341,7 +341,7 @@
         <target>Limite du CPU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="393e204f9358a7b2bb54c23a1dd6fda2d3a20fe0" datatype="html">
@@ -349,7 +349,7 @@
         <target>Limite pour la mémoire, en Gi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7116806989868355164" datatype="html">
@@ -357,7 +357,7 @@
         <target>Spécifier la quantité de mémoire (ex. 2Gi)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8684569996723918517" datatype="html">
@@ -365,7 +365,7 @@
         <target>Spécifier au moins <x id="PH" equiv-text="e.min"/>Gi de mémoire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="176617288574203292" datatype="html">
@@ -373,7 +373,7 @@
         <target>Ne peut pas excéder <x id="PH" equiv-text="e.max"/>Gi de mémoire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="18447639280265814" datatype="html">
@@ -381,7 +381,7 @@
         <target>Spécifier le nombre de CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5339579025826969009" datatype="html">
@@ -389,7 +389,7 @@
         <target>Spécifier au moins <x id="PH" equiv-text="e.min"/> CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="285715029179282466" datatype="html">
@@ -397,7 +397,7 @@
         <target>Ne peut pas excéder <x id="PH" equiv-text="e.max"/> CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cbe5b11222992396a96e6d3d8ba3e9af4cbbdd92" datatype="html">
@@ -852,7 +852,7 @@
         <target>Nom est obligatoire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4132137222488891883" datatype="html">
@@ -860,7 +860,7 @@
         <target>Le nom du volume peut seulement contenir des caractères alphanumériques minuscules, &apos;-&apos; ou &apos;.&apos;, et doit commencer et terminer avec un caractère alphanumérique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4810876179563414983" datatype="html">
@@ -868,7 +868,7 @@
         <target>Déjà monté</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3cee9bf23fd146de773f2eb0215e36d2ba8241bc" datatype="html">

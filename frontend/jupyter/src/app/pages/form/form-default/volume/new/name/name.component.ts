@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -9,6 +9,8 @@ import {
   NgForm
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { NamespaceService } from 'kubeflow';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 const NB_NAME_SUBST = '{notebook-name}';
@@ -18,7 +20,7 @@ const NB_NAME_SUBST = '{notebook-name}';
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.scss'],
 })
-export class VolumeNameComponent implements OnInit, OnDestroy {
+export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
   private templatedName = '';
   private subs = new Subscription();
   private group: FormGroup;
@@ -64,20 +66,44 @@ export class VolumeNameComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor() {}
+  constructor(
+    private backend: JWABackendService,
+    private ns: NamespaceService,
+  ) {}
 
   ngOnInit(): void {
     this.templatedName = this.getNameCtrl(this.metadataGroup).value as string;
-    //error messages not showing up
-    this.getNameCtrl(this.metadataGroup).setValidators([
-        Validators.required,
-        this.isMountedValidator(),
-        Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
-      ]);
+
+    this.initComponent();
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  ngOnChanges(): void{
+    //this needs to happen because we were losing the validators on init.
+    this.initComponent();
+  }
+
+  private initComponent(): void{
+    // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
+    this.subs.add(
+      this.ns.getSelectedNamespace().subscribe(ns => {
+        this.backend.getNotebooks(ns).subscribe(notebooks => {
+          this.mountedVolumes.clear();
+          notebooks.map(nb => nb.volumes.map(v => {
+            this.mountedVolumes.add(v)
+          }));
+        });
+      })
+    );
+
+    this.getNameCtrl(this.metadataGroup).setValidators([
+      Validators.required,
+      this.isMountedValidator(),
+      Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
+    ]);
   }
 
   private getNameCtrl(metadata: FormGroup): AbstractControl {

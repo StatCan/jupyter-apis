@@ -288,70 +288,70 @@
         <source>Requested memory in Gi</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1251b85307adc77a2b9c2b83da23657dc18ee14a" datatype="html">
         <source>These limits determine the maximum amount of CPU and RAM to be used by your Notebook Server, which may be used to scale up the server if available.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b236d0d38ab7c46409b041002e008f28ade48e54" datatype="html">
         <source>CPU limit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="393e204f9358a7b2bb54c23a1dd6fda2d3a20fe0" datatype="html">
         <source> Memory limit in Gi </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7116806989868355164" datatype="html">
         <source>Specify amount of memory (e.g. 2Gi) </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8684569996723918517" datatype="html">
         <source>Specify at least <x id="PH" equiv-text="e.min"/>Gi of memory</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="176617288574203292" datatype="html">
         <source>Can&apos;t exceed <x id="PH" equiv-text="e.max"/>Gi of memory</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="18447639280265814" datatype="html">
         <source>Specify number of CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5339579025826969009" datatype="html">
         <source>Specify at least <x id="PH" equiv-text="e.min"/> CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="285715029179282466" datatype="html">
         <source>Can&apos;t exceed <x id="PH" equiv-text="e.max"/> CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cbe5b11222992396a96e6d3d8ba3e9af4cbbdd92" datatype="html">
@@ -759,21 +759,21 @@
         <source>Name is required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4132137222488891883" datatype="html">
         <source>The volume name can only contain lowercase alphanumeric characters, &apos;-&apos; or &apos;.&apos;, and must start and end with an alphanumeric character</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4810876179563414983" datatype="html">
         <source>Already mounted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/volume/new/name/name.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3cee9bf23fd146de773f2eb0215e36d2ba8241bc" datatype="html">

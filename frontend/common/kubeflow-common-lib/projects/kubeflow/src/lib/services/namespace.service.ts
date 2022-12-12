@@ -47,7 +47,7 @@ export class NamespaceService {
       this.dashboardConnectedSource.next(DashboardState.Disconnected);
 
       if (this.currNamespace === undefined) {
-        this.updateSelectedNamespace('mathis-marcotte');
+        this.updateSelectedNamespace('kubeflow-user');
       }
     });
   }

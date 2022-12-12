@@ -18,7 +18,7 @@
         formControlName="cpu"
         [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
       />
-      <mat-error>{{getCPULimitError('cpu')}}</mat-error>
+      <mat-error>{{getCPUError('cpu')}}</mat-error>
     </mat-form-field>
 
     <!--RAM AAW, do not take their lib-positive-input-->
@@ -33,7 +33,7 @@
         formControlName="memory"
         [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
       />
-      <mat-error>{{getRAMLimitError('memory')}}</mat-error>
+      <mat-error>{{getRAMError('memory')}}</mat-error>
     </mat-form-field>
   </div>
 
@@ -45,6 +45,7 @@
         <mat-form-field appearance="outline" class="wide">
           <mat-label i18n>CPU limit</mat-label>
           <input
+            [attr.disabled]="readonlySpecs ? '' : null"
             matInput
             type="number"
             min="0.5"
@@ -52,7 +53,7 @@
             [formControl]="parentForm.get('cpuLimit')"
             [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
           />
-          <mat-error>{{getCPULimitError('cpuLimit')}}</mat-error>
+          <mat-error>{{getCPUError('cpuLimit')}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -61,6 +62,7 @@
         <mat-form-field appearance="outline" class="wide">
           <mat-label i18n> Memory limit in Gi </mat-label>
           <input
+            [attr.disabled]="readonlySpecs ? '' : null"
             matInput
             type="number"
             min="1"
@@ -68,7 +70,7 @@
             [formControl]="parentForm.get('memoryLimit')"
             [errorStateMatcher]="parentErrorKeysErrorStateMatcher()"
           />
-          <mat-error>{{getRAMLimitError('memoryLimit')}}</mat-error>
+          <mat-error>{{getRAMError('memoryLimit')}}</mat-error>
         </mat-form-field>
       </div>
     </div>

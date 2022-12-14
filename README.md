@@ -139,6 +139,16 @@ and run `vagrant up`.
 [go]: https://golang.org/dl/
 [kubeflow]: https://github.com/kubeflow/kubeflow
 
+
+## On platform testing
+
+Any push to an open PR that also has the auto-deploy label on the PR This allows developers to opt-in to on-platform testing. For example, when you need to build in github and test on platform (or want someone else to be able to pull your image):
+1. open a PR and add the auto-deploy label
+2. push to your PR and watch the GitHub Action CI
+3. access your image in Kubeflow DEV via a custom image from any of:
+    - k8scc01covidacrdev.azurecr.io/IMAGENAME:SHA
+    - k8scc01covidacrdev.azurecr.io/IMAGENAME:SHORT_SHA
+
 ## Whats Different?
 
 Routes are defined in this repository [here](./main.go).

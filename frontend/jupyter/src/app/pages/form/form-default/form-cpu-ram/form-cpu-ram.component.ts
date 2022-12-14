@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, AbstractControl, Validators, ValidatorFn, ControlContainer, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
 import { calculateLimits } from '../utils';
 
@@ -14,7 +14,7 @@ const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
   templateUrl: './form-cpu-ram.component.html',
   styleUrls: ['./form-cpu-ram.component.scss'],
 })
-export class FormCpuRamComponent implements OnInit {
+export class FormCpuRamComponent implements OnInit, OnChanges {
   @Input() parentForm: FormGroup;
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
@@ -74,7 +74,6 @@ export class FormCpuRamComponent implements OnInit {
               this.parentForm.get('memory').value
             ).toFixed(1)
           );
-
       } //  AAW end
       // set memory limit when value of the memory request changes
       if (this.parentForm.get('memoryLimit').dirty) {
@@ -86,6 +85,14 @@ export class FormCpuRamComponent implements OnInit {
         .get('memoryLimit')
         .setValue(calculateLimits(memory, this.memoryLimitFactor));
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //triggers when gpu number goes from 1 to 0
+    if(changes?.readonlySpecs.previousValue===true){
+      this.parentForm.get("cpu").updateValueAndValidity();
+      this.parentForm.get("memory").updateValueAndValidity();
+    }
   }
 
   // AAW changes

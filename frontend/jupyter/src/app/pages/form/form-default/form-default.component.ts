@@ -191,9 +191,6 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   checkGPU(gpu: string) {
     if (gpu == "none") {
       this.readonlySpecs = false;
-      //triggers the validators
-      this.formCtrl.get("cpu").updateValueAndValidity();
-      this.formCtrl.get("memory").updateValueAndValidity();
     } else {
       this.readonlySpecs = true;
       this.formCtrl.get("cpu").setValue("4");

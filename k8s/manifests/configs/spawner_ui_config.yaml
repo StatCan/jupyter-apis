@@ -155,7 +155,7 @@ spawnerFormDefaults:
         - limitsKey: "nvidia.com/gpu"
           uiName: "NVIDIA"
       # Values: "" or a `limits-key` from the vendors list
-      vendor: ""
+      vendor: "nvidia.com/gpu"
     readOnly: false
   shm:
     value: false

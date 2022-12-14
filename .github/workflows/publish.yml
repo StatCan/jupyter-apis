@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - 'opened'
+      - 'synchronize'
+      - 'reopened'
 env:
   REGISTRY_NAME: k8scc01covidacr
 
@@ -10,6 +15,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    # Push image to ACR
+    # Pushes if this is a push to master or an update to a PR that has auto-deploy label
+    - name: Test if we should push to ACR
+      id: should-i-push
+      if: |
+        github.event_name == 'push' ||
+        (
+          github.event_name == 'pull_request' &&
+          contains( github.event.pull_request.labels.*.name, 'auto-deploy')
+        )
+      run: echo "::set-output name=boolean::true"
+
     - uses: actions/checkout@master
 
     - uses: azure/docker-login@v1
@@ -18,11 +35,15 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    - run: |
+    - name: Build docker image and push
+      if: steps.should-i-push.outputs.boolean == 'true'
+      run: |
         docker build -f Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} .
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
 
-    - uses: Azure/container-scan@v0
+    - name: Azure containrer scan
+      if: steps.should-i-push.outputs.boolean == 'true'
+      uses: Azure/container-scan@v0
       with:
         image-name: ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
         severity-threshold: CRITICAL

@@ -34,10 +34,10 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxResourcesValidator('memory')]);
     this.parentForm
       .get('cpuLimit')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxResourcesValidator('cpuLimit')])
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxResourcesValidator('cpuLimit'), this.limitValidator('cpu')])
     this.parentForm
       .get('memoryLimit')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxResourcesValidator('memoryLimit')])
+      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxResourcesValidator('memoryLimit'), this.limitValidator('memory')])
     // end AAW validations
 
     this.parentForm.get('cpu').valueChanges.subscribe(val => {
@@ -101,7 +101,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     const errs = this.parentForm.get(key).errors || {};
 
     if (errs.required || errs.pattern)
-      return $localize`Specify amount of memory (e.g. 2Gi) `;
+      return $localize`Specify amount of memory (e.g. 2Gi)`;
 
     if (e = errs.min){
       return $localize`Specify at least ${e.min}Gi of memory`;
@@ -109,6 +109,10 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 
     if (e = errs.max) {
       return $localize`Can't exceed ${e.max}Gi of memory`;
+    }
+
+    if(errs.limit){
+      return $localize`Can't be lower than requested memory`;
     }
   }
 
@@ -126,6 +130,10 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     if (e = errs.max) {
       return $localize`Can't exceed ${e.max} CPUs`;
     }
+
+    if(errs.limit){
+      return $localize`Can't be lower than requested CPUs`;
+    }
   }
 
   private maxResourcesValidator(input: string): ValidatorFn {
@@ -135,6 +143,14 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       const max = MAX_FOR_GPU.get(gpu)[input];
       
       return control.value>max ? {max: {max: max, actual: control.value}} : null;
+    };
+  }
+
+  private limitValidator(resource: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null =>{
+      const value = this.parentForm.get(resource).value;
+      
+      return control.value<value ? {limit: true} : null;
     };
   }
 

@@ -349,15 +349,15 @@
         <target>Limite pour la mémoire, en Gi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7116806989868355164" datatype="html">
-        <source>Specify amount of memory (e.g. 2Gi) </source>
+      <trans-unit id="2327257985468080025" datatype="html">
+        <source>Specify amount of memory (e.g. 2Gi)</source>
         <target>Spécifier la quantité de mémoire (ex. 2Gi)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8684569996723918517" datatype="html">
@@ -365,7 +365,7 @@
         <target>Spécifier au moins <x id="PH" equiv-text="e.min"/>Gi de mémoire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="176617288574203292" datatype="html">
@@ -373,7 +373,15 @@
         <target>Ne peut pas excéder <x id="PH" equiv-text="e.max"/>Gi de mémoire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9028631140090286921" datatype="html">
+        <source>Can&apos;t be lower than requested memory</source>
+        <target>Ne peux pas être moins que la mémoire demandée</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="18447639280265814" datatype="html">
@@ -381,7 +389,7 @@
         <target>Spécifier le nombre de CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5339579025826969009" datatype="html">
@@ -389,7 +397,7 @@
         <target>Spécifier au moins <x id="PH" equiv-text="e.min"/> CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="285715029179282466" datatype="html">
@@ -397,7 +405,15 @@
         <target>Ne peut pas excéder <x id="PH" equiv-text="e.max"/> CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3475402591410840556" datatype="html">
+        <source>Can&apos;t be lower than requested CPUs</source>
+        <target>Ne peut pas être moins que les CPUs demandés</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-default/form-cpu-ram/form-cpu-ram.component.ts</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cbe5b11222992396a96e6d3d8ba3e9af4cbbdd92" datatype="html">

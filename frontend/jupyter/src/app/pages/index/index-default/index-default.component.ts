@@ -56,6 +56,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   costConfig = defaultCostConfig;
   rawCostData: AggregateCostResponse = null;
   processedCostData: AggregateCostObject[] = [];
+  costWindow = "today";
+  kubecostPoller: ExponentialBackoff;
+  kubecostSubs = new Subscription();
 
   buttons: ToolbarButton[] = [
     new ToolbarButton({
@@ -79,6 +82,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.poller = new ExponentialBackoff({ interval: 1000, retries: 3 });
+    this.kubecostPoller = new ExponentialBackoff({ interval: 30000, retries: 1 });//30 second intervals
 
     // Poll for new data and reset the poller if different data is found
     this.subs.add(
@@ -105,22 +109,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
         })
 
-        this.kubecostService.getAggregateCost(this.currNamespace).subscribe(
-          aggCost => {
-            if (!isEqual(this.rawCostData, aggCost)) {
-              this.rawCostData = aggCost;
-
-              this.processedCostData = [this.processIncomingCostData(aggCost)];
-              this.poller.reset();
-              }
-            },
-          err => {
-            if (!isEqual(this.rawCostData, err)) {
-              this.rawCostData = err;
-
-              this.poller.reset();
-            }
-          });
       }),
     );
 
@@ -129,13 +117,40 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       this.ns.getSelectedNamespace().subscribe(ns => {
         this.currNamespace = ns;
         this.poller.reset();
+        this.kubecostPoller.reset();
+      }),
+    );
+
+    // Poll for new kubecost data and reset the poller if different data is found
+    this.kubecostSubs.add(
+      this.kubecostPoller.start().subscribe(() => {
+        if (!this.currNamespace) {
+          return;
+        }
+
+        this.kubecostService.getAggregateCost(this.currNamespace, this.costWindow).subscribe(
+          aggCost => {
+            if (!isEqual(this.rawCostData, aggCost)) {
+              this.rawCostData = aggCost;
+
+              this.processedCostData = [this.processIncomingCostData(aggCost)];
+              }
+            },
+          err => {
+            if (!isEqual(this.rawCostData, err)) {
+              this.rawCostData = err;
+              this.kubecostPoller.reset();
+            }
+          });
       }),
     );
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+    this.kubecostSubs.unsubscribe();
     this.poller.stop();
+    this.kubecostPoller.stop();
   }
 
   // Event handling functions
@@ -444,6 +459,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
       });
     });
+  }
+
+  public costWindowChanged(window: string) {
+    this.costWindow = window;
+    this.kubecostPoller.reset();
   }
 
   public costTrackByFn(index: number, cost: AggregateCostObject) {

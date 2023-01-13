@@ -36,7 +36,7 @@ export type AggregateCostResponse = {
 export class KubecostService {
   constructor(private http: HttpClient) {}
 
-  getAggregateCost(ns: string): Observable<AggregateCostResponse> {
+  getAggregateCost(ns: string, window:string="1d"): Observable<AggregateCostResponse> {
     const url = `api/namespaces/${ns}/cost/aggregated`;
 
     return this.http
@@ -44,7 +44,7 @@ export class KubecostService {
         params: {
           aggregation: "namespace",
           namespace: ns,
-          window: "1d"
+          window: window
         }
       })
       .pipe(

@@ -12,14 +12,14 @@ import (
 func (s *server) GetCost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
-
+	window := r.URL.Query().Get("window")
 	log.Printf("loading namespace costs for %q", namespace)
 
 	u, _ := s.kubecostURL.Parse("model/aggregatedCostModel")
 
 	params := url.Values{}
 	params.Add("namespace", namespace)
-	params.Add("window", "1d")
+	params.Add("window", window)
 	params.Add("aggregation", "namespace")
 	u.RawQuery = params.Encode()
 

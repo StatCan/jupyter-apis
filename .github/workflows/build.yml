@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - ui-enhancement-kubecost-clarity
 
 env:
   K3D_VERSION: 4.4.7

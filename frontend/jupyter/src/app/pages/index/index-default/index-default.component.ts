@@ -60,6 +60,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   kubecostPoller: ExponentialBackoff;
   kubecostSubs = new Subscription();
 
+  kubecostLoading = false;
+
   buttons: ToolbarButton[] = [
     new ToolbarButton({
       text: $localize`New Notebook`,
@@ -127,9 +129,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         if (!this.currNamespace) {
           return;
         }
-
+        
         this.kubecostService.getAggregateCost(this.currNamespace, this.costWindow).subscribe(
           aggCost => {
+            this.kubecostLoading = false;
             if (!isEqual(this.rawCostData, aggCost)) {
               this.rawCostData = aggCost;
 
@@ -137,6 +140,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
               }
             },
           err => {
+            this.kubecostLoading = false;
             if (!isEqual(this.rawCostData, err)) {
               this.rawCostData = err;
               this.kubecostPoller.reset();
@@ -463,6 +467,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public costWindowChanged(window: string) {
     this.costWindow = window;
+    this.kubecostLoading = true;
     this.kubecostPoller.reset();
   }
 

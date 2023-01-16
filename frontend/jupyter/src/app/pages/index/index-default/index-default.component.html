@@ -29,20 +29,28 @@
   </lib-title-actions-toolbar>
   <div class="page-padding lib-flex-grow">
     <p i18n>Approximate cost of notebook server resources - summed values may not match total due to rounding</p>
-    <mat-form-field>
-      <mat-label i18n>Time Window</mat-label>
-      <mat-select
-        [(value)]="costWindow"
-        (selectionChange)="costWindowChanged($event.value)"
-      >
-        <mat-option value="today" i18n>Today</mat-option>
-        <mat-option value="yesterday" i18n>Yesterday</mat-option>
-        <mat-option value="week" i18n>Week</mat-option>
-        <mat-option value="month" i18n>Month</mat-option>
-        <mat-option value="lastweek" i18n>Last Week</mat-option>
-        <!--commented out because it was throwing errors <mat-option value="lastmonth" i18n>Last Month</mat-option>-->
-      </mat-select>
-    </mat-form-field>
+    <div>
+      <div class="table-header-elem">
+        <mat-form-field>
+          <mat-label i18n>Time Window</mat-label>
+          <mat-select
+            [(value)]="costWindow"
+            (selectionChange)="costWindowChanged($event.value)"
+          >
+            <mat-option value="today" i18n>Today</mat-option>
+            <mat-option value="yesterday" i18n>Yesterday</mat-option>
+            <mat-option value="week" i18n>Week</mat-option>
+            <mat-option value="month" i18n>Month</mat-option>
+            <mat-option value="lastweek" i18n>Last Week</mat-option>
+            <mat-option value="lastmonth" i18n>Last Month</mat-option>
+            <!--commented out because it was throwing errors <mat-option value="lastmonth" i18n>Last Month</mat-option>-->
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="this.kubecostLoading == true" class="table-header-elem margin-left">
+        <lib-loading-spinner></lib-loading-spinner>
+      </div>
+    </div>
     <mat-divider></mat-divider>
     <lib-table *ngIf="this.getCostStatus() == true; else error"
       [config]="costConfig"

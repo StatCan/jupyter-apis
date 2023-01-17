@@ -3,13 +3,12 @@ on:
   push:
     branches:
       - main
+      - ui-enhancement-kubecost-clarity
   pull_request:
     types:
       - 'opened'
       - 'synchronize'
       - 'reopened'
-    branches:
-      - ui-enhancement-kubecost-clarity
 env:
   REGISTRY_NAME: k8scc01covidacr
 

@@ -1,3 +1,4 @@
+<!-- AAW change, keep custom yaml out
 <mat-form-field appearance="outline" class="wide">
   <mat-label i18n>Type</mat-label>
   <mat-select
@@ -5,7 +6,6 @@
     (selectionChange)="typeChanged($event.value)"
   >
     <mat-option [value]="NEW_VOLUME_TYPE.EMPTY" i18n> Empty volume </mat-option>
-
     <mat-option
       [value]="NEW_VOLUME_TYPE.ROK_SNAPSHOT"
       *ngIf="env.ui === 'rok'"
@@ -13,7 +13,6 @@
     >
       Rok snapshot
     </mat-option>
-    <!-- AAW change, keep custom yaml out
     <mat-option
       [value]="NEW_VOLUME_TYPE.CUSTOM"
       matTooltip="Edit the K8s PVC full spec"
@@ -22,9 +21,9 @@
     >
       Custom (Advanced)
     </mat-option>
-     -->
   </mat-select>
 </mat-form-field>
+-->
 
 <app-rok-url
   *ngIf="volGroup.get('newPvc.metadata.annotations.rok/origin')"

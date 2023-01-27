@@ -25,7 +25,8 @@
             >
               {{ getVolumeName(volGroup.value) }},
             </div>
-            <div class="pvc-type">{{ getNewVolumeType(volGroup.value) }},</div>
+            <!--AAW removed. Always returns 'Empty', provides no value-->
+            <!--<div class="pvc-type">{{ getNewVolumeType(volGroup.value) }},</div>-->
             <div>{{ getNewVolumeSize(volGroup.value) }}</div>
           </ng-container>
 

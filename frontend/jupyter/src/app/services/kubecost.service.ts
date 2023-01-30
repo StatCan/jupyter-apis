@@ -6,28 +6,54 @@ import {
   JWABackendResponse,
 } from '../types';
 
-export type AggregateCostResponse = {
+interface AllocationCostData {
+  [namespace: string]: {
+    "name": string,
+    "properties": object,
+    "window": object,
+    "start": string,
+    "end": string,
+    "minutes": number,
+    "cpuCores": number,
+    "cpuCoreRequestAverage": number,
+    "cpuCoreUsageAverage": number,
+    "cpuCoreHours": number,
+    "cpuCost": number,
+    "cpuCostAdjustment": number,
+    "cpuEfficiency": number,
+    "gpuCount": number,
+    "gpuHours": number,
+    "gpuCost": number,
+    "gpuCostAdjustment": number,
+    "networkTransferBytes": number,
+    "networkReceiveBytes": number,
+    "networkCost": number,
+    "networkCostAdjustment": number,
+    "loadBalancerCost": number,
+    "loadBalancerCostAdjustment": number,
+    "pvBytes": number,
+    "pvByteHours": number,
+    "pvCost": number,
+    "pvs": object,
+    "pvCostAdjustment": number,
+    "ramBytes": number,
+    "ramByteRequestAverage": number,
+    "ramByteUsageAverage": number,
+    "ramByteHours": number,
+    "ramCost": number,
+    "ramCostAdjustment": number,
+    "ramEfficiency": number,
+    "sharedCost": number,
+    "externalCost": number,
+    "totalCost": number,
+    "totalEfficiency": number,
+    "rawAllocationOnly": object
+  }
+};
+
+export type AllocationCostResponse = {
     code: number;
-    data: {
-      [namespace: string]: {
-        aggregation: string;
-        environment: string;
-        cpuAllocationAverage: number;
-        cpuCost: number;
-        cpuEfficiency: number;
-        efficiency: number;
-        gpuAllocationAverage: number;
-        gpuCost: number;
-        ramAllocationAverage: number;
-        ramCost: number;
-        ramEfficiency: number;
-        pvAllocationAverage: number;
-        pvCost: number;
-        networkCost: number;
-        sharedCost: number;
-        totalCost: number;
-      };
-    };
+    data: Array<AllocationCostData>;
     message: string;
   };
 
@@ -36,11 +62,11 @@ export type AggregateCostResponse = {
 export class KubecostService {
   constructor(private http: HttpClient) {}
 
-  getAggregateCost(ns: string, window:string="1d"): Observable<AggregateCostResponse> {
-    const url = `api/namespaces/${ns}/cost/aggregated`;
+  getAllocationCost(ns: string, window:string="1d"): Observable<AllocationCostResponse> {
+    const url = `api/namespaces/${ns}/cost/allocation`;
 
     return this.http
-      .get<AggregateCostResponse | JWABackendResponse>(url, {
+      .get<AllocationCostResponse | JWABackendResponse>(url, {
         params: {
           aggregation: "namespace",
           namespace: ns,
@@ -50,24 +76,24 @@ export class KubecostService {
       .pipe(
         tap(res => this.handleBackendError(res)),
         catchError(err => this.handleError(err))
-      ) as Observable<AggregateCostResponse>;
+      ) as Observable<AllocationCostResponse>;
   }
 
-  private handleBackendError(response: AggregateCostResponse | JWABackendResponse) {
+  private handleBackendError(response: AllocationCostResponse | JWABackendResponse) {
     if (this.isResp(response) || response.code < 200 || response.code >= 300) {
       throw response;
     }
   }
 
   private handleError(
-    error: HttpErrorResponse | AggregateCostResponse | JWABackendResponse
+    error: HttpErrorResponse | AllocationCostResponse | JWABackendResponse
   ): Observable<never> {
     const message = this.isResp(error) ? error.log : error.message;
     return throwError(new Error(message));
   }
 
   private isResp(
-    obj: HttpErrorResponse | AggregateCostResponse | JWABackendResponse
+    obj: HttpErrorResponse | AllocationCostResponse | JWABackendResponse
   ): obj is JWABackendResponse {
     return (obj as JWABackendResponse).success !== undefined;
   }

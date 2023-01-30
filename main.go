@@ -134,7 +134,7 @@ func main() {
 	router.HandleFunc("/api/storageclasses", s.GetStorageClasses).Methods("GET")
 	router.HandleFunc("/api/storageclasses/default", s.GetDefaultStorageClass).Methods("GET")
 
-	router.HandleFunc("/api/namespaces/{namespace}/cost/aggregated", s.checkAccess(authorizationv1.SubjectAccessReview{
+	router.HandleFunc("/api/namespaces/{namespace}/cost/allocation", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Group:    corev1.SchemeGroupVersion.Group,

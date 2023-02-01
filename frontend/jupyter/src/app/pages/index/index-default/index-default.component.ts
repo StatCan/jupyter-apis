@@ -490,14 +490,18 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       JSON.stringify(cost),
     ) as AllocationCostResponse;
 
-    let costCopy: AllocationCostObject = {};
+    let costCopy: AllocationCostObject = {
+      cpuCost: this.formatCost(0),
+      gpuCost: this.formatCost(0),
+      pvCost: this.formatCost(0),
+      totalCost: this.formatCost(0)
+    };
     if (resp.data[0][this.currNamespace]) {
       costCopy.cpuCost = this.formatCost(resp.data[0][this.currNamespace].cpuCost + resp.data[0][this.currNamespace].ramCost);
       costCopy.gpuCost = this.formatCost(resp.data[0][this.currNamespace].gpuCost);
       costCopy.pvCost = this.formatCost(resp.data[0][this.currNamespace].pvCost);
       costCopy.totalCost = this.formatCost(resp.data[0][this.currNamespace].totalCost);
     }
-
     return costCopy;
   }
 

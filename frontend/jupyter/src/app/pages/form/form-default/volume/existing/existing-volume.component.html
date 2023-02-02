@@ -1,11 +1,10 @@
+<!-- We at the AAW definitely do not want this
 <mat-form-field appearance="outline" class="wide">
   <mat-label i18n>Type</mat-label>
   <mat-select [value]="type" (selectionChange)="typeChanged($event.value)">
     <mat-option [value]="EXISTING_VOLUME_TYPE.PVC" i18n>
       Kubernetes Volume
     </mat-option>
-
-    <!-- We at the AAW definitely do not want this
     <mat-option
       [value]="EXISTING_VOLUME_TYPE.CUSTOM"
       matTooltip="Insert your custom K8s volume spec."
@@ -14,9 +13,9 @@
     >
       Custom (Advanced)
     </mat-option>
-  -->
   </mat-select>
 </mat-form-field>
+-->
 
 <!-- PVC -->
 <ng-container *ngIf="type === EXISTING_VOLUME_TYPE.PVC; else customSrc">

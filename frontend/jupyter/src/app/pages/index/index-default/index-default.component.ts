@@ -14,7 +14,7 @@ import {
   ToolbarButton,
 } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { KubecostService, AggregateCostResponse } from 'src/app/services/kubecost.service';
+import { KubecostService, AllocationCostResponse } from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
@@ -29,7 +29,7 @@ import { NotebookResponseObject,
   NotebookProcessedObject, 
   VolumeResponseObject, 
   VolumeProcessedObject,
-  AggregateCostObject,
+  AllocationCostObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 
@@ -54,8 +54,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   processedVolumeData: VolumeProcessedObject[] = [];
 
   costConfig = defaultCostConfig;
-  rawCostData: AggregateCostResponse = null;
-  processedCostData: AggregateCostObject[] = [];
+  rawCostData: AllocationCostResponse = null;
+  processedCostData: AllocationCostObject[] = [];
   costWindow = "today";
   kubecostPoller: ExponentialBackoff;
   kubecostSubs = new Subscription();
@@ -130,12 +130,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           return;
         }
         
-        this.kubecostService.getAggregateCost(this.currNamespace, this.costWindow).subscribe(
+        this.kubecostService.getAllocationCost(this.currNamespace, this.costWindow).subscribe(
           aggCost => {
             this.kubecostLoading = false;
             if (!isEqual(this.rawCostData, aggCost)) {
               this.rawCostData = aggCost;
-
+              
               this.processedCostData = [this.processIncomingCostData(aggCost)];
               }
             },
@@ -471,7 +471,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     this.kubecostPoller.reset();
   }
 
-  public costTrackByFn(index: number, cost: AggregateCostObject) {
+  public costTrackByFn(index: number, cost: AllocationCostObject) {
     return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.totalCost}`;
   }
 
@@ -485,21 +485,25 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  public processIncomingCostData(cost: AggregateCostResponse) {
-
+  public processIncomingCostData(cost: AllocationCostResponse) {
     const resp = JSON.parse(
       JSON.stringify(cost),
-    ) as AggregateCostResponse;
-    
-    let costCopy: AggregateCostObject = {};
+    ) as AllocationCostResponse;
 
-    if (resp.data[this.currNamespace]) {
-      costCopy.cpuCost = this.formatCost(resp.data[this.currNamespace].cpuCost + resp.data[this.currNamespace].ramCost);
-      costCopy.gpuCost = this.formatCost(resp.data[this.currNamespace].gpuCost);
-      costCopy.pvCost = this.formatCost(resp.data[this.currNamespace].pvCost);
-      costCopy.totalCost = this.formatCost(resp.data[this.currNamespace].totalCost);
+    let costCopy: AllocationCostObject = {
+      cpuCost: this.formatCost(0),
+      gpuCost: this.formatCost(0),
+      ramCost: this.formatCost(0),
+      pvCost: this.formatCost(0),
+      totalCost: this.formatCost(0)
+    };
+    if (resp.data[0][this.currNamespace]) {
+      costCopy.cpuCost = this.formatCost(resp.data[0][this.currNamespace].cpuCost);
+      costCopy.gpuCost = this.formatCost(resp.data[0][this.currNamespace].gpuCost);
+      costCopy.ramCost = this.formatCost(resp.data[0][this.currNamespace].ramCost);
+      costCopy.pvCost = this.formatCost(resp.data[0][this.currNamespace].pvCost);
+      costCopy.totalCost = this.formatCost(resp.data[0][this.currNamespace].totalCost);
     }
-
     return costCopy;
   }
 

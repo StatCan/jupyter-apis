@@ -1,5 +1,5 @@
 export * from './affinity';
-export * from './aggregatecost';
+export * from './allocationcost';
 export * from './config';
 export * from './gpu';
 export * from './notebook';

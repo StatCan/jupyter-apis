@@ -227,14 +227,19 @@ export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
 export const defaultCostConfig = {
   columns: [
     {
-      matHeaderCellDef: $localize`Compute`,
-      matColumnDef: 'compute',
+      matHeaderCellDef: $localize`CPUs`,
+      matColumnDef: 'cpus',
       value: new PropertyValue({ field: 'cpuCost' }),
     },
     {
       matHeaderCellDef: $localize`GPUs`,
       matColumnDef: 'gpus',
       value: new PropertyValue({ field: 'gpuCost' }),
+    },
+    {
+      matHeaderCellDef: $localize`RAM`,
+      matColumnDef: 'ram',
+      value: new PropertyValue({ field: 'ramCost' }),
     },
     {
       matHeaderCellDef: $localize`Storage`,

@@ -10,11 +10,20 @@ on:
       - 'reopened'
 env:
   REGISTRY_NAME: k8scc01covidacr
+  DEV_REGISTRY_NAME: k8scc01covidacrdev
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    # Determine if pushing to ACR or DEV ACR
+    - name: Set ENV variables for a PR containing the auto-deploy tag
+      if: github.event_name == 'pull_request' && contains( github.event.pull_request.labels.*.name, 'auto-deploy')
+      run: echo "REGISTRY=${{env.DEV_REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
+   
+    - name: Set ENV variable for pushes to master
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: echo "REGISTRY=${{env.REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
     # Push image to ACR
     # Pushes if this is a push to master or an update to a PR that has auto-deploy label
     - name: Test if we should push to ACR
@@ -29,22 +38,30 @@ jobs:
 
     - uses: actions/checkout@master
 
+    # Connect to Azure Container registry (ACR)
     - uses: azure/docker-login@v1
       with:
         login-server: ${{ env.REGISTRY_NAME }}.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
+    # Connect to Azure DEV Container registry (ACR)
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.DEV_REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.DEV_REGISTRY_USERNAME }}
+        password: ${{ secrets.DEV_REGISTRY_PASSWORD }}
+
     - name: Build docker image and push
       if: steps.should-i-push.outputs.boolean == 'true'
       run: |
-        docker build -f Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} .
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
+        docker build -f Dockerfile -t $REGISTRY.azurecr.io/jupyter-apis:${{ github.sha }} .
+        docker push $REGISTRY.azurecr.io/jupyter-apis:${{ github.sha }}
 
     - name: Azure containrer scan
       if: steps.should-i-push.outputs.boolean == 'true'
       uses: Azure/container-scan@v0
       with:
-        image-name: ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
+        image-name: $REGISTRY.azurecr.io/jupyter-apis:${{ github.sha }}
         severity-threshold: CRITICAL
         run-quality-checks: false

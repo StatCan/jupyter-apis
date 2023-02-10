@@ -56,13 +56,13 @@ jobs:
     - name: Build docker image and push
       if: steps.should-i-push.outputs.boolean == 'true'
       run: |
-        docker build -f Dockerfile -t $REGISTRY/jupyter-apis:${{ github.sha }} .
-        docker push $REGISTRY/jupyter-apis:${{ github.sha }}
+        docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
+        docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
 
     - name: Azure containrer scan
       if: steps.should-i-push.outputs.boolean == 'true'
       uses: Azure/container-scan@v0
       with:
-        image-name: $REGISTRY/jupyter-apis:${{ github.sha }}
+        image-name: ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
         severity-threshold: CRITICAL
         run-quality-checks: false

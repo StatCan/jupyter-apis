@@ -188,9 +188,11 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   }
   
   // Automatically set values of CPU and Memory if GPU is 1
-  checkGPU(gpu: string) {
+  checkGPU(gpu: string) {    
     if (gpu == "none") {
       this.readonlySpecs = false;
+      this.formCtrl.get("cpu").setValue("1");
+      this.formCtrl.get("memory").setValue("4");
     } else {
       this.readonlySpecs = true;
       this.formCtrl.get("cpu").setValue("4");

@@ -45,6 +45,7 @@ type LabelSelectorMatchExpression struct {
 
 type CPU struct {
 	Value       string `yaml:"value" json:"value"`
+	GpuDefault  string `yaml:"gpuDefault" json:"gpuDefault"`
 	LimitFactor string `yaml:"limitFactor" json:"limitFactor"`
 	ReadOnly    bool   `yaml:"readOnly" json:"readOnly"`
 }
@@ -64,7 +65,7 @@ type ValueElement struct {
 }
 
 // Structs for the yaml versions of definitions, minimalistic as it is just a default
-//can't re-use structs from go since this is yaml and not json
+// can't re-use structs from go since this is yaml and not json
 type VolumeValues struct {
 	Mount  string     `yaml:"mount" json:"mount"`
 	NewPvc NewPvcYaml `yaml:"newPvc" json:"newPvc"`

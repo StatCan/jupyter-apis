@@ -43,12 +43,14 @@ export interface Config {
 
   cpu?: {
     value: string;
+    gpuDefault: string;
     limitFactor: string;
     readOnly?: boolean;
   };
 
   memory?: {
     value: string;
+    gpuDefault: string;
     limitFactor: string;
     readOnly?: boolean;
   };

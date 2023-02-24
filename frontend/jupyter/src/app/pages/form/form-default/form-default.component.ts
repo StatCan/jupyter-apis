@@ -191,12 +191,12 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   checkGPU(gpu: string) {
     if (gpu == "none") {
       this.readonlySpecs = false;
-      this.formCtrl.get("cpu").setValue("1");
-      this.formCtrl.get("memory").setValue("4");
+      this.formCtrl.get("cpu").setValue(this.config?.cpu?.value);
+      this.formCtrl.get("memory").setValue(this.config?.memory?.value);
     } else {
       this.readonlySpecs = true;
-      this.formCtrl.get("cpu").setValue("4");
-      this.formCtrl.get("memory").setValue("96");
+      this.formCtrl.get("cpu").setValue(this.config?.cpu?.gpuDefault);
+      this.formCtrl.get("memory").setValue(this.config?.memory?.gpuDefault);
     }
   }
 

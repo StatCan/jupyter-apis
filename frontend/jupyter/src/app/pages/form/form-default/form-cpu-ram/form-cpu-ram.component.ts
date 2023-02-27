@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, AbstractControl, Validators, ValidatorFn, ControlContainer, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
+import { FormGroup, AbstractControl, Validators, ValidatorFn, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
 import { calculateLimits } from '../utils';
 
 // AAW
@@ -88,11 +88,9 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    //triggers when gpu number goes from 1 to 0
-    if(changes?.readonlySpecs.previousValue===true){
-      this.parentForm.get("cpu").updateValueAndValidity();
-      this.parentForm.get("memory").updateValueAndValidity();
-    }
+    //for updating limit inputs
+    this.parentForm.get("cpu").updateValueAndValidity();
+    this.parentForm.get("memory").updateValueAndValidity();
   }
 
   // AAW changes

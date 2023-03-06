@@ -16,8 +16,8 @@
     "start:fr": "ng serve --configuration=fr --base-href / --deploy-url / --proxy-config proxy.config.js",
     "i18n:extract": "ng extract-i18n --output-path i18n",
     "test": "ng test",
-    "e2e": "cypress open .",
-    "e2e-ci": "cypress run .",
+    "e2e": "cypress open",
+    "e2e-ci": "cypress run",
     "lint": "ng lint"
   },
   "private": true,

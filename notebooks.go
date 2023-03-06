@@ -41,6 +41,7 @@ const StoppedAnnotation string = "kubeflow-resource-stopped"
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
+// AutoMountLabel is the label name to automount blob-csi volumes
 const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
 // Begin structs necessary for handling volumes

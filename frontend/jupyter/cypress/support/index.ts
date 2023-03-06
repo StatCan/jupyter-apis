@@ -7,15 +7,27 @@ declare global {
   namespace Cypress {
     interface Chainable {
       /**
-       * Custom command to select a Namespace in the main page from the dropdown
-       * @param ns The namespace to select from the dropdown
+       * Custom command to mock request at '/api/namespaces'
        */
-      selectNamespace(ns: string): Chainable;
+      mockNamespacesRequest(): Chainable<void>;
 
       /**
-       * Custom command to create a Notebook with random suffixed name
+       * Custom command to mock request at '/api/namespaces/<namespace>/notebooks'
+       * and returns array with mock notebooks []
        */
-      createNotebook(): Chainable;
+      mockNotebooksRequest(namespace: string): Chainable<void>;
+
+       /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/pvcs'
+       * and returns array with mock pvcs []
+       */
+       mockPVCsRequest(namespace: string): Chainable<void>;
+
+       /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/cost/allocation'
+       * and returns array with mock cost data
+       */
+       mockKubecostRequest(namespace: string): Chainable<void>;
     }
   }
 }

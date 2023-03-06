@@ -77,15 +77,10 @@ KF_USER_ID=user npm start
 
 For the kubecost data to be retrievable, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
 
-### Older instructions
+### Running intergration tests
 
-1. ~Change directory to front-end folder: `cd frontend`~
-2. ~Install dependencies: `npm install`~
-3. ~Run the front-end `KF_USER_ID=<cloud_email> npm start`~
-
-~The front-end is now available at `http://localhost:4200/jupyter/`. Since it is
-disconnected from the `centraldashboard` component, you need to type your
-desired namespace in the UI rather than selecting it from a dropdown.~
+We use [Cypress](https://www.cypress.io/) to make our end-to-end tests.
+To run integration tests locally, first make sure that the jupyter-apis app is up and running. Then, from the `jupyter-apis/frontend/jupyter` directory, run either `npm run e2e` to open the Cypress UI, or `npm run e2e-ci` to run the cypress tests just in the terminal.
 
 ### Connecting a Kubeflow Cluster
 

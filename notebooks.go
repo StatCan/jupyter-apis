@@ -41,6 +41,8 @@ const StoppedAnnotation string = "kubeflow-resource-stopped"
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
+const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
+
 // Begin structs necessary for handling volumes
 type volrequest struct {
 	Mount          string         `json:"mount,omitempty"`
@@ -446,7 +448,9 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      req.Name,
 			Namespace: namespace,
-			Labels:    make(map[string]string),
+			Labels: map[string]string{
+				AutoMountLabel: "true",
+			},
 			Annotations: map[string]string{
 				ServerTypeAnnotation: req.ServerType,
 			},

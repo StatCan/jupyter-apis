@@ -12,7 +12,6 @@ import {
   PodDefault,
   NotebookFormObject,
   NotebookProcessedObject,
-  PvcResponseObject,
 } from '../types';
 import { V1Namespace } from '@kubernetes/client-node';
 
@@ -54,18 +53,6 @@ export class JWABackendService extends BackendService {
       catchError(error => this.handleError(error)),
       map(data => {
         return data.config;
-      }),
-    );
-  }
-
-  public getVolumes(ns: string): Observable<PvcResponseObject[]> {
-    // Get existing PVCs in a namespace
-    const url = `api/namespaces/${ns}/pvcs`;
-
-    return this.http.get<JWABackendResponse>(url).pipe(
-      catchError(error => this.handleError(error)),
-      map(data => {
-        return data.pvcs;
       }),
     );
   }
@@ -147,7 +134,9 @@ export class JWABackendService extends BackendService {
     return this.http.get<VWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
       map((resp: VWABackendResponse) => {
-        return resp.pvcs;
+        let pvcsCopy = JSON.parse(JSON.stringify(resp.pvcs));
+        pvcsCopy = pvcsCopy.filter(pvc => pvc.labels?.["blob.aaw.statcan.gc.ca/automount"]==="true" ? false : true);
+        return pvcsCopy;
       }),
     );
   }

@@ -379,8 +379,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
     );
 
-    pvcsCopy = pvcsCopy.filter(pvc => pvc.labels?.["blob.aaw.statcan.gc.ca/automount"]==="true" ? false : true);
-
     pvcsCopy.forEach(element => {
       if(mounts[element.name]){
         element.usedBy = mounts[element.name].name;

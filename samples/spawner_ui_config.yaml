@@ -188,7 +188,7 @@ spawnerFormDefaults:
     readOnly: false
   tolerationGroup:
     # The default `groupKey` from the options list
-    # If readonly, the default value will be the only option
+    # If readonly, the default value will be the only option 
     value: "none"
     # The list of available tolerationGroup configs
     options: []

@@ -16,9 +16,12 @@
     "start:fr": "ng serve --configuration=fr --base-href / --deploy-url / --proxy-config proxy.config.js",
     "i18n:extract": "ng extract-i18n --output-path i18n",
     "test": "ng test",
-    "e2e": "cypress open",
-    "e2e-ci": "cypress run",
-    "lint": "ng lint"
+    "test:prod": "ng test --browsers=ChromeHeadless --watch=false",
+    "ui-test": "cypress open",
+    "ui-test-ci": "cypress run",
+    "ui-test-ci-all": "cypress run --browser=chrome && cypress run --browser=firefox",
+    "lint-check": "ng lint",
+    "lint": "ng lint --fix"
   },
   "private": true,
   "dependencies": {

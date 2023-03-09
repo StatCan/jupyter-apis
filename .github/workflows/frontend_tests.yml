@@ -1,0 +1,85 @@
+name: JWA Frontend Tests
+on:
+  pull_request:
+    types:
+      - 'opened'
+      - 'synchronize'
+      - 'reopened'
+
+jobs:
+  #frontend-format-linting-check:
+  #  name: Check code format and lint
+  #  runs-on: ubuntu-latest
+  #
+  #  steps:
+  #    - name: Check out code
+  #      uses: actions/checkout@v3
+  #
+  #    - name: Setup Node
+  #      uses: actions/setup-node@v3
+  #      with:
+  #        node-version: 12
+  #
+  #    - name: Check frontend formatting
+  #      run: |
+  #        cd frontend/jupyter
+  #        npm i
+  #        npm run format:check
+  #    - name: Check frontend code linting
+  #      run: |
+  #        cd frontend/jupyter
+  #        npm i
+  #        npm run lint-check
+#  frontend-unit-tests:
+#    runs-on: ubuntu-latest
+#    name: Unit tests
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Setup node version to 12
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 12
+#
+#      - name: Install Kubeflow common library dependecies
+#        run: |
+#          cd frontend/common/kubeflow-common-lib
+#          npm i
+#          npm run build
+#          npm link ./dist/kubeflow
+#      - name: Install JWA dependencies
+#        run: |
+#          cd frontend/jupyter
+#          npm i
+#          npm link kubeflow
+#      - name: Run unit tests
+#        run: |
+#          cd frontend/jupyter
+#          npm run test:prod
+  run-ui-tests:
+    name: UI tests with Cypress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node version to 12
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12
+
+      - name: Install Kubeflow common library dependecies
+        run: |
+          cd frontend/common/kubeflow-common-lib
+          npm i
+          npm run build
+          npm link ./dist/kubeflow
+      - name: Install JWA dependencies
+        run: |
+          cd frontend/jupyter
+          npm i
+          npm link kubeflow
+      - name: Serve UI & run Cypress tests in Chrome and Firefox
+        run: |
+          cd frontend/jupyter
+          npm start
+          npm run ui-test-ci-all

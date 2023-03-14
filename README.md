@@ -66,10 +66,9 @@ The following can be pasted in a script and executed. This uses the latest node 
 cd frontend/common/kubeflow-common-lib
 npm i
 npm run build
-cd dist/kubeflow
-npm link
+npm link ./dist/kubeflow
 
-cd ../../../../jupyter
+cd ../../jupyter
 npm i
 npm link kubeflow --legacy-peer-deps
 KF_USER_ID=user npm start
@@ -80,7 +79,7 @@ For the kubecost data to be retrievable, the following will need to be executed 
 ### Running intergration tests
 
 We use [Cypress](https://www.cypress.io/) to make our end-to-end tests.
-To run integration tests locally, first make sure that the jupyter-apis app is up and running. Then, from the `jupyter-apis/frontend/jupyter` directory, run either `npm run e2e` to open the Cypress UI, or `npm run e2e-ci` to run the cypress tests just in the terminal.
+To run integration tests locally, first make sure that the jupyter-apis app is up and running. Then, from the `jupyter-apis/frontend/jupyter` directory, run either `npm run ui-test` to open the Cypress UI, or `npm run ui-test-ci` to run the cypress tests just in the terminal.
 
 ### Connecting a Kubeflow Cluster
 

@@ -127,6 +127,19 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
       notebook.image = notebook.imageGroupThree;
     }
 
+    // Set serverType for custom image
+    if (notebook.customImageCheck) {
+      if(notebook.image.match(/\/rstudio:/)){
+        notebook.serverType = 'group-one';
+      }else if(notebook.image.match(/\/remote-desktop:/)){
+        notebook.serverType = 'group-two';
+      }else if(notebook.image.match(/\/sas:/)){
+        notebook.serverType = 'group-three';
+      }else{
+        notebook.serverType = 'jupyter';
+      }
+    }
+
     // Remove unnecessary images from the request sent to the backend
     delete notebook.imageGroupOne;
     delete notebook.imageGroupTwo;

@@ -21,16 +21,16 @@ export class VolumeMountComponent implements OnInit, OnChanges {
   private initComponent(): void{
     // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
 
-    this.volGroup.setValidators([
+    this.volGroup.get('mount').setValidators([
       Validators.required,
-      Validators.pattern(/^(\/home\/jovyan(\/)?).*|(\/opt\/openmpp(\/)?).*$/)
+      Validators.pattern(/^(\/home\/jovyan)((\/)(.)*)?|(\/opt\/openmpp)((\/)(.)*)?$/)
     ]);
   }
 
   showMountPathError() {
-    const volumeName =this.volGroup; // should this be like the getNameCtrl?
-    if (volumeName.hasError("pattern")) {
-      return $localize`The accepted locations are /home/jovyan and any subdirectory or /opt/openmp`;
+    const mountName =this.volGroup.get('mount'); // should this be like the getNameCtrl?
+    if (mountName.hasError("pattern")) {
+      return `The accepted locations are /home/jovyan and any subdirectory or /opt/openmp`;
     }
   }
 }

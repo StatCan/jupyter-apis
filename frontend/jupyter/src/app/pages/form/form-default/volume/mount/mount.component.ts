@@ -23,14 +23,14 @@ export class VolumeMountComponent implements OnInit, OnChanges {
 
     this.volGroup.get('mount').setValidators([
       Validators.required,
-      Validators.pattern(/^(\/home\/jovyan)((\/)(.)*)?|(\/opt\/openmpp)((\/)(.)*)?$/)
+      Validators.pattern(/^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/)
     ]);
   }
 
   showMountPathError() {
     const mountName =this.volGroup.get('mount'); // should this be like the getNameCtrl?
     if (mountName.hasError("pattern")) {
-      return `The accepted locations are /home/jovyan and any subdirectory or /opt/openmp`;
+      return $localize `The accepted locations are /home/jovyan and any subdirectory or /opt/openmp`;
     }
   }
 }

@@ -29,8 +29,11 @@ export class VolumeMountComponent implements OnInit, OnChanges {
 
   showMountPathError() {
     const mountName =this.volGroup.get('mount'); // should this be like the getNameCtrl?
+    if (mountName.hasError("required")) {
+      return $localize`Mount path is required`;
+    }
     if (mountName.hasError("pattern")) {
-      return $localize `The accepted locations are /home/jovyan, /opt/openmp and any of their subdirectorie`;
+      return $localize `The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie`;
     }
   }
 }

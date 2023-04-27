@@ -136,7 +136,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
             if (!isEqual(this.rawCostData, aggCost)) {
               this.rawCostData = aggCost;
               
-              this.processedCostData = [this.processIncomingCostData(aggCost)];
+              this.processedCostData = this.processIncomingCostData(aggCost);
               }
             },
           err => {
@@ -470,7 +470,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public costTrackByFn(index: number, cost: AllocationCostObject) {
-    return `${cost.cpuCost}/${cost.gpuCost}/${cost.pvCost}/${cost.totalCost}`;
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.sharedCost}/${cost.totalCost}`;
   }
 
   public getCostStatus() {
@@ -493,20 +493,31 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       gpuCost: this.formatCost(0),
       ramCost: this.formatCost(0),
       pvCost: this.formatCost(0),
+      sharedCost: this.formatCost(0),
       totalCost: this.formatCost(0)
     };
-    if (resp.data[0][this.currNamespace]) {
-      costCopy.cpuCost = this.formatCost(resp.data[0][this.currNamespace].cpuCost);
-      costCopy.gpuCost = this.formatCost(resp.data[0][this.currNamespace].gpuCost);
-      costCopy.ramCost = this.formatCost(resp.data[0][this.currNamespace].ramCost);
-      costCopy.pvCost = this.formatCost(resp.data[0][this.currNamespace].pvCost);
-      costCopy.totalCost = this.formatCost(resp.data[0][this.currNamespace].totalCost);
+
+    const alloc = resp.data.sets[0].allocations[this.currNamespace];
+    if (alloc) {
+      costCopy.cpuCost = this.formatCost(alloc.cpuCost);
+      costCopy.gpuCost = this.formatCost(alloc.gpuCost);
+      costCopy.ramCost = this.formatCost(alloc.ramCost);
+      costCopy.pvCost = this.formatCost(alloc.pvCost);
+      costCopy.sharedCost = this.formatCost(alloc.sharedCost);
+      costCopy.totalCost = Number.parseInt(costCopy.sharedCost).toString();
+      costCopy.totalCost = this.formatCost(alloc.cpuCost
+        +alloc.gpuCost
+        +alloc.ramCost
+        +alloc.pvCost
+        +alloc.sharedCost
+      );
     }
-    return costCopy;
+    
+    return [costCopy];
   }
 
   public formatCost(value: number): string {
-    return "$" + (value > 0 ? Math.max(value, 0.01) : 0).toFixed(2)
+    return "$" + value.toFixed(2)
   }
 
 }

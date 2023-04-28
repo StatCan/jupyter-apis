@@ -9,51 +9,38 @@ import {
 interface AllocationCostData {
   [namespace: string]: {
     "name": string,
-    "properties": object,
-    "window": object,
     "start": string,
     "end": string,
-    "minutes": number,
-    "cpuCores": number,
-    "cpuCoreRequestAverage": number,
+    "cpuCoreRequestAverage": number, 
     "cpuCoreUsageAverage": number,
-    "cpuCoreHours": number,
     "cpuCost": number,
-    "cpuCostAdjustment": number,
-    "cpuEfficiency": number,
-    "gpuCount": number,
-    "gpuHours": number,
     "gpuCost": number,
-    "gpuCostAdjustment": number,
-    "networkTransferBytes": number,
-    "networkReceiveBytes": number,
     "networkCost": number,
-    "networkCostAdjustment": number,
     "loadBalancerCost": number,
-    "loadBalancerCostAdjustment": number,
-    "pvBytes": number,
-    "pvByteHours": number,
     "pvCost": number,
-    "pvs": object,
-    "pvCostAdjustment": number,
-    "ramBytes": number,
     "ramByteRequestAverage": number,
     "ramByteUsageAverage": number,
-    "ramByteHours": number,
     "ramCost": number,
-    "ramCostAdjustment": number,
-    "ramEfficiency": number,
     "sharedCost": number,
     "externalCost": number,
-    "totalCost": number,
-    "totalEfficiency": number,
-    "rawAllocationOnly": object
   }
 };
 
 export type AllocationCostResponse = {
     code: number;
-    data: Array<AllocationCostData>;
+    data: {
+      sets: Array<{
+        allocations: AllocationCostData,
+        window: {
+          start: string,
+          end: string
+        }
+      }>
+      window: {
+        start: string,
+        end: string
+      }
+    };
     message: string;
   };
 

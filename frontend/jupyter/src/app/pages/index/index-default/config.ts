@@ -247,6 +247,11 @@ export const defaultCostConfig = {
       value: new PropertyValue({ field: 'pvCost' }),
     },
     {
+      matHeaderCellDef: $localize`Shared`,
+      matColumnDef: 'shared',
+      value: new PropertyValue({ field: 'sharedCost' }),
+    },
+    {
       matHeaderCellDef: $localize`Total`,
       matColumnDef: 'total',
       value: new PropertyValue({ field: 'totalCost' }),

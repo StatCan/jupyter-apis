@@ -546,7 +546,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="59d809cdc85110d7959687522ca681374096ba02" datatype="html">
-        <source>Select the base software you want installed in your server. If you choose a custom image, it must be available in the DAaaS container registry.</source>
+        <source>Select the base software you want installed in your server. If you choose a custom image, it must be available in the AAW container registry.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-default/form-image/form-image.component.html</context>
           <context context-type="linenumber">3</context>

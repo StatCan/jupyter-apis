@@ -246,11 +246,12 @@ export const defaultCostConfig = {
       matColumnDef: 'storage',
       value: new PropertyValue({ field: 'pvCost' }),
     },
-    {
-      matHeaderCellDef: $localize`Shared`,
-      matColumnDef: 'shared',
-      value: new PropertyValue({ field: 'sharedCost' }),
-    },
+    //AAW: Commented out shared cost
+    //{
+    //  matHeaderCellDef: $localize`Shared`,
+    //  matColumnDef: 'shared',
+    //  value: new PropertyValue({ field: 'sharedCost' }),
+    //},
     {
       matHeaderCellDef: $localize`Total`,
       matColumnDef: 'total',

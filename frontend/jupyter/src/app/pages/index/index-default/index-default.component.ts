@@ -470,7 +470,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public costTrackByFn(index: number, cost: AllocationCostObject) {
-    return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.sharedCost}/${cost.totalCost}`;
+    //AAW: Commented out shared cost
+    //return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.sharedCost}/${cost.totalCost}`;
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.totalCost}`;
   }
 
   public getCostStatus() {
@@ -503,13 +505,19 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       costCopy.gpuCost = this.formatCost(alloc.gpuCost);
       costCopy.ramCost = this.formatCost(alloc.ramCost);
       costCopy.pvCost = this.formatCost(alloc.pvCost);
-      costCopy.sharedCost = this.formatCost(alloc.sharedCost);
-      costCopy.totalCost = Number.parseInt(costCopy.sharedCost).toString();
-      costCopy.totalCost = this.formatCost(alloc.cpuCost
+      //AAW: Commented out shared cost
+      //costCopy.sharedCost = this.formatCost(alloc.sharedCost);
+      //costCopy.totalCost = this.formatCost(alloc.cpuCost
+      //  +alloc.gpuCost
+      //  +alloc.ramCost
+      //  +alloc.pvCost
+      //  +alloc.sharedCost
+      //);
+      costCopy.totalCost = this.formatCost(
+        alloc.cpuCost
         +alloc.gpuCost
         +alloc.ramCost
         +alloc.pvCost
-        +alloc.sharedCost
       );
     }
     

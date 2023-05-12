@@ -472,7 +472,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   public costTrackByFn(index: number, cost: AllocationCostObject) {
     //AAW: Commented out shared cost
     //return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.sharedCost}/${cost.totalCost}`;
-    return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.sharedCost}/${cost.totalCost}`;
+    return `${cost.cpuCost}/${cost.gpuCost}/${cost.ramCost}/${cost.pvCost}/${cost.totalCost}`;
   }
 
   public getCostStatus() {

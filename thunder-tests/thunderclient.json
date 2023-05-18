@@ -50,13 +50,8 @@
     "method": "GET",
     "sortNum": 17500,
     "created": "2022-09-23T13:47:44.953Z",
-    "modified": "2022-09-23T13:47:44.953Z",
-    "headers": [
-      {
-        "name": "KF_USER_ID",
-        "value": "christian.boin@cloud.statcan.ca"
-      }
-    ],
+    "modified": "2023-05-18T19:52:15.288Z",
+    "headers": [],
     "params": [
       {
         "name": "namespace",

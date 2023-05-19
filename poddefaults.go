@@ -5,11 +5,14 @@ import (
 	"net/http"
 	"reflect"
 
+	v1alpha1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1alpha1"
 	"github.com/gorilla/mux"
 	"k8s.io/apimachinery/pkg/labels"
 )
 
+// v1alpha1.PodDefault
 type poddefaultresponse struct {
+	v1alpha1.PodDefault
 	Label       string `json:"label"`
 	Description string `json:"desc"`
 }
@@ -41,9 +44,15 @@ func (s *server) GetPodDefaults(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, pd := range pds {
+		desc := pd.Spec.Desc
+		if desc == "" {
+			desc = pd.Name
+		}
+
 		resp.PodDefaults = append(resp.PodDefaults, poddefaultresponse{
+			PodDefault:  *pd,
 			Label:       reflect.ValueOf(pd.Spec.Selector.MatchLabels).MapKeys()[0].String(),
-			Description: pd.Spec.Desc,
+			Description: desc,
 		})
 	}
 

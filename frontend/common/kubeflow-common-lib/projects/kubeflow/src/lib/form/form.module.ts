@@ -16,7 +16,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FormSectionComponent } from './section/section.component';
-import { FormSectionImageComponent } from './section-image/section.image.component';
 
 import { NameNamespaceInputsComponent } from './name-namespace-inputs/name-namespace-inputs.component';
 import { NameInputComponent } from './name-namespace-inputs/name-input/name-input.component';
@@ -31,7 +30,6 @@ import { StepInfoComponent } from './step-info/step-info.component';
 @NgModule({
   declarations: [
     FormSectionComponent,
-    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,
@@ -52,10 +50,10 @@ import { StepInfoComponent } from './step-info/step-info.component';
     IconModule,
     MatProgressSpinnerModule,
     PopoverModule,
+    MatIconModule,
   ],
   exports: [
     FormSectionComponent,
-    FormSectionImageComponent,
     NameNamespaceInputsComponent,
     NameInputComponent,
     PositiveNumberInputComponent,

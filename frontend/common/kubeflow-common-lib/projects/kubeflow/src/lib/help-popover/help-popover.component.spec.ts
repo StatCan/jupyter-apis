@@ -1,24 +1,22 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { IconComponent } from './icon.component';
-import { IconModule } from './icon.module';
+import { HelpPopoverComponent } from './help-popover.component';
+import { HelpPopoverModule } from './help-popover.module';
 
-describe('IconComponent', () => {
-  let component: IconComponent;
-  let fixture: ComponentFixture<IconComponent>;
+describe('HelpPopoverComponent', () => {
+  let component: HelpPopoverComponent;
+  let fixture: ComponentFixture<HelpPopoverComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [IconModule],
+        imports: [HelpPopoverModule],
       }).compileComponents();
-
-      TestBed.compileComponents();
     }),
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IconComponent);
+    fixture = TestBed.createComponent(HelpPopoverComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

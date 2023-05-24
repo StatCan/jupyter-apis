@@ -76,6 +76,12 @@ KF_USER_ID=user npm start
 
 For the kubecost data to be retrievable, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
 
+### Testing backend Rest API
+
+To test the backend, first install the "Thunder Client" extension, and it should then appear in your vs code sidebar. 
+First, make sure that the backend is running. Then, open Thunder Client from the vs code sidebar. From there, you should be able to see multiple requests that can be made against the backend under the "Collections" tab, in the "Golang kubeflow" dropdown. Just select a request and hit "Send". 
+Some requests require certain parameters to have values. Those can be filled up under the "Env" tab.
+
 ### Running intergration tests
 
 We use [Cypress](https://www.cypress.io/) to make our end-to-end tests.
@@ -174,7 +180,7 @@ _Note_
 | PATCH | /api/namespaces/{namespace}/notebooks/{notebook} | [/api/namespaces/\<namespace\>/notebooks/\<notebook\>](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/patch.py#L19) | Delete a notebook |
 | GET | /api/namespaces/{namespace}/pvcs | [/api/namespaces/\<namespace\>/pvcs](https://github.com/kubeflow/kubeflow/blob/cce5c88047815c45df8a52c8592e5890ae1b1949/components/crud-web-apps/volumes/backend/apps/default/routes/get.py#L9) | List `PVC`s |
 | GET | /api/namespaces/{namespace}/pvcs/{pvc} | [/api/namespaces/\<namespace\>/pvcs/\<pvc\>](https://github.com/kubeflow/kubeflow/blob/cce5c88047815c45df8a52c8592e5890ae1b1949/components/crud-web-apps/volumes/backend/apps/default/routes/get.py#L19) | Gets a `PVC` |
+| DELETE | /api/namespaces/{namespace}/pvcs/{pvc} | [/api/namespaces/\<namespace\>/pvcs/\<pvc\>](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/volumes/backend/apps/default/routes/delete.py#L11) | Delete a `PVC` |
 | GET | /api/namespaces/{namespace}/pvcs/{pvc}/pods | [/api/namespaces/\<namespace\>/pvcs/\<pvc\>/pods](https://github.com/kubeflow/kubeflow/blob/cce5c88047815c45df8a52c8592e5890ae1b1949/components/crud-web-apps/volumes/backend/apps/default/routes/get.py#L25) | Gets pods of a `PVC` |
 | GET | /api/namespaces/{namespace}/pvcs/{pvc}/events | [/api/namespaces/\<namespace\>/pvcs/\<pvc\>/events](https://github.com/kubeflow/kubeflow/blob/cce5c88047815c45df8a52c8592e5890ae1b1949/components/crud-web-apps/volumes/backend/apps/default/routes/get.py#L32) | Gets events of a `PVC` |
-| DELETE | /api/namespaces/{namespace}/pvcs/{pvc} | [/api/namespaces/\<namespace\>/pvcs/\<pvc\>](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/volumes/backend/apps/default/routes/delete.py#L11) | Delete a `PVC` |
 | GET | /api/namespaces/{namespace}/poddefaults | [/api/namespaces/\<namespace\>/poddefaults](https://github.com/kubeflow/kubeflow/blob/v1.6.0/components/crud-web-apps/jupyter/backend/apps/common/routes/get.py#L25) | Get `PodDefault`s for a given namespace |

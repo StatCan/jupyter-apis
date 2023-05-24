@@ -227,7 +227,7 @@ func main() {
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Group:    corev1.SchemeGroupVersion.Group,
-				Verb:     "get",
+				Verb:     "list",
 				Resource: "events",
 				Version:  corev1.SchemeGroupVersion.Version,
 			},

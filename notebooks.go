@@ -126,6 +126,7 @@ type notebookresponse struct {
 	Status     status            `json:"status"`
 	Volumes    []string          `json:"volumes"`
 	Labels     map[string]string `json:"labels"`
+	Metadata   metav1.ObjectMeta `json:"metadata"`
 }
 
 type notebooksresponse struct {
@@ -151,7 +152,7 @@ type podlogsresponse struct {
 
 type notebookeventsresponse struct {
 	APIResponseBase
-	Events []*corev1.Event `json:"events"`
+	Events []corev1.Event `json:"events"`
 }
 
 type updatenotebookrequest struct {
@@ -349,6 +350,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 			Status:     status,
 			Volumes:    volumes,
 			Labels:     notebook.Labels,
+			Metadata:   notebook.ObjectMeta,
 		})
 	}
 
@@ -926,7 +928,10 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", notebook, namespace)
 
-	events, err := s.listers.events.Events(namespace).List(labels.Everything())
+	eventOpts := metav1.ListOptions{
+		FieldSelector: "involvedObject.kind=Notebook,involvedObject.name=" + notebook,
+	}
+	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
 	if err != nil {
 		log.Printf("failed to load events for %s/%s: %v", namespace, notebook, err)
 	}
@@ -936,7 +941,7 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Events: events,
+		Events: events.Items,
 	}
 	s.respond(w, r, resp)
 }

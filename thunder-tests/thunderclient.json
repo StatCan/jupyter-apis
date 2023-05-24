@@ -254,7 +254,7 @@
     "_id": "ac8f49d9-70da-4390-beb4-6046b56c53ca",
     "colId": "bf518063-1214-41a0-a602-702e12d98039",
     "containerId": "",
-    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook}",
     "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}",
     "method": "GET",
     "sortNum": 125000,
@@ -279,7 +279,7 @@
     "_id": "7c0ed837-f99a-44f0-ac86-fb5c5279bdc1",
     "colId": "bf518063-1214-41a0-a602-702e12d98039",
     "containerId": "",
-    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy Copy",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook}/pod",
     "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}/pod",
     "method": "GET",
     "sortNum": 127500,
@@ -304,7 +304,7 @@
     "_id": "d0f3d24b-03b8-44e5-a6fc-dd8650b279fe",
     "colId": "bf518063-1214-41a0-a602-702e12d98039",
     "containerId": "",
-    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy Copy Copy",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook}/pod/{pod}/logs",
     "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}/pod/{pod}/logs",
     "method": "GET",
     "sortNum": 128750,
@@ -334,7 +334,7 @@
     "_id": "185a1506-e3aa-409f-962c-545734a15bc4",
     "colId": "bf518063-1214-41a0-a602-702e12d98039",
     "containerId": "",
-    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy Copy Copy Copy",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook}/events",
     "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}/events",
     "method": "GET",
     "sortNum": 129375,
@@ -350,6 +350,81 @@
       {
         "name": "notebook",
         "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "6cd54e99-c286-48a8-a4f7-259366f22c48",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/pvcs/{pvc}",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/pvcs/{pvc}",
+    "method": "GET",
+    "sortNum": 145000,
+    "created": "2023-05-24T12:46:30.428Z",
+    "modified": "2023-05-24T12:46:59.193Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "pvc",
+        "value": "{{KF_PVC_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "c2d1458c-3ac0-4269-837b-901fa3a0f24e",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/pvcs/{pvc}/pods",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/pvcs/{pvc}/pods",
+    "method": "GET",
+    "sortNum": 147500,
+    "created": "2023-05-24T16:58:25.616Z",
+    "modified": "2023-05-24T16:59:27.743Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "pvc",
+        "value": "{{KF_PVC_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "37f065c5-e204-4e83-834a-4db19988c6ea",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/pvcs/{pvc}/events",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/pvcs/{pvc}/events",
+    "method": "GET",
+    "sortNum": 148750,
+    "created": "2023-05-24T16:58:30.691Z",
+    "modified": "2023-05-24T16:59:33.550Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "pvc",
+        "value": "{{KF_PVC_NAME}}",
         "isPath": true
       }
     ],

@@ -22,6 +22,10 @@
       {
         "name": "KF_POD_NAME",
         "value": ""
+      },
+      {
+        "name": "KF_PVC_NAME",
+        "value": ""
       }
     ],
     "envFile": "../.env"

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -30,6 +31,21 @@ type pvcresponse struct {
 type pvcsresponse struct {
 	APIResponseBase
 	PersistentVolumeClaims []pvcresponse `json:"pvcs"`
+}
+
+type getpvcresponse struct {
+	APIResponseBase
+	Pvc corev1.PersistentVolumeClaim `json:"pvc"`
+}
+
+type pvcpodsresponse struct {
+	APIResponseBase
+	Pods []corev1.Pod `json:"pods"`
+}
+
+type pvceventsresponse struct {
+	APIResponseBase
+	Events []corev1.Event `json:"events"`
 }
 
 // pvcPhase is the phase of a PVC
@@ -240,4 +256,107 @@ func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
 		Success: true,
 		Status:  http.StatusOK,
 	})
+}
+
+func (s *server) GetPvc(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	pvc := vars["pvc"]
+
+	log.Printf("getting pvc %q for %q", pvc, namespace)
+
+	vol, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).Get(pvc)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := &getpvcresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Pvc: *vol,
+	}
+
+	s.respond(w, r, resp)
+}
+
+func getPodPvcs(pod corev1.Pod) []string {
+	/*
+		Return a list of PVC name that the given Pod
+		is using. If it doesn't use any, then an empty list will
+		be returned.
+	*/
+	pvcs := make([]string, 0)
+	if len(pod.Spec.Volumes) == 0 {
+		return pvcs
+	}
+
+	vols := pod.Spec.Volumes
+	for _, vol := range vols {
+		//Check if the volume is a pvc
+		if vol.PersistentVolumeClaim != nil {
+			pvcs = append(pvcs, vol.PersistentVolumeClaim.ClaimName)
+		}
+	}
+
+	return pvcs
+}
+
+func (s *server) GetPvcPods(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	pvc := vars["pvc"]
+
+	log.Printf("getting pods with pvc %q for %q", pvc, namespace)
+
+	allpods, err := s.listers.pods.Pods(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	mountedPods := make([]corev1.Pod, 0)
+	for _, pod := range allpods {
+		pvcs := getPodPvcs(*pod)
+		if Contains(pvcs, pvc) {
+			mountedPods = append(mountedPods, *pod)
+		}
+	}
+
+	resp := &pvcpodsresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Pods: mountedPods,
+	}
+
+	s.respond(w, r, resp)
+}
+
+func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	pvc := vars["pvc"]
+
+	log.Printf("getting events in %q in %q", pvc, namespace)
+
+	eventOpts := v1.ListOptions{
+		FieldSelector: "involvedObject.kind=PersistentVolumeClaim,involvedObject.name=" + pvc,
+	}
+	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
+	if err != nil {
+		log.Printf("failed to load events for %s/%s: %v", namespace, pvc, err)
+	}
+
+	resp := &pvceventsresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Events: events.Items,
+	}
+	s.respond(w, r, resp)
 }

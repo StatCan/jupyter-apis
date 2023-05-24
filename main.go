@@ -278,6 +278,39 @@ func main() {
 		},
 	}, s.DeletePvc)).Methods("DELETE")
 
+	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "get",
+				Resource: "persistentvolumeclaims",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetPvc)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}/pods", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "pods",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetPvcPods)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}/events", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "events",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetPvcEvents)).Methods("GET")
+
 	router.HandleFunc("/api/namespaces/{namespace}/poddefaults", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

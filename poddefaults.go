@@ -10,7 +10,6 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 )
 
-// v1alpha1.PodDefault
 type poddefaultresponse struct {
 	v1alpha1.PodDefault
 	Label       string `json:"label"`

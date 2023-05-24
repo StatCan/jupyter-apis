@@ -44,6 +44,7 @@ type listers struct {
 	persistentVolumeClaims v1listers.PersistentVolumeClaimLister
 	podDefaults            kubeflowv1alpha1listers.PodDefaultLister
 	notebooks              kubeflowv1listers.NotebookLister
+	pods                   v1listers.PodLister
 }
 
 type clientsets struct {
@@ -188,6 +189,50 @@ func main() {
 			},
 		},
 	}, s.NewNotebook)).Headers("Content-Type", "application/json").Methods("POST")
+
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
+				Verb:     "get",
+				Resource: "notebooks",
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetNotebook)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}/pod", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "pods",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetNotebookPod)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}/pod/{pod}/logs", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "get",
+				Resource: "pods",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetNotebookPodLogs)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}/events", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "get",
+				Resource: "events",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetNotebookEvents)).Methods("GET")
 
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{

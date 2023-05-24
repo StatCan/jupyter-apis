@@ -6,7 +6,24 @@
     "sortNum": 10000,
     "created": "2022-09-23T13:47:57.807Z",
     "modified": "2022-09-23T13:48:16.638Z",
-    "data": [],
+    "data": [
+      {
+        "name": "KF_USER_ID",
+        "value": ""
+      },
+      {
+        "name": "KF_NAMESPACE",
+        "value": ""
+      },
+      {
+        "name": "KF_NOTEBOOK_NAME",
+        "value": ""
+      },
+      {
+        "name": "KF_POD_NAME",
+        "value": ""
+      }
+    ],
     "envFile": "../.env"
   }
 ]

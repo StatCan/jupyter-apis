@@ -249,5 +249,110 @@
       }
     ],
     "tests": []
+  },
+  {
+    "_id": "ac8f49d9-70da-4390-beb4-6046b56c53ca",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}",
+    "method": "GET",
+    "sortNum": 125000,
+    "created": "2023-05-19T14:34:41.023Z",
+    "modified": "2023-05-19T14:35:38.095Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "notebook",
+        "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "7c0ed837-f99a-44f0-ac86-fb5c5279bdc1",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy Copy",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}/pod",
+    "method": "GET",
+    "sortNum": 127500,
+    "created": "2023-05-19T15:41:32.216Z",
+    "modified": "2023-05-19T15:41:44.022Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "notebook",
+        "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "d0f3d24b-03b8-44e5-a6fc-dd8650b279fe",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy Copy Copy",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}/pod/{pod}/logs",
+    "method": "GET",
+    "sortNum": 128750,
+    "created": "2023-05-19T18:07:04.832Z",
+    "modified": "2023-05-19T18:07:43.448Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "notebook",
+        "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      },
+      {
+        "name": "pod",
+        "value": "{{KF_POD_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "185a1506-e3aa-409f-962c-545734a15bc4",
+    "colId": "bf518063-1214-41a0-a602-702e12d98039",
+    "containerId": "",
+    "name": "/api/namespaces/{namespace}/notebooks/{notebook} Copy Copy Copy Copy",
+    "url": "http://localhost:5000/api/namespaces/{namespace}/notebooks/{notebook}/events",
+    "method": "GET",
+    "sortNum": 129375,
+    "created": "2023-05-24T11:59:17.143Z",
+    "modified": "2023-05-24T11:59:46.212Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "namespace",
+        "value": "{{KF_NAMESPACE}}",
+        "isPath": true
+      },
+      {
+        "name": "notebook",
+        "value": "{{KF_NOTEBOOK_NAME}}",
+        "isPath": true
+      }
+    ],
+    "tests": []
   }
 ]

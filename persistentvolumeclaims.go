@@ -53,10 +53,11 @@ type pvcPhase string
 
 // status represents the status of a PVC.
 type pvcStatus struct {
-	Message string   `json:"message"`
-	Phase   pvcPhase `json:"phase"`
-	State   string   `json:"state"`
-	Key     string   `json:"key"`
+	Message      string   `json:"message"`
+	Phase        pvcPhase `json:"phase"`
+	State        string   `json:"state"`
+	Key          string   `json:"key"`
+	EventMessage string   `json:"eventMessage"`
 }
 
 const (
@@ -111,6 +112,7 @@ func GetPvcStatus(pvc *corev1.PersistentVolumeClaim, allevents []*corev1.Event) 
 
 	msg := fmt.Sprintf("Pending: %s", evs[0].Message)
 	key := "pvcPending"
+	eventMsg := evs[0].Message
 	state := evs[0].Reason
 	var phase pvcPhase
 	if evs[0].Reason == "WaitForFirstConsumer" {
@@ -130,10 +132,11 @@ func GetPvcStatus(pvc *corev1.PersistentVolumeClaim, allevents []*corev1.Event) 
 	}
 
 	return pvcStatus{
-		Message: msg,
-		Phase:   phase,
-		State:   state,
-		Key:     key,
+		Message:      msg,
+		Phase:        phase,
+		State:        state,
+		Key:          key,
+		EventMessage: eventMsg,
 	}
 }
 

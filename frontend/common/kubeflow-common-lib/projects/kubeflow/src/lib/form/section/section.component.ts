@@ -22,11 +22,8 @@ export class FormSectionComponent implements OnInit {
   icon: string;
 
   @Input()
-  link: string;
+  helpText: string;
 
-  @Input()
-  linkText: string;
-  
   constructor() {}
 
   ngOnInit() {}

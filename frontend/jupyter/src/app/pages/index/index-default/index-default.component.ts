@@ -2,16 +2,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@app/environment';
 import {
   NamespaceService,
-  ExponentialBackoff,
   ActionEvent,
   STATUS_TYPE,
   Status,
-  DialogConfig,
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
   SnackType,
   ToolbarButton,
+  PollerService,
+  DashboardState,
 } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { KubecostService, AllocationCostResponse } from 'src/app/services/kubecost.service';
@@ -20,11 +20,8 @@ import {
   defaultConfig,
   defaultVolumeConfig,
   defaultCostConfig,
-  getDeleteDialogConfig,
-  getStopDialogConfig,
   getDeleteVolumeDialogConfig,
 } from './config';
-import { isEqual } from 'lodash';
 import { NotebookResponseObject, 
   NotebookProcessedObject, 
   VolumeResponseObject, 
@@ -32,6 +29,7 @@ import { NotebookResponseObject,
   AllocationCostObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
+import { ActionsService } from 'src/app/services/actions.service';
 
 @Component({
   selector: 'app-index-default',
@@ -40,14 +38,14 @@ import { Router } from '@angular/router';
 })
 export class IndexDefaultComponent implements OnInit, OnDestroy {
   env = environment;
-  poller: ExponentialBackoff;
 
-  currNamespace = '';
-  subs = new Subscription();
+  nsSub = new Subscription();
+  pollSub = new Subscription();
 
+  currNamespace: string | string[];
   config = defaultConfig;
-  rawData: NotebookResponseObject[] = [];
   processedData: NotebookProcessedObject[] = [];
+  dashboardDisconnectedState = DashboardState.Disconnected;
 
   volumeConfig= defaultVolumeConfig;
   rawVolumeData: VolumeResponseObject[] = [];
@@ -62,17 +60,17 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   kubecostLoading = false;
 
-  buttons: ToolbarButton[] = [
-    new ToolbarButton({
-      text: $localize`New Notebook`,
-      icon: 'add',
-      stroked: true,
-      fn: () => {
-        this.router.navigate(['/new']);
-      },
-    }),
-  ];
+  private newNotebookButton = new ToolbarButton({
+    text: $localize`New Notebook`,
+    icon: 'add',
+    stroked: true,
+    fn: () => {
+      this.router.navigate(['/new']);
+    },
+  });
 
+  buttons: ToolbarButton[] = [this.newNotebookButton];
+  
   constructor(
     public ns: NamespaceService,
     public backend: JWABackendService,
@@ -80,88 +78,49 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public snackBar: SnackBarService,
     public router: Router,
     private kubecostService: KubecostService,
+    public poller: PollerService,
+    public actions: ActionsService,
   ) {}
 
   ngOnInit(): void {
-    this.poller = new ExponentialBackoff({ interval: 1000, retries: 3 });
-    this.kubecostPoller = new ExponentialBackoff({ interval: 30000, retries: 1 });//30 second intervals
-
-    // Poll for new data and reset the poller if different data is found
-    this.subs.add(
-      this.poller.start().subscribe(() => {
-        if (!this.currNamespace) {
-          return;
-        }
-
-        Promise.all([
-          this.backend.getNotebooks(this.currNamespace).toPromise(),
-          this.backend.getPVCs(this.currNamespace).toPromise()
-        ]).then(([notebooks, pvcs]) => {
-          if(
-            !isEqual(notebooks, this.rawData) ||
-            !isEqual(pvcs, this.rawVolumeData)
-          ) {
-            this.poller.reset();
-          }
-
-          this.rawData = notebooks;
-          this.rawVolumeData = pvcs;
-
-          this.processedData = this.processIncomingData(notebooks);
-          this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
-        })
-
-      }),
-    );
-
     // Reset the poller whenever the selected namespace changes
-    this.subs.add(
-      this.ns.getSelectedNamespace().subscribe(ns => {
-        this.currNamespace = ns;
-        this.poller.reset();
-        this.kubecostPoller.reset();
-      }),
-    );
-
-    // Poll for new kubecost data and reset the poller if different data is found
-    this.kubecostSubs.add(
-      this.kubecostPoller.start().subscribe(() => {
-        if (!this.currNamespace) {
-          return;
-        }
-        
-        this.kubecostService.getAllocationCost(this.currNamespace, this.costWindow).subscribe(
-          aggCost => {
-            this.kubecostLoading = false;
-            if (!isEqual(this.rawCostData, aggCost)) {
-              this.rawCostData = aggCost;
-              
-              this.processedCostData = this.processIncomingCostData(aggCost);
-              }
-            },
-          err => {
-            this.kubecostLoading = false;
-            if (!isEqual(this.rawCostData, err)) {
-              this.rawCostData = err;
-              this.kubecostPoller.reset();
-            }
-          });
-      }),
-    );
+    this.nsSub = this.ns.getSelectedNamespace2().subscribe(ns => {
+      this.currNamespace = ns;
+      this.poll(ns);
+      this.newNotebookButton.namespaceChanged(ns, $localize`Notebook`);
+    });
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
-    this.kubecostSubs.unsubscribe();
-    this.poller.stop();
-    this.kubecostPoller.stop();
+    this.nsSub.unsubscribe();
+    this.pollSub.unsubscribe();
   }
+
+  public poll(ns: string | string[]) {
+    this.pollSub.unsubscribe();
+    this.processedData = [];
+    this.processedVolumeData = [];
+
+    const request = Promise.all([
+      this.backend.getNotebooks(ns), 
+      this.backend.getPVCs(ns),
+      this.kubecostService.getAllocationCost(ns, this.costWindow)
+    ])
+
+    this.kubecostLoading = false;
+    this.pollSub = this.poller.exponential(request).subscribe((notebooks, pvcs, aggCost) => {
+      this.processedData = this.processIncomingData(notebooks);
+      this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
+      this.processedCostData = this.processIncomingCostData(aggCost);
+    });
+  }
+
 
   // Event handling functions
   reactToAction(a: ActionEvent) {
     switch (a.action) {
       case 'delete':
-        this.deleteVolumeClicked(a.data);
+        this.deleteNotebookClicked(a.data);
         break;
       case 'connect':
         this.connectClicked(a.data);
@@ -169,35 +128,26 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       case 'start-stop':
         this.startStopClicked(a.data);
         break;
+      case 'name:link':
+        if (a.data.status.phase ==; STATUS_TYPE.TERMINATING) {
+          a.event.stopPropagation();
+          a.event.preventDefault();
+          this.snackBar.open(
+            'Notebook is being deleted, cannot show details.',
+            SnackType.Info,
+            4000,
+          );
+          return;
+        }
+        break;
     }
   }
 
-  public deleteVolumeClicked(notebook: NotebookProcessedObject) {
-    const deleteDialogConfig = getDeleteDialogConfig(notebook.name);
-
-    const ref = this.confirmDialog.open(notebook.name, deleteDialogConfig);
-    const delSub = ref.componentInstance.applying$.subscribe(applying => {
-      if (!applying) {
-        return;
-      }
-
-      // Close the open dialog only if the DELETE request succeeded
-      this.backend.deleteNotebook(this.currNamespace, notebook.name).subscribe({
-        next: _ => {
-          this.poller.reset();
-          ref.close(DIALOG_RESP.ACCEPT);
-        },
-        error: err => {
-          const errorMsg = err;
-          deleteDialogConfig.error = errorMsg;
-          ref.componentInstance.applying$.next(false);
-        },
-      });
-
-      // DELETE request has succeeded
-      ref.afterClosed().subscribe(res => {
-        delSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
+  deleteNotebookClicked(notebook: NotebookProcessedObject) {
+    this.actions
+      .deleteNotebook(notebook.namespace, notebook.name)
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
           return;
         }
 
@@ -205,12 +155,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         notebook.status.message = 'Preparing to delete the Notebook...';
         this.updateNotebookFields(notebook);
       });
-    });
   }
 
   public connectClicked(notebook: NotebookProcessedObject) {
-    // Open new tab to work on the Notebook
-    window.open(`/notebook/${notebook.namespace}/${notebook.name}/`);
+    this.actions.connectToNotebook(notebook.namespace, notebook.name);
   }
 
   public startStopClicked(notebook: NotebookProcessedObject) {
@@ -222,60 +170,27 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {
-    this.snackBar.open(
-      $localize`Starting Notebook server '${notebook.name}'...`,
-      SnackType.Info,
-      3000,
-    );
-
-    notebook.status.phase = STATUS_TYPE.WAITING;
-    notebook.status.message = 'Starting the Notebook Server...';
-    this.updateNotebookFields(notebook);
-
-    this.backend.startNotebook(notebook).subscribe(() => {
-      this.poller.reset();
-    });
+    this.actions
+      .startNotebook(notebook.namespace, notebook.name)
+      .subscribe(_ => {
+        notebook.status.phase = STATUS_TYPE.WAITING;
+        notebook.status.message = 'Starting the Notebook Server...';
+        this.updateNotebookFields(notebook);
+      });
   }
 
   public stopNotebook(notebook: NotebookProcessedObject) {
-    const stopDialogConfig = getStopDialogConfig(notebook.name);
-    const ref = this.confirmDialog.open(notebook.name, stopDialogConfig);
-    const stopSub = ref.componentInstance.applying$.subscribe(applying => {
-      if (!applying) {
-        return;
-      }
-
-      // Close the open dialog only if the request succeeded
-      this.backend.stopNotebook(notebook).subscribe({
-        next: _ => {
-          this.poller.reset();
-          ref.close(DIALOG_RESP.ACCEPT);
-        },
-        error: err => {
-          const errorMsg = err;
-          stopDialogConfig.error = errorMsg;
-          ref.componentInstance.applying$.next(false);
-        },
-      });
-
-      // request has succeeded
-      ref.afterClosed().subscribe(res => {
-        stopSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
+    this.actions
+      .stopNotebook(notebook.namespace, notebook.name)
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
           return;
         }
-
-        this.snackBar.open(
-          $localize`Stopping Notebook server '${notebook.name}'...`,
-          SnackType.Info,
-          3000,
-        );
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
         notebook.status.message = $localize`Preparing to stop the Notebook Server...`;
         this.updateNotebookFields(notebook);
       });
-    });
   }
 
   //gets internationalized status messageks based on status key message values from backend
@@ -306,6 +221,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     notebook.connectAction = this.processConnectActionStatus(notebook);
     notebook.startStopAction = this.processStartStopActionStatus(notebook);
     notebook.status.message = this.getStatusMessage(notebook);
+    notebook.link = {
+      text: notebook.name,
+      url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
+    };
   }
 
   processIncomingData(notebooks: NotebookResponseObject[]) {
@@ -366,6 +285,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public notebookTrackByFn(index: number, notebook: NotebookProcessedObject) {
     return `${notebook.name}/${notebook.image}`;
+  }
+
+  private updateButtons(): void {
+    this.buttons = [this.newNotebookButton];
   }
 
   public pvcTrackByFn(index: number, pvc: VolumeProcessedObject) {

@@ -1,10 +1,13 @@
 <div class="lib-content-wrapper">
   <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>
-    <lib-namespace-select *ngIf="!env.production"></lib-namespace-select>
+    <lib-namespace-select
+      *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
+      namespacesUrl="/api/namespaces"
+    ></lib-namespace-select>
   </lib-title-actions-toolbar>
 
   <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow">
+  <div class="page-padding lib-flex-grow lib-overflow-auto">
     <lib-table
       [config]="config"
       [data]="processedData"
@@ -16,7 +19,7 @@
   <lib-title-actions-toolbar title="Volumes" i18n-title>
   </lib-title-actions-toolbar>
   <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow">    
+  <div class="page-padding lib-flex-grow lib-overflow-auto">    
     <lib-table
       [config]="volumeConfig"
       [data]="processedVolumeData"
@@ -27,7 +30,7 @@
 
   <lib-title-actions-toolbar title="Cost" i18n-title>
   </lib-title-actions-toolbar>
-  <div class="page-padding lib-flex-grow">
+  <div class="page-padding lib-flex-grow lib-overflow-auto">
     <p i18n>Approximate cost of notebook server resources - summed values may not match total due to rounding</p>
     <div>
       <div class="table-header-elem">

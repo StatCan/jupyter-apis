@@ -78,8 +78,8 @@ For the kubecost data to be retrievable, the following will need to be executed 
 
 ### Testing backend Rest API
 
-To test the backend, first install the "Thunder Client" extension, and it should then appear in your vs code sidebar. 
-First, make sure that the backend is running. Then, open Thunder Client from the vs code sidebar. From there, you should be able to see multiple requests that can be made against the backend under the "Collections" tab, in the "Golang kubeflow" dropdown. Just select a request and hit "Send". 
+To test the backend, install the "Thunder Client" extension. After being installed, it should appear in the vs code sidebar (it might require a restart first). 
+First thing is to make sure that the backend is running. Then, open Thunder Client from the vs code sidebar. You should be able to see multiple requests that can be made against the backend under the "Collections" tab, in the "Golang kubeflow" dropdown. From there, just select a request and hit "Send". 
 Some requests require certain parameters to have values. Those can be filled up under the "Env" tab.
 
 ### Running intergration tests

@@ -1,36 +1,24 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
-import {
-  NamespaceService,
-  BackendService,
-  SnackBarService,
-  SnackType,
-  getNameError,
-} from 'kubeflow';
+import { NamespaceService, SnackBarService, SnackType } from 'kubeflow';
 import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { environment } from '@app/environment';
 import { V1Namespace } from '@kubernetes/client-node';
 
 @Component({
-  selector: 'app-form-default',
-  templateUrl: './form-default.component.html',
-  styleUrls: ['./form-default.component.scss'],
+  selector: 'app-form-new',
+  templateUrl: './form-new.component.html',
+  styleUrls: ['./form-new.component.scss'],
 })
-export class FormDefaultComponent implements OnInit, OnDestroy {
+export class FormNewComponent implements OnInit, OnDestroy {
   currNamespace = '';
   formCtrl: FormGroup;
   config: Config;
 
-  ephemeral = false;
   defaultStorageclass = false;
-
-  blockSubmit = false;
-  formReady = false;
-  existingNotebooks = new Set<string>();
 
   subscriptions = new Subscription();
 
@@ -43,7 +31,6 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
-    public cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -63,9 +50,13 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
 
     // Keep track of the selected namespace
     this.subscriptions.add(
-      this.namespaceService.getSelectedNamespace().subscribe(namespace => {
-        this.currNamespace = namespace;
-        this.formCtrl.controls.namespace.setValue(this.currNamespace);
+      this.namespaceService.getSelectedNamespace2().subscribe(namespace => {
+        if (Array.isArray(namespace)) {
+          this.goToNotebooks();
+        } else {
+          this.currNamespace = namespace;
+          this.formCtrl.controls.namespace.setValue(this.currNamespace);
+        }
 
         this.backend.getNSMetadata(namespace).subscribe(nsMetadata => {
           this.nsMetadata = nsMetadata;
@@ -73,7 +64,6 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
         
       }),
     );
-
 
     // Check if a default StorageClass is set
     this.backend.getDefaultStorageClass().subscribe(defaultClass => {
@@ -88,10 +78,6 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
         this.defaultStorageclass = true;
       }
     });
-  }
-
-  ngAfterContentChecked() {
-    this.cdr.detectChanges();
   }
 
   ngOnDestroy() {
@@ -151,7 +137,7 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
     }
 
     // Ensure GPU input is a string
-    if (typeof notebook.gpus.num === 'number') {
+    if (notebook.gpus && typeof notebook.gpus.num === 'number') {
       notebook.gpus.num = notebook.gpus.num.toString();
     }
 
@@ -185,6 +171,17 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
     return notebook;
   }
 
+  // Set the tooltip text based on form's validity
+  setTooltipText(form: FormGroup): string {
+    let text: string;
+    if (!form.get('name').valid) {
+      text = 'No value of the Notebook name was provided';
+    } else if (!form.controls.valid) {
+      text = 'The form contains invalid fields';
+    }
+    return text;
+  }
+
   onSubmit() {
     this.popup.open('Submitting new Notebook...', SnackType.Info, 3000);
 
@@ -196,10 +193,10 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
         SnackType.Success,
         3000,
       );
-      this.router.navigate(['/']);
+      this.goToNotebooks();
     });
   }
-  
+
   // Automatically set values of CPU and Memory if GPU is 1
   checkGPU(gpu: string) {
     if (gpu == "none") {
@@ -214,6 +211,10 @@ export class FormDefaultComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
+    this.goToNotebooks();
+  }
+
+  goToNotebooks() {
     this.router.navigate(['/']);
   }
 }

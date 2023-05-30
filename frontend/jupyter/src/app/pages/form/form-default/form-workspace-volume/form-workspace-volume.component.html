@@ -1,9 +1,8 @@
 <lib-form-section
   title="Workspace Volume"
   i18n-title
-  text="Configure the Volume to be mounted as your personal Workspace."
+  text="Volume that will be mounted in your home directory."
   i18n-text
-  icon="fa:fas:laptop-code"
 >
   <mat-accordion>
     <mat-expansion-panel
@@ -91,9 +90,9 @@
 
   <div class="volume-buttons">
     <button
+      *ngIf="volGroup.disabled || readonly"
       type="button"
       color="primary"
-      [disabled]="!volGroup.disabled || readonly"
       (click)="addNewVolume()"
       mat-stroked-button
       i18n
@@ -102,9 +101,9 @@
     </button>
 
     <button
+      *ngIf="volGroup.disabled || readonly"
       type="button"
       color="primary"
-      [disabled]="!volGroup.disabled || readonly"
       (click)="attachExistingVolume()"
       mat-stroked-button
       i18n

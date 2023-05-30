@@ -1,16 +1,8 @@
-<lib-form-section
-  title="Name"
-  i18n-title
-  text="Specify the name of the Notebook Server and the Namespace it will belong to."
-  i18n-text
-  icon="fa:fas:book"
->
-  <lib-form-name-namespace-inputs
+<lib-form-section title="" i18n-title>
+  <lib-name-input
     [nameControl]="parentForm.get('name')"
     maxLength="40"
-    [namespaceControl]="parentForm.get('namespace')"
     resourceName="Notebook Server"
     [existingNames]="existingNotebooks"
-  >
-  </lib-form-name-namespace-inputs>
+  ></lib-name-input>
 </lib-form-section>

@@ -6,6 +6,7 @@
     (selectionChange)="typeChanged($event.value)"
   >
     <mat-option [value]="NEW_VOLUME_TYPE.EMPTY" i18n> Empty volume </mat-option>
+
     <mat-option
       [value]="NEW_VOLUME_TYPE.ROK_SNAPSHOT"
       *ngIf="env.ui === 'rok'"
@@ -13,6 +14,7 @@
     >
       Rok snapshot
     </mat-option>
+
     <mat-option
       [value]="NEW_VOLUME_TYPE.CUSTOM"
       matTooltip="Edit the K8s PVC full spec"
@@ -31,6 +33,7 @@
 ></app-rok-url>
 
 <ng-container [ngSwitch]="volumeType">
+  <!-- Custom (YAML editor) -->
   <ng-container *ngSwitchCase="NEW_VOLUME_TYPE.CUSTOM">
     <ng-container i18n>Check the </ng-container>
     <a
@@ -40,7 +43,14 @@
     >
     <ng-container i18n> for the supported volumes and their specs</ng-container>
 
-    <div ace-editor mode="yaml" theme="xcode" [(text)]="yaml"></div>
+    <lib-monaco-editor
+      [(text)]="yaml"
+      language="yaml"
+      [readOnly]="false"
+      [height]="250"
+      class="editor"
+    ></lib-monaco-editor>
+
     <mat-error *ngIf="errorParsingYaml">{{ errorParsingYaml }}</mat-error>
   </ng-container>
 

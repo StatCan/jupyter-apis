@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
@@ -31,6 +31,7 @@ export class FormNewComponent implements OnInit, OnDestroy {
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
+    public cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +89,10 @@ export class FormNewComponent implements OnInit, OnDestroy {
   // Functions for handling the Form Group of the entire Form
   getFormDefaults() {
     return getFormDefaults();
+  }
+
+  ngAfterContentChecked() {
+    this.cdr.detectChanges();
   }
 
   initFormControls(formCtrl: FormGroup, config: Config) {

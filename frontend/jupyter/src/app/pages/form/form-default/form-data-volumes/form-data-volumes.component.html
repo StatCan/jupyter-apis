@@ -1,16 +1,21 @@
 <lib-form-section
   title="Data Volumes"
-  text="Configure the Volumes to be mounted as your Datasets."
+  text="Additional volumes that will be mounted in your Notebook"
   i18n-title
   i18n-text
-  icon="fa:fas:hdd"
 >
   <mat-accordion>
     <mat-expansion-panel
       hideToggle
-      *ngFor="let volGroup of volsArray.controls; let i = index"
+      *ngFor="
+        let volGroup of volsArray.controls;
+        let i = index;
+        let last = last
+      "
       (opened)="openPanel.add(i)"
       (closed)="openPanel.clear()"
+      [class.last]="last"
+      data-cy="data volumes"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -96,6 +101,7 @@
       (click)="addNewVolume()"
       mat-stroked-button
       i18n
+      data-cy="add new volume"
     >
       + Add new volume
     </button>
@@ -107,6 +113,7 @@
       (click)="attachExistingVolume()"
       mat-stroked-button
       i18n
+      data-cy="attach existing volume"
     >
       + Attach existing volume
     </button>

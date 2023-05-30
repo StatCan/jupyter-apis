@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormArray, Validators, FormBuilder } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,
@@ -39,7 +39,7 @@ export class FormDataVolumesComponent implements OnInit {
   addNewVolume() {
     const volId = this.volsArray.length + 1;
     const volGroup = createNewPvcVolumeFormGroup(
-      `{notebook-name}-datavol-${volId}`, //this is what needs to work, somwhow {notebook-name} is evaluating to an object
+      `{notebook-name}-datavol-${volId}`,
     );
 
     this.volsArray.push(volGroup);

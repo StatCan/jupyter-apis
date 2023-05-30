@@ -12,6 +12,7 @@
     autocomplete="off"
     matInput
     [formControl]="metadataGroup.get('name')"
+    data-cy="volume name input"
     [errorStateMatcher]="matcher"
   />
   <mat-error>
@@ -29,6 +30,7 @@
     autocomplete="off"
     matInput
     [formControl]="metadataGroup.get('generateName')"
+    data-cy="volume generateName input"
   />
   <mat-icon
     matSuffix

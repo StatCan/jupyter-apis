@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { V1Namespace } from '@kubernetes/client-node';
 import { Config } from 'src/app/types';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-form-image',
@@ -27,20 +28,20 @@ export class FormImageComponent implements OnInit, OnDestroy {
 
   constructor(@Inject(LOCALE_ID) public localeId: string, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon(
-      'jupyterlab',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.jupyterlabLogo),
+      'jupyter-icon',
+      sanitizer.bypassSecurityTrustResourceUrl(environment.jupyterIcon),
     );
     iconRegistry.addSvgIcon(
       'group-one',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupOneLogo),
+      sanitizer.bypassSecurityTrustResourceUrl(environment.groupOneIcon),
     );
     iconRegistry.addSvgIcon(
       'group-two',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupTwoLogo),
+      sanitizer.bypassSecurityTrustResourceUrl(environment.groupTwoIcon),
     );
     iconRegistry.addSvgIcon(
       'group-three',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeLogo),
+      sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeIcon),
     );
   }
 
@@ -106,6 +107,20 @@ export class FormImageComponent implements OnInit, OnDestroy {
     );
   }
 
+  onSelect(event: MatCheckboxChange): void {
+    if (event.checked) {
+      this.parentForm.get('image').disable();
+      this.parentForm.get('imageGroupOne').disable();
+      this.parentForm.get('imageGroupTwo').disable();
+      this.parentForm.get('imageGroupThree').disable();
+    } else {
+      this.parentForm.get('image').enable();
+      this.parentForm.get('imageGroupOne').enable();
+      this.parentForm.get('imageGroupTwo').enable();
+      this.parentForm.get('imageGroupThree').enable();
+    }
+  }
+
   urlValidation(): string {
     const url = this.parentForm.get("customImage");
 
@@ -133,14 +148,14 @@ export class FormImageComponent implements OnInit, OnDestroy {
   }
 
   imageDisplayName(image: string): string {
-    const [name, tag = null] = image.split(":");
-    let tokens = name.split("/");
+    const [name, tag = null] = image.split(':');
+    const tokens = name.split('/');
 
-    if (this.hideRegistry && tokens.length > 1 && tokens[0].includes(".")) {
+    if (this.hideRegistry && tokens.length > 1 && tokens[0].includes('.')) {
       tokens.shift();
     }
 
-    let displayName = tokens.join("/");
+    let displayName = tokens.join('/');
 
     if (!this.hideTag && tag !== null) {
       displayName = `${displayName}:${tag}`;

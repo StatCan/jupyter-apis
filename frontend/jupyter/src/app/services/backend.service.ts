@@ -12,8 +12,8 @@ import {
   NotebookFormObject,
   NotebookProcessedObject,
   VolumeResponseObject
-  PvcResponseObject,
 } from '../types';
+import { V1Namespace } from '@kubernetes/client-node';
 import { V1Pod } from '@kubernetes/client-node';
 import { EventObject } from '../types/event';
 @Injectable({
@@ -36,6 +36,16 @@ export class JWABackendService extends BackendService {
     );
   }
 
+  public getNSMetadata(namespace: string): Observable<V1Namespace> {
+    const url = `api/namespaces/${namespace}`;
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map(data => {
+        return data.namespace;
+      }),
+    );
+  }
+  
   private getNotebooksAllNamespaces(
     namespaces: string[],
   ): Observable<NotebookResponseObject[]> {

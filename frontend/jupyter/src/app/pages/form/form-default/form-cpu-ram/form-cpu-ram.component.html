@@ -1,14 +1,12 @@
 <lib-form-section
   title="CPU / RAM"
-  i18n-title
-  text="Specify the minimum guaranteed CPU and RAM reserved by your Notebook Server. You will pay for at least this much. Unless you are running a multithreaded workload, it is recommended to request a maximum of one CPU (e.g. 0.5)."
-  i18n-text
-  icon="fa:fas:microchip"
+  i18n-title="Title for the CPU/RAM form section"
+  helpText="Configure the resources allocated to the notebook. Minimum and maximum values correspond to K8s requests and limits for the resources of the underlying Pod."
 >
   <div class="row" [formGroup]="parentForm">
     <!--CPU AAW, do not take their lib-positive-input -->
     <mat-form-field appearance="outline" class="column">
-      <mat-label i18n>Requested CPUs</mat-label>
+      <mat-label i18n>Minimum CPUs</mat-label>
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
         matInput
@@ -23,7 +21,7 @@
 
     <!--RAM AAW, do not take their lib-positive-input-->
     <mat-form-field appearance="outline" class="column">
-      <mat-label i18n>Requested memory in Gi</mat-label>
+      <mat-label i18n>Minimum Memory Gi</mat-label>
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
         matInput
@@ -43,7 +41,7 @@
       <!--CPU-->
       <div class="column">
         <mat-form-field appearance="outline" class="wide">
-          <mat-label i18n>CPU limit</mat-label>
+          <mat-label i18n>Maximum CPU</mat-label>
           <input
             [attr.disabled]="readonlySpecs ? '' : null"
             matInput
@@ -60,7 +58,7 @@
       <!--RAM-->
       <div class="column">
         <mat-form-field appearance="outline" class="wide">
-          <mat-label i18n> Memory limit in Gi </mat-label>
+          <mat-label i18n>Maximum Memory Gi</mat-label>
           <input
             [attr.disabled]="readonlySpecs ? '' : null"
             matInput

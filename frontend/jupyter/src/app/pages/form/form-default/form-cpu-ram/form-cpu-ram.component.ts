@@ -21,6 +21,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   @Input() readonlySpecs: boolean;
   @Input() cpuLimitFactor: string;
   @Input() memoryLimitFactor: string;
+  @Input() popoverPosition = 'below';
 
   constructor() {}
 
@@ -94,26 +95,6 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   }
 
   // AAW changes
-  getRAMError(key: string) {
-    let e: any;
-    const errs = this.parentForm.get(key).errors || {};
-
-    if (errs.required || errs.pattern)
-      return $localize`Specify amount of memory (e.g. 2Gi)`;
-
-    if (e = errs.min){
-      return $localize`Specify at least ${e.min}Gi of memory`;
-    }
-
-    if (e = errs.max) {
-      return $localize`Can't exceed ${e.max}Gi of memory`;
-    }
-
-    if(errs.limit){
-      return $localize`Can't be lower than requested memory`;
-    }
-  }
-
   getCPUError(key: string) {
     let e: any;
     const errs = this.parentForm.get(key).errors || {};
@@ -127,6 +108,26 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 
     if (e = errs.max) {
       return $localize`Can't exceed ${e.max} CPUs`;
+    }
+
+    if(errs.limit){
+      return $localize`Can't be lower than requested CPUs`;
+    }
+  }
+
+  getRAMError(key: string) {
+    let e: any;
+    const errs = this.parentForm.get(key).errors || {};
+
+    if (errs.required || errs.pattern)
+      return $localize`Specify amount of memory (e.g. 2Gi)`;
+
+    if (e = errs.min){
+      return $localize`Specify at least ${e.min}Gi of memory`;
+    }
+
+    if (e = errs.max) {
+      return $localize`Can't exceed ${e.max}Gi of memory`;
     }
 
     if(errs.limit){

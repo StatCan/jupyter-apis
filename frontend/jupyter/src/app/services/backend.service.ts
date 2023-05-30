@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { BackendService, SnackBarService } from 'kubeflow';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BackendService, SnackBarService, SnackType } from 'kubeflow';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
-  VolumeResponseObject,
+  NotebookRawObject,
   JWABackendResponse,
-  VWABackendResponse,
   Config,
   PodDefault,
   NotebookFormObject,
   NotebookProcessedObject,
+  VolumeResponseObject
 } from '../types';
 import { V1Namespace } from '@kubernetes/client-node';
-
+import { V1Pod } from '@kubernetes/client-node';
+import { EventObject } from '../types/event';
 @Injectable({
   providedIn: 'root',
 })
@@ -24,25 +25,90 @@ export class JWABackendService extends BackendService {
   }
 
   // GET
-  public getNotebooks(namespace: string): Observable<NotebookResponseObject[]> {
+  private getNotebooksSingleNamespace(
+    namespace: string,
+  ): Observable<NotebookResponseObject[]> {
     const url = `api/namespaces/${namespace}/notebooks`;
 
     return this.http.get<JWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map((resp: JWABackendResponse) => {
-        return resp.notebooks;
-      }),
+      map((resp: JWABackendResponse) => resp.notebooks),
     );
   }
 
   public getNSMetadata(namespace: string): Observable<V1Namespace> {
     const url = `api/namespaces/${namespace}`;
-
     return this.http.get<JWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
       map(data => {
         return data.namespace;
       }),
+    );
+  }
+  
+  private getNotebooksAllNamespaces(
+    namespaces: string[],
+  ): Observable<NotebookResponseObject[]> {
+    return this.getObjectsAllNamespaces(
+      this.getNotebooksSingleNamespace.bind(this),
+      namespaces,
+    );
+  }
+
+  public getNotebooks(
+    ns: string | string[],
+  ): Observable<NotebookResponseObject[]> {
+    if (Array.isArray(ns)) {
+      return this.getNotebooksAllNamespaces(ns);
+    }
+
+    return this.getNotebooksSingleNamespace(ns);
+  }
+
+  public getNotebook(
+    namespace: string,
+    notebookName: string,
+  ): Observable<NotebookRawObject> {
+    const url = `api/namespaces/${namespace}/notebooks/${notebookName}`;
+
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: JWABackendResponse) => resp.notebook),
+    );
+  }
+
+  public getNotebookPod(notebook: NotebookRawObject): Observable<V1Pod> {
+    const namespace = notebook.metadata.namespace;
+    const notebookName = notebook.metadata.name;
+    const url = `api/namespaces/${namespace}/notebooks/${notebookName}/pod`;
+
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleErrorExtended(error, [404])),
+      map((resp: JWABackendResponse) => resp.pod),
+    );
+  }
+
+  public getPodLogs(pod: V1Pod): Observable<string[]> {
+    const namespace = pod.metadata.namespace;
+    const notebookName = pod.metadata.labels['notebook-name'];
+    const podName = pod.metadata.name;
+    const url = `api/namespaces/${namespace}/notebooks/${notebookName}/pod/${podName}/logs`;
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleErrorExtended(error, [404, 400])),
+      map((resp: JWABackendResponse) => resp.logs),
+    );
+  }
+
+  public getNotebookEvents(
+    notebook: NotebookRawObject,
+  ): Observable<EventObject[]> {
+    const namespace = notebook.metadata.namespace;
+    const notebookName = notebook.metadata.name;
+    const url = `api/namespaces/${namespace}/notebooks/${notebookName}/events`;
+
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleErrorExtended(error, [404])),
+      map((resp: JWABackendResponse) => resp.events),
     );
   }
 
@@ -51,9 +117,17 @@ export class JWABackendService extends BackendService {
 
     return this.http.get<JWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map(data => {
-        return data.config;
-      }),
+      map(data => data.config),
+    );
+  }
+
+  public getVolumes(ns: string): Observable<VolumeResponseObject[]> {
+    // Get existing PVCs in a namespace
+    const url = `api/namespaces/${ns}/pvcs`;
+
+    return this.http.get<JWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map(data => data.pvcs),
     );
   }
 
@@ -63,9 +137,7 @@ export class JWABackendService extends BackendService {
 
     return this.http.get<JWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map(data => {
-        return data.poddefaults;
-      }),
+      map(data => data.poddefaults),
     );
   }
 
@@ -85,36 +157,26 @@ export class JWABackendService extends BackendService {
 
     return this.http.post<JWABackendResponse>(url, notebook).pipe(
       catchError(error => this.handleError(error)),
-      map(_ => {
-        return 'posted';
-      }),
+      map(_ => 'posted'),
     );
   }
 
   // PATCH
-  public startNotebook(notebook: NotebookProcessedObject): Observable<string> {
-    const name = notebook.name;
-    const namespace = notebook.namespace;
+  public startNotebook(namespace: string, name: string): Observable<string> {
     const url = `api/namespaces/${namespace}/notebooks/${name}`;
 
     return this.http.patch<JWABackendResponse>(url, { stopped: false }).pipe(
       catchError(error => this.handleError(error)),
-      map(_ => {
-        return 'started';
-      }),
+      map(_ => 'started'),
     );
   }
 
-  public stopNotebook(notebook: NotebookProcessedObject): Observable<string> {
-    const name = notebook.name;
-    const namespace = notebook.namespace;
+  public stopNotebook(namespace: string, name: string): Observable<string> {
     const url = `api/namespaces/${namespace}/notebooks/${name}`;
 
     return this.http.patch<JWABackendResponse>(url, { stopped: true }).pipe(
       catchError(error => this.handleError(error, false)),
-      map(_ => {
-        return 'stopped';
-      }),
+      map(_ => 'stopped'),
     );
   }
 
@@ -127,25 +189,44 @@ export class JWABackendService extends BackendService {
       .pipe(catchError(error => this.handleError(error, false)));
   }
 
-  //Volumes
-  public getPVCs(namespace: string): Observable<VolumeResponseObject[]> {
-    const url = `api/namespaces/${namespace}/pvcs`;
+  // ---------------------------Error Handling---------------------------------
 
-    return this.http.get<VWABackendResponse>(url).pipe(
-      catchError(error => this.handleError(error)),
-      map((resp: VWABackendResponse) => {
-        let pvcsCopy = JSON.parse(JSON.stringify(resp.pvcs));
-        pvcsCopy = pvcsCopy.filter(pvc => pvc.labels?.["blob.aaw.statcan.gc.ca/automount"]==="true" ? false : true);
-        return pvcsCopy;
-      }),
-    );
+  public handleErrorExtended(
+    error: HttpErrorResponse | ErrorEvent | string,
+    codes: number[] = [],
+  ): Observable<never> {
+    if (
+      error instanceof HttpErrorResponse &&
+      codes.includes(error.error.status)
+    ) {
+      // Error code is expected so we do not open a snackBar dialog
+      return this.handleError(error, false);
+    } else {
+      return this.handleError(error);
+    }
   }
 
-  public deletePVC(namespace: string, pvc: string){
-    const url = `api/namespaces/${namespace}/pvcs/${pvc}`;
+  // Override common service's getErrorMessage
+  // in order to incldue the error.status in error message
+  public getErrorMessage(
+    error: HttpErrorResponse | ErrorEvent | string,
+  ): string {
+    if (typeof error === 'string') {
+      return error;
+    }
 
-    return this.http
-      .delete<VWABackendResponse>(url)
-      .pipe(catchError(error => this.handleError(error, false)));
+    if (error instanceof HttpErrorResponse) {
+      if (this.getBackendErrorLog(error) !== undefined) {
+        return `[${error.status}] ${this.getBackendErrorLog(error)}`;
+      }
+
+      return `${error.status}: ${error.message}`;
+    }
+
+    if (error instanceof ErrorEvent) {
+      return error.message;
+    }
+
+    return `Unexpected error encountered`;
   }
 }

@@ -1,10 +1,4 @@
-<lib-form-section 
-  title="GPUs" 
-  i18n-title
-  text="Specify the number and Vendor of GPUs that will be assigned to the Notebook Server's Container."
-  i18n-text
-  icon="custom:gpuSectionIcon"
->
+<lib-form-section title="GPUs" i18n-title>
   <div class="row" [formGroup]="parentForm.get('gpus')">
     <!--GPUs Number-->
     <mat-form-field class="column" appearance="outline">

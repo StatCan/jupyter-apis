@@ -55,9 +55,11 @@ export const defaultConfig: TableConfig = {
       sortingPreprocessorFn: element => element.serverType,
       filteringPreprocessorFn: element => {
         if (element.serverType === 'group-one') {
-          return 'vscode Visual Studio Code';
-        } else if (element.serverType === 'group-two') {
           return 'rstudio';
+        } else if (element.serverType === 'group-two') {
+          return 'ubuntu';
+        } else if (element.serverType === 'group-three') {
+          return 'sas';
         } else {
           return 'jupyterlab';
         }

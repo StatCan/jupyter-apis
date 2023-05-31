@@ -897,6 +897,7 @@ func (s *server) GetNotebookPodLogs(w http.ResponseWriter, r *http.Request) {
 		Container: notebook,
 	}
 	podLogsRequest := s.clientsets.kubernetes.CoreV1().Pods(namespace).GetLogs(pod, &podLogsOpts)
+	//context.TODO() is used because it is unclear which context to use
 	podLogs, err := podLogsRequest.Stream(context.TODO())
 	if err != nil {
 		s.error(w, r, err)

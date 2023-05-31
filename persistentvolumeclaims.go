@@ -10,6 +10,7 @@ import (
 	kf_v1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
+	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -72,6 +73,7 @@ const (
 )
 
 // Set the status of the pvc
+// https://github.com/kubeflow/kubeflow/blob/v1.7.0/components/crud-web-apps/volumes/backend/apps/common/status.py#L4
 func GetPvcStatus(pvc *corev1.PersistentVolumeClaim, allevents []*corev1.Event) pvcStatus {
 	// If pvc is being deleted
 	if pvc.DeletionTimestamp != nil {
@@ -140,15 +142,6 @@ func GetPvcStatus(pvc *corev1.PersistentVolumeClaim, allevents []*corev1.Event) 
 	}
 }
 
-func Contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
 func GetNotebookPvcs(nb *kf_v1.Notebook) []string {
 	pvcs := make([]string, 0)
 	if len(nb.Spec.Template.Spec.Volumes) == 0 {
@@ -170,7 +163,7 @@ func GetNotebooksUsingPvc(pvc string, notebooks []*kf_v1.Notebook) []string {
 
 	for _, nb := range notebooks {
 		pvcs := GetNotebookPvcs(nb)
-		if Contains(pvcs, pvc) {
+		if slices.Contains(pvcs, pvc) {
 			mountedNotebooks = append(mountedNotebooks, nb.Name)
 		}
 	}
@@ -323,7 +316,7 @@ func (s *server) GetPvcPods(w http.ResponseWriter, r *http.Request) {
 	mountedPods := make([]corev1.Pod, 0)
 	for _, pod := range allpods {
 		pvcs := getPodPvcs(*pod)
-		if Contains(pvcs, pvc) {
+		if slices.Contains(pvcs, pvc) {
 			mountedPods = append(mountedPods, *pod)
 		}
 	}

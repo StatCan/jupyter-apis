@@ -26,7 +26,7 @@ export class ExistingPvcComponent implements OnInit {
 
   ngOnInit(): void {
     this.ns.getSelectedNamespace().subscribe(ns => {
-      this.backend.getVolumes(ns).subscribe(pvcs => {
+      this.backend.getNamespacedPVCs(ns).subscribe(pvcs => {
         this.pvcs = pvcs;
       });
     });

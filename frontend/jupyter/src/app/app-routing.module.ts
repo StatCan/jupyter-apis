@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IndexComponent } from './pages/index/index.component';
 import { FormNewComponent } from './pages/form/form-new/form-new.component';
 import { NotebookPageComponent } from './pages/notebook-page/notebook-page.component';
+import { VolumeDetailsPageComponent } from './pages/volume-details-page/volume-details-page.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'notebook/details/:namespace/:notebookName',
     component: NotebookPageComponent,
+  },
+  {
+    path: 'volume/details/:namespace/:pvcName',
+    component: VolumeDetailsPageComponent,
   },
 ];
 

@@ -10,11 +10,12 @@ import {
   Config,
   PodDefault,
   NotebookFormObject,
-  NotebookProcessedObject,
-  VolumeResponseObject
+  PVCResponseObject, 
+  VWABackendResponse, 
+  PVCPostObject
 } from '../types';
 import { V1Namespace } from '@kubernetes/client-node';
-import { V1Pod } from '@kubernetes/client-node';
+import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
 import { EventObject } from '../types/event';
 @Injectable({
   providedIn: 'root',
@@ -121,13 +122,65 @@ export class JWABackendService extends BackendService {
     );
   }
 
-  public getVolumes(ns: string): Observable<VolumeResponseObject[]> {
-    // Get existing PVCs in a namespace
-    const url = `api/namespaces/${ns}/pvcs`;
+  private getNamespacedPVCs(
+    namespace: string,
+  ): Observable<PVCResponseObject[]> {
+    const url = `api/namespaces/${namespace}/pvcs`;
 
-    return this.http.get<JWABackendResponse>(url).pipe(
+    return this.http.get<VWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map(data => data.pvcs),
+      map((resp: VWABackendResponse) => resp.pvcs),
+    );
+  }
+
+  private getPVCsAllNamespaces(
+    namespaces: string[],
+  ): Observable<PVCResponseObject[]> {
+    return this.getObjectsAllNamespaces(
+      this.getNamespacedPVCs.bind(this),
+      namespaces,
+    );
+  }
+
+  public getPVCs(ns: string | string[]): Observable<PVCResponseObject[]> {
+    if (!Array.isArray(ns)) {
+      return this.getNamespacedPVCs(ns);
+    }
+
+    return this.getPVCsAllNamespaces(ns);
+  }
+
+  public getPVC(
+    namespace: string,
+    pvcName: string,
+  ): Observable<V1PersistentVolumeClaim> {
+    const url = `api/namespaces/${namespace}/pvcs/${pvcName}`;
+
+    return this.http.get<VWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: VWABackendResponse) => resp.pvc),
+    );
+  }
+
+  public getPVCEvents(pvc: V1PersistentVolumeClaim): Observable<EventObject[]> {
+    const namespace = pvc.metadata.namespace;
+    const pvcName = pvc.metadata.name;
+    const url = `api/namespaces/${namespace}/pvcs/${pvcName}/events`;
+
+    return this.http.get<VWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: VWABackendResponse) => resp.events),
+    );
+  }
+
+  public getPodsUsingPVC(pvc: V1PersistentVolumeClaim): Observable<V1Pod[]> {
+    const namespace = pvc.metadata.namespace;
+    const pvcName = pvc.metadata.name;
+    const url = `api/namespaces/${namespace}/pvcs/${pvcName}/pods`;
+
+    return this.http.get<VWABackendResponse>(url).pipe(
+      catchError(error => this.handleError(error)),
+      map((resp: VWABackendResponse) => resp.pods),
     );
   }
 
@@ -161,6 +214,22 @@ export class JWABackendService extends BackendService {
     );
   }
 
+  public createViewer(namespace: string, viewer: string) {
+    const url = `api/namespaces/${namespace}/viewers`;
+
+    return this.http
+      .post<VWABackendResponse>(url, { name: viewer })
+      .pipe(catchError(error => this.handleError(error)));
+  }
+
+  public createPVC(namespace: string, pvc: PVCPostObject) {
+    const url = `api/namespaces/${namespace}/pvcs`;
+
+    return this.http
+      .post<VWABackendResponse>(url, pvc)
+      .pipe(catchError(error => this.handleError(error)));
+  }
+
   // PATCH
   public startNotebook(namespace: string, name: string): Observable<string> {
     const url = `api/namespaces/${namespace}/notebooks/${name}`;
@@ -186,6 +255,14 @@ export class JWABackendService extends BackendService {
 
     return this.http
       .delete<JWABackendResponse>(url)
+      .pipe(catchError(error => this.handleError(error, false)));
+  }
+
+  public deletePVC(namespace: string, pvc: string) {
+    const url = `api/namespaces/${namespace}/pvcs/${pvc}`;
+
+    return this.http
+      .delete<VWABackendResponse>(url)
       .pipe(catchError(error => this.handleError(error, false)));
   }
 

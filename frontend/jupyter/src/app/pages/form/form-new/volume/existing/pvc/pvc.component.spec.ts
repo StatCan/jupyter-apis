@@ -12,7 +12,7 @@ import { JWABackendService } from 'src/app/services/backend.service';
 import { ExistingPvcComponent } from './pvc.component';
 
 const JWABackendServiceStub: Partial<JWABackendService> = {
-  getNamespacedPVCs: () => of(),
+  getPVCs: () => of(),
 };
 
 const NamespaceServiceStub: Partial<NamespaceService> = {

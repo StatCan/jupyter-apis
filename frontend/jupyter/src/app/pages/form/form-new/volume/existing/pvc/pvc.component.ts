@@ -3,7 +3,7 @@ import { FormGroup, Validators, ValidatorFn, AbstractControl, FormControl, FormG
 import { Subscription } from 'rxjs';
 import { NamespaceService } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { VolumeResponseObject } from 'src/app/types';
+import { PVCResponseObject } from 'src/app/types';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 @Component({
@@ -14,7 +14,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 export class ExistingPvcComponent implements OnInit {
   @Input() pvcGroup: FormGroup;
 
-  pvcs: VolumeResponseObject[] = [];
+  pvcs: PVCResponseObject[] = [];
   private mountedVolumes: Set<string> = new Set<string>(); //AAW
   matcher = new PvcErrorStateMatcher(); //AAW
   subscriptions = new Subscription(); //AAW
@@ -26,7 +26,7 @@ export class ExistingPvcComponent implements OnInit {
 
   ngOnInit(): void {
     this.ns.getSelectedNamespace().subscribe(ns => {
-      this.backend.getNamespacedPVCs(ns).subscribe(pvcs => {
+      this.backend.getPVCs(ns).subscribe(pvcs => {
         this.pvcs = pvcs;
       });
     });

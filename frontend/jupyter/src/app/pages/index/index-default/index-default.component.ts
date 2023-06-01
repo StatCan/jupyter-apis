@@ -307,11 +307,31 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${pvc.name}/${pvc.namespace}/${pvc.capacity}`;
   }
 
-  public parseIncomingData(pvcs: PVCResponseObject[]): PVCProcessedObject[] {
+  public parseIncomingData(pvcs: PVCResponseObject[], notebooks: NotebookResponseObject[]): PVCProcessedObject[] {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
+
+    //Check which notebooks are mounted
+    let mounts = Object.fromEntries(
+      notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
+    );
+    
+    //AAW: overwrite status field with our custom values
+    pvcsCopy.forEach(element => {
+      if(mounts[element.name]){
+        element.usedBy = mounts[element.name].name;
+        element.status = {} as Status;
+        element.status.message = $localize`Attached`;
+        element.status.phase = STATUS_TYPE.MOUNTED;
+      } else {
+        element.status = {} as Status;
+        element.status.message = $localize`Unattached`;
+        element.status.phase = STATUS_TYPE.UNMOUNTED;
+      }
+    });
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
+      pvc.protB = this.parseProtBVolume(pvc);
       pvc.ageValue = pvc.age.uptime;
       pvc.ageTooltip = pvc.age.timestamp;
       pvc.link = {
@@ -326,6 +346,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // Status Terminating allows action to be enabled.
   // If there is a pvc in use, we want to block actions
   public parseDeletionActionStatus(pvc: PVCProcessedObject) {
+    if(pvc.usedBy != null) {
+      return STATUS_TYPE.TERMINATING
+    }
+
     if (pvc.notebooks.length) {
       return STATUS_TYPE.UNAVAILABLE;
     }
@@ -337,7 +361,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return STATUS_TYPE.TERMINATING;
   }
 
-  parseProtBVolume(pvc: VolumeProcessedObject) {
+  parseProtBVolume(pvc: PVCProcessedObject) {
     if(pvc.labels?.["data.statcan.gc.ca/classification"] === "protected-b") {
       return true;
     }

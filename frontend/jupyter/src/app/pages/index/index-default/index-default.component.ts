@@ -24,8 +24,8 @@ import {
 } from './config';
 import { NotebookResponseObject, 
   NotebookProcessedObject, 
-  VolumeResponseObject, 
-  VolumeProcessedObject,
+  PVCResponseObject, 
+  PVCProcessedObject,
   AllocationCostObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
@@ -48,8 +48,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   dashboardDisconnectedState = DashboardState.Disconnected;
 
   volumeConfig= defaultVolumeConfig;
-  rawVolumeData: VolumeResponseObject[] = [];
-  processedVolumeData: VolumeProcessedObject[] = [];
+  rawVolumeData: PVCResponseObject[] = [];
+  processedVolumeData: PVCProcessedObject[] = [];
+  public pvcsWaitingViewer = new Set<string>();
 
   costConfig = defaultCostConfig;
   rawCostData: AllocationCostResponse = null;
@@ -69,7 +70,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     },
   });
 
-  buttons: ToolbarButton[] = [this.newNotebookButton];
+  private newVolumeButton = new ToolbarButton({
+    text: $localize`New Volume`,
+    icon: 'add',
+    stroked: true,
+    fn: () => {
+      this.newResourceClicked();
+    },
+  });
+
+  buttons: ToolbarButton[] = [this.newNotebookButton, this.newVolumeButton];
   
   constructor(
     public ns: NamespaceService,
@@ -86,8 +96,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     // Reset the poller whenever the selected namespace changes
     this.nsSub = this.ns.getSelectedNamespace2().subscribe(ns => {
       this.currNamespace = ns;
+      this.pvcsWaitingViewer = new Set<string>();
       this.poll(ns);
       this.newNotebookButton.namespaceChanged(ns, $localize`Notebook`);
+      this.newVolumeButton.namespaceChanged(ns, $localize`Volume`);
     });
   }
 
@@ -291,17 +303,19 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     this.buttons = [this.newNotebookButton];
   }
 
-  public pvcTrackByFn(index: number, pvc: VolumeProcessedObject) {
-    return `${pvc.name}/${pvc.namespace}/${pvc.size}`;
+  public pvcTrackByFn(index: number, pvc: PVCProcessedObject) {
+    return `${pvc.name}/${pvc.namespace}/${pvc.capacity}`;
   }
 
-  public parseIncomingData(pvcs: VolumeResponseObject[], notebooks: NotebookResponseObject[]) {
-    let pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as VolumeProcessedObject[];
+  public parseIncomingData(pvcs: PVCResponseObject[], notebooks: NotebookResponseObject[]): PVCProcessedObject[] {
+    const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
+
     //Check which notebooks are mounted
     let mounts = Object.fromEntries(
       notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
     );
-
+    
+    //AAW: overwrite status field with our custom values
     pvcsCopy.forEach(element => {
       if(mounts[element.name]){
         element.usedBy = mounts[element.name].name;
@@ -318,6 +332,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
       pvc.protB = this.parseProtBVolume(pvc);
+      pvc.ageValue = pvc.age.uptime;
+      pvc.ageTooltip = pvc.age.timestamp;
+      pvc.link = {
+        text: pvc.name,
+        url: `/volume/details/${pvc.namespace}/${pvc.name}`,
+      };
     }
 
     return pvcsCopy;
@@ -325,15 +345,23 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   // Status Terminating allows action to be enabled.
   // If there is a pvc in use, we want to block actions
-  public parseDeletionActionStatus(pvc: VolumeProcessedObject) {
+  public parseDeletionActionStatus(pvc: PVCProcessedObject) {
     if(pvc.usedBy != null) {
       return STATUS_TYPE.TERMINATING
     }
-    return STATUS_TYPE.READY;
 
+    if (pvc.notebooks.length) {
+      return STATUS_TYPE.UNAVAILABLE;
+    }
+
+    if (pvc.status.phase !== STATUS_TYPE.TERMINATING) {
+      return STATUS_TYPE.READY;
+    }
+
+    return STATUS_TYPE.TERMINATING;
   }
 
-  parseProtBVolume(pvc: VolumeProcessedObject) {
+  parseProtBVolume(pvc: PVCProcessedObject) {
     if(pvc.labels?.["data.statcan.gc.ca/classification"] === "protected-b") {
       return true;
     }
@@ -343,46 +371,52 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   public reactVolumeToAction(a: ActionEvent) {
     switch (a.action) {
       case 'delete':
-        this.deletePVCClicked(a.data);
+        this.deleteVolumeClicked(a.data);
+        break;
+      case 'name:link':
+        if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
+          a.event.stopPropagation();
+          a.event.preventDefault();
+          this.snackBar.open(
+            'PVC is unavailable now.',
+            SnackType.Warning,
+            3000,
+          );
+          return;
+        }
         break;
     }
   }
 
-  public deletePVCClicked(pvc: VolumeProcessedObject) {
-    const deleteDialogConfig = getDeleteVolumeDialogConfig(pvc.name);
+  // Functions for handling the action events
+  public newResourceClicked() {
+    const ref = this.dialog.open(FormDefaultComponent, {
+      width: '600px',
+      panelClass: 'form--dialog-padding',
+    });
 
-    const ref = this.confirmDialog.open(pvc.name, deleteDialogConfig);
-    const delSub = ref.componentInstance.applying$.subscribe(applying => {
-      if (!applying) {
+    ref.afterClosed().subscribe(res => {
+      if (res === DIALOG_RESP.ACCEPT) {
+        this.snackBar.open(
+          $localize`Volume was submitted successfully.`,
+          SnackType.Success,
+          2000,
+        );
+        this.poll(this.currNamespace);
+      }
+    });
+  }
+
+  public deleteVolumeClicked(pvc: PVCProcessedObject) {
+    this.actions.deleteVolume(pvc.name, pvc.namespace).subscribe(result => {
+      if (result !== DIALOG_RESP.ACCEPT) {
         return;
       }
 
-      // Close the open dialog only if the DELETE request succeeded
-      this.backend.deletePVC(this.currNamespace, pvc.name).subscribe({
-        next: _ => {
-          this.poller.reset();
-          ref.close(DIALOG_RESP.ACCEPT);
-        },
-        error: err => {
-          // Simplify the error message
-          const errorMsg = err;
-          console.log(err);
-          deleteDialogConfig.error = errorMsg;
-          ref.componentInstance.applying$.next(false);
-        },
-      });
-
-      // DELETE request has succeeded
-      ref.afterClosed().subscribe(res => {
-        delSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
-          return;
-        }
-
-        pvc.status.phase = STATUS_TYPE.TERMINATING;
-        pvc.status.message = "Preparing to delete the Volume...";
-        pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
-      });
+      pvc.status.phase = STATUS_TYPE.TERMINATING;
+      pvc.status.message = 'Preparing to delete the Volume...';
+      pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
+      this.pvcsWaitingViewer.delete(pvc.name);
     });
   }
 

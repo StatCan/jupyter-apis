@@ -10,10 +10,13 @@ import {
   DateTimeValue,
   LinkValue,
   LinkType,
+  TableColumn,
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { quantityToScalar } from '@kubernetes/client-node/dist/util';
 import { ProtBComponent } from './protb-icon/protb-icon.component';
+import { tableConfig } from '../config';
+import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 
 // --- Config for the Resource Table ---
 export const defaultConfig: TableConfig = {
@@ -154,54 +157,20 @@ export const defaultConfig: TableConfig = {
   ],
 };
 
-export const defaultVolumeConfig = {
-  columns: [
-    {
-      matHeaderCellDef: $localize`Status`,
-      matColumnDef: 'status',
-      value: new StatusValue(),
-    },
-    {
-      matHeaderCellDef: $localize`Name`,
-      matColumnDef: 'name',
-      style: { width: '25%' },
-      value: new PropertyValue({
-        field: 'name',
-        tooltipField: 'name',
-        truncate: true,
-      }),
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'prot-b',
-      value: new ComponentValue({
-        component: ProtBComponent,
-      }),
-    },
-    {
-      matHeaderCellDef: $localize`Size`,
-      matColumnDef: 'size',
-      value: new PropertyValue({ field: 'size' }),
-    },
-    {
-      matHeaderCellDef: $localize`Used By`,
-      matColumnDef: 'usedBy',
-      value: new PropertyValue({ field: 'usedBy' }),
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'actions',
-      value: new ActionListValue([
-        new ActionIconValue({
-          name: 'delete',
-          tooltip: $localize`Delete Volume`,
-          color: 'warn',
-          field: 'deleteAction',
-          iconReady: 'material:delete',
-        }),
-      ]),
-  },
-  ],
+const customDeleteCol: TableColumn = {
+  matHeaderCellDef: '',
+  matColumnDef: 'customDelete',
+  style: { width: '40px' },
+  value: new ComponentValue({
+    component: DeleteButtonComponent,
+  }),
+};
+
+export const defaultVolumeConfig: TableConfig = {
+  title: tableConfig.title,
+  dynamicNamespaceColumn: true,
+  newButtonText: tableConfig.newButtonText,
+  columns: tableConfig.columns.concat(customDeleteCol),
 };
 
 export function getDeleteVolumeDialogConfig(name: string): DialogConfig {

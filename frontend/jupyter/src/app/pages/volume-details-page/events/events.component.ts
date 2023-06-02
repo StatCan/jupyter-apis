@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import { PollerService } from 'kubeflow';
 import { Subscription } from 'rxjs';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { EventObject } from 'src/app/types/event';
 import { defaultConfig } from './config';
 
@@ -19,7 +19,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   pollSub = new Subscription();
 
   constructor(
-    public backend: VWABackendService,
+    public backend: JWABackendService,
     public poller: PollerService,
   ) {}
 

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { environment } from '@app/environment';
 import {
   NamespaceService,
+  ExponentialBackoff,
   ActionEvent,
   STATUS_TYPE,
   Status,
@@ -13,6 +14,7 @@ import {
   PollerService,
   DashboardState,
 } from 'kubeflow';
+import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { KubecostService, AllocationCostResponse } from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
@@ -20,8 +22,8 @@ import {
   defaultConfig,
   defaultVolumeConfig,
   defaultCostConfig,
-  getDeleteVolumeDialogConfig,
 } from './config';
+import { isEqual } from 'lodash';
 import { NotebookResponseObject, 
   NotebookProcessedObject, 
   PVCResponseObject, 
@@ -30,6 +32,8 @@ import { NotebookResponseObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
+import { VolumeFormComponent } from '../../volume-form/volume-form.component';
+
 
 @Component({
   selector: 'app-index-default',
@@ -41,14 +45,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   nsSub = new Subscription();
   pollSub = new Subscription();
-
-  currNamespace: string | string[];
+  // AAW: currNamespace is only a string, not a "string | string[]"
+  currNamespace: string;
   config = defaultConfig;
   processedData: NotebookProcessedObject[] = [];
   dashboardDisconnectedState = DashboardState.Disconnected;
 
-  volumeConfig= defaultVolumeConfig;
-  rawVolumeData: PVCResponseObject[] = [];
+  volPollSub = new Subscription();
+  volumeConfig = defaultVolumeConfig;
   processedVolumeData: PVCProcessedObject[] = [];
   public pvcsWaitingViewer = new Set<string>();
 
@@ -87,46 +91,84 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public confirmDialog: ConfirmDialogService,
     public snackBar: SnackBarService,
     public router: Router,
-    private kubecostService: KubecostService,
+    public kubecostService: KubecostService,
     public poller: PollerService,
     public actions: ActionsService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
+    this.kubecostPoller = new ExponentialBackoff({ interval: 30000, retries: 1 });//30 second intervals
+
     // Reset the poller whenever the selected namespace changes
-    this.nsSub = this.ns.getSelectedNamespace2().subscribe(ns => {
+    //AAW: use getSelectedNamespace instead of getSelectedNamespace2 to only return a string
+    this.nsSub = this.ns.getSelectedNamespace().subscribe(ns => {
       this.currNamespace = ns;
       this.pvcsWaitingViewer = new Set<string>();
       this.poll(ns);
+      this.volumePoll(ns);
       this.newNotebookButton.namespaceChanged(ns, $localize`Notebook`);
       this.newVolumeButton.namespaceChanged(ns, $localize`Volume`);
+
+      this.kubecostPoller.reset();
     });
+
+    // Poll for new kubecost data and reset the poller if different data is found
+    this.kubecostSubs.add(
+      this.kubecostPoller.start().subscribe(() => {
+        if (!this.currNamespace) {
+          return;
+        }
+        
+        this.kubecostService.getAllocationCost(this.currNamespace, this.costWindow).subscribe(
+          aggCost => {
+            this.kubecostLoading = false;
+            if (!isEqual(this.rawCostData, aggCost)) {
+              this.rawCostData = aggCost;
+              
+              this.processedCostData = this.processIncomingCostData(aggCost);
+              }
+            },
+          err => {
+            this.kubecostLoading = false;
+            if (!isEqual(this.rawCostData, err)) {
+              this.rawCostData = err;
+              this.kubecostPoller.reset();
+            }
+          });
+      }),
+    );
   }
 
   ngOnDestroy() {
     this.nsSub.unsubscribe();
     this.pollSub.unsubscribe();
+    this.volPollSub.unsubscribe();
+    this.kubecostSubs.unsubscribe();
+    this.kubecostPoller.stop();
   }
 
   public poll(ns: string | string[]) {
     this.pollSub.unsubscribe();
     this.processedData = [];
-    this.processedVolumeData = [];
 
-    const request = Promise.all([
-      this.backend.getNotebooks(ns), 
-      this.backend.getPVCs(ns),
-      this.kubecostService.getAllocationCost(ns, this.costWindow)
-    ])
+    const request = this.backend.getNotebooks(ns);
 
-    this.kubecostLoading = false;
-    this.pollSub = this.poller.exponential(request).subscribe((notebooks, pvcs, aggCost) => {
+    this.pollSub = this.poller.exponential(request).subscribe(notebooks => {
       this.processedData = this.processIncomingData(notebooks);
-      this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
-      this.processedCostData = this.processIncomingCostData(aggCost);
     });
   }
 
+  public volumePoll(ns: string | string[]) {
+    this.volPollSub.unsubscribe();
+    this.processedVolumeData = [];
+
+    const request = this.backend.getPVCs(ns);
+
+    this.volPollSub = this.poller.exponential(request).subscribe(pvcs => {
+      this.processedVolumeData = this.parseIncomingData(pvcs);
+    });
+  }
 
   // Event handling functions
   reactToAction(a: ActionEvent) {
@@ -141,7 +183,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         this.startStopClicked(a.data);
         break;
       case 'name:link':
-        if (a.data.status.phase ==; STATUS_TYPE.TERMINATING) {
+        if (a.data.status.phase == STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
           a.event.preventDefault();
           this.snackBar.open(
@@ -307,18 +349,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${pvc.name}/${pvc.namespace}/${pvc.capacity}`;
   }
 
-  public parseIncomingData(pvcs: PVCResponseObject[], notebooks: NotebookResponseObject[]): PVCProcessedObject[] {
+  public parseIncomingData(pvcs: PVCResponseObject[]): PVCProcessedObject[] {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
-
-    //Check which notebooks are mounted
-    let mounts = Object.fromEntries(
-      notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
-    );
     
     //AAW: overwrite status field with our custom values
     pvcsCopy.forEach(element => {
-      if(mounts[element.name]){
-        element.usedBy = mounts[element.name].name;
+      if(element.notebooks.length){
+        element.usedBy = element.notebooks[0];
         element.status = {} as Status;
         element.status.message = $localize`Attached`;
         element.status.phase = STATUS_TYPE.MOUNTED;
@@ -390,7 +427,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   // Functions for handling the action events
   public newResourceClicked() {
-    const ref = this.dialog.open(FormDefaultComponent, {
+    const ref = this.dialog.open(VolumeFormComponent, {
       width: '600px',
       panelClass: 'form--dialog-padding',
     });

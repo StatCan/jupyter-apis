@@ -173,19 +173,6 @@ export const defaultVolumeConfig: TableConfig = {
   columns: tableConfig.columns.concat(customDeleteCol),
 };
 
-export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
-  return { // TODO key + param
-    title: $localize`Delete Volume '${name}'`,
-    message: $localize`Warning: All data in this volume will be lost.`,
-    accept: $localize`DELETE`,
-    confirmColor: 'warn',
-    cancel: $localize`CANCEL`,
-    error: '',
-    applying: $localize`DELETING`,
-    width: '600px',
-  };
-}
-
 // --- Config for the Cost Table ---
 export const defaultCostConfig = {
   columns: [

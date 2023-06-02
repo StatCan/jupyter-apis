@@ -14,7 +14,7 @@ import {
   getNameError,
   DIALOG_RESP,
 } from 'kubeflow';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { PVCPostObject } from 'src/app/types';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -39,7 +39,7 @@ export class VolumeFormComponent implements OnInit, OnDestroy {
   constructor(
     public ns: NamespaceService,
     public fb: FormBuilder,
-    public backend: VWABackendService,
+    public backend: JWABackendService,
     public dialog: MatDialogRef<VolumeFormComponent>,
   ) {
     this.formCtrl = this.fb.group({

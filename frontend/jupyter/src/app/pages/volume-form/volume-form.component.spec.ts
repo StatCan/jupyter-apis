@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { KubeflowModule } from 'kubeflow';
 import { of } from 'rxjs';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 
 import { VolumeFormComponent } from './volume-form.component';
 
-const VWABackendServiceStub: Partial<VWABackendService> = {
+const JWABackendServiceStub: Partial<JWABackendService> = {
   getStorageClasses: () => of(),
   getDefaultStorageClass: () => of(),
   getPVCs: () => of(),
@@ -41,7 +41,7 @@ describe('VolumeFormComponent', () => {
         declarations: [VolumeFormComponent],
         providers: [
           { provide: FormBuilder, useValue: FormBuilderStub },
-          { provide: VWABackendService, useValue: VWABackendServiceStub },
+          { provide: JWABackendService, useValue: JWABackendServiceStub },
           { provide: MatDialogRef, useValue: {} },
         ],
         imports: [KubeflowModule],

@@ -115,7 +115,8 @@ export class TableComponent
   }
 
   ngOnInit() {
-    this.nsSub = this.ns.getSelectedNamespace2().subscribe(ns => {
+    //AAW: use getSlectedNamespace instead of getSelectedNamespace2 since we dont want string[]
+    this.nsSub = this.ns.getSelectedNamespace().subscribe(ns => {
       if (
         !this.config ||
         !this.config.dynamicNamespaceColumn ||
@@ -123,7 +124,7 @@ export class TableComponent
       ) {
         return;
       }
-
+      
       if (Array.isArray(ns)) {
         addColumn(this.config, NAMESPACE_COLUMN, 'name');
       } else {

@@ -18,7 +18,7 @@ import {
 } from 'kubeflow';
 import { of, Subject } from 'rxjs';
 import { ActionsService } from 'src/app/services/actions.service';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { EventsModule } from './events/events.module';
 import { OverviewModule } from './overview/overview.module';
 import { mockPvc } from './pvc-mock';
@@ -29,7 +29,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 const ActionsServiceStub: Partial<ActionsService> = {
   deleteVolume: () => of(),
 };
-const VWABackendServiceStub: Partial<VWABackendService> = {
+const JWABackendServiceStub: Partial<JWABackendService> = {
   getPVC: () => of(mockPvc),
   getPodsUsingPVC: () => of(),
   getPVCEvents: () => of(),
@@ -51,7 +51,7 @@ describe('VolumeDetailsPageComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [VolumeDetailsPageComponent],
       providers: [
-        { provide: VWABackendService, useValue: VWABackendServiceStub },
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
         { provide: NamespaceService, useValue: NamespaceServiceStub },
         { provide: ActivatedRoute, useValue: ActivatedRouteStub },
       ],

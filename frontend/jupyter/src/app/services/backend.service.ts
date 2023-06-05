@@ -129,7 +129,11 @@ export class JWABackendService extends BackendService {
 
     return this.http.get<VWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map((resp: VWABackendResponse) => resp.pvcs),
+      map((resp: VWABackendResponse) => {
+        let pvcsCopy = JSON.parse(JSON.stringify(resp.pvcs));
+        pvcsCopy = pvcsCopy.filter(pvc => pvc.labels?.["blob.aaw.statcan.gc.ca/automount"]==="true" ? false : true);
+        return pvcsCopy;
+      }),
     );
   }
 

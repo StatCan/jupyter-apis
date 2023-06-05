@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"time"
 
 	kf_v1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
-	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
@@ -21,7 +21,7 @@ type pvcresponse struct {
 	Name      string                              `json:"name"`
 	Namespace string                              `json:"namespace"`
 	Status    pvcStatus                           `json:"status"`
-	Age       string                              `json:"age"`
+	Age       time.Time                           `json:"age"`
 	Capacity  resource.Quantity                   `json:"capacity"`
 	Modes     []corev1.PersistentVolumeAccessMode `json:"modes"`
 	Class     string                              `json:"class"`
@@ -219,7 +219,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			Name:      pvc.Name,
 			Namespace: pvc.Namespace,
 			Status:    status,
-			Age:       prettytime.Format(pvc.CreationTimestamp.Time),
+			Age:       pvc.CreationTimestamp.Time,
 			Capacity:  *size,
 			Modes:     pvc.Spec.AccessModes,
 			Class:     *pvc.Spec.StorageClassName,

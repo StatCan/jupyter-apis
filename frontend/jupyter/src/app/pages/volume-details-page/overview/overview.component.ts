@@ -124,7 +124,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     let url = '';
 
     if (groupName === 'Notebooks') {
-      url = `${viewerUrl}/jupyter/notebook/details/${namespace}/${podName}/`;
+      url = `/notebook/details/${namespace}/${podName}/`;
     } else if (groupName === 'InferenceService') {
       // Remove (component) from podName
       const serviceName = podName.replace(/ *\([^)]*\) */g, '');

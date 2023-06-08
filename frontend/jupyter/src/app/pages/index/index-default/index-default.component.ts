@@ -73,7 +73,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       this.router.navigate(['/new']);
     },
   });
-
+  /*AAW: Hiding the new volume form
   private newVolumeButton = new ToolbarButton({
     text: $localize`New Volume`,
     icon: 'add',
@@ -82,8 +82,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       this.newResourceClicked();
     },
   });
-
-  buttons: ToolbarButton[] = [this.newNotebookButton, this.newVolumeButton];
+  */
+  buttons: ToolbarButton[] = [this.newNotebookButton];
   
   constructor(
     public ns: NamespaceService,
@@ -108,7 +108,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       this.poll(ns);
       this.volumePoll(ns);
       this.newNotebookButton.namespaceChanged(ns, $localize`Notebook`);
-      this.newVolumeButton.namespaceChanged(ns, $localize`Volume`);
+      //AAW: Hide this button
+      //this.newVolumeButton.namespaceChanged(ns, $localize`Volume`);
 
       this.kubecostPoller.reset();
     });

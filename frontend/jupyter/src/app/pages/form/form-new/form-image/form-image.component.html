@@ -28,13 +28,20 @@
         [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
       >
         <mat-icon class="server-type-icon" svgIcon="group-one"></mat-icon>
-        <p class="server-type-title">VisualStudio Code</p>
+        <p class="server-type-title">RStudio</p>
         <p class="server-type-content">
-          A lightweight but powerful source code editor, redefined and optimized
-          for building and debugging modern web and cloud applications.
+          An integrated development environment for R, a programming language
+          for statistical computing and graphics.
         </p>
       </mat-button-toggle>
+    </mat-button-toggle-group>
 
+    <mat-button-toggle-group
+      [formControl]="parentForm.get('serverType')"
+      class="server-type-wrapper"
+      attr.aria-label="Server Type"
+      i18n-aria-label="Aria label for the Server Type"
+    >
       <mat-button-toggle
         value="group-two"
         attr.aria-label="Use Group Two based server"
@@ -44,10 +51,9 @@
         [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
       >
         <mat-icon class="server-type-icon" svgIcon="group-two"></mat-icon>
-        <p class="server-type-title">RStudio</p>
+        <p class="server-type-title">Remote Desktop</p>
         <p class="server-type-content">
-          An integrated development environment for R, a programming language
-          for statistical computing and graphics.
+          A ubuntu remote desktop.
         </p>
       </mat-button-toggle>
 

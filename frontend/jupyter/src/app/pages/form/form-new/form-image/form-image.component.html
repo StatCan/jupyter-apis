@@ -21,7 +21,6 @@
 
       <mat-button-toggle
         value="group-one"
-        *ngIf="!parentForm.get('imageGroupOne')?.disabled"
         attr.aria-label="Use Group One based server"
         i18n-aria-label="Aria label for Group One server"
         [disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
@@ -38,7 +37,6 @@
 
       <mat-button-toggle
         value="group-two"
-        *ngIf="!parentForm.get('imageGroupTwo')?.disabled"
         attr.aria-label="Use Group Two based server"
         i18n-aria-label="Aria label for Group Two server"
         [disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
@@ -194,7 +192,7 @@
               />
               <mat-error>{{ urlValidation() }}</mat-error>
             </mat-form-field>
-            
+
             <!--AAW Removed. Deemed unecessary
             <div class="row">
               <mat-form-field class="column" appearance="outline">

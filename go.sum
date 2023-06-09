@@ -57,6 +57,8 @@ github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbt
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
 github.com/StatCan/kubeflow-apis v0.0.0-20220217170523-72ec9dc9b637 h1:7yGq2kwL4BXfH1a9gQ7EtEVtvvyhBBUWlSqIxbocgtQ=
 github.com/StatCan/kubeflow-apis v0.0.0-20220217170523-72ec9dc9b637/go.mod h1:1QdOYTU7yw3WuX8IGipUFkbUmbiit+6jrPRXtixFPcs=
+github.com/StatCan/kubeflow-apis v0.0.0-20230609114333-af080f42f387 h1:7UboJnm2F05dZ7qNaRDqAtgJN9+K/zAZ0NN0tDGCB48=
+github.com/StatCan/kubeflow-apis v0.0.0-20230609114333-af080f42f387/go.mod h1:1QdOYTU7yw3WuX8IGipUFkbUmbiit+6jrPRXtixFPcs=
 github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a/go.mod h1:lB+ZfQJz7igIIfQNfa7Ml4HSf2uFQQRzpGGRXenZAgY=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=

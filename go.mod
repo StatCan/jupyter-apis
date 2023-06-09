@@ -3,7 +3,7 @@ module github.com/StatCan/jupyter-apis
 go 1.18
 
 require (
-	github.com/StatCan/kubeflow-apis v0.0.0-20220217170523-72ec9dc9b637
+	github.com/StatCan/kubeflow-apis v0.0.0-20230609114333-af080f42f387
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1

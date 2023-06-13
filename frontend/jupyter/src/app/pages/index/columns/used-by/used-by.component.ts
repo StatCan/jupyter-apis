@@ -27,7 +27,7 @@ export class UsedByComponent implements TableColumnComponent, OnInit {
   getUrlItem(nb: string, element: any) {
     return {
       name: nb,
-      url: `/jupyter/notebook/details/${element.namespace}/${nb}`,
+      url: `/notebook/details/${element.namespace}/${nb}`,
     };
   }
 }

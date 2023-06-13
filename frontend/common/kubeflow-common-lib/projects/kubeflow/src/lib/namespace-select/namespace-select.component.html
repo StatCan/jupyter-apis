@@ -8,10 +8,6 @@
       (selectionChange)="namespaceChanged($event.value)"
       data-cy-namespace-selector-dropdown
     >
-      <mat-option data-cy-all-namespaces value="{all}">
-        All namespaces
-      </mat-option>
-
       <mat-option
         *ngFor="let namespace of namespaces"
         [value]="namespace"

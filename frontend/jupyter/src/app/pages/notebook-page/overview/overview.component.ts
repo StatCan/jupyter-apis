@@ -237,13 +237,12 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   private generatePodDefaults(nb: NotebookRawObject) {
-    const configurations = [];
-
     this.pollSub.unsubscribe();
 
     const request = this.backend.getPodDefaults(nb.metadata.namespace);
 
     this.pollSub = this.poller.exponential(request).subscribe(podDefaults => {
+      const configurations = [];// AAW: moved this line to inside the subscribe to prevent duplication bug
       for (const pd of podDefaults) {
         for (const label in nb.metadata.labels) {
           if (label === Object.keys(pd.spec.selector.matchLabels)[0]) {
@@ -353,7 +352,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     if (groupName === PVCS) {
       return {
         name: vol.name,
-        url: `/volumes/volume/details/${ns}/${vol.name}`,
+        url: `/volume/details/${ns}/${vol.name}`,
       };
     }
     return {

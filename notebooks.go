@@ -15,7 +15,6 @@ import (
 	"time"
 
 	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
-	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
 	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
@@ -114,7 +113,7 @@ type gpuresponse struct {
 }
 
 type notebookresponse struct {
-	Age        string            `json:"age"`
+	Age        time.Time         `json:"age"`
 	CPU        *inf.Dec          `json:"cpu"`
 	GPUs       gpuresponse       `json:"gpu"`
 	Image      string            `json:"image"`
@@ -338,7 +337,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		resp.Notebooks = append(resp.Notebooks, notebookresponse{
-			Age:        prettytime.Format(notebook.CreationTimestamp.Time),
+			Age:        notebook.CreationTimestamp.Time,
 			Name:       notebook.Name,
 			Namespace:  notebook.Namespace,
 			Image:      notebook.Spec.Template.Spec.Containers[0].Image,

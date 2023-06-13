@@ -16,11 +16,11 @@ import { BackendService,
 import { Observable, of } from 'rxjs';
 import { IndexDefaultModule } from './index-default/index-default.module';
 import { IndexRokModule } from './index-rok/index-rok.module';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 
 import { IndexComponent } from './index.component';
 
-const VWABackendServiceStub: Partial<VWABackendService> = {
+const JWABackendServiceStub: Partial<JWABackendService> = {
   getPVCs: () => of(),
 };
 const SnackBarServiceStub: Partial<SnackBarService> = {
@@ -59,7 +59,7 @@ describe('IndexComponent', () => {
         ],
         providers: [
           { provide: ConfirmDialogService, useValue: {} },
-          { provide: VWABackendService, useValue: VWABackendServiceStub },
+          { provide: JWABackendService, useValue: JWABackendServiceStub },
           { provide: SnackBarService, useValue: SnackBarServiceStub },
           { provide: NamespaceService, useValue: NamespaceServiceStub },
           { provide: PollerService, useValue: {} },

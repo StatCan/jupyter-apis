@@ -3,7 +3,7 @@ import { environment } from '@app/environment';
 import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
 import { ChipDescriptor, PollerService, UrlItem } from 'kubeflow';
 import { Subscription } from 'rxjs';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { LinkGroup } from './link-groups-table/types';
 
 @Component({
@@ -124,7 +124,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     let url = '';
 
     if (groupName === 'Notebooks') {
-      url = `${viewerUrl}/jupyter/notebook/details/${namespace}/${podName}/`;
+      url = `/notebook/details/${namespace}/${podName}/`;
     } else if (groupName === 'InferenceService') {
       // Remove (component) from podName
       const serviceName = podName.replace(/ *\([^)]*\) */g, '');
@@ -221,7 +221,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    public backend: VWABackendService,
+    public backend: JWABackendService,
     public poller: PollerService,
   ) {}
 

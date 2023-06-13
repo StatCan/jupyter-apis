@@ -21,7 +21,6 @@
 
       <mat-button-toggle
         value="group-one"
-        *ngIf="!parentForm.get('imageGroupOne')?.disabled"
         attr.aria-label="Use Group One based server"
         i18n-aria-label="Aria label for Group One server"
         [disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
@@ -29,16 +28,15 @@
         [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
       >
         <mat-icon class="server-type-icon" svgIcon="group-one"></mat-icon>
-        <p class="server-type-title">VisualStudio Code</p>
+        <p class="server-type-title">RStudio</p>
         <p class="server-type-content">
-          A lightweight but powerful source code editor, redefined and optimized
-          for building and debugging modern web and cloud applications.
+          An integrated development environment for R, a programming language
+          for statistical computing and graphics.
         </p>
       </mat-button-toggle>
-
+      
       <mat-button-toggle
         value="group-two"
-        *ngIf="!parentForm.get('imageGroupTwo')?.disabled"
         attr.aria-label="Use Group Two based server"
         i18n-aria-label="Aria label for Group Two server"
         [disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
@@ -46,10 +44,9 @@
         [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
       >
         <mat-icon class="server-type-icon" svgIcon="group-two"></mat-icon>
-        <p class="server-type-title">RStudio</p>
+        <p class="server-type-title">Remote Desktop</p>
         <p class="server-type-content">
-          An integrated development environment for R, a programming language
-          for statistical computing and graphics.
+          A ubuntu remote desktop.
         </p>
       </mat-button-toggle>
 
@@ -194,7 +191,7 @@
               />
               <mat-error>{{ urlValidation() }}</mat-error>
             </mat-form-field>
-            
+
             <!--AAW Removed. Deemed unecessary
             <div class="row">
               <mat-form-field class="column" appearance="outline">

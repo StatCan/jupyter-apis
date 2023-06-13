@@ -20,9 +20,9 @@
       <app-form-image
         [parentForm]="formCtrl"
         [images]="config?.image?.options"
-        [imagesGroupOne]="config?.imageGroupOne?.options"
-        [imagesGroupTwo]="config?.imageGroupTwo?.options"
-        [imagesGroupThree]="config?.imageGroupThree?.options"
+        [imagesGroupOne]="config?.imageGroupOne"
+        [imagesGroupTwo]="config?.imageGroupTwo"
+        [imagesGroupThree]="config?.imageGroupThree"
         [allowCustomImage]="config?.allowCustomImage"
         [hideRegistry]="config?.hideRegistry"
         [hideTag]="config?.hideTag"
@@ -85,7 +85,7 @@
           mat-raised-button
           color="primary"
           (click)="onSubmit()"
-        [disabled]="!formCtrl.valid || blockSubmit"
+          [disabled]="!formCtrl.valid"
           i18n
         >
           LAUNCH

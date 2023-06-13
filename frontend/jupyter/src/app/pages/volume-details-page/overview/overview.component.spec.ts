@@ -6,7 +6,7 @@ import {
   PollerService,
   SnackBarModule,
 } from 'kubeflow';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 import { of } from 'rxjs';
 
 import { OverviewComponent } from './overview.component';
@@ -14,7 +14,7 @@ import { mockPods } from './pods-mock';
 import { mockPvc } from '../pvc-mock';
 import { mockPodGroups } from './pod-groups-mock';
 
-const VWABackendServiceStub: Partial<VWABackendService> = {
+const JWABackendServiceStub: Partial<JWABackendService> = {
   getPodsUsingPVC: () => of(mockPods),
 };
 const PollerServiceStub: Partial<PollerService> = {
@@ -29,7 +29,7 @@ describe('OverviewComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [OverviewComponent],
       providers: [
-        { provide: VWABackendService, useValue: VWABackendServiceStub },
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
         { provide: PollerService, useValue: PollerServiceStub },
       ],
       imports: [

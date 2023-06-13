@@ -11,7 +11,7 @@ import {
 } from 'kubeflow';
 import { Subscription } from 'rxjs';
 import { ActionsService } from 'src/app/services/actions.service';
-import { VWABackendService } from 'src/app/services/backend.service';
+import { JWABackendService } from 'src/app/services/backend.service';
 
 @Component({
   selector: 'app-volume-details-page',
@@ -42,7 +42,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
 
   constructor(
     public ns: NamespaceService,
-    public backend: VWABackendService,
+    public backend: JWABackendService,
     public poller: PollerService,
     public router: Router,
     public actions: ActionsService,

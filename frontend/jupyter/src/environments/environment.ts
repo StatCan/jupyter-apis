@@ -18,8 +18,6 @@ export const environment = {
 
   // Rok specifics
   rokUrl: '',
-  //AAW: from upstream volumes crud-web-app
-  viewerUrl: '//localhost:8081',
 };
 /*
  * For easier debugging in development mode, you can import the following file

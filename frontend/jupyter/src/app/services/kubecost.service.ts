@@ -45,7 +45,9 @@ export type AllocationCostResponse = {
   };
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class KubecostService {
   constructor(private http: HttpClient) {}
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, AbstractControl, Validators, ValidatorFn, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
 import { calculateLimits } from '../utils';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 // AAW
 type MaxResourceSpec = {cpu: number; memory: number, cpuLimit: number, memoryLimit: number};
@@ -22,6 +23,8 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   @Input() cpuLimitFactor: string;
   @Input() memoryLimitFactor: string;
   @Input() popoverPosition = 'below';
+
+  matcher = new parentErrorKeysErrorStateMatcher(); //AAW
 
   constructor() {}
 
@@ -152,17 +155,11 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       return control.value<value ? {limit: true} : null;
     };
   }
+}
 
-  parentErrorKeysErrorStateMatcher() {
-    return {
-      isErrorState(
-        control: FormControl,
-        form: FormGroupDirective | NgForm
-      ): boolean {
-        return (
-          control && control.invalid && (control.dirty || form.dirty)
-        );
-      }
-    };
+// Error when invalid control is dirty, touched, or submitted, AAW
+export class parentErrorKeysErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return !!(control && control.invalid && (control.dirty || (form && form.dirty)));
   }
 }

@@ -11,6 +11,7 @@ import {
 } from 'kubeflow';
 import { Observable, of } from 'rxjs';
 import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService } from 'src/app/services/kubecost.service';
 
 import { IndexDefaultComponent } from './index-default.component';
 
@@ -19,6 +20,10 @@ const JWABackendServiceStub: Partial<JWABackendService> = {
   deleteNotebook: () => of(),
   startNotebook: () => of(),
   stopNotebook: () => of(),
+};
+
+const KubecostServiceStub: Partial<KubecostService> = {
+  getAllocationCost: () => of(),
 };
 
 const NamespaceServiceStub: Partial<NamespaceService> = {
@@ -48,6 +53,7 @@ describe('IndexDefaultComponent', () => {
         imports: [CommonModule, KubeflowModule, RouterTestingModule],
         providers: [
           { provide: JWABackendService, useValue: JWABackendServiceStub },
+          { provide: KubecostService, useValue: KubecostServiceStub },
           { provide: NamespaceService, useValue: NamespaceServiceStub },
           { provide: SnackBarService, useValue: SnackBarServiceStub },
           { provide: PollerService, useValue: {} },

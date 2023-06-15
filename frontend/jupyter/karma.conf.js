@@ -14,28 +14,28 @@ module.exports = function (config) {
     ],
     files: [
       {
-        pattern: 'jupyter/frontend/node_modules/monaco-editor/**',
+        pattern: 'frontend/jupyter/node_modules/monaco-editor/**',
         watched: false,
         included: false,
         served: true,
       },
       {
-        pattern: 'jupyter/frontend/node_modules/kubeflow/**',
+        pattern: 'frontend/jupyter/node_modules/kubeflow/**',
         watched: false,
         included: false,
         served: true,
       },
       {
-        pattern: 'jupyter/frontend/src/assets/**',
+        pattern: 'frontend/jupyter/src/assets/**',
         watched: false,
         included: false,
         served: true,
       },
     ],
     proxies: {
-      '/static/assets/monaco-editor/': '/base/jupyter/frontend/node_modules/monaco-editor/',
-      '/static/assets/': '/base/jupyter/frontend/node_modules/kubeflow/assets/',
-      '/static/assets/': '/base/jupyter/frontend/src/assets/',
+      '/static/assets/monaco-editor/': '/base/frontend/jupyter/node_modules/monaco-editor/',
+      '/static/assets/': '/base/frontend/jupyter/node_modules/kubeflow/assets/',
+      '/static/assets/': '/base/frontend/jupyter/src/assets/',
     },
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser

@@ -8,11 +8,11 @@ import { AppComponent } from './app.component';
 import { IndexModule } from './pages/index/index.module';
 import { 
   KubeflowModule,
-  ImmediateErrorStateMatcher,
   ResourceTableModule,
   NamespaceSelectModule,
   ConfirmDialogModule,
   FormModule,
+  ImmediateErrorStateMatcher,
 } from 'kubeflow';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -29,7 +29,10 @@ import { ErrorStateMatcher } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
+    IndexComponent,
     VolumeFormComponent,
+    IndexDefaultComponent,
+    IndexRokComponent,
   ],
   imports: [
     HttpClientModule,
@@ -40,18 +43,14 @@ import { ErrorStateMatcher } from '@angular/material/core';
     IndexModule,
     NotebookPageModule,
     FormNewModule,
-    VolumeDetailsPageModule,
-    ColumnsModule,
-
     ResourceTableModule,
     NamespaceSelectModule,
     ConfirmDialogModule,
     FormModule,
+    VolumeDetailsPageModule,
+    ColumnsModule,
   ],
-  providers: [
-    KubecostService,
-    { provide: ErrorStateMatcher, useClass: ImmediateErrorStateMatcher },
-  ],
+  providers: [KubecostService, { provide: ErrorStateMatcher, useClass: ImmediateErrorStateMatcher },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -80,11 +80,9 @@
   },
   "overrides": {
     "@angular-devkit/build-angular": {
-      "webpack-dev-server": {
-        "ansi-html": "0.0.8"
-      },
       "minimatch": "3.0.5"
     },
+    "ansi-html": "0.0.8",
     "webpack": "5.76.0",
     "terser": "5.18.0",
     "loader-utils": "2.0.4",

@@ -59,7 +59,7 @@ The front-end is configured to proxy requests to the local API server. It
 requires an environment variable (`KF_USER_ID`) to specify the current user –
 this is passed to the API server as an HTTP header.
 
-The following can be pasted in a script and executed. This uses the latest node lts version(v16.16.0).
+The following can be pasted in a script and executed. This uses the latest node lts/gallium version(v16.20.0) with npm v8(8.19.4).
 **NOTE**: `user` is when using vagrant. Use the email adress if it is the dev cluser (please never connect to prod directly)
 
 ```

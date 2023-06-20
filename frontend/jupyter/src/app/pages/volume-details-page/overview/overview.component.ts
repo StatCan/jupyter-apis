@@ -47,7 +47,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.pollSub = this.poller.exponential(request).subscribe(
       pods => {
         this.podGroupsLoaded = true;
-        this.podGroups = this.generatePodGroups(pods, this.env.viewerUrl);
+        this.podGroups = this.generatePodGroups(pods);
       },
       error => {
         this.podGroupsLoaded = true;
@@ -56,7 +56,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     );
   }
 
-  private generatePodGroups(pods: V1Pod[], viewerUrl: string): LinkGroup[] {
+  private generatePodGroups(pods: V1Pod[]): LinkGroup[] {
     const podObjects = pods
       .map(pod => this.getPodDetails(pod))
       .filter(podObj => podObj !== null);
@@ -69,7 +69,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
         podObj.podName,
         podObj.namespace,
         podObj.groupName,
-        viewerUrl,
       );
       if (index < 0) {
         podGroups.push(this.newPodGroup(podLink, podObj.groupName));
@@ -119,7 +118,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
     podName: string,
     namespace: string,
     groupName: string,
-    viewerUrl: string,
   ): UrlItem {
     let url = '';
 
@@ -128,7 +126,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     } else if (groupName === 'InferenceService') {
       // Remove (component) from podName
       const serviceName = podName.replace(/ *\([^)]*\) */g, '');
-      url = `${viewerUrl}/models/details/${namespace}/${serviceName}/`;
+      url = `/models/details/${namespace}/${serviceName}/`;
     }
 
     return { name: podName, url };

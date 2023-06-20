@@ -36,7 +36,7 @@ const JWABackendServiceStub: Partial<JWABackendService> = {
 };
 const NamespaceServiceStub: Partial<NamespaceService> = {
   updateSelectedNamespace: () => {},
-  getSelectedNamespace2: () => of(),
+  getSelectedNamespace: () => of(),
 };
 const ActivatedRouteStub: Partial<ActivatedRoute> = {
   params: of({ namespace: 'kubeflow-user', notebookName: 'asa232rstudio' }),

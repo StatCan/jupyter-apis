@@ -58,23 +58,21 @@ describe('OverviewComponent', () => {
       'podName',
       'namespace',
       'Notebooks',
-      'viewerUrl',
     );
     expect(podLink.url).toEqual(
-      'viewerUrl/jupyter/notebook/details/namespace/podName/',
+      '/notebook/details/namespace/podName/',
     );
     podLink = component[newPodLink](
       'podName',
       'namespace',
       'InferenceService',
-      'viewerUrl',
     );
-    expect(podLink.url).toEqual('viewerUrl/models/details/namespace/podName/');
+    expect(podLink.url).toEqual('/models/details/namespace/podName/');
   });
 
   it('should initialize correct podGroups', () => {
     const generatePodGroups = 'generatePodGroups';
-    const groups = component[generatePodGroups](mockPods, 'viewerUrl');
+    const groups = component[generatePodGroups](mockPods);
     const names = groups.map(group => group.name);
     expect(names).toContain('InferenceService');
   });
@@ -82,9 +80,8 @@ describe('OverviewComponent', () => {
   it('should generate expected podGroups', () => {
     const podGroups = mockPodGroups;
     const pods = mockPods;
-    const viewerUrl = 'viewerUrl';
     const generatePodGroups = 'generatePodGroups';
-    const newPodGroups = component[generatePodGroups](pods, viewerUrl);
+    const newPodGroups = component[generatePodGroups](pods);
     expect(newPodGroups).toEqual(podGroups);
   });
 });

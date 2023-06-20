@@ -13,6 +13,7 @@ import {
 } from 'kubeflow';
 import { Observable, of } from 'rxjs';
 import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService } from 'src/app/services/kubecost.service';
 import { IndexDefaultModule } from '../index-default/index-default.module';
 
 import { IndexRokComponent } from './index-rok.component';
@@ -36,6 +37,10 @@ const RokServiceStub: Partial<RokService> = {
 const SnackBarServiceStub: Partial<SnackBarService> = {
   open: () => {},
   close: () => {},
+};
+
+const KubecostServiceStub: Partial<KubecostService> = {
+  getAllocationCost: () => of(),
 };
 
 const MockBackendService: Partial<BackendService> = {
@@ -67,6 +72,7 @@ describe('IndexRokComponent', () => {
           { provide: ConfirmDialogService, useValue: {} },
           { provide: RokService, useValue: RokServiceStub },
           { provide: BackendService, useValue: MockBackendService },
+          { provide: KubecostService, useValue: KubecostServiceStub },
         ],
       }).compileComponents();
     }),

@@ -45,6 +45,10 @@ describe('FormCpuRamComponent', () => {
       cpuLimit: new FormControl(),
       memory: new FormControl(),
       memoryLimit: new FormControl(),
+      gpus: new FormGroup({
+        vendor: new FormControl(),
+        num: new FormControl(),
+      }),
     });
 
     fixture.detectChanges();

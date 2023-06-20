@@ -17,6 +17,7 @@ import { Observable, of } from 'rxjs';
 import { IndexDefaultModule } from './index-default/index-default.module';
 import { IndexRokModule } from './index-rok/index-rok.module';
 import { JWABackendService } from 'src/app/services/backend.service';
+import { KubecostService } from 'src/app/services/kubecost.service';
 
 import { IndexComponent } from './index.component';
 
@@ -30,6 +31,9 @@ const SnackBarServiceStub: Partial<SnackBarService> = {
 const NamespaceServiceStub: Partial<NamespaceService> = {
   getSelectedNamespace: () => of(),
   getSelectedNamespace2: () => of(),
+};
+const KubecostServiceStub: Partial<KubecostService> = {
+  getAllocationCost: () => of(),
 };
 const MockBackendService: Partial<BackendService> = {
   getNamespaces(): Observable<string[]> {
@@ -64,6 +68,7 @@ describe('IndexComponent', () => {
           { provide: NamespaceService, useValue: NamespaceServiceStub },
           { provide: PollerService, useValue: {} },
           { provide: BackendService, useValue: MockBackendService },
+          { provide: KubecostService, useValue: KubecostServiceStub },
         ],
       }).compileComponents();
     }),

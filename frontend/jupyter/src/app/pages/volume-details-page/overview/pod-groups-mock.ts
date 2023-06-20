@@ -7,12 +7,12 @@ export const mockPodGroups: LinkGroup[] = [
       {
         name: 'serving-openvaccine-0-486kc (predictor)',
         url:
-          'viewerUrl/models/details/kubeflow-user/serving-openvaccine-0-486kc/',
+          '/models/details/kubeflow-user/serving-openvaccine-0-486kc/',
       },
       {
         name: 'serving-openvaccine-0-486kc (transformer)',
         url:
-          'viewerUrl/models/details/kubeflow-user/serving-openvaccine-0-486kc/',
+          '/models/details/kubeflow-user/serving-openvaccine-0-486kc/',
       },
     ],
   },

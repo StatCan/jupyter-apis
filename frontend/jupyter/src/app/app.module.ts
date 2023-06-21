@@ -29,10 +29,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
-    IndexComponent,
-    VolumeFormComponent,
-    IndexDefaultComponent,
-    IndexRokComponent,
+    VolumeFormComponent
   ],
   imports: [
     HttpClientModule,

@@ -34,7 +34,6 @@ export class NamespaceSelectComponent implements OnInit, OnDestroy {
       .subscribe(namespace => {
         this.currNamespace = namespace;
       });
-    /*
     this.backend
       .getNamespaces(true, this.namespacesUrl)
       .subscribe(namespaces => {
@@ -45,7 +44,6 @@ export class NamespaceSelectComponent implements OnInit, OnDestroy {
 
         this.namespaceService.updateSelectedNamespace(this.currNamespace);
       });
-    */
 
     this.subscriptions.add(currNsSub);
   }

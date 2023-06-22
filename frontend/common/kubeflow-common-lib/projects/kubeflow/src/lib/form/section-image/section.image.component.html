@@ -6,8 +6,6 @@
   <a href="{{ link }}" target="_blank" style="text-decoration: none">
     {{ linkText }}
   </a>
-  <p *ngIf="readOnly">
-    *The cluster admin has disabled setting this section!
-  </p>
+  <p *ngIf="readOnly">*The cluster admin has disabled setting this section!</p>
   <ng-content></ng-content>
 </div>

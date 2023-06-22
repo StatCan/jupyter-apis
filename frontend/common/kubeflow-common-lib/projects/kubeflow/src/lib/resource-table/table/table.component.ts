@@ -124,7 +124,7 @@ export class TableComponent
       ) {
         return;
       }
-      
+
       if (Array.isArray(ns)) {
         addColumn(this.config, NAMESPACE_COLUMN, 'name');
       } else {

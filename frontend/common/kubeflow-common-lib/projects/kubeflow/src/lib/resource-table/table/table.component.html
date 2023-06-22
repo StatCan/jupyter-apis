@@ -63,6 +63,7 @@
   matSort
   [trackBy]="trackByFn"
   class="wide"
+  [attr.data-cy-table-id]="config?.id"
 >
   <ng-container
     [matColumnDef]="col.matColumnDef"

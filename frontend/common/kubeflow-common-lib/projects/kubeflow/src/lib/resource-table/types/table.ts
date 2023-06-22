@@ -34,6 +34,7 @@ export interface TableColumn {
 
 export interface TableConfig {
   columns: TableColumn[];
+  id?: string; //AAW value to aid with testing
   title?: string;
   newButtonText?: string;
   width?: string;

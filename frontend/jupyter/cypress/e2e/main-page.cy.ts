@@ -26,7 +26,8 @@ describe('Main table', () => {
     cy.get('[data-cy-snack-status=ERROR]').should('not.exist');
   });
 
-  it('should have a `Namespace` column, when showing all-namespaces', () => {
+  //AAW: We removed the all-namespaces option
+  /*it('should have a `Namespace` column, when showing all-namespaces', () => {
     cy.visit('/');
     cy.wait(['@mockNamespacesRequest', '@mockNotebooksRequest']);
 
@@ -36,7 +37,7 @@ describe('Main table', () => {
     cy.selectAllNamespaces();
 
     cy.get('[data-cy-table-header-row="Namespace"]').should('exist');
-  });
+  });*/
 
   // We use function () in order to be able to access aliases via this
   // tslint:disable-next-line: space-before-function-paren
@@ -48,7 +49,7 @@ describe('Main table', () => {
     const notebooks = this.notebooksRequest.notebooks;
     // Table is sorted by Name in ascending order by default
     // and pvcs object is also sorted alphabetically by name
-    cy.get(`[data-cy-resource-table-row="Name"]`).each(element => {
+    cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).each(element => {
       expect(element).to.contain(notebooks[i].name);
       i++;
     });
@@ -61,7 +62,7 @@ describe('Main table', () => {
 
     let i = 0;
     const notebooks = this.notebooksRequest.notebooks;
-    cy.get('[data-cy-resource-table-row="Status"]').each(element => {
+    cy.get('[data-cy-table-id="notebooks-table"]').find('[data-cy-resource-table-row="Status"]').each(element => {
       if (notebooks[i].status.phase === STATUS_TYPE.READY) {
         cy.wrap(element)
           .find('lib-status>mat-icon')
@@ -92,7 +93,6 @@ describe('Main table', () => {
   it('renders every PVC name into the table', function () {
     cy.visit('/');
     cy.wait([
-      '@mockDashboardRequest',
       '@mockNamespacesRequest',
       '@mockPVCsRequest',
     ]);
@@ -101,7 +101,7 @@ describe('Main table', () => {
     const pvcs = this.pvcsRequest.pvcs;
     // Table is sorted by Name in ascending order by default
     // and pvcs object is also sorted alphabetically by name
-    cy.get(`[data-cy-resource-table-row="Name"]`).each(element => {
+    cy.get('[data-cy-table-id="volumes-table"]').find(`[data-cy-resource-table-row="Name"]`).each(element => {
       expect(element).to.contain(pvcs[i].name);
       i++;
     });
@@ -110,31 +110,21 @@ describe('Main table', () => {
   it('checks Status icon for all PVCs', function () {
     cy.visit('/');
     cy.wait([
-      '@mockDashboardRequest',
       '@mockNamespacesRequest',
       '@mockPVCsRequest',
     ]);
 
     let i = 0;
     const pvcs = this.pvcsRequest.pvcs;
-    cy.get('[data-cy-resource-table-row="Status"]').each(element => {
-      if (pvcs[i].status.phase === STATUS_TYPE.READY) {
+    cy.get('[data-cy-table-id="volumes-table"]').find('[data-cy-resource-table-row="Status"]').each(element => {
+      if (pvcs[i].status.phase === STATUS_TYPE.MOUNTED) {
         cy.wrap(element)
           .find('lib-status>mat-icon')
-          .should('contain', 'check_circle');
-      } else if (pvcs[i].status.phase === STATUS_TYPE.UNAVAILABLE) {
+          .should('contain', 'link');
+      } else if (pvcs[i].status.phase === STATUS_TYPE.UNMOUNTED) {
         cy.wrap(element)
           .find('lib-status>mat-icon')
-          .should('contain', 'timelapse');
-      } else if (pvcs[i].status.phase === STATUS_TYPE.WARNING) {
-        cy.wrap(element)
-          .find('lib-status>mat-icon')
-          .should('contain', 'warning');
-      } else if (
-        pvcs[i].status.phase === STATUS_TYPE.WAITING ||
-        pvcs[i].status.phase === STATUS_TYPE.TERMINATING
-      ) {
-        cy.wrap(element).find('mat-spinner').should('exist');
+          .should('contain', 'link_off');
       }
       i++;
     });

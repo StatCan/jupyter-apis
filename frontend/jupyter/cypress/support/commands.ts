@@ -85,7 +85,7 @@ Cypress.Commands.add('mockPVCsRequest', namespace => {
 });
 
 Cypress.Commands.add('mockKubecostRequest', namespace => {
-  cy.intercept('GET', `/api/namespaces/${namespace}/cost/allocation`, {
+  cy.intercept('GET', `/api/namespaces/${namespace}/cost/allocation?aggregation=namespace&namespace=${namespace}&window=today`, {
     fixture: 'cost',
   }).as('mockKubecostRequest');
 });

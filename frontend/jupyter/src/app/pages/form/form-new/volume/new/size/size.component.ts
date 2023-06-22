@@ -33,7 +33,7 @@ export class VolumeSizeComponent implements OnInit {
   ngOnInit(): void {
     this.sizeNum.setValue(this.parseK8sGiSizeToInt(this.sizeCtrl.value));
     this.sizeCtrl.setValue(`${this.sizeNum.value}Gi`);
-    this.sizeNum.setValue("16")
+    this.sizeNum.setValue('16');
 
     this.sizeNum.valueChanges.subscribe(size => {
       this.sizeCtrl.setValue(`${size}Gi`, { emitEvent: false });

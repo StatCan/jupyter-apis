@@ -54,19 +54,9 @@ describe('OverviewComponent', () => {
 
   it('should generate correct PodUrl according to group', () => {
     const newPodLink = 'newPodLink';
-    let podLink = component[newPodLink](
-      'podName',
-      'namespace',
-      'Notebooks',
-    );
-    expect(podLink.url).toEqual(
-      '/notebook/details/namespace/podName/',
-    );
-    podLink = component[newPodLink](
-      'podName',
-      'namespace',
-      'InferenceService',
-    );
+    let podLink = component[newPodLink]('podName', 'namespace', 'Notebooks');
+    expect(podLink.url).toEqual('/notebook/details/namespace/podName/');
+    podLink = component[newPodLink]('podName', 'namespace', 'InferenceService');
     expect(podLink.url).toEqual('/models/details/namespace/podName/');
   });
 

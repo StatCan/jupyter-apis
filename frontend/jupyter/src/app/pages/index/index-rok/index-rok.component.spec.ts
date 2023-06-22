@@ -53,30 +53,28 @@ describe('IndexRokComponent', () => {
   let component: IndexRokComponent;
   let fixture: ComponentFixture<IndexRokComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [IndexRokComponent],
-        imports: [
-          CommonModule,
-          KubeflowModule,
-          IndexDefaultModule,
-          HttpClientModule,
-          RouterTestingModule,
-        ],
-        providers: [
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: NamespaceService, useValue: NamespaceServiceStub },
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-          { provide: PollerService, useValue: {} },
-          { provide: ConfirmDialogService, useValue: {} },
-          { provide: RokService, useValue: RokServiceStub },
-          { provide: BackendService, useValue: MockBackendService },
-          { provide: KubecostService, useValue: KubecostServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [IndexRokComponent],
+      imports: [
+        CommonModule,
+        KubeflowModule,
+        IndexDefaultModule,
+        HttpClientModule,
+        RouterTestingModule,
+      ],
+      providers: [
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: NamespaceService, useValue: NamespaceServiceStub },
+        { provide: SnackBarService, useValue: SnackBarServiceStub },
+        { provide: PollerService, useValue: {} },
+        { provide: ConfirmDialogService, useValue: {} },
+        { provide: RokService, useValue: RokServiceStub },
+        { provide: BackendService, useValue: MockBackendService },
+        { provide: KubecostService, useValue: KubecostServiceStub },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IndexRokComponent);

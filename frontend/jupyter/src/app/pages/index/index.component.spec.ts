@@ -6,12 +6,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { BackendService,
+import {
+  BackendService,
   ConfirmDialogService,
   KubeflowModule,
   NamespaceService,
   PollerService,
-  SnackBarService, 
+  SnackBarService,
 } from 'kubeflow';
 import { Observable, of } from 'rxjs';
 import { IndexDefaultModule } from './index-default/index-default.module';
@@ -45,34 +46,32 @@ describe('IndexComponent', () => {
   let component: IndexComponent;
   let fixture: ComponentFixture<IndexComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [IndexComponent],
-        imports: [
-          CommonModule,
-          IndexRokModule,
-          IndexDefaultModule,
-          MatIconModule,
-          MatTooltipModule,
-          MatInputModule,
-          MatSnackBarModule,
-          RouterTestingModule,
-          MatDialogModule, 
-          KubeflowModule
-        ],
-        providers: [
-          { provide: ConfirmDialogService, useValue: {} },
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-          { provide: NamespaceService, useValue: NamespaceServiceStub },
-          { provide: PollerService, useValue: {} },
-          { provide: BackendService, useValue: MockBackendService },
-          { provide: KubecostService, useValue: KubecostServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [IndexComponent],
+      imports: [
+        CommonModule,
+        IndexRokModule,
+        IndexDefaultModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatInputModule,
+        MatSnackBarModule,
+        RouterTestingModule,
+        MatDialogModule,
+        KubeflowModule,
+      ],
+      providers: [
+        { provide: ConfirmDialogService, useValue: {} },
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: SnackBarService, useValue: SnackBarServiceStub },
+        { provide: NamespaceService, useValue: NamespaceServiceStub },
+        { provide: PollerService, useValue: {} },
+        { provide: BackendService, useValue: MockBackendService },
+        { provide: KubecostService, useValue: KubecostServiceStub },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IndexComponent);

@@ -10,9 +10,9 @@ import {
   Config,
   PodDefault,
   NotebookFormObject,
-  PVCResponseObject, 
-  VWABackendResponse, 
-  PVCPostObject
+  PVCResponseObject,
+  VWABackendResponse,
+  PVCPostObject,
 } from '../types';
 import { V1Namespace } from '@kubernetes/client-node';
 import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
@@ -46,7 +46,7 @@ export class JWABackendService extends BackendService {
       }),
     );
   }
-  
+
   private getNotebooksAllNamespaces(
     namespaces: string[],
   ): Observable<NotebookResponseObject[]> {
@@ -131,7 +131,11 @@ export class JWABackendService extends BackendService {
       catchError(error => this.handleError(error)),
       map((resp: VWABackendResponse) => {
         let pvcsCopy = JSON.parse(JSON.stringify(resp.pvcs));
-        pvcsCopy = pvcsCopy.filter(pvc => pvc.labels?.["blob.aaw.statcan.gc.ca/automount"]==="true" ? false : true);
+        pvcsCopy = pvcsCopy.filter(pvc =>
+          pvc.labels?.['blob.aaw.statcan.gc.ca/automount'] === 'true'
+            ? false
+            : true,
+        );
         return pvcsCopy;
       }),
     );

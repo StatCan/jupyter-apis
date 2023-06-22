@@ -23,26 +23,24 @@ describe('FormGpusComponent', () => {
   let component: FormGpusComponent;
   let fixture: ComponentFixture<FormGpusComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormGpusComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          NoopAnimationsModule,
-          MatFormFieldModule,
-          ReactiveFormsModule,
-          MatInputModule,
-          MatSelectModule,
-        ],
-        providers: [
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormGpusComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        NoopAnimationsModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+      ],
+      providers: [
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: SnackBarService, useValue: SnackBarServiceStub },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormGpusComponent);

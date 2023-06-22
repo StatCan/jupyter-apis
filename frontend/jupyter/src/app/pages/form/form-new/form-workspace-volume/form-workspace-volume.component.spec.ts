@@ -22,28 +22,24 @@ describe('FormWorkspaceVolumeComponent', () => {
   let component: FormWorkspaceVolumeComponent;
   let fixture: ComponentFixture<FormWorkspaceVolumeComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormWorkspaceVolumeComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          MatExpansionModule,
-          MatIconModule,
-          MatButtonToggleModule,
-          VolumeModule,
-          NoopAnimationsModule,
-          MatCheckboxModule,
-          MatSelectModule,
-          HttpClientModule,
-        ],
-        providers: [
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormWorkspaceVolumeComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        MatExpansionModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        VolumeModule,
+        NoopAnimationsModule,
+        MatCheckboxModule,
+        MatSelectModule,
+        HttpClientModule,
+      ],
+      providers: [{ provide: SnackBarService, useValue: SnackBarServiceStub }],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormWorkspaceVolumeComponent);

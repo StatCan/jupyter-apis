@@ -25,9 +25,7 @@ describe('VolumeNameComponent', () => {
         NoopAnimationsModule,
         MatSnackBarModule,
       ],
-      providers: [
-        { provide: HttpClient, useValue: {} },
-      ],
+      providers: [{ provide: HttpClient, useValue: {} }],
     }).compileComponents();
   });
 

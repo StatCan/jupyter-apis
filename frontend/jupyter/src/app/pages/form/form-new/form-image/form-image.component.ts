@@ -1,5 +1,17 @@
-import { Component, OnInit, Input, OnDestroy, LOCALE_ID, Inject } from '@angular/core';
-import { FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  LOCALE_ID,
+  Inject,
+} from '@angular/core';
+import {
+  FormGroup,
+  Validators,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { environment } from '@app/environment';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -16,17 +28,21 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class FormImageComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() images: string[];
-  @Input() imagesGroupOne: Config["imageGroupOne"];
-  @Input() imagesGroupTwo: Config["imageGroupTwo"];
-  @Input() imagesGroupThree: Config["imageGroupThree"];
+  @Input() imagesGroupOne: Config['imageGroupOne'];
+  @Input() imagesGroupTwo: Config['imageGroupTwo'];
+  @Input() imagesGroupThree: Config['imageGroupThree'];
   @Input() allowCustomImage: boolean;
   @Input() hideRegistry: boolean;
   @Input() hideTag: boolean;
-  @Input() nsMetadata: V1Namespace; 
+  @Input() nsMetadata: V1Namespace;
 
   subs = new Subscription();
 
-  constructor(@Inject(LOCALE_ID) public localeId: string, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+  constructor(
+    @Inject(LOCALE_ID) public localeId: string,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
+  ) {
     iconRegistry.addSvgIcon(
       'jupyter-icon',
       sanitizer.bypassSecurityTrustResourceUrl(environment.jupyterIcon),
@@ -49,17 +65,20 @@ export class FormImageComponent implements OnInit, OnDestroy {
     this.subs.add(
       this.parentForm.get('customImageCheck').valueChanges.subscribe(check => {
         //disable custom image input when not being used, so errors are ignored
-        this.parentForm.get("customImageCheck")
-        .valueChanges.subscribe((b: boolean) => {
-          if (b) {
-            this.parentForm.controls.customImage.enable();
-          } else {
-            this.parentForm.controls.customImage.disable();
-          }
-        })
+        this.parentForm
+          .get('customImageCheck')
+          .valueChanges.subscribe((b: boolean) => {
+            if (b) {
+              this.parentForm.controls.customImage.enable();
+            } else {
+              this.parentForm.controls.customImage.disable();
+            }
+          });
         // Make sure that the use will insert and Image value
         if (check) {
-          this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]);
+          this.parentForm
+            .get('customImage')
+            .setValidators([this.urlValidator(), Validators.required]);
           this.parentForm.get('image').setValidators([]);
           this.parentForm.get('imageGroupOne').setValidators([]);
           this.parentForm.get('imageGroupTwo').setValidators([]);
@@ -67,13 +86,17 @@ export class FormImageComponent implements OnInit, OnDestroy {
         }
         this.parentForm.get('serverType').valueChanges.subscribe(selection => {
           if (selection === 'jupyter') {
-            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
+            this.parentForm
+              .get('customImage')
+              .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators(Validators.required);
             this.parentForm.get('imageGroupOne').setValidators([]);
             this.parentForm.get('imageGroupTwo').setValidators([]);
             this.parentForm.get('imageGroupThree').setValidators([]);
           } else if (selection === 'group-one') {
-            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
+            this.parentForm
+              .get('customImage')
+              .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm
               .get('imageGroupOne')
@@ -81,7 +104,9 @@ export class FormImageComponent implements OnInit, OnDestroy {
             this.parentForm.get('imageGroupTwo').setValidators([]);
             this.parentForm.get('imageGroupThree').setValidators([]);
           } else if (selection === 'group-two') {
-            this.parentForm.get('customImage').setValidators([this.urlValidator(),Validators.required]); //AAW
+            this.parentForm
+              .get('customImage')
+              .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm.get('imageGroupOne').setValidators([]);
             this.parentForm
@@ -122,24 +147,24 @@ export class FormImageComponent implements OnInit, OnDestroy {
   }
 
   urlValidation(): string {
-    const url = this.parentForm.get("customImage");
+    const url = this.parentForm.get('customImage');
 
-    if (url.hasError("invalidUrl")) {
-      let urlBeginning = "https://";
+    if (url.hasError('invalidUrl')) {
+      let urlBeginning = 'https://';
       const schemeReg = /^http:\/\//i;
 
       if (schemeReg.test(url.value)) {
-        urlBeginning = "http://";
+        urlBeginning = 'http://';
       }
 
-      return $localize`${ urlBeginning } is not allowed in URLs`;
+      return $localize`${urlBeginning} is not allowed in URLs`;
     }
   }
 
   private urlValidator(): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} => {
+    return (control: AbstractControl): { [key: string]: any } => {
       const schemeReg = /^http[s]?:\/\//i;
-      return schemeReg.test(control.value) ? {invalidUrl: true} : null;
+      return schemeReg.test(control.value) ? { invalidUrl: true } : null;
     };
   }
 
@@ -169,7 +194,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    const conditionLabels = Object.entries(imageGroup["labels"]);
+    const conditionLabels = Object.entries(imageGroup['labels']);
     const namespaceLabelMetadata = (this.nsMetadata.metadata || {}).labels;
     for (const [key, val] of conditionLabels) {
       if (namespaceLabelMetadata[key] !== val) {
@@ -180,23 +205,23 @@ export class FormImageComponent implements OnInit, OnDestroy {
   }
 
   getDisabledMessage(serverType: string): string {
-    // Get the current browser language, if the error message isn't given in that language (in the config), 
+    // Get the current browser language, if the error message isn't given in that language (in the config),
     // return the default disabled message
-    const currentLanguage =  this.localeId;
+    const currentLanguage = this.localeId;
 
     var msg = {
-      'group-one': this.imagesGroupOne.disabledMessage, 
-      'group-two': this.imagesGroupTwo.disabledMessage, 
-      'group-three': this.imagesGroupThree.disabledMessage
-    }; 
+      'group-one': this.imagesGroupOne.disabledMessage,
+      'group-two': this.imagesGroupTwo.disabledMessage,
+      'group-three': this.imagesGroupThree.disabledMessage,
+    };
 
     const disabledMsg = msg[serverType] || {};
-    const message = disabledMsg[currentLanguage]
+    const message = disabledMsg[currentLanguage];
 
-    if (typeof(message) == 'string') {
+    if (typeof message == 'string') {
       return message;
     }
 
-    return $localize`This workspace type is disabled for profile "${this.nsMetadata.metadata.name}".`
+    return $localize`This workspace type is disabled for profile "${this.nsMetadata.metadata.name}".`;
   }
 }

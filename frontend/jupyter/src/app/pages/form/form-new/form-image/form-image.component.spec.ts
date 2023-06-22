@@ -17,26 +17,24 @@ describe('FormImageComponent', () => {
   let component: FormImageComponent;
   let fixture: ComponentFixture<FormImageComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormImageComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          MatIconModule,
-          MatButtonToggleModule,
-          NoopAnimationsModule,
-          HttpClientModule,
-          MatFormFieldModule,
-          MatSelectModule,
-          ReactiveFormsModule,
-          MatIconTestingModule,
-          MatExpansionModule,
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormImageComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        NoopAnimationsModule,
+        HttpClientModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatIconTestingModule,
+        MatExpansionModule,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormImageComponent);

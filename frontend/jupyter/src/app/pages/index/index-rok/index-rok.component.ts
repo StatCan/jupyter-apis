@@ -32,7 +32,17 @@ export class IndexRokComponent extends IndexDefaultComponent implements OnInit {
     public actions: ActionsService,
     public dialog: MatDialog,
   ) {
-    super(ns, backend, confirmDialog, snackBar, router, kubecostService, poller, actions, dialog);
+    super(
+      ns,
+      backend,
+      confirmDialog,
+      snackBar,
+      router,
+      kubecostService,
+      poller,
+      actions,
+      dialog,
+    );
 
     this.rok.initCSRF();
   }

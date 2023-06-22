@@ -20,7 +20,7 @@ import { DeleteButtonComponent } from '../columns/delete-button/delete-button.co
 
 // --- Config for the Resource Table ---
 export const defaultConfig: TableConfig = {
-  id: "notebooks-table",
+  id: 'notebooks-table',
   dynamicNamespaceColumn: true,
   columns: [
     {
@@ -168,7 +168,7 @@ const customDeleteCol: TableColumn = {
 };
 
 export const defaultVolumeConfig: TableConfig = {
-  id: "volumes-table",
+  id: 'volumes-table',
   title: tableConfig.title,
   dynamicNamespaceColumn: true,
   newButtonText: tableConfig.newButtonText,
@@ -177,7 +177,7 @@ export const defaultVolumeConfig: TableConfig = {
 
 // --- Config for the Cost Table ---
 export const defaultCostConfig = {
-  id: "kubecost-table",
+  id: 'kubecost-table',
   columns: [
     {
       matHeaderCellDef: $localize`CPUs`,

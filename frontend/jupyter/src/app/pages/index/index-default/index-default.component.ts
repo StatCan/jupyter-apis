@@ -16,7 +16,10 @@ import {
 } from 'kubeflow';
 import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { KubecostService, AllocationCostResponse } from 'src/app/services/kubecost.service';
+import {
+  KubecostService,
+  AllocationCostResponse,
+} from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
@@ -24,16 +27,16 @@ import {
   defaultCostConfig,
 } from './config';
 import { isEqual } from 'lodash';
-import { NotebookResponseObject, 
-  NotebookProcessedObject, 
-  PVCResponseObject, 
+import {
+  NotebookResponseObject,
+  NotebookProcessedObject,
+  PVCResponseObject,
   PVCProcessedObject,
   AllocationCostObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-
 
 @Component({
   selector: 'app-index-default',
@@ -59,7 +62,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   costConfig = defaultCostConfig;
   rawCostData: AllocationCostResponse = null;
   processedCostData: AllocationCostObject[] = [];
-  costWindow = "today";
+  costWindow = 'today';
   kubecostPoller: ExponentialBackoff;
   kubecostSubs = new Subscription();
 
@@ -84,7 +87,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   });
   */
   buttons: ToolbarButton[] = [this.newNotebookButton];
-  
+
   constructor(
     public ns: NamespaceService,
     public backend: JWABackendService,
@@ -98,7 +101,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.kubecostPoller = new ExponentialBackoff({ interval: 30000, retries: 1 });//30 second intervals
+    this.kubecostPoller = new ExponentialBackoff({
+      interval: 30000,
+      retries: 1,
+    }); //30 second intervals
 
     // Reset the poller whenever the selected namespace changes
     //AAW: use getSelectedNamespace instead of getSelectedNamespace2 to only return a string
@@ -120,23 +126,26 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         if (!this.currNamespace) {
           return;
         }
-        
-        this.kubecostService.getAllocationCost(this.currNamespace, this.costWindow).subscribe(
-          aggCost => {
-            this.kubecostLoading = false;
-            if (!isEqual(this.rawCostData, aggCost)) {
-              this.rawCostData = aggCost;
-              
-              this.processedCostData = this.processIncomingCostData(aggCost);
+
+        this.kubecostService
+          .getAllocationCost(this.currNamespace, this.costWindow)
+          .subscribe(
+            aggCost => {
+              this.kubecostLoading = false;
+              if (!isEqual(this.rawCostData, aggCost)) {
+                this.rawCostData = aggCost;
+
+                this.processedCostData = this.processIncomingCostData(aggCost);
               }
             },
-          err => {
-            this.kubecostLoading = false;
-            if (!isEqual(this.rawCostData, err)) {
-              this.rawCostData = err;
-              this.kubecostPoller.reset();
-            }
-          });
+            err => {
+              this.kubecostLoading = false;
+              if (!isEqual(this.rawCostData, err)) {
+                this.rawCostData = err;
+                this.kubecostPoller.reset();
+              }
+            },
+          );
       }),
     );
   }
@@ -250,23 +259,23 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   //gets internationalized status messageks based on status key message values from backend
   getStatusMessage(notebook: NotebookProcessedObject) {
-    switch(notebook.status.key){
-      case "notebookDeleting":
+    switch (notebook.status.key) {
+      case 'notebookDeleting':
         return $localize`Deleting this notebook server`;
-      case "noPodsRunning":
+      case 'noPodsRunning':
         return $localize`No Pods are currently running for this Notebook Server`;
-      case "notebookStopping":
+      case 'notebookStopping':
         return $localize`Notebook Server is stopping`;
-      case "running":
+      case 'running':
         return $localize`Running`;
-      case "waitingStatus":
+      case 'waitingStatus':
         return $localize`Current status is waiting. Check 'kubectl describe pod' for more information`;
-      case "errorEvent":
+      case 'errorEvent':
         return $localize`An error has occured. Check 'kubectl describe pod' for more information`;
-      case "schedulingPod":
+      case 'schedulingPod':
         return $localize`Scheduling the Pod`;
       default:
-        return "";
+        return '';
     }
   }
 
@@ -295,7 +304,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   parseProtBNotebook(notebook: NotebookProcessedObject) {
-    if(notebook.labels?.["notebook.statcan.gc.ca/protected-b"] === "true") {
+    if (notebook.labels?.['notebook.statcan.gc.ca/protected-b'] === 'true') {
       return true;
     }
     return false;
@@ -352,10 +361,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public parseIncomingData(pvcs: PVCResponseObject[]): PVCProcessedObject[] {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
-    
+
     //AAW: overwrite status field with our custom values
     pvcsCopy.forEach(element => {
-      if(element.notebooks.length){
+      if (element.notebooks.length) {
         element.usedBy = element.notebooks[0];
         element.status = {} as Status;
         element.status.message = $localize`Attached`;
@@ -384,8 +393,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // Status Terminating allows action to be enabled.
   // If there is a pvc in use, we want to block actions
   public parseDeletionActionStatus(pvc: PVCProcessedObject) {
-    if(pvc.usedBy != null) {
-      return STATUS_TYPE.TERMINATING
+    if (pvc.usedBy != null) {
+      return STATUS_TYPE.TERMINATING;
     }
 
     if (pvc.notebooks.length) {
@@ -400,7 +409,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   parseProtBVolume(pvc: PVCProcessedObject) {
-    if(pvc.labels?.["data.statcan.gc.ca/classification"] === "protected-b") {
+    if (pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b') {
       return true;
     }
     return false;
@@ -481,9 +490,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public processIncomingCostData(cost: AllocationCostResponse) {
-    const resp = JSON.parse(
-      JSON.stringify(cost),
-    ) as AllocationCostResponse;
+    const resp = JSON.parse(JSON.stringify(cost)) as AllocationCostResponse;
 
     let costCopy: AllocationCostObject = {
       cpuCost: this.formatCost(0),
@@ -491,7 +498,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       ramCost: this.formatCost(0),
       pvCost: this.formatCost(0),
       sharedCost: this.formatCost(0),
-      totalCost: this.formatCost(0)
+      totalCost: this.formatCost(0),
     };
 
     const alloc = resp.data.sets[0].allocations[this.currNamespace];
@@ -509,18 +516,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       //  +alloc.sharedCost
       //);
       costCopy.totalCost = this.formatCost(
-        alloc.cpuCost
-        +alloc.gpuCost
-        +alloc.ramCost
-        +alloc.pvCost
+        alloc.cpuCost + alloc.gpuCost + alloc.ramCost + alloc.pvCost,
       );
     }
-    
+
     return [costCopy];
   }
 
   public formatCost(value: number): string {
-    return "$" + value.toFixed(2)
+    return '$' + value.toFixed(2);
   }
-
 }

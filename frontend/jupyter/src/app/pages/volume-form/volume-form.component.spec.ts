@@ -35,19 +35,17 @@ describe('VolumeFormComponent', () => {
   let component: VolumeFormComponent;
   let fixture: ComponentFixture<VolumeFormComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [VolumeFormComponent],
-        providers: [
-          { provide: FormBuilder, useValue: FormBuilderStub },
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: MatDialogRef, useValue: {} },
-        ],
-        imports: [KubeflowModule],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [VolumeFormComponent],
+      providers: [
+        { provide: FormBuilder, useValue: FormBuilderStub },
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: MatDialogRef, useValue: {} },
+      ],
+      imports: [KubeflowModule],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(VolumeFormComponent);

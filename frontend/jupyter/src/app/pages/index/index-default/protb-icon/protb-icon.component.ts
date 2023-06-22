@@ -15,8 +15,8 @@ export class ProtBComponent implements TableColumnComponent {
     this.row = elem;
   }
 
-  public isProtectedB(){
-    if(this.row.hasOwnProperty("protB")){
+  public isProtectedB() {
+    if (this.row.hasOwnProperty('protB')) {
       return this.row.protB;
     }
     return false;

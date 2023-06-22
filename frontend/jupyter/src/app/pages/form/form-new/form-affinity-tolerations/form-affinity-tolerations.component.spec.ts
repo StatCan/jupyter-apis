@@ -12,22 +12,20 @@ describe('FormAffinityTolerationsComponent', () => {
   let component: FormAffinityTolerationsComponent;
   let fixture: ComponentFixture<FormAffinityTolerationsComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormAffinityTolerationsComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          MatFormFieldModule,
-          ReactiveFormsModule,
-          MatInputModule,
-          MatSelectModule,
-          NoopAnimationsModule,
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormAffinityTolerationsComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        NoopAnimationsModule,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormAffinityTolerationsComponent);

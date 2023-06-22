@@ -9,13 +9,13 @@ import { FormGroup } from '@angular/forms';
 export class FormAdvancedOptionsComponent implements OnInit {
   @Input() parentForm: FormGroup;
   languageList = [
-    {'id':'en', 'label':'English'},
-    {'id':'fr', 'label':'Français'}
+    { id: 'en', label: 'English' },
+    { id: 'fr', label: 'Français' },
   ];
 
   constructor(@Inject(LOCALE_ID) public localeId: string) {}
 
   ngOnInit() {
-    this.parentForm.get('language').setValue(this.localeId)
+    this.parentForm.get('language').setValue(this.localeId);
   }
 }

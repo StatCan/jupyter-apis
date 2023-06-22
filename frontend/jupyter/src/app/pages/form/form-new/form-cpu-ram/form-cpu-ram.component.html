@@ -16,7 +16,7 @@
         formControlName="cpu"
         [errorStateMatcher]="matcher"
       />
-      <mat-error>{{getCPUError('cpu')}}</mat-error>
+      <mat-error>{{ getCPUError('cpu') }}</mat-error>
     </mat-form-field>
 
     <!--RAM AAW, do not take their lib-positive-input-->
@@ -31,12 +31,16 @@
         formControlName="memory"
         [errorStateMatcher]="matcher"
       />
-      <mat-error>{{getRAMError('memory')}}</mat-error>
+      <mat-error>{{ getRAMError('memory') }}</mat-error>
     </mat-form-field>
   </div>
 
   <lib-advanced-options>
-    <p i18n>These limits determine the maximum amount of CPU and RAM to be used by your Notebook Server, which may be used to scale up the server if available.</p>
+    <p i18n>
+      These limits determine the maximum amount of CPU and RAM to be used by
+      your Notebook Server, which may be used to scale up the server if
+      available.
+    </p>
     <div class="row">
       <!--CPU-->
       <div class="column">
@@ -51,7 +55,7 @@
             [formControl]="parentForm.get('cpuLimit')"
             [errorStateMatcher]="matcher"
           />
-          <mat-error>{{getCPUError('cpuLimit')}}</mat-error>
+          <mat-error>{{ getCPUError('cpuLimit') }}</mat-error>
         </mat-form-field>
       </div>
 
@@ -68,7 +72,7 @@
             [formControl]="parentForm.get('memoryLimit')"
             [errorStateMatcher]="matcher"
           />
-          <mat-error>{{getRAMError('memoryLimit')}}</mat-error>
+          <mat-error>{{ getRAMError('memoryLimit') }}</mat-error>
         </mat-form-field>
       </div>
     </div>

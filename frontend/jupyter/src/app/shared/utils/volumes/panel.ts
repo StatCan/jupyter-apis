@@ -30,7 +30,9 @@ function getVolumeType(pvc: V1PersistentVolumeClaim): NEW_VOLUME_TYPE {
 }
 
 export function getVolumeTitle(vol: Volume) {
-  return vol.existingSource ? $localize`Existing volume` : $localize`New volume`;
+  return vol.existingSource
+    ? $localize`Existing volume`
+    : $localize`New volume`;
 }
 
 export function getVolumeName(vol: Volume): string {

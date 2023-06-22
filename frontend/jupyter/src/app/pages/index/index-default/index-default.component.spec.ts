@@ -46,23 +46,21 @@ describe('IndexDefaultComponent', () => {
   let component: IndexDefaultComponent;
   let fixture: ComponentFixture<IndexDefaultComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [IndexDefaultComponent],
-        imports: [CommonModule, KubeflowModule, RouterTestingModule],
-        providers: [
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: KubecostService, useValue: KubecostServiceStub },
-          { provide: NamespaceService, useValue: NamespaceServiceStub },
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-          { provide: PollerService, useValue: {} },
-          { provide: ConfirmDialogService, useValue: {} },
-          { provide: BackendService, useValue: MockBackendService },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [IndexDefaultComponent],
+      imports: [CommonModule, KubeflowModule, RouterTestingModule],
+      providers: [
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: KubecostService, useValue: KubecostServiceStub },
+        { provide: NamespaceService, useValue: NamespaceServiceStub },
+        { provide: SnackBarService, useValue: SnackBarServiceStub },
+        { provide: PollerService, useValue: {} },
+        { provide: ConfirmDialogService, useValue: {} },
+        { provide: BackendService, useValue: MockBackendService },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IndexDefaultComponent);

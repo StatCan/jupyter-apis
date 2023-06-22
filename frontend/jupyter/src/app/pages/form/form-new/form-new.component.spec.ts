@@ -45,36 +45,34 @@ describe('FormNewComponent', () => {
   let component: FormNewComponent;
   let fixture: ComponentFixture<FormNewComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormNewComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          TitleActionsToolbarModule,
-          VolumeModule,
-          FormWorkspaceVolumeModule,
-          FormDataVolumesModule,
-          FormCpuRamModule,
-          FormGpusModule,
-          FormConfigurationsModule,
-          FormAffinityTolerationsModule,
-          FormAdvancedOptionsModule,
-          FormImageModule,
-          FormNameModule,
-          HttpClientModule,
-          RouterTestingModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: NamespaceService, useValue: NamespaceServiceStub },
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormNewComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        TitleActionsToolbarModule,
+        VolumeModule,
+        FormWorkspaceVolumeModule,
+        FormDataVolumesModule,
+        FormCpuRamModule,
+        FormGpusModule,
+        FormConfigurationsModule,
+        FormAffinityTolerationsModule,
+        FormAdvancedOptionsModule,
+        FormImageModule,
+        FormNameModule,
+        HttpClientModule,
+        RouterTestingModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: NamespaceService, useValue: NamespaceServiceStub },
+        { provide: SnackBarService, useValue: SnackBarServiceStub },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormNewComponent);

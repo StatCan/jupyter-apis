@@ -1,8 +1,10 @@
 name: JWA Frontend Tests
 on:
   pull_request:
-    paths:
-      - frontend/**
+    types:
+      - 'opened'
+      - 'synchronize'
+      - 'reopened'
 
 jobs:
   frontend-format-linting-check:

@@ -59,7 +59,7 @@ export class KubecostService {
         params: {
           aggregation: 'namespace',
           namespace: ns,
-          window: window,
+          window,
         },
       })
       .pipe(

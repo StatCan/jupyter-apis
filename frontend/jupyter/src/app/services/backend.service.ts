@@ -41,9 +41,7 @@ export class JWABackendService extends BackendService {
     const url = `api/namespaces/${namespace}`;
     return this.http.get<JWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map(data => {
-        return data.namespace;
-      }),
+      map(data => data.namespace),
     );
   }
 

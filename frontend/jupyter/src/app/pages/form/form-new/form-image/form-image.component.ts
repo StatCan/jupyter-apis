@@ -194,7 +194,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    const conditionLabels = Object.entries(imageGroup['labels']);
+    const conditionLabels = Object.entries(imageGroup.labels);
     const namespaceLabelMetadata = (this.nsMetadata.metadata || {}).labels;
     for (const [key, val] of conditionLabels) {
       if (namespaceLabelMetadata[key] !== val) {
@@ -209,7 +209,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
     // return the default disabled message
     const currentLanguage = this.localeId;
 
-    var msg = {
+    const msg = {
       'group-one': this.imagesGroupOne.disabledMessage,
       'group-two': this.imagesGroupTwo.disabledMessage,
       'group-three': this.imagesGroupThree.disabledMessage,

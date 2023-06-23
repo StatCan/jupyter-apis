@@ -189,12 +189,12 @@ export class FormImageComponent implements OnInit, OnDestroy {
     return displayName;
   }
 
-  shouldEnable(imageGroup: Map<string, string>): boolean {
-    if (imageGroup == null || this.nsMetadata == null) {
+  shouldEnable(enabledCondition: {labels: Map<string, string>}): boolean {
+    if (enabledCondition == null || this.nsMetadata == null) {
       return true;
     }
 
-    const conditionLabels = Object.entries(imageGroup.labels);
+    const conditionLabels = Object.entries(enabledCondition.labels);
     const namespaceLabelMetadata = (this.nsMetadata.metadata || {}).labels;
     for (const [key, val] of conditionLabels) {
       if (namespaceLabelMetadata[key] !== val) {

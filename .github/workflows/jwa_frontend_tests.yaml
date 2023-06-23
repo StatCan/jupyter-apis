@@ -28,7 +28,7 @@ jobs:
 
       - name: Check frontend code linting
         run: |
-          cd frontned/jupyter
+          cd frontend/jupyter
           npm i
           npm run lint-check
 

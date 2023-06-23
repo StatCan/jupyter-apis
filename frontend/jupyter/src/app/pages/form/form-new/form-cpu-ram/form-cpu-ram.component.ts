@@ -1,13 +1,33 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, AbstractControl, Validators, ValidatorFn, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  FormGroup,
+  AbstractControl,
+  Validators,
+  ValidatorFn,
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+} from '@angular/forms';
 import { calculateLimits } from '../utils';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 // AAW
-type MaxResourceSpec = {cpu: number; memory: number, cpuLimit: number, memoryLimit: number};
+type MaxResourceSpec = {
+  cpu: number;
+  memory: number;
+  cpuLimit: number;
+  memoryLimit: number;
+};
 const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
-  [0, {cpu: 14, memory: 48, cpuLimit: 14, memoryLimit: 48}],
-  [1, {cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96}]
+  [0, { cpu: 14, memory: 48, cpuLimit: 14, memoryLimit: 48 }],
+  [1, { cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96 }],
 ]);
 // End aaw
 @Component({
@@ -29,30 +49,52 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit() {
-    // AAW VALIDATIONS NOTE: tried removing duplicate code, previously had something for each field  
+    // AAW VALIDATIONS NOTE: tried removing duplicate code, previously had something for each field
     this.parentForm
       .get('cpu')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxResourcesValidator('cpu')]);
+      .setValidators([
+        Validators.required,
+        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+        Validators.min(0.5),
+        this.maxResourcesValidator('cpu'),
+      ]);
     this.parentForm
       .get('memory')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxResourcesValidator('memory')]);
+      .setValidators([
+        Validators.required,
+        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+        Validators.min(1),
+        this.maxResourcesValidator('memory'),
+      ]);
     this.parentForm
       .get('cpuLimit')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(0.5), this.maxResourcesValidator('cpuLimit'), this.limitValidator('cpu')])
+      .setValidators([
+        Validators.required,
+        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+        Validators.min(0.5),
+        this.maxResourcesValidator('cpuLimit'),
+        this.limitValidator('cpu'),
+      ]);
     this.parentForm
       .get('memoryLimit')
-      .setValidators([Validators.required, Validators.pattern(/^[0-9]+([.][0-9]+)?$/), Validators.min(1), this.maxResourcesValidator('memoryLimit'), this.limitValidator('memory')])
+      .setValidators([
+        Validators.required,
+        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+        Validators.min(1),
+        this.maxResourcesValidator('memoryLimit'),
+        this.limitValidator('memory'),
+      ]);
     // end AAW validations
 
     this.parentForm.get('cpu').valueChanges.subscribe(val => {
-      // AAW 
+      // AAW
       if (this.cpuLimitFactor !== null) {
         this.parentForm
           .get('cpuLimit')
           .setValue(
             (
               parseFloat(this.cpuLimitFactor) * this.parentForm.get('cpu').value
-            ).toFixed(1)
+            ).toFixed(1),
           );
       } // AAW end
 
@@ -76,7 +118,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
             (
               parseFloat(this.memoryLimitFactor) *
               this.parentForm.get('memory').value
-            ).toFixed(1)
+            ).toFixed(1),
           );
       } //  AAW end
       // set memory limit when value of the memory request changes
@@ -93,8 +135,8 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     //for updating limit inputs
-    this.parentForm.get("cpu").updateValueAndValidity();
-    this.parentForm.get("memory").updateValueAndValidity();
+    this.parentForm.get('cpu').updateValueAndValidity();
+    this.parentForm.get('memory').updateValueAndValidity();
   }
 
   // AAW changes
@@ -102,18 +144,19 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     let e: any;
     const errs = this.parentForm.get(key).errors || {};
 
-    if (errs.required || errs.pattern )
+    if (errs.required || errs.pattern) {
       return $localize`Specify number of CPUs`;
+    }
 
-    if (e = errs.min){
+    if ((e = errs.min)) {
       return $localize`Specify at least ${e.min} CPUs`;
     }
 
-    if (e = errs.max) {
+    if ((e = errs.max)) {
       return $localize`Can't exceed ${e.max} CPUs`;
     }
 
-    if(errs.limit){
+    if (errs.limit) {
       return $localize`Can't be lower than requested CPUs`;
     }
   }
@@ -122,44 +165,54 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     let e: any;
     const errs = this.parentForm.get(key).errors || {};
 
-    if (errs.required || errs.pattern)
+    if (errs.required || errs.pattern) {
       return $localize`Specify amount of memory (e.g. 2Gi)`;
+    }
 
-    if (e = errs.min){
+    if ((e = errs.min)) {
       return $localize`Specify at least ${e.min}Gi of memory`;
     }
 
-    if (e = errs.max) {
+    if ((e = errs.max)) {
       return $localize`Can't exceed ${e.max}Gi of memory`;
     }
 
-    if(errs.limit){
+    if (errs.limit) {
       return $localize`Can't be lower than requested CPUs`;
     }
   }
 
   private maxResourcesValidator(input: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null =>{
-      const gpuNumValue = this.parentForm.get("gpus").get("num").value;
-      const gpu = gpuNumValue === "none" ? 0 : parseInt(gpuNumValue, 10) || 0;
+    return (control: AbstractControl): ValidationErrors | null => {
+      const gpuNumValue = this.parentForm.get('gpus').get('num').value;
+      const gpu = gpuNumValue === 'none' ? 0 : parseInt(gpuNumValue, 10) || 0;
       const max = MAX_FOR_GPU.get(gpu)[input];
-      
-      return control.value>max ? {max: {max: max, actual: control.value}} : null;
+
+      return control.value > max
+        ? { max: { max, actual: control.value } }
+        : null;
     };
   }
 
   private limitValidator(resource: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null =>{
+    return (control: AbstractControl): ValidationErrors | null => {
       const value = this.parentForm.get(resource).value;
-      
-      return control.value<value ? {limit: true} : null;
+
+      return control.value < value ? { limit: true } : null;
     };
   }
 }
 
 // Error when invalid control is dirty, touched, or submitted, AAW
 export class parentErrorKeysErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return !!(control && control.invalid && (control.dirty || (form && form.dirty)));
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || (form && form.dirty))
+    );
   }
 }

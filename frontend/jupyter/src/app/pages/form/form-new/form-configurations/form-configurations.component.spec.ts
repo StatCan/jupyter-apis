@@ -23,25 +23,23 @@ describe('FormConfigurationsComponent', () => {
   let component: FormConfigurationsComponent;
   let fixture: ComponentFixture<FormConfigurationsComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormConfigurationsComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatSelectModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: NamespaceService, useValue: NamespaceServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormConfigurationsComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        NoopAnimationsModule,
+      ],
+      providers: [
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: NamespaceService, useValue: NamespaceServiceStub },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormConfigurationsComponent);

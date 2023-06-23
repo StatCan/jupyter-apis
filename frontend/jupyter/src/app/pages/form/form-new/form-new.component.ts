@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  AfterContentChecked,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
@@ -13,7 +19,9 @@ import { V1Namespace } from '@kubernetes/client-node';
   templateUrl: './form-new.component.html',
   styleUrls: ['./form-new.component.scss'],
 })
-export class FormNewComponent implements OnInit, OnDestroy {
+export class FormNewComponent
+  implements OnInit, OnDestroy, AfterContentChecked
+{
   currNamespace = '';
   formCtrl: FormGroup;
   config: Config;
@@ -23,7 +31,7 @@ export class FormNewComponent implements OnInit, OnDestroy {
   subscriptions = new Subscription();
 
   readonlySpecs: boolean;
-  
+
   nsMetadata: V1Namespace;
 
   constructor(
@@ -31,7 +39,7 @@ export class FormNewComponent implements OnInit, OnDestroy {
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
-    public cdr: ChangeDetectorRef
+    public cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +71,6 @@ export class FormNewComponent implements OnInit, OnDestroy {
         this.backend.getNSMetadata(namespace).subscribe(nsMetadata => {
           this.nsMetadata = nsMetadata;
         });
-        
       }),
     );
 
@@ -121,13 +128,13 @@ export class FormNewComponent implements OnInit, OnDestroy {
 
     // Set serverType for custom image
     if (notebook.customImageCheck) {
-      if(notebook.image.match(/\/rstudio:/)){
+      if (notebook.image.match(/\/rstudio:/)) {
         notebook.serverType = 'group-one';
-      }else if(notebook.image.match(/\/remote-desktop:/)){
+      } else if (notebook.image.match(/\/remote-desktop:/)) {
         notebook.serverType = 'group-two';
-      }else if(notebook.image.match(/\/sas:/)){
+      } else if (notebook.image.match(/\/sas:/)) {
         notebook.serverType = 'group-three';
-      }else{
+      } else {
         notebook.serverType = 'jupyter';
       }
     }
@@ -205,14 +212,14 @@ export class FormNewComponent implements OnInit, OnDestroy {
 
   // Automatically set values of CPU and Memory if GPU is 1
   checkGPU(gpu: string) {
-    if (gpu == "none") {
+    if (gpu === 'none') {
       this.readonlySpecs = false;
-      this.formCtrl.get("cpu").setValue(this.config?.cpu?.value);
-      this.formCtrl.get("memory").setValue(this.config?.memory?.value);
+      this.formCtrl.get('cpu').setValue(this.config?.cpu?.value);
+      this.formCtrl.get('memory').setValue(this.config?.memory?.value);
     } else {
       this.readonlySpecs = true;
-      this.formCtrl.get("cpu").setValue(this.config?.cpu?.gpuDefault);
-      this.formCtrl.get("memory").setValue(this.config?.memory?.gpuDefault);
+      this.formCtrl.get('cpu').setValue(this.config?.cpu?.gpuDefault);
+      this.formCtrl.get('memory').setValue(this.config?.memory?.gpuDefault);
     }
   }
 

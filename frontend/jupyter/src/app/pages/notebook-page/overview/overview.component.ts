@@ -242,7 +242,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     const request = this.backend.getPodDefaults(nb.metadata.namespace);
 
     this.pollSub = this.poller.exponential(request).subscribe(podDefaults => {
-      const configurations = [];// AAW: moved this line to inside the subscribe to prevent duplication bug
+      const configurations = []; // AAW: moved this line to inside the subscribe to prevent duplication bug
       for (const pd of podDefaults) {
         for (const label in nb.metadata.labels) {
           if (label === Object.keys(pd.spec.selector.matchLabels)[0]) {

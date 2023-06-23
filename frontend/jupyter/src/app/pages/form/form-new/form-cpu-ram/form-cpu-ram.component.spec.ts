@@ -17,25 +17,21 @@ describe('FormCpuRamComponent', () => {
   let component: FormCpuRamComponent;
   let fixture: ComponentFixture<FormCpuRamComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormCpuRamComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          MatFormFieldModule,
-          ReactiveFormsModule,
-          MatInputModule,
-          MatSelectModule,
-          NoopAnimationsModule,
-        ],
-        providers: [
-          { provide: SnackBarService, useValue: SnackBarServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormCpuRamComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        NoopAnimationsModule,
+      ],
+      providers: [{ provide: SnackBarService, useValue: SnackBarServiceStub }],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormCpuRamComponent);

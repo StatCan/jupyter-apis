@@ -19,7 +19,7 @@
   <lib-title-actions-toolbar title="Volumes" i18n-title>
   </lib-title-actions-toolbar>
   <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow">    
+  <div class="page-padding lib-flex-grow">
     <lib-table
       [config]="volumeConfig"
       [data]="processedVolumeData"
@@ -31,7 +31,10 @@
   <lib-title-actions-toolbar title="Cost" i18n-title>
   </lib-title-actions-toolbar>
   <div class="page-padding lib-flex-grow">
-    <p i18n>Approximate cost of notebook server resources - summed values may not match total due to rounding</p>
+    <p i18n>
+      Approximate cost of notebook server resources - summed values may not
+      match total due to rounding
+    </p>
     <div>
       <div class="table-header-elem">
         <mat-form-field>
@@ -50,19 +53,23 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div *ngIf="this.kubecostLoading == true" class="table-header-elem margin-left">
+      <div
+        *ngIf="this.kubecostLoading === true"
+        class="table-header-elem margin-left"
+      >
         <lib-loading-spinner></lib-loading-spinner>
       </div>
     </div>
     <mat-divider></mat-divider>
-    <lib-table *ngIf="this.getCostStatus() == true; else error"
+    <lib-table
+      *ngIf="this.getCostStatus() === true; else error"
       [config]="costConfig"
       [data]="processedCostData"
       [trackByFn]="costTrackByFn"
     ></lib-table>
   </div>
   <ng-template #error>
-    <div *ngIf="this.getCostStatus() == false" class="center-flex costerror">
+    <div *ngIf="this.getCostStatus() === false" class="center-flex costerror">
       <p i18n>Failed to retrieve cost information</p>
     </div>
   </ng-template>

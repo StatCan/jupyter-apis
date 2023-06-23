@@ -8,10 +8,8 @@ describe('KubecostService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        { provide: HttpClient, useValue: {} },
-      ],
-    })
+      providers: [{ provide: HttpClient, useValue: {} }],
+    });
     service = TestBed.inject(KubecostService);
   });
 

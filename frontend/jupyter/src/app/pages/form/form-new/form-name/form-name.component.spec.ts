@@ -20,18 +20,16 @@ describe('FormNameComponent', () => {
   let component: FormNameComponent;
   let fixture: ComponentFixture<FormNameComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormNameComponent],
-        imports: [CommonModule, KfFormModule, NoopAnimationsModule],
-        providers: [
-          { provide: JWABackendService, useValue: JWABackendServiceStub },
-          { provide: NamespaceService, useValue: NamespaceServiceStub },
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormNameComponent],
+      imports: [CommonModule, KfFormModule, NoopAnimationsModule],
+      providers: [
+        { provide: JWABackendService, useValue: JWABackendServiceStub },
+        { provide: NamespaceService, useValue: NamespaceServiceStub },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormNameComponent);

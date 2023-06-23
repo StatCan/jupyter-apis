@@ -14,7 +14,7 @@ export interface PVCResponseObject {
   namespace: string;
   status: Status;
   notebooks: string[];
-  
+
   extraFields?: { [key: string]: any };
   usedBy?: string | null;
   labels?: { [key: string]: any };

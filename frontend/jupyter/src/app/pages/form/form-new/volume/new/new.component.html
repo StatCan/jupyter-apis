@@ -64,7 +64,7 @@
     <!--Sizes is an AAW specific change-->
     <app-volume-size
       [sizeCtrl]="volGroup.get('newPvc.spec.resources.requests.storage')"
-      [sizes]=sizes
+      [sizes]="sizes"
     ></app-volume-size>
 
     <app-storage-class

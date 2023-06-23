@@ -24,8 +24,14 @@
         attr.aria-label="Use Group One based server"
         i18n-aria-label="Aria label for Group One server"
         [disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
-        [matTooltip]="!shouldEnable(imagesGroupOne?.enabledCondition) ? getDisabledMessage('group-one') : ''"
-        [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
+        [matTooltip]="
+          !shouldEnable(imagesGroupOne?.enabledCondition)
+            ? getDisabledMessage('group-one')
+            : ''
+        "
+        [class.toolbar-icon-disabled]="
+          !shouldEnable(imagesGroupOne?.enabledCondition)
+        "
       >
         <mat-icon class="server-type-icon" svgIcon="group-one"></mat-icon>
         <p class="server-type-title">RStudio</p>
@@ -34,35 +40,43 @@
           for statistical computing and graphics.
         </p>
       </mat-button-toggle>
-      
+
       <mat-button-toggle
         value="group-two"
         attr.aria-label="Use Group Two based server"
         i18n-aria-label="Aria label for Group Two server"
         [disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
-        [matTooltip]="!shouldEnable(imagesGroupTwo?.enabledCondition) ? getDisabledMessage('group-two') : ''"
-        [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
+        [matTooltip]="
+          !shouldEnable(imagesGroupTwo?.enabledCondition)
+            ? getDisabledMessage('group-two')
+            : ''
+        "
+        [class.toolbar-icon-disabled]="
+          !shouldEnable(imagesGroupTwo?.enabledCondition)
+        "
       >
         <mat-icon class="server-type-icon" svgIcon="group-two"></mat-icon>
         <p class="server-type-title">Remote Desktop</p>
-        <p class="server-type-content">
-          A ubuntu remote desktop.
-        </p>
+        <p class="server-type-content">A ubuntu remote desktop.</p>
       </mat-button-toggle>
 
       <mat-button-toggle
         value="group-three"
         attr.aria-label="Use Group Three based server"
         [disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"
-        [matTooltip]="!shouldEnable(imagesGroupThree?.enabledCondition) ? getDisabledMessage('group-three') : ''"
-        [class.toolbar-icon-disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"
+        [matTooltip]="
+          !shouldEnable(imagesGroupThree?.enabledCondition)
+            ? getDisabledMessage('group-three')
+            : ''
+        "
+        [class.toolbar-icon-disabled]="
+          !shouldEnable(imagesGroupThree?.enabledCondition)
+        "
         i18n-aria-label
       >
         <mat-icon class="server-type-icon" svgIcon="group-three"></mat-icon>
         <p class="server-type-title">SAS</p>
-        <p class="server-type-content">
-          This is text for SAS
-        </p>
+        <p class="server-type-content">This is text for SAS</p>
       </mat-button-toggle>
     </mat-button-toggle-group>
 
@@ -154,16 +168,14 @@
             i18n-placeholder
           >
             <mat-option
-            *ngFor="let img of imagesGroupThree.options"
-            [value]="img"
-            [matTooltip]="img"
+              *ngFor="let img of imagesGroupThree.options"
+              [value]="img"
+              [matTooltip]="img"
             >
               {{ imageDisplayName(img) }}
             </mat-option>
           </mat-select>
-          <mat-error i18n>
-            Please provide an Image to use
-          </mat-error>
+          <mat-error i18n> Please provide an Image to use </mat-error>
         </mat-form-field>
 
         <lib-advanced-options>

@@ -1,5 +1,10 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -16,10 +21,14 @@ export class VolumeMountComponent implements OnDestroy {
 
   set volGroup(volGroup: FormGroup) {
     this.prvVolGroup = volGroup;
-    this.prvVolGroup.get('mount').setValidators([
-      Validators.required,
-      Validators.pattern(/^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/)
-    ]);
+    this.prvVolGroup
+      .get('mount')
+      .setValidators([
+        Validators.required,
+        Validators.pattern(
+          /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
+        ),
+      ]);
     this.valueChangeSubscription.unsubscribe();
     this.updateMountOnNameChange(volGroup);
   }
@@ -75,12 +84,12 @@ export class VolumeMountComponent implements OnDestroy {
   }
 
   showMountPathError() {
-    const mountName =this.volGroup.get('mount'); // should this be like the getNameCtrl?
-    if (mountName.hasError("required")) {
+    const mountName = this.volGroup.get('mount'); // should this be like the getNameCtrl?
+    if (mountName.hasError('required')) {
       return $localize`Mount path is required`;
     }
-    if (mountName.hasError("pattern")) {
-      return $localize `The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie`;
+    if (mountName.hasError('pattern')) {
+      return $localize`The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie`;
     }
   }
 }

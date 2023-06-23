@@ -6,7 +6,7 @@ import {
   Validators,
   ValidatorFn,
   FormGroupDirective,
-  NgForm
+  NgForm,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NamespaceService } from 'kubeflow';
@@ -81,28 +81,32 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
     this.subs.unsubscribe();
   }
 
-  ngOnChanges(): void{
+  ngOnChanges(): void {
     //this needs to happen because we were losing the validators on init.
     this.initComponent();
   }
 
-  private initComponent(): void{
+  private initComponent(): void {
     // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
     this.subs.add(
       this.ns.getSelectedNamespace().subscribe(ns => {
         this.backend.getNotebooks(ns).subscribe(notebooks => {
           this.mountedVolumes.clear();
-          notebooks.map(nb => nb.volumes.map(v => {
-            this.mountedVolumes.add(v)
-          }));
+          notebooks.map(nb =>
+            nb.volumes.map(v => {
+              this.mountedVolumes.add(v);
+            }),
+          );
         });
-      })
+      }),
     );
 
     this.getNameCtrl(this.metadataGroup).setValidators([
       Validators.required,
       this.isMountedValidator(),
-      Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)
+      Validators.pattern(
+        /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/,
+      ),
     ]);
   }
 
@@ -120,13 +124,14 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
   showNameError() {
     const volumeName = this.getNameCtrl(this.metadataGroup); // should this be like the getNameCtrl?
 
-    if (volumeName.hasError("required")) {
+    if (volumeName.hasError('required')) {
       return $localize`Name is required`;
     }
-    if (volumeName.hasError("pattern")) {
-      return $localize`The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+    if (volumeName.hasError('pattern')) {
+      return $localize`The volume name can only contain lowercase alphanumeric characters,
+       '-' or '.', and must start and end with an alphanumeric character`;
     }
-    if (volumeName.hasError("isMounted")) {
+    if (volumeName.hasError('isMounted')) {
       return $localize`Already mounted`;
     }
   }
@@ -141,9 +146,19 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
 }
 // Error when invalid control is dirty, touched, or submitted, AAW Specific
 export class PvcErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null,
+  ): boolean {
     const isSubmitted = form && form.submitted;
     //Allows to control when volume is untouched but already assigned
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted || !control.hasError("pattern")));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty ||
+        control.touched ||
+        isSubmitted ||
+        !control.hasError('pattern'))
+    );
   }
 }

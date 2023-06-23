@@ -9,8 +9,12 @@ export const mockPods: V1Pod[] = [
         'prometheus.io/path': '/stats/prometheus',
         'prometheus.io/port': '15020',
         'prometheus.io/scrape': 'true',
-        'sidecar.istio.io/status':
-          '{"initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-data","istio-podinfo","istio-token","istiod-ca-cert"],"imagePullSecrets":null}',
+        'sidecar.istio.io/status': `{
+            "initContainers":["istio-init"],
+            "containers":["istio-proxy"],
+            "volumes":["istio-envoy","istio-data","istio-podinfo","istio-token","istiod-ca-cert"],
+            "imagePullSecrets":null
+          }`,
       },
       creationTimestamp: new Date('2022-07-13T09:36:09+00:00'),
       labels: {
@@ -157,7 +161,7 @@ export const mockPods: V1Pod[] = [
                 fieldRef: {
                   apiVersion: 'v1',
                   fieldPath:
-                    "metadata.labels['service.istio.io/canonical-name']",
+                    'metadata.labels["service.istio.io/canonical-name"]',
                 },
               },
             },
@@ -167,7 +171,7 @@ export const mockPods: V1Pod[] = [
                 fieldRef: {
                   apiVersion: 'v1',
                   fieldPath:
-                    "metadata.labels['service.istio.io/canonical-revision']",
+                    'metadata.labels["service.istio.io/canonical-revision"]',
                 },
               },
             },
@@ -561,8 +565,8 @@ export const mockPods: V1Pod[] = [
             'docker://167e89109e1b9f141eaec7fb50166c907d364f374952322443e9c85257efdb2c',
           image:
             'sha256:5d794711f8601a29ee4095c2cff8f14e69aced79a400008fa9c252fc43d22d24',
-          imageID:
-            'docker-pullable://gcr.io/arrikto-public/startup-lock-init@sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21',
+          imageID: `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
+            sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21`,
           lastState: {},
           name: 'startup-lock-init-container',
           ready: true,
@@ -655,8 +659,7 @@ export const mockPods: V1Pod[] = [
           blockOwnerDeletion: true,
           controller: true,
           kind: 'ReplicaSet',
-          name:
-            'serving-openvaccine-0-486kc-predictor-default-00001-deployment-7695bf497f',
+          name: 'serving-openvaccine-0-486kc-predictor-default-00001-deployment-7695bf497f',
           uid: 'a2b15c20-2731-4640-862e-7c3ddfd2ca49',
         },
       ],
@@ -800,8 +803,22 @@ export const mockPods: V1Pod[] = [
             },
             {
               name: 'SERVING_REQUEST_LOG_TEMPLATE',
-              value:
-                '{"httpRequest": {"requestMethod": "{{.Request.Method}}", "requestUrl": "{{js .Request.RequestURI}}", "requestSize": "{{.Request.ContentLength}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{js .Request.UserAgent}}", "remoteIp": "{{js .Request.RemoteAddr}}", "serverIp": "{{.Revision.PodIP}}", "referer": "{{js .Request.Referer}}", "latency": "{{.Response.Latency}}s", "protocol": "{{.Request.Proto}}"}, "traceId": "{{index .Request.Header "X-B3-Traceid"}}"}',
+              value: `{
+                  "httpRequest": {
+                    "requestMethod": "{{.Request.Method}}", 
+                    "requestUrl": "{{js .Request.RequestURI}}", 
+                    "requestSize": "{{.Request.ContentLength}}", 
+                    "status": {{.Response.Code}}, 
+                    "responseSize": "{{.Response.Size}}", 
+                    "userAgent": "{{js .Request.UserAgent}}", 
+                    "remoteIp": "{{js .Request.RemoteAddr}}", 
+                    "serverIp": "{{.Revision.PodIP}}", 
+                    "referer": "{{js .Request.Referer}}", 
+                    "latency": "{{.Response.Latency}}s", 
+                    "protocol": "{{.Request.Proto}}"
+                  }, 
+                  "traceId": "{{index .Request.Header "X-B3-Traceid"}}"
+                }`,
             },
             {
               name: 'SERVING_ENABLE_REQUEST_LOG',
@@ -1091,8 +1108,8 @@ export const mockPods: V1Pod[] = [
           containerID:
             'docker://0cb698de3ac787ae361d33b911f2d08a850bebff1d259732aae143779b14e6a1',
           image: 'tensorflow/serving:2.3.0',
-          imageID:
-            'docker-pullable://tensorflow/serving@sha256:a94b7e3b0e825350675e83b0c2f2fc28f34be358c34e4126a1d828de899ec44f',
+          imageID: `docker-pullable://tensorflow/serving@
+            sha256:a94b7e3b0e825350675e83b0c2f2fc28f34be358c34e4126a1d828de899ec44f`,
           lastState: {},
           name: 'kfserving-container',
           ready: false,
@@ -1104,8 +1121,37 @@ export const mockPods: V1Pod[] = [
                 'docker://0cb698de3ac787ae361d33b911f2d08a850bebff1d259732aae143779b14e6a1',
               exitCode: 137,
               // finishedAt: '2022-04-14T19:01:07+00:00',
-              message:
-                'odel from: /mnt/models/1\n2022-04-14 12:07:26.695042: I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:54] Reading meta graph with tags { serve }\n2022-04-14 12:07:26.695097: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:234] Reading SavedModel debug info (if present) from: /mnt/models/1\n2022-04-14 12:07:26.696352: I external/org_tensorflow/tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN)to use the following CPU instructions in performance-critical operations:  AVX2 FMA\nTo enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.\n2022-04-14 12:07:27.385584: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:199] Restoring SavedModel bundle.\n2022-04-14 12:07:28.424782: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:183] Running initialization op on SavedModel bundle at path: /mnt/models/1\n2022-04-14 12:07:29.142901: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:303] SavedModel load for tags { serve }; Status: success: OK. Took 2653687 microseconds.\n2022-04-14 12:07:29.191852: I tensorflow_serving/servables/tensorflow/saved_model_warmup_util.cc:59] No warmup data file found at /mnt/models/1/assets.extra/tf_serving_warmup_requests\n2022-04-14 12:07:29.252701: I tensorflow_serving/core/loader_harness.cc:87] Successfully loaded servable version {name: serving-openvaccine-0-486kc version: 1}\n2022-04-14 12:07:29.263481: I tensorflow_serving/model_servers/server.cc:367] Running gRPC ModelServer at 0.0.0.0:9000 ...\n[warn] getaddrinfo: address family for nodename not supported\n2022-04-14 12:07:29.268634: I tensorflow_serving/model_servers/server.cc:387] Exporting HTTP/REST API at:localhost:8080 ...\n[evhttp_server.cc : 238] NET_LOG: Entering the event loop ...\n2022-04-14 12:10:36.363181: E external/org_tensorflow/tensorflow/core/grappler/optimizers/meta_optimizer.cc:581] implementation_selector failed: Internal: Could not parse device name:\n',
+              message: `odel from: 
+                /mnt/models/1\n2022-04-14 12:07:26.695042: 
+                I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:54] 
+                Reading meta graph with tags { serve }\n
+                2022-04-14 12:07:26.695097: 
+                I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:234] 
+                Reading SavedModel debug info (if present) from: /mnt/models/1\n
+                2022-04-14 12:07:26.696352: 
+                I external/org_tensorflow/tensorflow/core/platform/cpu_feature_guard.cc:142] 
+                This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN)
+                to use the following CPU instructions in performance-critical operations:  AVX2 FMA\n
+                To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.\n
+                2022-04-14 12:07:27.385584: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:199] 
+                Restoring SavedModel bundle.\n
+                2022-04-14 12:07:28.424782: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:183] 
+                Running initialization op on SavedModel bundle at path: /mnt/models/1\n
+                2022-04-14 12:07:29.142901: I external/org_tensorflow/tensorflow/cc/saved_model/loader.cc:303] 
+                SavedModel load for tags { serve }; 
+                Status: success: OK. Took 2653687 microseconds.\n
+                2022-04-14 12:07:29.191852: I tensorflow_serving/servables/tensorflow/saved_model_warmup_util.cc:59] 
+                No warmup data file found at /mnt/models/1/assets.extra/tf_serving_warmup_requests\n
+                2022-04-14 12:07:29.252701: I tensorflow_serving/core/loader_harness.cc:87] 
+                Successfully loaded servable version {name: serving-openvaccine-0-486kc version: 1}\n
+                2022-04-14 12:07:29.263481: I tensorflow_serving/model_servers/server.cc:367] 
+                Running gRPC ModelServer at 0.0.0.0:9000 ...\n
+                [warn] getaddrinfo: address family for nodename not supported\n
+                2022-04-14 12:07:29.268634: I tensorflow_serving/model_servers/server.cc:387] 
+                Exporting HTTP/REST API at:localhost:8080 ...\n
+                [evhttp_server.cc : 238] NET_LOG: Entering the event loop ...\n
+                2022-04-14 12:10:36.363181: E external/org_tensorflow/tensorflow/core/grappler/optimizers/meta_optimizer.cc:581] 
+                implementation_selector failed: Internal: Could not parse device name:\n`,
               reason: 'Error',
               // startedAt: '2022-04-14T12:07:26+00:00',
             },
@@ -1116,8 +1162,8 @@ export const mockPods: V1Pod[] = [
             'docker://dde83107f2d19637e45ba3fc0d1a1f5ee78d927f23c8a6011004b973a049e0e3',
           image:
             'sha256:7b084b4174cb572be1e28313a17f5d65e3d776070e296a9f1b209da8e98d1bd8',
-          imageID:
-            'docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:0b8e031170354950f3395876961452af1c62f7ab5161c9e71867392c11881962',
+          imageID: `docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@
+            sha256:0b8e031170354950f3395876961452af1c62f7ab5161c9e71867392c11881962`,
           lastState: {},
           name: 'queue-proxy',
           ready: false,
@@ -1142,8 +1188,8 @@ export const mockPods: V1Pod[] = [
             'docker://c3b4a8122c2f218115aba88b5ee0d244e464ebd8d6ba4b7a87042ba4eaa08c82',
           image:
             'sha256:5d794711f8601a29ee4095c2cff8f14e69aced79a400008fa9c252fc43d22d24',
-          imageID:
-            'docker-pullable://gcr.io/arrikto-public/startup-lock-init@sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21',
+          imageID: `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
+            sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21`,
           lastState: {},
           name: 'startup-lock-init-container',
           ready: true,
@@ -1171,8 +1217,18 @@ export const mockPods: V1Pod[] = [
                 'docker://6d3cf4856791cde1fd825aa702d204cdd0649301ccc997e417045fadb03ef2de',
               exitCode: 1,
               // finishedAt: '2022-08-19T08:16:02+00:00',
-              message:
-                '[I 220819 08:16:02 initializer-entrypoint:13] Initializing, args: src_uri [/mnt/pvc/.kale.kfserving.model.dir/model.tfkeras] dest_path[ [/mnt/models]\n[I 220819 08:16:02 storage:50] Copying contents of /mnt/pvc/.kale.kfserving.model.dir/model.tfkeras to local\n[I 220819 08:16:02 storage:247] Linking: /mnt/pvc/.kale.kfserving.model.dir/model.tfkeras/1 to /mnt/models/1\nTraceback (most recent call last):\n  File "/storage-initializer/scripts/initializer-entrypoint", line 14, in <module>\n    kfserving.Storage.download(src_uri, dest_path)\n  File "/usr/local/lib/python3.7/site-packages/kfserving/storage.py", line 71, in download\n    return Storage._download_local(uri, out_dir)\n  File "/usr/local/lib/python3.7/site-packages/kfserving/storage.py", line 248, in _download_local\n    os.symlink(src, dest_path)\nFileExistsError: [Errno 17] File exists: \'/mnt/pvc/.kale.kfserving.model.dir/model.tfkeras/1\' -> \'/mnt/models/1\'\n',
+              message: `[I 220819 08:16:02 initializer-entrypoint:13] 
+                Initializing, args: src_uri [/mnt/pvc/.kale.kfserving.model.dir/model.tfkeras] dest_path[ [/mnt/models]\n
+                [I 220819 08:16:02 storage:50] Copying contents of /mnt/pvc/.kale.kfserving.model.dir/model.tfkeras to local\n
+                [I 220819 08:16:02 storage:247] Linking: /mnt/pvc/.kale.kfserving.model.dir/model.tfkeras/1 to /mnt/models/1\n
+                Traceback (most recent call last):\n  
+                File "/storage-initializer/scripts/initializer-entrypoint", line 14, in <module>\n    
+                kfserving.Storage.download(src_uri, dest_path)\n  
+                File "/usr/local/lib/python3.7/site-packages/kfserving/storage.py", line 71, in download\n    
+                return Storage._download_local(uri, out_dir)\n  
+                File "/usr/local/lib/python3.7/site-packages/kfserving/storage.py", line 248, in _download_local\n    
+                os.symlink(src, dest_path)\n
+                FileExistsError: [Errno 17] File exists: \'/mnt/pvc/.kale.kfserving.model.dir/model.tfkeras/1\' -> \'/mnt/models/1\'\n`,
               reason: 'Error',
               // startedAt: '2022-08-19T08:16:00+00:00',
             },
@@ -1182,8 +1238,8 @@ export const mockPods: V1Pod[] = [
           restartCount: 20,
           state: {
             waiting: {
-              message:
-                'back-off 5m0s restarting failed container=storage-initializer pod=serving-openvaccine-0-486kc-predictor-default-00001-deploynhbqd_kubeflow-user(cc073323-4189-4bdf-899f-390d15ba389f)',
+              message: `back-off 5m0s restarting failed container=storage-initializer 
+                pod=serving-openvaccine-0-486kc-predictor-default-00001-deploynhbqd_kubeflow-user(cc073323-4189-4bdf-899f-390d15ba389f)`,
               reason: 'CrashLoopBackOff',
             },
           },
@@ -1244,8 +1300,7 @@ export const mockPods: V1Pod[] = [
           blockOwnerDeletion: true,
           controller: true,
           kind: 'ReplicaSet',
-          name:
-            'serving-openvaccine-2786a7fd31c47d404c0bd18da10bd203-deployment-84654847dc',
+          name: 'serving-openvaccine-2786a7fd31c47d404c0bd18da10bd203-deployment-84654847dc',
           uid: 'c98ae290-16b2-4822-9d8f-f5079fdb642e',
         },
       ],
@@ -1403,8 +1458,22 @@ export const mockPods: V1Pod[] = [
             },
             {
               name: 'SERVING_REQUEST_LOG_TEMPLATE',
-              value:
-                '{"httpRequest": {"requestMethod": "{{.Request.Method}}", "requestUrl": "{{js .Request.RequestURI}}", "requestSize": "{{.Request.ContentLength}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{js .Request.UserAgent}}", "remoteIp": "{{js .Request.RemoteAddr}}", "serverIp": "{{.Revision.PodIP}}", "referer": "{{js .Request.Referer}}", "latency": "{{.Response.Latency}}s", "protocol": "{{.Request.Proto}}"}, "traceId": "{{index .Request.Header "X-B3-Traceid"}}"}',
+              value: `{
+                  "httpRequest": {
+                    "requestMethod": "{{.Request.Method}}", 
+                    "requestUrl": "{{js .Request.RequestURI}}", 
+                    "requestSize": "{{.Request.ContentLength}}", 
+                    "status": {{.Response.Code}}, 
+                    "responseSize": "{{.Response.Size}}", 
+                    "userAgent": "{{js .Request.UserAgent}}", 
+                    "remoteIp": "{{js .Request.RemoteAddr}}", 
+                    "serverIp": "{{.Revision.PodIP}}", 
+                    "referer": "{{js .Request.Referer}}", 
+                    "latency": "{{.Response.Latency}}s", 
+                    "protocol": "{{.Request.Proto}}"
+                  }, 
+                  "traceId": "{{index .Request.Header "X-B3-Traceid"}}"
+                }`,
             },
             {
               name: 'SERVING_ENABLE_REQUEST_LOG',
@@ -1654,8 +1723,32 @@ export const mockPods: V1Pod[] = [
                 'docker://648e54f01118f90a6bd3c2c158080bcaaf3aa67fc9dd1448a23241d89e41d737',
               exitCode: 15,
               // finishedAt: '2022-08-18T19:00:57+00:00',
-              message:
-                '-packages/kale/kfserving/__main__.py", line 45, in <module>\n    predictor_host=args.predictor_host)\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 39, in __init__\n    self._load_transformer_assets()\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 73, in _load_transformer_assets\n    log.info("Assets successfully loaded: %s" % self.assets.keys())\nMessage: "Assets successfully loaded: dict_keys([\'transformer_function\', \'tokenizer\'])"\nArguments: ()\n--- Logging error ---\nTraceback (most recent call last):\n  File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit\n    msg = self.format(record)\n  File "/usr/lib/python3.6/logging/__init__.py", line 840, in format\n    return fmt.format(record)\n  File "/usr/lib/python3.6/logging/__init__.py", line 580, in format\n    s = self.formatMessage(record)\n  File "/usr/lib/python3.6/logging/__init__.py", line 549, in formatMessage\n    return self._style.format(record)\n  File "/usr/lib/python3.6/logging/__init__.py", line 391, in format\n    return self._fmt % record.__dict__\nKeyError: \'origin\'\nCall stack:\n  File "/usr/lib/python3.6/runpy.py", line 193, in _run_module_as_main\n    "__main__", mod_spec)\n  File "/usr/lib/python3.6/runpy.py", line 85, in _run_code\n    exec(code, run_globals)\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/__main__.py", line 45, in <module>\n    predictor_host=args.predictor_host)\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 39, in __init__\n    self._load_transformer_assets()\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 74, in _load_transformer_assets\n    log.info("Initializing assets...")\nMessage: \'Initializing assets...\'\nArguments: ()\n[I 220818 06:51:33 kfserver:151] Registering model: serving-openvaccine-0-486kc\n[I 220818 06:51:33 kfserver:121] Setting asyncio max_workers as 5\n[I 220818 06:51:33 kfserver:128] Listening on port 8080\n[I 220818 06:51:33 kfserver:130] Will fork 1 workers\n',
+              message: `-packages/kale/kfserving/__main__.py", line 45, in <module>\n    
+                predictor_host=args.predictor_host)\n  
+                File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 39, in __init__\n    
+                self._load_transformer_assets()\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", 
+                line 73, in _load_transformer_assets\n    
+                log.info("Assets successfully loaded: %s" % self.assets.keys())\n
+                Message: "Assets successfully loaded: dict_keys([\'transformer_function\', \'tokenizer\'])"\nArguments: ()\n
+                --- Logging error ---\n
+                Traceback (most recent call last):\n  
+                File "/usr/lib/python3.6/logging/__init__.py", line 994, in emit\n    
+                msg = self.format(record)\n  
+                File "/usr/lib/python3.6/logging/__init__.py", line 840, in format\n    return fmt.format(record)\n  
+                File "/usr/lib/python3.6/logging/__init__.py", line 580, in format\n    s = self.formatMessage(record)\n  
+                File "/usr/lib/python3.6/logging/__init__.py", line 549, in formatMessage\n    return self._style.format(record)\n  
+                File "/usr/lib/python3.6/logging/__init__.py", line 391, in format\n    return self._fmt % record.__dict__\n
+                KeyError: \'origin\'\n
+                Call stack:\n  File "/usr/lib/python3.6/runpy.py", line 193, in _run_module_as_main\n    "__main__", mod_spec)\n  
+                File "/usr/lib/python3.6/runpy.py", line 85, in _run_code\n    exec(code, run_globals)\n  
+                File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/__main__.py", line 45, in <module>\n    
+                predictor_host=args.predictor_host)\n  
+                File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 39, in __init__\n    
+                self._load_transformer_assets()\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 74, 
+                in _load_transformer_assets\n    log.info("Initializing assets...")\nMessage: \'Initializing assets...\'\nArguments: ()\n
+                [I 220818 06:51:33 kfserver:151] Registering model: serving-openvaccine-0-486kc\n[I 220818 06:51:33 kfserver:121] 
+                Setting asyncio max_workers as 5\n[I 220818 06:51:33 kfserver:128] Listening on port 8080\n
+                [I 220818 06:51:33 kfserver:130] Will fork 1 workers\n`,
               reason: 'Error',
               // startedAt: '2022-08-18T06:51:18+00:00',
             },
@@ -1675,8 +1768,8 @@ export const mockPods: V1Pod[] = [
             'docker://68168aee29daa873b51c6c543474ad6de5971cc55f4e2f980e9e679bf6a0b7b6',
           image:
             'sha256:7b084b4174cb572be1e28313a17f5d65e3d776070e296a9f1b209da8e98d1bd8',
-          imageID:
-            'docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@sha256:0b8e031170354950f3395876961452af1c62f7ab5161c9e71867392c11881962',
+          imageID: `docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@
+            sha256:0b8e031170354950f3395876961452af1c62f7ab5161c9e71867392c11881962`,
           lastState: {
             terminated: {
               containerID:
@@ -1705,8 +1798,8 @@ export const mockPods: V1Pod[] = [
             'docker://3fb58c12f7e0687b060fa3d29fdba89567c445fd891f7dcdf3eba2b704918938',
           image:
             'sha256:5d794711f8601a29ee4095c2cff8f14e69aced79a400008fa9c252fc43d22d24',
-          imageID:
-            'docker-pullable://gcr.io/arrikto-public/startup-lock-init@sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21',
+          imageID: `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
+            sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21`,
           lastState: {},
           name: 'startup-lock-init-container',
           ready: true,

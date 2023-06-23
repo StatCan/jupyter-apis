@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { IndexModule } from './pages/index/index.module';
-import { 
+import {
   KubeflowModule,
   ResourceTableModule,
   NamespaceSelectModule,
@@ -27,10 +27,7 @@ import { ColumnsModule } from './pages/index/columns/columns.module';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    VolumeFormComponent
-  ],
+  declarations: [AppComponent, VolumeFormComponent],
   imports: [
     HttpClientModule,
     BrowserModule,
@@ -47,7 +44,10 @@ import { ErrorStateMatcher } from '@angular/material/core';
     VolumeDetailsPageModule,
     ColumnsModule,
   ],
-  providers: [KubecostService, { provide: ErrorStateMatcher, useClass: ImmediateErrorStateMatcher },],
+  providers: [
+    KubecostService,
+    { provide: ErrorStateMatcher, useClass: ImmediateErrorStateMatcher },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

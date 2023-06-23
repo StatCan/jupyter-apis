@@ -13,21 +13,19 @@ describe('FormDataVolumesComponent', () => {
   let component: FormDataVolumesComponent;
   let fixture: ComponentFixture<FormDataVolumesComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [FormDataVolumesComponent],
-        imports: [
-          CommonModule,
-          KfFormModule,
-          MatExpansionModule,
-          MatIconModule,
-          MatButtonToggleModule,
-          VolumeModule,
-        ],
-      }).compileComponents();
-    }),
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [FormDataVolumesComponent],
+      imports: [
+        CommonModule,
+        KfFormModule,
+        MatExpansionModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        VolumeModule,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormDataVolumesComponent);

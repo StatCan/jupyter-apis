@@ -36,7 +36,7 @@ export class FormGpusComponent implements OnInit {
     this.subscriptions.add(
       this.gpuCtrl.get('num').valueChanges.subscribe((n: string) => {
         if (n === 'none') {
-          this.message = "";
+          this.message = '';
           this.gpuCtrl.get('vendor').disable();
         } else {
           this.message = $localize`Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.`;

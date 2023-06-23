@@ -189,7 +189,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
     return displayName;
   }
 
-  shouldEnable(enabledCondition: {labels: Map<string, string>}): boolean {
+  shouldEnable(enabledCondition: { labels: Map<string, string> }): boolean {
     if (enabledCondition == null || this.nsMetadata == null) {
       return true;
     }

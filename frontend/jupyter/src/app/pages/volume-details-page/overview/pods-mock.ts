@@ -9,8 +9,7 @@ export const mockPods: V1Pod[] = [
         'prometheus.io/path': '/stats/prometheus',
         'prometheus.io/port': '15020',
         'prometheus.io/scrape': 'true',
-        'sidecar.istio.io/status':
-          `{
+        'sidecar.istio.io/status': `{
             "initContainers":["istio-init"],
             "containers":["istio-proxy"],
             "volumes":["istio-envoy","istio-data","istio-podinfo","istio-token","istiod-ca-cert"],
@@ -162,7 +161,7 @@ export const mockPods: V1Pod[] = [
                 fieldRef: {
                   apiVersion: 'v1',
                   fieldPath:
-                    'metadata.labels[\'service.istio.io/canonical-name\']',
+                    'metadata.labels["service.istio.io/canonical-name"]',
                 },
               },
             },
@@ -172,7 +171,7 @@ export const mockPods: V1Pod[] = [
                 fieldRef: {
                   apiVersion: 'v1',
                   fieldPath:
-                    'metadata.labels[\'service.istio.io/canonical-revision\']',
+                    'metadata.labels["service.istio.io/canonical-revision"]',
                 },
               },
             },
@@ -566,8 +565,7 @@ export const mockPods: V1Pod[] = [
             'docker://167e89109e1b9f141eaec7fb50166c907d364f374952322443e9c85257efdb2c',
           image:
             'sha256:5d794711f8601a29ee4095c2cff8f14e69aced79a400008fa9c252fc43d22d24',
-          imageID:
-            `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
+          imageID: `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
             sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21`,
           lastState: {},
           name: 'startup-lock-init-container',
@@ -805,8 +803,7 @@ export const mockPods: V1Pod[] = [
             },
             {
               name: 'SERVING_REQUEST_LOG_TEMPLATE',
-              value:
-                `{
+              value: `{
                   "httpRequest": {
                     "requestMethod": "{{.Request.Method}}", 
                     "requestUrl": "{{js .Request.RequestURI}}", 
@@ -1111,8 +1108,7 @@ export const mockPods: V1Pod[] = [
           containerID:
             'docker://0cb698de3ac787ae361d33b911f2d08a850bebff1d259732aae143779b14e6a1',
           image: 'tensorflow/serving:2.3.0',
-          imageID:
-            `docker-pullable://tensorflow/serving@
+          imageID: `docker-pullable://tensorflow/serving@
             sha256:a94b7e3b0e825350675e83b0c2f2fc28f34be358c34e4126a1d828de899ec44f`,
           lastState: {},
           name: 'kfserving-container',
@@ -1125,8 +1121,7 @@ export const mockPods: V1Pod[] = [
                 'docker://0cb698de3ac787ae361d33b911f2d08a850bebff1d259732aae143779b14e6a1',
               exitCode: 137,
               // finishedAt: '2022-04-14T19:01:07+00:00',
-              message:
-                `odel from: 
+              message: `odel from: 
                 /mnt/models/1\n2022-04-14 12:07:26.695042: 
                 I external/org_tensorflow/tensorflow/cc/saved_model/reader.cc:54] 
                 Reading meta graph with tags { serve }\n
@@ -1167,8 +1162,7 @@ export const mockPods: V1Pod[] = [
             'docker://dde83107f2d19637e45ba3fc0d1a1f5ee78d927f23c8a6011004b973a049e0e3',
           image:
             'sha256:7b084b4174cb572be1e28313a17f5d65e3d776070e296a9f1b209da8e98d1bd8',
-          imageID:
-            `docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@
+          imageID: `docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@
             sha256:0b8e031170354950f3395876961452af1c62f7ab5161c9e71867392c11881962`,
           lastState: {},
           name: 'queue-proxy',
@@ -1194,8 +1188,7 @@ export const mockPods: V1Pod[] = [
             'docker://c3b4a8122c2f218115aba88b5ee0d244e464ebd8d6ba4b7a87042ba4eaa08c82',
           image:
             'sha256:5d794711f8601a29ee4095c2cff8f14e69aced79a400008fa9c252fc43d22d24',
-          imageID:
-            `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
+          imageID: `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
             sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21`,
           lastState: {},
           name: 'startup-lock-init-container',
@@ -1224,8 +1217,7 @@ export const mockPods: V1Pod[] = [
                 'docker://6d3cf4856791cde1fd825aa702d204cdd0649301ccc997e417045fadb03ef2de',
               exitCode: 1,
               // finishedAt: '2022-08-19T08:16:02+00:00',
-              message:
-                `[I 220819 08:16:02 initializer-entrypoint:13] 
+              message: `[I 220819 08:16:02 initializer-entrypoint:13] 
                 Initializing, args: src_uri [/mnt/pvc/.kale.kfserving.model.dir/model.tfkeras] dest_path[ [/mnt/models]\n
                 [I 220819 08:16:02 storage:50] Copying contents of /mnt/pvc/.kale.kfserving.model.dir/model.tfkeras to local\n
                 [I 220819 08:16:02 storage:247] Linking: /mnt/pvc/.kale.kfserving.model.dir/model.tfkeras/1 to /mnt/models/1\n
@@ -1246,8 +1238,7 @@ export const mockPods: V1Pod[] = [
           restartCount: 20,
           state: {
             waiting: {
-              message:
-                `back-off 5m0s restarting failed container=storage-initializer 
+              message: `back-off 5m0s restarting failed container=storage-initializer 
                 pod=serving-openvaccine-0-486kc-predictor-default-00001-deploynhbqd_kubeflow-user(cc073323-4189-4bdf-899f-390d15ba389f)`,
               reason: 'CrashLoopBackOff',
             },
@@ -1467,8 +1458,7 @@ export const mockPods: V1Pod[] = [
             },
             {
               name: 'SERVING_REQUEST_LOG_TEMPLATE',
-              value:
-                `{
+              value: `{
                   "httpRequest": {
                     "requestMethod": "{{.Request.Method}}", 
                     "requestUrl": "{{js .Request.RequestURI}}", 
@@ -1733,8 +1723,7 @@ export const mockPods: V1Pod[] = [
                 'docker://648e54f01118f90a6bd3c2c158080bcaaf3aa67fc9dd1448a23241d89e41d737',
               exitCode: 15,
               // finishedAt: '2022-08-18T19:00:57+00:00',
-              message:
-                `-packages/kale/kfserving/__main__.py", line 45, in <module>\n    
+              message: `-packages/kale/kfserving/__main__.py", line 45, in <module>\n    
                 predictor_host=args.predictor_host)\n  
                 File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", line 39, in __init__\n    
                 self._load_transformer_assets()\n  File "/usr/local/lib/python3.6/dist-packages/kale/kfserving/transformer.py", 
@@ -1779,8 +1768,7 @@ export const mockPods: V1Pod[] = [
             'docker://68168aee29daa873b51c6c543474ad6de5971cc55f4e2f980e9e679bf6a0b7b6',
           image:
             'sha256:7b084b4174cb572be1e28313a17f5d65e3d776070e296a9f1b209da8e98d1bd8',
-          imageID:
-            `docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@
+          imageID: `docker-pullable://gcr.io/knative-releases/knative.dev/serving/cmd/queue@
             sha256:0b8e031170354950f3395876961452af1c62f7ab5161c9e71867392c11881962`,
           lastState: {
             terminated: {
@@ -1810,8 +1798,7 @@ export const mockPods: V1Pod[] = [
             'docker://3fb58c12f7e0687b060fa3d29fdba89567c445fd891f7dcdf3eba2b704918938',
           image:
             'sha256:5d794711f8601a29ee4095c2cff8f14e69aced79a400008fa9c252fc43d22d24',
-          imageID:
-            `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
+          imageID: `docker-pullable://gcr.io/arrikto-public/startup-lock-init@
             sha256:0fbe996a2f6b380d7c566ba16255ec034faec983c2661da778fe09b3e744ad21`,
           lastState: {},
           name: 'startup-lock-init-container',

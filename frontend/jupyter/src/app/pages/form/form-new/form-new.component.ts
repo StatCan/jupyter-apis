@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  AfterContentChecked,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
@@ -13,7 +19,9 @@ import { V1Namespace } from '@kubernetes/client-node';
   templateUrl: './form-new.component.html',
   styleUrls: ['./form-new.component.scss'],
 })
-export class FormNewComponent implements OnInit, OnDestroy, AfterContentChecked {
+export class FormNewComponent
+  implements OnInit, OnDestroy, AfterContentChecked
+{
   currNamespace = '';
   formCtrl: FormGroup;
   config: Config;

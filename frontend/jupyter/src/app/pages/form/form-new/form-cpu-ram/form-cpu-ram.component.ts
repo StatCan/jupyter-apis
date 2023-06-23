@@ -144,7 +144,9 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     let e: any;
     const errs = this.parentForm.get(key).errors || {};
 
-    if (errs.required || errs.pattern) {return $localize`Specify number of CPUs`;}
+    if (errs.required || errs.pattern) {
+      return $localize`Specify number of CPUs`;
+    }
 
     if ((e = errs.min)) {
       return $localize`Specify at least ${e.min} CPUs`;
@@ -163,8 +165,9 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     let e: any;
     const errs = this.parentForm.get(key).errors || {};
 
-    if (errs.required || errs.pattern)
-      {return $localize`Specify amount of memory (e.g. 2Gi)`;}
+    if (errs.required || errs.pattern) {
+      return $localize`Specify amount of memory (e.g. 2Gi)`;
+    }
 
     if ((e = errs.min)) {
       return $localize`Specify at least ${e.min}Gi of memory`;

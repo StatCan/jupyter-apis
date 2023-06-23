@@ -128,7 +128,8 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
       return $localize`Name is required`;
     }
     if (volumeName.hasError('pattern')) {
-      return $localize`The volume name can only contain lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character`;
+      return $localize`The volume name can only contain lowercase alphanumeric characters,
+       '-' or '.', and must start and end with an alphanumeric character`;
     }
     if (volumeName.hasError('isMounted')) {
       return $localize`Already mounted`;

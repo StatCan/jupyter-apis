@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { V1Namespace } from '@kubernetes/client-node';
   templateUrl: './form-new.component.html',
   styleUrls: ['./form-new.component.scss'],
 })
-export class FormNewComponent implements OnInit, OnDestroy {
+export class FormNewComponent implements OnInit, OnDestroy, AfterContentChecked {
   currNamespace = '';
   formCtrl: FormGroup;
   config: Config;
@@ -204,7 +204,7 @@ export class FormNewComponent implements OnInit, OnDestroy {
 
   // Automatically set values of CPU and Memory if GPU is 1
   checkGPU(gpu: string) {
-    if (gpu == 'none') {
+    if (gpu === 'none') {
       this.readonlySpecs = false;
       this.formCtrl.get('cpu').setValue(this.config?.cpu?.value);
       this.formCtrl.get('memory').setValue(this.config?.memory?.value);

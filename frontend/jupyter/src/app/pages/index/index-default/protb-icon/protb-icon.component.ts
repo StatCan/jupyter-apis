@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TableColumnComponent } from 'kubeflow/lib/resource-table/component-value/component-value.component';
 
 @Component({
-  selector: 'protb-icon',
+  selector: 'app-protb-icon',
   templateUrl: './protb-icon.component.html',
   styleUrls: ['./protb-icon.component.scss'],
 })

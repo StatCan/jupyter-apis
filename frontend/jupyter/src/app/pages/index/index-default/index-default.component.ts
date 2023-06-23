@@ -193,7 +193,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         this.startStopClicked(a.data);
         break;
       case 'name:link':
-        if (a.data.status.phase == STATUS_TYPE.TERMINATING) {
+        if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
           a.event.preventDefault();
           this.snackBar.open(

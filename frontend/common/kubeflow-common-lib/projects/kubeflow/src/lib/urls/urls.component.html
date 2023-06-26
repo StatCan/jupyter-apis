@@ -1,7 +1,7 @@
 <a
-  [href]="url.url"
   *ngFor="let url of urlList; trackBy: urlTrackByFn"
   class="lib-link"
+  [routerLink]="url.url"
 >
   {{ url.name }}
 </a>

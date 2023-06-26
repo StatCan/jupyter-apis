@@ -70,7 +70,7 @@ npm link ./dist/kubeflow
 
 cd ../../jupyter
 npm i
-npm link kubeflow --legacy-peer-deps
+npm link kubeflow
 KF_USER_ID=user npm start
 ```
 

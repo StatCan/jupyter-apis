@@ -1,6 +1,6 @@
 module github.com/StatCan/jupyter-apis
 
-go 1.18
+go 1.20
 
 require (
 	github.com/StatCan/kubeflow-apis v0.0.0-20230609114333-af080f42f387

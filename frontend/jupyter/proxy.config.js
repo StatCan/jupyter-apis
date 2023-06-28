@@ -1,3 +1,4 @@
+//AAW: JS file to replace src/proxy.conf.json
 const PROXY_CONFIG = {
   '/api/*': {
     target: 'http://localhost:5000',
@@ -11,6 +12,11 @@ const PROXY_CONFIG = {
       }
     },
   },
+  "/static": {
+    target: "http://localhost:4200",
+    pathRewrite: { "^/static": "" },
+    secure: false
+  }
 };
 
 module.exports = PROXY_CONFIG;

@@ -1,5 +1,5 @@
 # Stage 0: UI Build Stage
-FROM node:12-alpine as frontend
+FROM node:16-alpine as frontend
 WORKDIR /src
 ENV NG_CLI_ANALYTICS "ci"
 RUN apk add --no-cache --virtual .gyp python3 make g++
@@ -22,7 +22,7 @@ RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
 RUN ./node_modules/.bin/ng build --configuration production --localize
 
 # Stage 1: Build with the golang image
-FROM golang:1.17-alpine AS backend
+FROM golang:1.20-alpine AS backend
 RUN apk add git
 WORKDIR /go/src/github.com/StatCan/jupyter-apis
 COPY go.mod .

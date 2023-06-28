@@ -5,61 +5,41 @@ import {
   ActionIconValue,
   ActionButtonValue,
   MenuValue,
-  DialogConfig,
   ComponentValue,
   TableConfig,
-  TABLE_THEME,
   DateTimeValue,
+  LinkValue,
+  LinkType,
+  TableColumn,
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
+import { quantityToScalar } from '@kubernetes/client-node/dist/util';
 import { ProtBComponent } from './protb-icon/protb-icon.component';
-
-// --- Configs for the Confirm Dialogs ---
-export function getDeleteDialogConfig(name: string): DialogConfig {
-  return {
-    title: $localize`Are you sure you want to delete this notebook server? ${name}`,
-    message: $localize`Warning: Your data might be lost if the notebook server
-                       is not backed by persistent storage`,
-    accept: $localize`DELETE`,
-    confirmColor: 'warn',
-    cancel: $localize`CANCEL`,
-    error: '',
-    applying: $localize`DELETING`,
-    width: '600px',
-  };
-}
-
-export function getStopDialogConfig(name: string): DialogConfig {
-  return {
-    title: $localize`Are you sure you want to stop this notebook server? ${name}`,
-    message: $localize`Warning: Your data might be lost if the notebook server
-                       is not backed by persistent storage.`,
-    accept: $localize`STOP`,
-    confirmColor: 'primary',
-    cancel: $localize`CANCEL`,
-    error: '',
-    applying: $localize`STOPPING`,
-    width: '600px',
-  };
-}
+import { tableConfig } from '../config';
+import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 
 // --- Config for the Resource Table ---
 export const defaultConfig: TableConfig = {
+  id: 'notebooks-table',
+  dynamicNamespaceColumn: true,
   columns: [
     {
       matHeaderCellDef: $localize`Status`,
       matColumnDef: 'status',
       value: new StatusValue(),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`Name`,
       matColumnDef: 'name',
       style: { width: '25%' },
-      value: new PropertyValue({
-        field: 'name',
-        tooltipField: 'name',
+      value: new LinkValue({
+        field: 'link',
+        popoverField: 'name',
         truncate: true,
+        linkType: LinkType.Internal,
       }),
+      sort: true,
     },
     {
       matHeaderCellDef: '',
@@ -67,6 +47,7 @@ export const defaultConfig: TableConfig = {
       value: new ComponentValue({
         component: ProtBComponent,
       }),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`Type`,
@@ -74,18 +55,34 @@ export const defaultConfig: TableConfig = {
       value: new ComponentValue({
         component: ServerTypeComponent,
       }),
+      sort: true,
+      sortingPreprocessorFn: element => element.serverType,
+      filteringPreprocessorFn: element => {
+        if (element.serverType === 'group-one') {
+          return 'rstudio';
+        } else if (element.serverType === 'group-two') {
+          return 'ubuntu';
+        } else if (element.serverType === 'group-three') {
+          return 'sas';
+        } else {
+          return 'jupyterlab';
+        }
+      },
     },
     {
-      matHeaderCellDef: $localize`Age`,
+      matHeaderCellDef: $localize`Created at`,
       matColumnDef: 'age',
       style: { width: '12%' },
       textAlignment: 'right',
-      value: new PropertyValue({ field: 'age', truncate: true }),
+      value: new DateTimeValue({ field: 'age' }),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`Last activity`,
       matColumnDef: 'last_activity',
+      textAlignment: 'right',
       value: new DateTimeValue({ field: 'last_activity' }),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`Image`,
@@ -97,6 +94,7 @@ export const defaultConfig: TableConfig = {
         truncate: true,
         style: { maxWidth: '300px' },
       }),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`GPUs`,
@@ -107,6 +105,7 @@ export const defaultConfig: TableConfig = {
         field: 'gpus.count',
         tooltipField: 'gpus.message',
       }),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`CPUs`,
@@ -114,6 +113,8 @@ export const defaultConfig: TableConfig = {
       style: { width: '8%' },
       textAlignment: 'right',
       value: new PropertyValue({ field: 'cpu' }),
+      sort: true,
+      sortingPreprocessorFn: quantityToScalar,
     },
     {
       matHeaderCellDef: $localize`Memory`,
@@ -121,11 +122,8 @@ export const defaultConfig: TableConfig = {
       style: { width: '8%' },
       textAlignment: 'right',
       value: new PropertyValue({ field: 'memory' }),
-    },
-    {
-      matHeaderCellDef: $localize`Volumes`,
-      matColumnDef: 'volumes',
-      value: new MenuValue({ field: 'volumes', itemsIcon: 'storage' }),
+      sort: true,
+      sortingPreprocessorFn: quantityToScalar,
     },
 
     {
@@ -160,71 +158,26 @@ export const defaultConfig: TableConfig = {
   ],
 };
 
-export const defaultVolumeConfig = {
-  columns: [
-    {
-      matHeaderCellDef: $localize`Status`,
-      matColumnDef: 'status',
-      value: new StatusValue(),
-    },
-    {
-      matHeaderCellDef: $localize`Name`,
-      matColumnDef: 'name',
-      style: { width: '25%' },
-      value: new PropertyValue({
-        field: 'name',
-        tooltipField: 'name',
-        truncate: true,
-      }),
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'prot-b',
-      value: new ComponentValue({
-        component: ProtBComponent,
-      }),
-    },
-    {
-      matHeaderCellDef: $localize`Size`,
-      matColumnDef: 'size',
-      value: new PropertyValue({ field: 'size' }),
-    },
-    {
-      matHeaderCellDef: $localize`Used By`,
-      matColumnDef: 'usedBy',
-      value: new PropertyValue({ field: 'usedBy' }),
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'actions',
-      value: new ActionListValue([
-        new ActionIconValue({
-          name: 'delete',
-          tooltip: $localize`Delete Volume`,
-          color: 'warn',
-          field: 'deleteAction',
-          iconReady: 'material:delete',
-        }),
-      ]),
-  },
-  ],
+const customDeleteCol: TableColumn = {
+  matHeaderCellDef: '',
+  matColumnDef: 'customDelete',
+  style: { width: '40px' },
+  value: new ComponentValue({
+    component: DeleteButtonComponent,
+  }),
 };
 
-export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
-  return { // TODO key + param
-    title: $localize`Delete Volume '${name}'`,
-    message: $localize`Warning: All data in this volume will be lost.`,
-    accept: $localize`DELETE`,
-    confirmColor: 'warn',
-    cancel: $localize`CANCEL`,
-    error: '',
-    applying: $localize`DELETING`,
-    width: '600px',
-  };
-}
+export const defaultVolumeConfig: TableConfig = {
+  id: 'volumes-table',
+  title: tableConfig.title,
+  dynamicNamespaceColumn: true,
+  newButtonText: tableConfig.newButtonText,
+  columns: tableConfig.columns.concat(customDeleteCol),
+};
 
 // --- Config for the Cost Table ---
 export const defaultCostConfig = {
+  id: 'kubecost-table',
   columns: [
     {
       matHeaderCellDef: $localize`CPUs`,

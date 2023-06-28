@@ -7,6 +7,7 @@ import { TemplateValue } from './template';
 import { ChipsListValue } from './chip-list';
 import { ComponentValue } from './component-value';
 import { MenuValue } from './menu-value';
+import { LinkValue } from './link-value';
 
 export type TextAlignment = 'left' | 'right';
 
@@ -22,17 +23,25 @@ export interface TableColumn {
     | MenuValue
     | ChipsListValue
     | ComponentValue
-    | TemplateValue;
+    | TemplateValue
+    | LinkValue;
   textAlignment?: TextAlignment;
   style?: { [prop: string]: string };
+  sort?: boolean;
+  sortingPreprocessorFn?: (prop: any) => any;
+  filteringPreprocessorFn?: (prop: any) => any;
 }
 
 export interface TableConfig {
   columns: TableColumn[];
+  id?: string; //AAW value to aid with testing
   title?: string;
   newButtonText?: string;
   width?: string;
   theme?: TABLE_THEME;
+  dynamicNamespaceColumn?: boolean;
+  sortByColumn?: string;
+  sortDirection?: 'asc' | 'desc';
 }
 
 export enum TABLE_THEME {
@@ -44,9 +53,11 @@ export enum TABLE_THEME {
 export class ActionEvent {
   action: string;
   data: any;
+  event?: Event;
 
-  constructor(action, data) {
+  constructor(action, data, event = null) {
     this.action = action;
     this.data = data;
+    this.event = event;
   }
 }

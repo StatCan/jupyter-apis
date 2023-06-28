@@ -39,6 +39,10 @@ func (s *server) setupListers(ctx context.Context) error {
 	notebooksInformer := kubeflowFactory.Kubeflow().V1().Notebooks()
 	s.listers.notebooks = notebooksInformer.Lister()
 
+	// Pods
+	podsInformer := factory.Core().V1().Pods()
+	s.listers.pods = podsInformer.Lister()
+
 	go factory.Start(ctx.Done())
 	go kubeflowFactory.Start(ctx.Done())
 

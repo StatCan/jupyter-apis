@@ -14,4 +14,6 @@ export const environment = {
 
   // Rok
   rokUrl: '',
+  //AAW: from upstream volumes crud-web-app
+  viewerUrl: '',
 };

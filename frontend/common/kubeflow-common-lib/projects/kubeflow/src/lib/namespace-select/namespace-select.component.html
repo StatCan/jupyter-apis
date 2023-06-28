@@ -3,8 +3,8 @@
   <mat-form-field>
     <mat-label i18n>Select Namespace</mat-label>
     <mat-select
-      [(ngModel)]="currNamespace"
       name="namespacesSelect"
+      [value]="currNamespace"
       (selectionChange)="namespaceChanged($event.value)"
       data-cy-namespace-selector-dropdown
     >

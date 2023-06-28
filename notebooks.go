@@ -1,11 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"regexp"
@@ -14,13 +15,13 @@ import (
 	"time"
 
 	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
-	"github.com/andanhm/go-prettytime"
 	"github.com/gorilla/mux"
 	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/selection"
 )
 
 // DefaultServiceAccountName String.
@@ -112,7 +113,7 @@ type gpuresponse struct {
 }
 
 type notebookresponse struct {
-	Age        string            `json:"age"`
+	Age        time.Time         `json:"age"`
 	CPU        *inf.Dec          `json:"cpu"`
 	GPUs       gpuresponse       `json:"gpu"`
 	Image      string            `json:"image"`
@@ -124,11 +125,33 @@ type notebookresponse struct {
 	Status     status            `json:"status"`
 	Volumes    []string          `json:"volumes"`
 	Labels     map[string]string `json:"labels"`
+	Metadata   metav1.ObjectMeta `json:"metadata"`
 }
 
 type notebooksresponse struct {
 	APIResponseBase
 	Notebooks []notebookresponse `json:"notebooks"`
+}
+
+type getnotebookresponse struct {
+	APIResponseBase
+	Notebook kubeflowv1.Notebook `json:"notebook"`
+}
+
+type podresponse struct {
+	APIResponseBase
+	Pod corev1.Pod `json:"pod,omitempty"`
+	Log string     `json:"log,omitempty"`
+}
+
+type podlogsresponse struct {
+	APIResponseBase
+	Logs []string `json:"logs"`
+}
+
+type notebookeventsresponse struct {
+	APIResponseBase
+	Events []corev1.Event `json:"events"`
 }
 
 type updatenotebookrequest struct {
@@ -314,7 +337,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		resp.Notebooks = append(resp.Notebooks, notebookresponse{
-			Age:        prettytime.Format(notebook.CreationTimestamp.Time),
+			Age:        notebook.CreationTimestamp.Time,
 			Name:       notebook.Name,
 			Namespace:  notebook.Namespace,
 			Image:      notebook.Spec.Template.Spec.Containers[0].Image,
@@ -326,6 +349,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 			Status:     status,
 			Volumes:    volumes,
 			Labels:     notebook.Labels,
+			Metadata:   notebook.ObjectMeta,
 		})
 	}
 
@@ -422,7 +446,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	namespace := vars["namespace"]
 
 	// Read the incoming notebook
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -737,10 +761,10 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	namespaceName := vars["namespace"]
 	notebookName := vars["notebook"]
 
-	log.Printf("deleting notebook %q for %q", notebookName, namespaceName)
+	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
 
 	// Read the incoming notebook
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -793,4 +817,131 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 		Success: true,
 		Status:  http.StatusOK,
 	})
+}
+
+func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	notebook := vars["notebook"]
+
+	log.Printf("getting notebook %q for %q", notebook, namespace)
+
+	// Read existing notebook
+	nb, err := s.listers.notebooks.Notebooks(namespace).Get(notebook)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := &getnotebookresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Notebook: *nb,
+	}
+
+	s.respond(w, r, resp)
+}
+
+func (s *server) GetNotebookPod(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	notebook := vars["notebook"]
+
+	log.Printf("getting pod from notebook %q for %q", notebook, namespace)
+
+	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{notebook})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
+	pods, err := s.listers.pods.Pods(namespace).List(labelSelector)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	if len(pods) != 0 {
+		pod := pods[0]
+		resp := &podresponse{
+			APIResponseBase: APIResponseBase{
+				Success: true,
+				Status:  http.StatusOK,
+			},
+			Pod: *pod,
+		}
+		s.respond(w, r, resp)
+	} else {
+		resp := &podresponse{
+			APIResponseBase: APIResponseBase{
+				Success: true,
+				Status:  http.StatusNotFound,
+			},
+			Log: "No pod detected.",
+		}
+		s.respond(w, r, resp)
+	}
+}
+
+func (s *server) GetNotebookPodLogs(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	notebook := vars["notebook"]
+	pod := vars["pod"]
+
+	log.Printf("getting logs from pod %q in %q in %q", pod, notebook, namespace)
+	podLogsOpts := corev1.PodLogOptions{
+		Container: notebook,
+	}
+	podLogsRequest := s.clientsets.kubernetes.CoreV1().Pods(namespace).GetLogs(pod, &podLogsOpts)
+	//context.TODO() is used because it is unclear which context to use
+	podLogs, err := podLogsRequest.Stream(context.TODO())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer podLogs.Close()
+
+	buffer := new(bytes.Buffer)
+	_, err = io.Copy(buffer, podLogs)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := &podlogsresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Logs: strings.Split(buffer.String(), "\n"),
+	}
+	s.respond(w, r, resp)
+}
+
+func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	notebook := vars["notebook"]
+
+	log.Printf("getting events in %q in %q", notebook, namespace)
+
+	eventOpts := metav1.ListOptions{
+		FieldSelector: "involvedObject.kind=Notebook,involvedObject.name=" + notebook,
+	}
+	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
+	if err != nil {
+		log.Printf("failed to load events for %s/%s: %v", namespace, notebook, err)
+	}
+
+	resp := &notebookeventsresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Events: events.Items,
+	}
+	s.respond(w, r, resp)
 }

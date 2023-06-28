@@ -167,14 +167,15 @@ export class PopoverDirective implements OnDestroy {
   }
 
   getPositionStrategy(): FlexibleConnectedPositionStrategy {
-    let originPos: OriginPosition;
-    let overlayPos: OverlayPosition;
-    originPos = this.getOriginPos(this.libPopoverPosition);
-    overlayPos = this.getOverlayPos(this.libPopoverPosition);
-
-    const scrollableAncestors = this.scrollDispatcher.getAncestorScrollContainers(
-      this.elemRef,
+    const originPos: OriginPosition = this.getOriginPos(
+      this.libPopoverPosition,
     );
+    const overlayPos: OverlayPosition = this.getOverlayPos(
+      this.libPopoverPosition,
+    );
+
+    const scrollableAncestors =
+      this.scrollDispatcher.getAncestorScrollContainers(this.elemRef);
     return this.overlay
       .position()
       .flexibleConnectedTo(this.elemRef)

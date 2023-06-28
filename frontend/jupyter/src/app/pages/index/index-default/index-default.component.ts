@@ -6,32 +6,37 @@ import {
   ActionEvent,
   STATUS_TYPE,
   Status,
-  DialogConfig,
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
   SnackType,
   ToolbarButton,
+  PollerService,
+  DashboardState,
 } from 'kubeflow';
+import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { KubecostService, AllocationCostResponse } from 'src/app/services/kubecost.service';
+import {
+  KubecostService,
+  AllocationCostResponse,
+} from 'src/app/services/kubecost.service';
 import { Subscription } from 'rxjs';
 import {
   defaultConfig,
   defaultVolumeConfig,
   defaultCostConfig,
-  getDeleteDialogConfig,
-  getStopDialogConfig,
-  getDeleteVolumeDialogConfig,
 } from './config';
 import { isEqual } from 'lodash';
-import { NotebookResponseObject, 
-  NotebookProcessedObject, 
-  VolumeResponseObject, 
-  VolumeProcessedObject,
+import {
+  NotebookResponseObject,
+  NotebookProcessedObject,
+  PVCResponseObject,
+  PVCProcessedObject,
   AllocationCostObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
+import { ActionsService } from 'src/app/services/actions.service';
+import { VolumeFormComponent } from '../../volume-form/volume-form.component';
 
 @Component({
   selector: 'app-index-default',
@@ -40,38 +45,48 @@ import { Router } from '@angular/router';
 })
 export class IndexDefaultComponent implements OnInit, OnDestroy {
   env = environment;
-  poller: ExponentialBackoff;
 
-  currNamespace = '';
-  subs = new Subscription();
-
+  nsSub = new Subscription();
+  pollSub = new Subscription();
+  // AAW: currNamespace is only a string, not a "string | string[]"
+  currNamespace: string;
   config = defaultConfig;
-  rawData: NotebookResponseObject[] = [];
   processedData: NotebookProcessedObject[] = [];
+  dashboardDisconnectedState = DashboardState.Disconnected;
 
-  volumeConfig= defaultVolumeConfig;
-  rawVolumeData: VolumeResponseObject[] = [];
-  processedVolumeData: VolumeProcessedObject[] = [];
+  volPollSub = new Subscription();
+  volumeConfig = defaultVolumeConfig;
+  processedVolumeData: PVCProcessedObject[] = [];
+  public pvcsWaitingViewer = new Set<string>();
 
   costConfig = defaultCostConfig;
   rawCostData: AllocationCostResponse = null;
   processedCostData: AllocationCostObject[] = [];
-  costWindow = "today";
+  costWindow = 'today';
   kubecostPoller: ExponentialBackoff;
   kubecostSubs = new Subscription();
 
   kubecostLoading = false;
 
-  buttons: ToolbarButton[] = [
-    new ToolbarButton({
-      text: $localize`New Notebook`,
-      icon: 'add',
-      stroked: true,
-      fn: () => {
-        this.router.navigate(['/new']);
-      },
-    }),
-  ];
+  private newNotebookButton = new ToolbarButton({
+    text: $localize`New Notebook`,
+    icon: 'add',
+    stroked: true,
+    fn: () => {
+      this.router.navigate(['/new']);
+    },
+  });
+  /*AAW: Hiding the new volume form
+  private newVolumeButton = new ToolbarButton({
+    text: $localize`New Volume`,
+    icon: 'add',
+    stroked: true,
+    fn: () => {
+      this.newResourceClicked();
+    },
+  });
+  */
+  buttons: ToolbarButton[] = [this.newNotebookButton];
 
   constructor(
     public ns: NamespaceService,
@@ -79,49 +94,31 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public confirmDialog: ConfirmDialogService,
     public snackBar: SnackBarService,
     public router: Router,
-    private kubecostService: KubecostService,
+    public kubecostService: KubecostService,
+    public poller: PollerService,
+    public actions: ActionsService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
-    this.poller = new ExponentialBackoff({ interval: 1000, retries: 3 });
-    this.kubecostPoller = new ExponentialBackoff({ interval: 30000, retries: 1 });//30 second intervals
-
-    // Poll for new data and reset the poller if different data is found
-    this.subs.add(
-      this.poller.start().subscribe(() => {
-        if (!this.currNamespace) {
-          return;
-        }
-
-        Promise.all([
-          this.backend.getNotebooks(this.currNamespace).toPromise(),
-          this.backend.getPVCs(this.currNamespace).toPromise()
-        ]).then(([notebooks, pvcs]) => {
-          if(
-            !isEqual(notebooks, this.rawData) ||
-            !isEqual(pvcs, this.rawVolumeData)
-          ) {
-            this.poller.reset();
-          }
-
-          this.rawData = notebooks;
-          this.rawVolumeData = pvcs;
-
-          this.processedData = this.processIncomingData(notebooks);
-          this.processedVolumeData = this.parseIncomingData(pvcs, notebooks);
-        })
-
-      }),
-    );
+    this.kubecostPoller = new ExponentialBackoff({
+      interval: 30000,
+      retries: 1,
+    }); //30 second intervals
 
     // Reset the poller whenever the selected namespace changes
-    this.subs.add(
-      this.ns.getSelectedNamespace().subscribe(ns => {
-        this.currNamespace = ns;
-        this.poller.reset();
-        this.kubecostPoller.reset();
-      }),
-    );
+    //AAW: use getSelectedNamespace instead of getSelectedNamespace2 to only return a string
+    this.nsSub = this.ns.getSelectedNamespace().subscribe(ns => {
+      this.currNamespace = ns;
+      this.pvcsWaitingViewer = new Set<string>();
+      this.poll(ns);
+      this.volumePoll(ns);
+      this.newNotebookButton.namespaceChanged(ns, $localize`Notebook`);
+      //AAW: Hide this button
+      //this.newVolumeButton.namespaceChanged(ns, $localize`Volume`);
+
+      this.kubecostPoller.reset();
+    });
 
     // Poll for new kubecost data and reset the poller if different data is found
     this.kubecostSubs.add(
@@ -129,39 +126,65 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         if (!this.currNamespace) {
           return;
         }
-        
-        this.kubecostService.getAllocationCost(this.currNamespace, this.costWindow).subscribe(
-          aggCost => {
-            this.kubecostLoading = false;
-            if (!isEqual(this.rawCostData, aggCost)) {
-              this.rawCostData = aggCost;
-              
-              this.processedCostData = this.processIncomingCostData(aggCost);
+
+        this.kubecostService
+          .getAllocationCost(this.currNamespace, this.costWindow)
+          .subscribe(
+            aggCost => {
+              this.kubecostLoading = false;
+              if (!isEqual(this.rawCostData, aggCost)) {
+                this.rawCostData = aggCost;
+
+                this.processedCostData = this.processIncomingCostData(aggCost);
               }
             },
-          err => {
-            this.kubecostLoading = false;
-            if (!isEqual(this.rawCostData, err)) {
-              this.rawCostData = err;
-              this.kubecostPoller.reset();
-            }
-          });
+            err => {
+              this.kubecostLoading = false;
+              if (!isEqual(this.rawCostData, err)) {
+                this.rawCostData = err;
+                this.kubecostPoller.reset();
+              }
+            },
+          );
       }),
     );
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    this.nsSub.unsubscribe();
+    this.pollSub.unsubscribe();
+    this.volPollSub.unsubscribe();
     this.kubecostSubs.unsubscribe();
-    this.poller.stop();
     this.kubecostPoller.stop();
+  }
+
+  public poll(ns: string | string[]) {
+    this.pollSub.unsubscribe();
+    this.processedData = [];
+
+    const request = this.backend.getNotebooks(ns);
+
+    this.pollSub = this.poller.exponential(request).subscribe(notebooks => {
+      this.processedData = this.processIncomingData(notebooks);
+    });
+  }
+
+  public volumePoll(ns: string | string[]) {
+    this.volPollSub.unsubscribe();
+    this.processedVolumeData = [];
+
+    const request = this.backend.getPVCs(ns);
+
+    this.volPollSub = this.poller.exponential(request).subscribe(pvcs => {
+      this.processedVolumeData = this.parseIncomingData(pvcs);
+    });
   }
 
   // Event handling functions
   reactToAction(a: ActionEvent) {
     switch (a.action) {
       case 'delete':
-        this.deleteVolumeClicked(a.data);
+        this.deleteNotebookClicked(a.data);
         break;
       case 'connect':
         this.connectClicked(a.data);
@@ -169,35 +192,26 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       case 'start-stop':
         this.startStopClicked(a.data);
         break;
+      case 'name:link':
+        if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
+          a.event.stopPropagation();
+          a.event.preventDefault();
+          this.snackBar.open(
+            'Notebook is being deleted, cannot show details.',
+            SnackType.Info,
+            4000,
+          );
+          return;
+        }
+        break;
     }
   }
 
-  public deleteVolumeClicked(notebook: NotebookProcessedObject) {
-    const deleteDialogConfig = getDeleteDialogConfig(notebook.name);
-
-    const ref = this.confirmDialog.open(notebook.name, deleteDialogConfig);
-    const delSub = ref.componentInstance.applying$.subscribe(applying => {
-      if (!applying) {
-        return;
-      }
-
-      // Close the open dialog only if the DELETE request succeeded
-      this.backend.deleteNotebook(this.currNamespace, notebook.name).subscribe({
-        next: _ => {
-          this.poller.reset();
-          ref.close(DIALOG_RESP.ACCEPT);
-        },
-        error: err => {
-          const errorMsg = err;
-          deleteDialogConfig.error = errorMsg;
-          ref.componentInstance.applying$.next(false);
-        },
-      });
-
-      // DELETE request has succeeded
-      ref.afterClosed().subscribe(res => {
-        delSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
+  deleteNotebookClicked(notebook: NotebookProcessedObject) {
+    this.actions
+      .deleteNotebook(notebook.namespace, notebook.name)
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
           return;
         }
 
@@ -205,12 +219,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         notebook.status.message = 'Preparing to delete the Notebook...';
         this.updateNotebookFields(notebook);
       });
-    });
   }
 
   public connectClicked(notebook: NotebookProcessedObject) {
-    // Open new tab to work on the Notebook
-    window.open(`/notebook/${notebook.namespace}/${notebook.name}/`);
+    this.actions.connectToNotebook(notebook.namespace, notebook.name);
   }
 
   public startStopClicked(notebook: NotebookProcessedObject) {
@@ -222,81 +234,48 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {
-    this.snackBar.open(
-      $localize`Starting Notebook server '${notebook.name}'...`,
-      SnackType.Info,
-      3000,
-    );
-
-    notebook.status.phase = STATUS_TYPE.WAITING;
-    notebook.status.message = 'Starting the Notebook Server...';
-    this.updateNotebookFields(notebook);
-
-    this.backend.startNotebook(notebook).subscribe(() => {
-      this.poller.reset();
-    });
+    this.actions
+      .startNotebook(notebook.namespace, notebook.name)
+      .subscribe(_ => {
+        notebook.status.phase = STATUS_TYPE.WAITING;
+        notebook.status.message = 'Starting the Notebook Server...';
+        this.updateNotebookFields(notebook);
+      });
   }
 
   public stopNotebook(notebook: NotebookProcessedObject) {
-    const stopDialogConfig = getStopDialogConfig(notebook.name);
-    const ref = this.confirmDialog.open(notebook.name, stopDialogConfig);
-    const stopSub = ref.componentInstance.applying$.subscribe(applying => {
-      if (!applying) {
-        return;
-      }
-
-      // Close the open dialog only if the request succeeded
-      this.backend.stopNotebook(notebook).subscribe({
-        next: _ => {
-          this.poller.reset();
-          ref.close(DIALOG_RESP.ACCEPT);
-        },
-        error: err => {
-          const errorMsg = err;
-          stopDialogConfig.error = errorMsg;
-          ref.componentInstance.applying$.next(false);
-        },
-      });
-
-      // request has succeeded
-      ref.afterClosed().subscribe(res => {
-        stopSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
+    this.actions
+      .stopNotebook(notebook.namespace, notebook.name)
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
           return;
         }
-
-        this.snackBar.open(
-          $localize`Stopping Notebook server '${notebook.name}'...`,
-          SnackType.Info,
-          3000,
-        );
 
         notebook.status.phase = STATUS_TYPE.TERMINATING;
         notebook.status.message = $localize`Preparing to stop the Notebook Server...`;
         this.updateNotebookFields(notebook);
       });
-    });
   }
 
   //gets internationalized status messageks based on status key message values from backend
   getStatusMessage(notebook: NotebookProcessedObject) {
-    switch(notebook.status.key){
-      case "notebookDeleting":
+    switch (notebook.status.key) {
+      case 'notebookDeleting':
         return $localize`Deleting this notebook server`;
-      case "noPodsRunning":
+      case 'noPodsRunning':
         return $localize`No Pods are currently running for this Notebook Server`;
-      case "notebookStopping":
+      case 'notebookStopping':
         return $localize`Notebook Server is stopping`;
-      case "running":
+      case 'running':
         return $localize`Running`;
-      case "waitingStatus":
+      case 'waitingStatus':
         return $localize`Current status is waiting. Check 'kubectl describe pod' for more information`;
-      case "errorEvent":
+      case 'errorEvent':
         return $localize`An error has occured. Check 'kubectl describe pod' for more information`;
-      case "schedulingPod":
+      case 'schedulingPod':
         return $localize`Scheduling the Pod`;
       default:
-        return "";
+        return '';
     }
   }
 
@@ -306,6 +285,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     notebook.connectAction = this.processConnectActionStatus(notebook);
     notebook.startStopAction = this.processStartStopActionStatus(notebook);
     notebook.status.message = this.getStatusMessage(notebook);
+    notebook.link = {
+      text: notebook.name,
+      url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
+    };
   }
 
   processIncomingData(notebooks: NotebookResponseObject[]) {
@@ -321,7 +304,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   parseProtBNotebook(notebook: NotebookProcessedObject) {
-    if(notebook.labels?.["notebook.statcan.gc.ca/protected-b"] === "true") {
+    if (notebook.labels?.['notebook.statcan.gc.ca/protected-b'] === 'true') {
       return true;
     }
     return false;
@@ -368,20 +351,21 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${notebook.name}/${notebook.image}`;
   }
 
-  public pvcTrackByFn(index: number, pvc: VolumeProcessedObject) {
-    return `${pvc.name}/${pvc.namespace}/${pvc.size}`;
+  private updateButtons(): void {
+    this.buttons = [this.newNotebookButton];
   }
 
-  public parseIncomingData(pvcs: VolumeResponseObject[], notebooks: NotebookResponseObject[]) {
-    let pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as VolumeProcessedObject[];
-    //Check which notebooks are mounted
-    let mounts = Object.fromEntries(
-      notebooks.flatMap(nb => nb.volumes.map(v => [v,nb]))
-    );
+  public pvcTrackByFn(index: number, pvc: PVCProcessedObject) {
+    return `${pvc.name}/${pvc.namespace}/${pvc.capacity}`;
+  }
 
+  public parseIncomingData(pvcs: PVCResponseObject[]): PVCProcessedObject[] {
+    const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
+
+    //AAW: overwrite status field with our custom values
     pvcsCopy.forEach(element => {
-      if(mounts[element.name]){
-        element.usedBy = mounts[element.name].name;
+      if (element.notebooks.length) {
+        element.usedBy = element.notebooks[0];
         element.status = {} as Status;
         element.status.message = $localize`Attached`;
         element.status.phase = STATUS_TYPE.MOUNTED;
@@ -395,6 +379,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
       pvc.protB = this.parseProtBVolume(pvc);
+      pvc.ageValue = pvc.age.uptime;
+      pvc.ageTooltip = pvc.age.timestamp;
+      pvc.link = {
+        text: pvc.name,
+        url: `/volume/details/${pvc.namespace}/${pvc.name}`,
+      };
     }
 
     return pvcsCopy;
@@ -402,16 +392,24 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   // Status Terminating allows action to be enabled.
   // If there is a pvc in use, we want to block actions
-  public parseDeletionActionStatus(pvc: VolumeProcessedObject) {
-    if(pvc.usedBy != null) {
-      return STATUS_TYPE.TERMINATING
+  public parseDeletionActionStatus(pvc: PVCProcessedObject) {
+    if (pvc.usedBy != null) {
+      return STATUS_TYPE.TERMINATING;
     }
-    return STATUS_TYPE.READY;
 
+    if (pvc.notebooks.length) {
+      return STATUS_TYPE.UNAVAILABLE;
+    }
+
+    if (pvc.status.phase !== STATUS_TYPE.TERMINATING) {
+      return STATUS_TYPE.READY;
+    }
+
+    return STATUS_TYPE.TERMINATING;
   }
 
-  parseProtBVolume(pvc: VolumeProcessedObject) {
-    if(pvc.labels?.["data.statcan.gc.ca/classification"] === "protected-b") {
+  parseProtBVolume(pvc: PVCProcessedObject) {
+    if (pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b') {
       return true;
     }
     return false;
@@ -420,46 +418,52 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   public reactVolumeToAction(a: ActionEvent) {
     switch (a.action) {
       case 'delete':
-        this.deletePVCClicked(a.data);
+        this.deleteVolumeClicked(a.data);
+        break;
+      case 'name:link':
+        if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
+          a.event.stopPropagation();
+          a.event.preventDefault();
+          this.snackBar.open(
+            'PVC is unavailable now.',
+            SnackType.Warning,
+            3000,
+          );
+          return;
+        }
         break;
     }
   }
 
-  public deletePVCClicked(pvc: VolumeProcessedObject) {
-    const deleteDialogConfig = getDeleteVolumeDialogConfig(pvc.name);
+  // Functions for handling the action events
+  public newResourceClicked() {
+    const ref = this.dialog.open(VolumeFormComponent, {
+      width: '600px',
+      panelClass: 'form--dialog-padding',
+    });
 
-    const ref = this.confirmDialog.open(pvc.name, deleteDialogConfig);
-    const delSub = ref.componentInstance.applying$.subscribe(applying => {
-      if (!applying) {
+    ref.afterClosed().subscribe(res => {
+      if (res === DIALOG_RESP.ACCEPT) {
+        this.snackBar.open(
+          $localize`Volume was submitted successfully.`,
+          SnackType.Success,
+          2000,
+        );
+        this.poll(this.currNamespace);
+      }
+    });
+  }
+
+  public deleteVolumeClicked(pvc: PVCProcessedObject) {
+    this.actions.deleteVolume(pvc.name, pvc.namespace).subscribe(result => {
+      if (result !== DIALOG_RESP.ACCEPT) {
         return;
       }
 
-      // Close the open dialog only if the DELETE request succeeded
-      this.backend.deletePVC(this.currNamespace, pvc.name).subscribe({
-        next: _ => {
-          this.poller.reset();
-          ref.close(DIALOG_RESP.ACCEPT);
-        },
-        error: err => {
-          // Simplify the error message
-          const errorMsg = err;
-          console.log(err);
-          deleteDialogConfig.error = errorMsg;
-          ref.componentInstance.applying$.next(false);
-        },
-      });
-
-      // DELETE request has succeeded
-      ref.afterClosed().subscribe(res => {
-        delSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
-          return;
-        }
-
-        pvc.status.phase = STATUS_TYPE.TERMINATING;
-        pvc.status.message = "Preparing to delete the Volume...";
-        pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
-      });
+      pvc.status.phase = STATUS_TYPE.TERMINATING;
+      pvc.status.message = 'Preparing to delete the Volume...';
+      pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
+      this.pvcsWaitingViewer.delete(pvc.name);
     });
   }
 
@@ -486,17 +490,15 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   public processIncomingCostData(cost: AllocationCostResponse) {
-    const resp = JSON.parse(
-      JSON.stringify(cost),
-    ) as AllocationCostResponse;
+    const resp = JSON.parse(JSON.stringify(cost)) as AllocationCostResponse;
 
-    let costCopy: AllocationCostObject = {
+    const costCopy: AllocationCostObject = {
       cpuCost: this.formatCost(0),
       gpuCost: this.formatCost(0),
       ramCost: this.formatCost(0),
       pvCost: this.formatCost(0),
       sharedCost: this.formatCost(0),
-      totalCost: this.formatCost(0)
+      totalCost: this.formatCost(0),
     };
 
     const alloc = resp.data.sets[0].allocations[this.currNamespace];
@@ -514,18 +516,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       //  +alloc.sharedCost
       //);
       costCopy.totalCost = this.formatCost(
-        alloc.cpuCost
-        +alloc.gpuCost
-        +alloc.ramCost
-        +alloc.pvCost
+        alloc.cpuCost + alloc.gpuCost + alloc.ramCost + alloc.pvCost,
       );
     }
-    
+
     return [costCopy];
   }
 
   public formatCost(value: number): string {
-    return "$" + value.toFixed(2)
+    return '$' + value.toFixed(2);
   }
-
 }

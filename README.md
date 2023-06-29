@@ -35,21 +35,21 @@ _Recommended_
 You can use the vscode debugger to run the backend, just copy the below contents to a file at path `.vscode/launch.json`.
 ```json
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug jupyter-api backend",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": ".",
-            "args": [
-                "-spawner-config",
-                "samples/spawner_ui_config.yaml",
-            ],
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Debug jupyter-api backend",
+          "type": "go",
+          "request": "launch",
+          "mode": "debug",
+          "program": ".",
+          "args": [
+              "-spawner-config",
+              "samples/spawner_ui_config.yaml",
+          ],
+          "envFile": "${workspaceFolder}/.env"
+      }
+  ]
 }
 ```
 

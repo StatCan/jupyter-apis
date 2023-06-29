@@ -45,6 +45,9 @@ const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 // AutoMountLabel is the label name to automount blob-csi volumes
 const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
+// LastActivityAnnotation is the annotation name for the last activity value.
+const LastActivityAnnotation = "notebooks.kubeflow.org/last-activity"
+
 // Begin structs necessary for handling volumes
 type volrequest struct {
 	Mount          string         `json:"mount,omitempty"`
@@ -113,19 +116,20 @@ type gpuresponse struct {
 }
 
 type notebookresponse struct {
-	Age        time.Time         `json:"age"`
-	CPU        *inf.Dec          `json:"cpu"`
-	GPUs       gpuresponse       `json:"gpu"`
-	Image      string            `json:"image"`
-	Memory     resource.Quantity `json:"memory"`
-	Name       string            `json:"name"`
-	ServerType interface{}       `json:"serverType"`
-	Namespace  string            `json:"namespace"`
-	ShortImage string            `json:"shortImage"`
-	Status     status            `json:"status"`
-	Volumes    []string          `json:"volumes"`
-	Labels     map[string]string `json:"labels"`
-	Metadata   metav1.ObjectMeta `json:"metadata"`
+	Age          string            `json:"age"`
+	CPU          *inf.Dec          `json:"cpu"`
+	GPUs         gpuresponse       `json:"gpu"`
+	Image        string            `json:"image"`
+	LastActivity string            `json:"lastActivity"`
+	Memory       resource.Quantity `json:"memory"`
+	Name         string            `json:"name"`
+	ServerType   interface{}       `json:"serverType"`
+	Namespace    string            `json:"namespace"`
+	ShortImage   string            `json:"shortImage"`
+	Status       status            `json:"status"`
+	Volumes      []string          `json:"volumes"`
+	Labels       map[string]string `json:"labels"`
+	Metadata     metav1.ObjectMeta `json:"metadata"`
 }
 
 type notebooksresponse struct {
@@ -337,19 +341,20 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		resp.Notebooks = append(resp.Notebooks, notebookresponse{
-			Age:        notebook.CreationTimestamp.Time,
-			Name:       notebook.Name,
-			Namespace:  notebook.Namespace,
-			Image:      notebook.Spec.Template.Spec.Containers[0].Image,
-			ServerType: notebook.Annotations[ServerTypeAnnotation],
-			ShortImage: imageparts[len(imageparts)-1],
-			CPU:        cpulimit,
-			GPUs:       s.processGPUs(notebook),
-			Memory:     notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
-			Status:     status,
-			Volumes:    volumes,
-			Labels:     notebook.Labels,
-			Metadata:   notebook.ObjectMeta,
+			Age:          notebook.CreationTimestamp.Time.String(),
+			Name:         notebook.Name,
+			Namespace:    notebook.Namespace,
+			Image:        notebook.Spec.Template.Spec.Containers[0].Image,
+			LastActivity: notebook.Annotations[LastActivityAnnotation],
+			ServerType:   notebook.Annotations[ServerTypeAnnotation],
+			ShortImage:   imageparts[len(imageparts)-1],
+			CPU:          cpulimit,
+			GPUs:         s.processGPUs(notebook),
+			Memory:       notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
+			Status:       status,
+			Volumes:      volumes,
+			Labels:       notebook.Labels,
+			Metadata:     notebook.ObjectMeta,
 		})
 	}
 

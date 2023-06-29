@@ -18,6 +18,7 @@ export interface NotebookResponseObject {
   status: Status;
   reason: string;
   age: string;
+  lastActivity: string;
   image: string;
   volumes: string[];
   cpu: string;

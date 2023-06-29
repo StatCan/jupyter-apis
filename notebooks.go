@@ -118,7 +118,7 @@ type gpuresponse struct {
 type notebookresponse struct {
 	Age          string            `json:"age"`
 	CPU          *inf.Dec          `json:"cpu"`
-	GPUs         gpuresponse       `json:"gpu"`
+	GPUs         gpuresponse       `json:"gpus"`
 	Image        string            `json:"image"`
 	LastActivity string            `json:"lastActivity"`
 	Memory       resource.Quantity `json:"memory"`

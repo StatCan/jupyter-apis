@@ -1,23 +1,37 @@
-# Stage 0: UI Build Stage
-FROM node:16-alpine as frontend
+# --- Build the frontend kubeflow library ---
+FROM node:16-buster-slim as frontend-kubeflow-lib
+
 WORKDIR /src
+
 ENV NG_CLI_ANALYTICS "ci"
-RUN apk add --no-cache --virtual .gyp python3 make g++
-COPY ./frontend/common/kubeflow-common-lib/package*.json ./
+COPY ./frontend/common/kubeflow-common-lib/package.json ./
+COPY ./frontend/common/kubeflow-common-lib/package-lock.json ./
 RUN npm ci
-COPY ./frontend/common/kubeflow-common-lib/ .
+
+COPY ./frontend/common/kubeflow-common-lib/projects ./projects
+COPY ./frontend/common/kubeflow-common-lib/angular.json .
+COPY ./frontend/common/kubeflow-common-lib/tsconfig.json .
 RUN npm run build
-COPY ./frontend/jupyter/package*.json ./
-COPY ./frontend/jupyter/tsconfig*.json ./
+
+# --- Build the frontend ---
+FROM node:16-buster-slim as frontend
+
+WORKDIR /src
+
+COPY ./frontend/jupyter/package.json ./
+COPY ./frontend/jupyter/package-lock.json ./
+COPY ./frontend/jupyter/tsconfig.json ./
+COPY ./frontend/jupyter/tsconfig.app.json ./
+COPY ./frontend/jupyter/tsconfig.spec.json ./
 COPY ./frontend/jupyter/angular.json ./
 COPY ./frontend/jupyter/src ./src
 COPY ./frontend/jupyter/i18n /src/i18n
 
+ENV NG_CLI_ANALYTICS "ci"
 RUN npm ci
+COPY --from=frontend-kubeflow-lib /src/dist/kubeflow/ ./node_modules/kubeflow/
 
-RUN cp -R /src/dist/kubeflow/ ./node_modules/kubeflow/
 RUN npm run build -- --output-path=./dist/default --configuration=production
-RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
 # Build both locales:
 RUN ./node_modules/.bin/ng build --configuration production --localize
 

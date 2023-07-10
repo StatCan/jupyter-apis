@@ -47,8 +47,7 @@ RUN CGO_ENABLED=0 go install .
 
 # Stage 2: Generate final image
 FROM alpine:3.16.2
-COPY --from=frontend /src/dist/frontend /src/dist/frontend 
-COPY --from=frontend /src/dist/default /src/dist/default
+COPY --from=frontend /src/dist/default /src/apps/default/static
 COPY --from=backend /go/bin/jupyter-apis /jupyter-apis
 ENV LISTEN_ADDRESS 0.0.0.0:5001
 EXPOSE 5001

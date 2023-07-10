@@ -22,7 +22,8 @@
     "ui-test-ci": "cypress run . --e2e",
     "ui-test-ci-all": "cypress run . --e2e --browser=chrome && cypress run . --e2e --browser=firefox",
     "lint-check": "ng lint",
-    "lint": "ng lint --fix"
+    "lint": "ng lint --fix",
+    "build:test": "ng build --configuration production --localize"
   },
   "private": true,
   "dependencies": {

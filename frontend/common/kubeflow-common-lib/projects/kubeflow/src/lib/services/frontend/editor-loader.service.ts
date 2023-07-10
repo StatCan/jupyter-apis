@@ -14,7 +14,7 @@ const monacoInitState = new BehaviorSubject<boolean>(false);
   providedIn: 'root',
 })
 export class EditorLoaderService {
-  readonly monacoPath = 'en/assets/monaco-editor/min/vs';
+  readonly monacoPath = 'assets/monaco-editor/min/vs';
 
   constructor() {
     this.loadMonaco();

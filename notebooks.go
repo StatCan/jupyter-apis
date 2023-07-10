@@ -116,7 +116,7 @@ type gpuresponse struct {
 }
 
 type notebookresponse struct {
-	Age          string            `json:"age"`
+	Age          time.Time         `json:"age"`
 	CPU          *inf.Dec          `json:"cpu"`
 	GPUs         gpuresponse       `json:"gpus"`
 	Image        string            `json:"image"`
@@ -341,7 +341,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		resp.Notebooks = append(resp.Notebooks, notebookresponse{
-			Age:          notebook.CreationTimestamp.Time.String(),
+			Age:          notebook.CreationTimestamp.Time,
 			Name:         notebook.Name,
 			Namespace:    notebook.Namespace,
 			Image:        notebook.Spec.Template.Spec.Containers[0].Image,

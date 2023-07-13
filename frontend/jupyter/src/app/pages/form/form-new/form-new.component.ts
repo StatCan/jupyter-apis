@@ -216,10 +216,14 @@ export class FormNewComponent
       this.readonlySpecs = false;
       this.formCtrl.get('cpu').setValue(this.config?.cpu?.value);
       this.formCtrl.get('memory').setValue(this.config?.memory?.value);
+      this.formCtrl.get('cpuLimit').setValue(this.config?.cpu?.limitValue);
+      this.formCtrl.get('memoryLimit').setValue(this.config?.memory?.limitValue);
     } else {
       this.readonlySpecs = true;
       this.formCtrl.get('cpu').setValue(this.config?.cpu?.gpuDefault);
       this.formCtrl.get('memory').setValue(this.config?.memory?.gpuDefault);
+      this.formCtrl.get('cpuLimit').setValue(this.config?.cpu?.gpuDefault);
+      this.formCtrl.get('memoryLimit').setValue(this.config?.memory?.gpuDefault);
     }
   }
 

@@ -85,8 +85,11 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
         this.limitValidator('memory'),
       ]);
     // end AAW validations
-
+    
     this.parentForm.get('cpu').valueChanges.subscribe(val => {
+      // AAW: to trigger validation
+      this.parentForm.get('cpuLimit').updateValueAndValidity();
+      /*
       // AAW
       if (this.cpuLimitFactor !== null) {
         this.parentForm
@@ -97,7 +100,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
             ).toFixed(1),
           );
       } // AAW end
-
+      
       // set cpu limit when value of the cpu request changes
       if (this.parentForm.get('cpuLimit').dirty) {
         return;
@@ -107,9 +110,13 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       this.parentForm
         .get('cpuLimit')
         .setValue(calculateLimits(cpu, this.cpuLimitFactor));
+      */
     });
-
+    
     this.parentForm.get('memory').valueChanges.subscribe(val => {
+      // AAw: to trigger validation
+      this.parentForm.get('memoryLimit').updateValueAndValidity();
+      /*
       //AAW start
       if (this.memoryLimitFactor !== null) {
         this.parentForm
@@ -127,11 +134,12 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       }
 
       const memory = this.parentForm.get('memory').value;
-      this.parentForm
+        this.parentForm
         .get('memoryLimit')
         .setValue(calculateLimits(memory, this.memoryLimitFactor));
+      */
     });
-  }
+   }
 
   ngOnChanges(changes: SimpleChanges): void {
     //for updating limit inputs
@@ -178,7 +186,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     }
 
     if (errs.limit) {
-      return $localize`Can't be lower than requested CPUs`;
+      return $localize`Can't be lower than requested memory`;
     }
   }
 

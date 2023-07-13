@@ -45,6 +45,7 @@ export interface Config {
     value: string;
     gpuDefault: string;
     limitFactor: string;
+    limitValue: string;
     readOnly?: boolean;
   };
 
@@ -52,6 +53,7 @@ export interface Config {
     value: string;
     gpuDefault: string;
     limitFactor: string;
+    limitValue: string;
     readOnly?: boolean;
   };
 

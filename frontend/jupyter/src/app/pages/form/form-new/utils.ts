@@ -94,8 +94,11 @@ export function initCpuFormControls(formCtrl: FormGroup, config: Config) {
     formCtrl.controls.cpuLimit.disable();
   }
 
+  const cpuLimit = Number(config.cpu.limitValue);
   formCtrl.controls.cpuLimit.setValue(
-    calculateLimits(cpu, config.cpu.limitFactor),
+    //AAW
+    //calculateLimits(cpu, config.cpu.limitFactor),
+    cpuLimit,
   );
 }
 
@@ -110,8 +113,11 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
     formCtrl.controls.memoryLimit.disable();
   }
 
+  const memoryLimit = configSizeToNumber(config.memory.limitValue);
   formCtrl.controls.memoryLimit.setValue(
-    calculateLimits(memory, config.memory.limitFactor),
+    //AAW
+    //calculateLimits(memory, config.memory.limitFactor),
+    memoryLimit,
   );
 }
 

@@ -47,6 +47,7 @@ type CPU struct {
 	Value       string `yaml:"value" json:"value"`
 	GpuDefault  string `yaml:"gpuDefault" json:"gpuDefault"`
 	LimitFactor string `yaml:"limitFactor" json:"limitFactor"`
+	LimitValue  string `yaml:"limitValue" json:"limitValue"`
 	ReadOnly    bool   `yaml:"readOnly" json:"readOnly"`
 }
 

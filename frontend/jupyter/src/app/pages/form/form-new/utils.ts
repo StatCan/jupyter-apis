@@ -97,8 +97,8 @@ export function initCpuFormControls(formCtrl: FormGroup, config: Config) {
   const cpuLimit = Number(config.cpu.limitValue);
   formCtrl.controls.cpuLimit.setValue(
     //AAW
-    //calculateLimits(cpu, config.cpu.limitFactor)
-    cpuLimit
+    //calculateLimits(cpu, config.cpu.limitFactor),
+    cpuLimit,
   );
 }
 
@@ -116,8 +116,8 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   const memoryLimit = configSizeToNumber(config.memory.limitValue);
   formCtrl.controls.memoryLimit.setValue(
     //AAW
-    //calculateLimits(memory, config.memory.limitFactor)
-    memoryLimit
+    //calculateLimits(memory, config.memory.limitFactor),
+    memoryLimit,
   );
 }
 

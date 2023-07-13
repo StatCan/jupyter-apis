@@ -85,7 +85,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
         this.limitValidator('memory'),
       ]);
     // end AAW validations
-    
+
     this.parentForm.get('cpu').valueChanges.subscribe(val => {
       // AAW: to trigger validation
       this.parentForm.get('cpuLimit').updateValueAndValidity();
@@ -112,7 +112,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
         .setValue(calculateLimits(cpu, this.cpuLimitFactor));
       */
     });
-    
+
     this.parentForm.get('memory').valueChanges.subscribe(val => {
       // AAw: to trigger validation
       this.parentForm.get('memoryLimit').updateValueAndValidity();
@@ -139,7 +139,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
         .setValue(calculateLimits(memory, this.memoryLimitFactor));
       */
     });
-   }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     //for updating limit inputs

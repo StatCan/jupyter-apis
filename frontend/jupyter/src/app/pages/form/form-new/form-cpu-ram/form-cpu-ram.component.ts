@@ -100,7 +100,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
             ).toFixed(1),
           );
       } // AAW end
-      
+
       // set cpu limit when value of the cpu request changes
       if (this.parentForm.get('cpuLimit').dirty) {
         return;

@@ -17,6 +17,7 @@ import {
 } from '@angular/forms';
 import { calculateLimits } from '../utils';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { V1Namespace } from '@kubernetes/client-node';
 
 // AAW
 type MaxResourceSpec = {
@@ -25,10 +26,7 @@ type MaxResourceSpec = {
   cpuLimit: number;
   memoryLimit: number;
 };
-const MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
-  [0, { cpu: 14, memory: 48, cpuLimit: 14, memoryLimit: 48 }],
-  [1, { cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96 }],
-]);
+
 // End aaw
 @Component({
   selector: 'app-form-cpu-ram',
@@ -43,8 +41,11 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   @Input() cpuLimitFactor: string;
   @Input() memoryLimitFactor: string;
   @Input() popoverPosition = 'below';
+  @Input() nsMetadata: V1Namespace;
 
   matcher = new parentErrorKeysErrorStateMatcher(); //AAW
+
+  MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec>;
 
   constructor() {}
 
@@ -142,6 +143,22 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    //sets the max values for cpu/memory based on the label for the learning namespace
+    if (
+      this.nsMetadata?.metadata?.labels?.[
+        'state.aaw.statcan.gc.ca/learning-namespace'
+      ] === 'true'
+    ) {
+      this.MAX_FOR_GPU = new Map([
+        [0, { cpu: 4, memory: 24, cpuLimit: 8, memoryLimit: 32 }],
+        [1, { cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96 }],
+      ]);
+    } else {
+      this.MAX_FOR_GPU = new Map([
+        [0, { cpu: 14, memory: 48, cpuLimit: 14, memoryLimit: 48 }],
+        [1, { cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96 }],
+      ]);
+    }
     //for updating limit inputs
     this.parentForm.get('cpu').updateValueAndValidity();
     this.parentForm.get('memory').updateValueAndValidity();
@@ -194,7 +211,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     return (control: AbstractControl): ValidationErrors | null => {
       const gpuNumValue = this.parentForm.get('gpus').get('num').value;
       const gpu = gpuNumValue === 'none' ? 0 : parseInt(gpuNumValue, 10) || 0;
-      const max = MAX_FOR_GPU.get(gpu)[input];
+      const max = this.MAX_FOR_GPU.get(gpu)[input];
 
       return control.value > max
         ? { max: { max, actual: control.value } }

@@ -45,7 +45,10 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 
   matcher = new parentErrorKeysErrorStateMatcher(); //AAW
 
-  MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec>;
+  MAX_FOR_GPU: ReadonlyMap<number, MaxResourceSpec> = new Map([
+    [0, { cpu: 14, memory: 48, cpuLimit: 14, memoryLimit: 48 }],
+    [1, { cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96 }],
+  ]);
 
   constructor() {}
 

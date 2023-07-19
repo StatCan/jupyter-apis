@@ -19,6 +19,7 @@ import { FormConfigurationsModule } from './form-configurations/form-configurati
 import { FormDataVolumesModule } from './form-data-volumes/form-data-volumes.module';
 import { FormGpusModule } from './form-gpus/form-gpus.module';
 import { FormImageModule } from './form-image/form-image.module';
+import { FormImageCustomModule } from './form-image-custom/form-image-custom.module';
 import { FormNameModule } from './form-name/form-name.module';
 import { FormWorkspaceVolumeModule } from './form-workspace-volume/form-workspace-volume.module';
 import { FormNewComponent } from './form-new.component';
@@ -42,6 +43,7 @@ import { FormNewComponent } from './form-new.component';
     FormDataVolumesModule,
     FormGpusModule,
     FormImageModule,
+    FormImageCustomModule,
     FormNameModule,
     FormWorkspaceVolumeModule,
   ],

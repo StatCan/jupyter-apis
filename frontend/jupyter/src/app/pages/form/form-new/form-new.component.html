@@ -29,40 +29,54 @@
         [nsMetadata]="nsMetadata"
       ></app-form-image>
 
-      <app-form-cpu-ram
-        [parentForm]="formCtrl"
-        [readonlyCPU]="config?.cpu?.readOnly"
-        [readonlyMemory]="config?.memory?.readOnly"
-        [cpuLimitFactor]="config?.cpu?.limitFactor"
-        [memoryLimitFactor]="config?.memory?.limitFactor"
-        [readonlySpecs]="readonlySpecs"
-      ></app-form-cpu-ram>
-
-      <app-form-gpus
-        [parentForm]="formCtrl"
-        [vendors]="config?.gpus?.value.vendors"
-        (gpuValueEvent)="checkGPU($event)"
-      ></app-form-gpus>
-
-      <app-form-workspace-volume
-        *ngIf="formCtrl.get('workspace')"
-        [readonly]="config?.workspaceVolume?.readOnly"
-        [volGroup]="formCtrl.get('workspace')"
-        [externalName]="formCtrl.get('name').value"
-      >
-      </app-form-workspace-volume>
-
-      <app-form-data-volumes
-        [volsArray]="formCtrl.get('datavols')"
-        [readonly]="config?.dataVolumes?.readOnly"
-        [externalName]="formCtrl.get('name').value"
-      >
-      </app-form-data-volumes>
-
       <lib-advanced-options>
+        
+        <app-form-image-custom
+          [parentForm]="formCtrl" 
+          [images]="config?.image?.options"
+          [imagesGroupOne]="config?.imageGroupOne"
+          [imagesGroupTwo]="config?.imageGroupTwo"
+          [imagesGroupThree]="config?.imageGroupThree"
+          [allowCustomImage]="config?.allowCustomImage"
+          [hideRegistry]="config?.hideRegistry" 
+          [hideTag]="config?.hideTag"
+          [nsMetadata]="nsMetadata"
+        ></app-form-image-custom>
+
         <app-form-configurations
           [parentForm]="formCtrl"
         ></app-form-configurations>
+
+        <app-form-cpu-ram
+          [parentForm]="formCtrl"
+          [readonlyCPU]="config?.cpu?.readOnly"
+          [readonlyMemory]="config?.memory?.readOnly"
+          [cpuLimitFactor]="config?.cpu?.limitFactor"
+          [memoryLimitFactor]="config?.memory?.limitFactor"
+          [readonlySpecs]="readonlySpecs"
+        ></app-form-cpu-ram>
+
+        <app-form-gpus
+          [parentForm]="formCtrl"
+          [vendors]="config?.gpus?.value.vendors"
+          (gpuValueEvent)="checkGPU($event)"
+        ></app-form-gpus>
+
+        <app-form-workspace-volume
+          *ngIf="formCtrl.get('workspace')"
+          [readonly]="config?.workspaceVolume?.readOnly"
+          [volGroup]="formCtrl.get('workspace')"
+          [externalName]="formCtrl.get('name').value"
+        >
+        </app-form-workspace-volume>
+
+        <app-form-data-volumes
+          [volsArray]="formCtrl.get('datavols')"
+          [readonly]="config?.dataVolumes?.readOnly"
+          [externalName]="formCtrl.get('name').value"
+        >
+        </app-form-data-volumes>
+
         <!--AAW:Removed this section
         <app-form-affinity-tolerations
           [parentForm]="formCtrl"

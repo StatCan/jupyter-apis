@@ -3,6 +3,8 @@ import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/types';
 import { JWABackendService } from 'src/app/services/backend.service';
+import { V1Namespace } from '@kubernetes/client-node';
+
 
 @Component({
   selector: 'app-form-gpus',
@@ -12,6 +14,7 @@ import { JWABackendService } from 'src/app/services/backend.service';
 export class FormGpusComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() vendors: GPUVendor[] = [];
+  @Input() nsMetadata: V1Namespace;
   @Output() gpuValueEvent = new EventEmitter<string>();
 
   private gpuCtrl: FormGroup;
@@ -22,33 +25,41 @@ export class FormGpusComponent implements OnInit {
 
   message: string;
 
-  constructor(public backend: JWABackendService) {}
+  constructor(public backend: JWABackendService) { }
 
   ngOnInit() {
-    this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
+    if (!this.namespaceHasLabel) {
+      this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
 
-    // Vendor should not be empty if the user selects GPUs num
-    this.parentForm
-      .get('gpus')
-      .get('vendor')
-      .setValidators([this.vendorWithNum()]);
+      // Vendor should not be empty if the user selects GPUs num
+      this.parentForm
+        .get('gpus')
+        .get('vendor')
+        .setValidators([this.vendorWithNum()]);
 
-    this.subscriptions.add(
-      this.gpuCtrl.get('num').valueChanges.subscribe((n: string) => {
-        if (n === 'none') {
-          this.message = '';
-          this.gpuCtrl.get('vendor').disable();
-        } else {
-          this.message = $localize`Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.`;
-          this.gpuCtrl.get('vendor').enable();
-        }
-        this.gpuValueEvent.emit(n);
-      }),
-    );
+      this.subscriptions.add(
+        this.gpuCtrl.get('num').valueChanges.subscribe((n: string) => {
+          if (n === 'none') {
+            this.message = '';
+            this.gpuCtrl.get('vendor').disable();
+          } else {
+            this.message = $localize`Selecting 1 GPU will automatically set 4 CPUs and 96Gi of memory.`;
+            this.gpuCtrl.get('vendor').enable();
+          }
+          this.gpuValueEvent.emit(n);
+        }),
+      );
 
-    this.backend.getGPUVendors().subscribe(vendors => {
-      this.installedVendors = new Set(vendors);
-    });
+      this.backend.getGPUVendors().subscribe(vendors => {
+        this.installedVendors = new Set(vendors);
+      });
+    } else {
+      // Disable the GPU number input and set its value to 'none'
+      this.gpuCtrl.get('num').setValue('none');
+      this.gpuCtrl.get('num').disable();
+      this.gpuCtrl.get('vendor').disable();
+      this.message = 'GPU not available for learning namespaces';
+    }
   }
 
   // Vendor handling
@@ -81,4 +92,9 @@ export class FormGpusComponent implements OnInit {
       }
     };
   }
+
+  namespaceHasLabel() {
+    return this.nsMetadata?.metadata?.labels?.['state.aaw.statcan.gc.ca/learning-namespace'] === 'true';
+  }
+
 }

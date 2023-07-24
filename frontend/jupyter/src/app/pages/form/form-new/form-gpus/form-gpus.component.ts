@@ -27,8 +27,8 @@ export class FormGpusComponent implements OnInit {
   constructor(public backend: JWABackendService) {}
 
   ngOnInit() {
+    this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
     if (!this.namespaceHasLabel) {
-      this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
 
       // Vendor should not be empty if the user selects GPUs num
       this.parentForm

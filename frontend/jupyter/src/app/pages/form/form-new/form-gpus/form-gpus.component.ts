@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/types';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { V1Namespace } from '@kubernetes/client-node';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 @Component({
   selector: 'app-form-gpus',
@@ -39,9 +40,8 @@ export class FormGpusComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ('nsMetadata' in changes) {
-      this.handleResource(this.gpuCtrl);
-    }
+    this.handleResource(this.gpuCtrl);
+    console.log(changes)
   }
 
   private handleResource(gpuCtrl: FormGroup) {
@@ -110,6 +110,7 @@ export class FormGpusComponent implements OnInit, OnChanges {
   }
 
   namespaceHasLabel() {
+    console.log(this.nsMetadata.metadata);
     return (
       this.nsMetadata?.metadata?.labels?.[
         'state.aaw.statcan.gc.ca/learning-namespace'

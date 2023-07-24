@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/types';
@@ -10,7 +18,7 @@ import { V1Namespace } from '@kubernetes/client-node';
   templateUrl: './form-gpus.component.html',
   styleUrls: ['./form-gpus.component.scss'],
 })
-export class FormGpusComponent implements OnInit {
+export class FormGpusComponent implements OnInit, OnChanges {
   @Input() parentForm: FormGroup;
   @Input() vendors: GPUVendor[] = [];
   @Input() nsMetadata: V1Namespace;
@@ -27,8 +35,24 @@ export class FormGpusComponent implements OnInit {
   constructor(public backend: JWABackendService) {}
 
   ngOnInit() {
+    this.handleResource(this.gpuCtrl);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('nsMetadata' in changes) {
+      this.handleResource(this.gpuCtrl);
+    }
+  }
+
+  private handleResource(gpuCtrl: FormGroup) {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
-    if (!this.namespaceHasLabel) {
+    if (this.namespaceHasLabel) {
+      // Disable the GPU number input and set its value to 'none'
+      this.gpuCtrl.get('num').setValue('none');
+      this.gpuCtrl.get('num').disable();
+      this.gpuCtrl.get('vendor').disable();
+      this.message = 'GPU not available for learning namespaces';
+    } else {
       // Vendor should not be empty if the user selects GPUs num
       this.parentForm
         .get('gpus')
@@ -51,12 +75,6 @@ export class FormGpusComponent implements OnInit {
       this.backend.getGPUVendors().subscribe(vendors => {
         this.installedVendors = new Set(vendors);
       });
-    } else {
-      // Disable the GPU number input and set its value to 'none'
-      this.gpuCtrl.get('num').setValue('none');
-      this.gpuCtrl.get('num').disable();
-      this.gpuCtrl.get('vendor').disable();
-      this.message = 'GPU not available for learning namespaces';
     }
   }
 

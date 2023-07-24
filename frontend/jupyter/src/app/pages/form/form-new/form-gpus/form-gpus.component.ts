@@ -29,7 +29,6 @@ export class FormGpusComponent implements OnInit {
   ngOnInit() {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
     if (!this.namespaceHasLabel) {
-
       // Vendor should not be empty if the user selects GPUs num
       this.parentForm
         .get('gpus')

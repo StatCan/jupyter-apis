@@ -36,17 +36,22 @@ export class FormGpusComponent implements OnInit, OnChanges {
   constructor(public backend: JWABackendService) {}
 
   ngOnInit() {
-    this.handleResource(this.gpuCtrl);
+    this.handleResource();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.handleResource(this.gpuCtrl);
+    this.handleResource();
     console.log(changes);
   }
 
-  private handleResource(gpuCtrl: FormGroup) {
+  private handleResource() {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
-    if (this.namespaceHasLabel) {
+    console.log(this.nsMetadata.metadata);
+    if (
+      this.nsMetadata?.metadata?.labels?.[
+        'state.aaw.statcan.gc.ca/learning-namespace'
+      ] === 'true'
+    ) {
       // Disable the GPU number input and set its value to 'none'
       this.gpuCtrl.get('num').setValue('none');
       this.gpuCtrl.get('num').disable();
@@ -109,12 +114,8 @@ export class FormGpusComponent implements OnInit, OnChanges {
     };
   }
 
-  namespaceHasLabel() {
-    console.log(this.nsMetadata.metadata);
-    return (
-      this.nsMetadata?.metadata?.labels?.[
-        'state.aaw.statcan.gc.ca/learning-namespace'
-      ] === 'true'
-    );
-  }
-}
+//   namespaceHasLabel() {
+//     console.log(this.nsMetadata.metadata);
+//     return ;
+//   }
+// }

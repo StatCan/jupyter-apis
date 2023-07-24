@@ -5,7 +5,6 @@ import { GPUVendor } from 'src/app/types';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { V1Namespace } from '@kubernetes/client-node';
 
-
 @Component({
   selector: 'app-form-gpus',
   templateUrl: './form-gpus.component.html',
@@ -25,7 +24,7 @@ export class FormGpusComponent implements OnInit {
 
   message: string;
 
-  constructor(public backend: JWABackendService) { }
+  constructor(public backend: JWABackendService) {}
 
   ngOnInit() {
     if (!this.namespaceHasLabel) {
@@ -94,7 +93,10 @@ export class FormGpusComponent implements OnInit {
   }
 
   namespaceHasLabel() {
-    return this.nsMetadata?.metadata?.labels?.['state.aaw.statcan.gc.ca/learning-namespace'] === 'true';
+    return (
+      this.nsMetadata?.metadata?.labels?.[
+        'state.aaw.statcan.gc.ca/learning-namespace'
+      ] === 'true'
+    );
   }
-
 }

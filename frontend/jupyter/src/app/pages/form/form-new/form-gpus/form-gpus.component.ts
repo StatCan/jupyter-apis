@@ -54,6 +54,8 @@ export class FormGpusComponent implements OnInit, OnChanges {
       this.message = 'GPU not available for learning namespaces';
     } else {
       // Vendor should not be empty if the user selects GPUs num
+      this.gpuCtrl.get('num').enable();
+
       this.parentForm
         .get('gpus')
         .get('vendor')

@@ -154,7 +154,6 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     ) {
       this.MAX_FOR_GPU = new Map([
         [0, { cpu: 4, memory: 24, cpuLimit: 8, memoryLimit: 32 }],
-        [1, { cpu: 4, memory: 96, cpuLimit: 4, memoryLimit: 96 }],
       ]);
     } else {
       this.MAX_FOR_GPU = new Map([

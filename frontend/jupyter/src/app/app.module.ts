@@ -25,9 +25,10 @@ import { VolumeDetailsPageModule } from './pages/volume-details-page/volume-deta
 import { ColumnsModule } from './pages/index/columns/columns.module';
 
 import { ErrorStateMatcher } from '@angular/material/core';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [AppComponent, VolumeFormComponent],
+  declarations: [AppComponent, VolumeFormComponent, PageNotFoundComponent],
   imports: [
     HttpClientModule,
     BrowserModule,

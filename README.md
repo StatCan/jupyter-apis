@@ -74,7 +74,7 @@ npm link kubeflow
 KF_USER_ID=user npm start
 ```
 
-For the kubecost data to be retrievable, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
+For the kubecost data to be retrievable when running locally, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
 
 ### Testing backend Rest API
 

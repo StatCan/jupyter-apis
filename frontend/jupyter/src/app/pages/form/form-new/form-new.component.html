@@ -30,7 +30,7 @@
       ></app-form-image>
 
       <app-form-protected-b [parentForm]="formCtrl"></app-form-protected-b>
-
+    
       <lib-advanced-options>
         <app-form-image-custom
           [parentForm]="formCtrl"
@@ -62,6 +62,7 @@
           [parentForm]="formCtrl"
           [vendors]="config?.gpus?.value.vendors"
           (gpuValueEvent)="checkGPU($event)"
+          [nsMetadata]="nsMetadata"
         ></app-form-gpus>
 
         <app-form-workspace-volume

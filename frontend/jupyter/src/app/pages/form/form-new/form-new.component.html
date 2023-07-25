@@ -43,6 +43,7 @@
         [parentForm]="formCtrl"
         [vendors]="config?.gpus?.value.vendors"
         (gpuValueEvent)="checkGPU($event)"
+        [nsMetadata]="nsMetadata"
       ></app-form-gpus>
 
       <app-form-workspace-volume

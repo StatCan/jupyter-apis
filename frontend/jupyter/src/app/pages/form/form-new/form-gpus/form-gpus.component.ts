@@ -47,11 +47,7 @@ export class FormGpusComponent implements OnInit, OnChanges {
   private handleResource() {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
     console.log(this.nsMetadata.metadata);
-    if (
-      this.nsMetadata?.metadata?.labels?.[
-        'state.aaw.statcan.gc.ca/learning-namespace'
-      ] === 'true'
-    ) {
+    if (this.namespaceHasLabel()) {
       // Disable the GPU number input and set its value to 'none'
       this.gpuCtrl.get('num').setValue('none');
       this.gpuCtrl.get('num').disable();
@@ -114,8 +110,12 @@ export class FormGpusComponent implements OnInit, OnChanges {
     };
   }
 
-//   namespaceHasLabel() {
-//     console.log(this.nsMetadata.metadata);
-//     return ;
-//   }
-// }
+  namespaceHasLabel() {
+    console.log(this.nsMetadata.metadata);
+    return (
+      this.nsMetadata?.metadata?.labels?.[
+        'state.aaw.statcan.gc.ca/learning-namespace'
+      ] === 'true'
+    );
+  }
+}

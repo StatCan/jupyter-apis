@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  OnDestroy,
-  LOCALE_ID,
-  Inject,
-} from '@angular/core';
+import { Component, OnInit, Input, LOCALE_ID, Inject } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -24,7 +17,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   templateUrl: './form-image-custom.component.html',
   styleUrls: ['./form-image-custom.component.scss'],
 })
-export class FormImageCustomComponent implements OnInit, OnDestroy {
+export class FormImageCustomComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() images: string[];
   @Input() imagesGroupOne: Config['imageGroupOne'];
@@ -56,60 +49,6 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
               this.parentForm.controls.customImage.disable();
             }
           });
-        // Make sure that the use will insert and Image value
-        if (check) {
-          this.parentForm
-            .get('customImage')
-            .setValidators([this.urlValidator(), Validators.required]);
-          this.parentForm.get('image').setValidators([]);
-          this.parentForm.get('imageGroupOne').setValidators([]);
-          this.parentForm.get('imageGroupTwo').setValidators([]);
-          this.parentForm.get('imageGroupThree').setValidators([]);
-        }
-        this.parentForm.get('serverType').valueChanges.subscribe(selection => {
-          if (selection === 'jupyter') {
-            this.parentForm
-              .get('customImage')
-              .setValidators([this.urlValidator(), Validators.required]); //AAW
-            this.parentForm.get('image').setValidators(Validators.required);
-            this.parentForm.get('imageGroupOne').setValidators([]);
-            this.parentForm.get('imageGroupTwo').setValidators([]);
-            this.parentForm.get('imageGroupThree').setValidators([]);
-          } else if (selection === 'group-one') {
-            this.parentForm
-              .get('customImage')
-              .setValidators([this.urlValidator(), Validators.required]); //AAW
-            this.parentForm.get('image').setValidators([]);
-            this.parentForm
-              .get('imageGroupOne')
-              .setValidators(Validators.required);
-            this.parentForm.get('imageGroupTwo').setValidators([]);
-            this.parentForm.get('imageGroupThree').setValidators([]);
-          } else if (selection === 'group-two') {
-            this.parentForm
-              .get('customImage')
-              .setValidators([this.urlValidator(), Validators.required]); //AAW
-            this.parentForm.get('image').setValidators([]);
-            this.parentForm.get('imageGroupOne').setValidators([]);
-            this.parentForm
-              .get('imageGroupTwo')
-              .setValidators(Validators.required);
-            this.parentForm.get('imageGroupThree').setValidators([]);
-          } else if (selection === 'group-three') {
-            this.parentForm.get('image').setValidators([]);
-            this.parentForm.get('imageGroupOne').setValidators([]);
-            this.parentForm.get('imageGroupTwo').setValidators([]);
-            this.parentForm
-              .get('imageGroupThree')
-              .setValidators(Validators.required);
-          }
-          this.parentForm.get('image').updateValueAndValidity();
-          this.parentForm.get('imageGroupOne').updateValueAndValidity();
-          this.parentForm.get('imageGroupTwo').updateValueAndValidity();
-          this.parentForm.get('imageGroupThree').updateValueAndValidity();
-        });
-        this.parentForm.get('customImage').updateValueAndValidity();
-        this.parentForm.get('serverType').updateValueAndValidity();
       }),
     );
   }

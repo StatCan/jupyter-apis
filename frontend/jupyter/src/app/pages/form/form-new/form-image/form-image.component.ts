@@ -18,7 +18,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { V1Namespace } from '@kubernetes/client-node';
 import { Config } from 'src/app/types';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-form-image',
@@ -64,16 +63,6 @@ export class FormImageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.add(
       this.parentForm.get('customImageCheck').valueChanges.subscribe(check => {
-        //disable custom image input when not being used, so errors are ignored
-        this.parentForm
-          .get('customImageCheck')
-          .valueChanges.subscribe((b: boolean) => {
-            if (b) {
-              this.parentForm.controls.customImage.enable();
-            } else {
-              this.parentForm.controls.customImage.disable();
-            }
-          });
         // Make sure that the use will insert and Image value
         if (check) {
           this.parentForm
@@ -132,35 +121,6 @@ export class FormImageComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSelect(event: MatCheckboxChange): void {
-    if (event.checked) {
-      this.parentForm.get('image').disable();
-      this.parentForm.get('imageGroupOne').disable();
-      this.parentForm.get('imageGroupTwo').disable();
-      this.parentForm.get('imageGroupThree').disable();
-    } else {
-      this.parentForm.get('image').enable();
-      this.parentForm.get('imageGroupOne').enable();
-      this.parentForm.get('imageGroupTwo').enable();
-      this.parentForm.get('imageGroupThree').enable();
-    }
-  }
-
-  urlValidation(): string {
-    const url = this.parentForm.get('customImage');
-
-    if (url.hasError('invalidUrl')) {
-      let urlBeginning = 'https://';
-      const schemeReg = /^http:\/\//i;
-
-      if (schemeReg.test(url.value)) {
-        urlBeginning = 'http://';
-      }
-
-      return $localize`${urlBeginning} is not allowed in URLs`;
-    }
-  }
-
   private urlValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       const schemeReg = /^http[s]?:\/\//i;
@@ -170,23 +130,6 @@ export class FormImageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
-  }
-
-  imageDisplayName(image: string): string {
-    const [name, tag = null] = image.split(':');
-    const tokens = name.split('/');
-
-    if (this.hideRegistry && tokens.length > 1 && tokens[0].includes('.')) {
-      tokens.shift();
-    }
-
-    let displayName = tokens.join('/');
-
-    if (!this.hideTag && tag !== null) {
-      displayName = `${displayName}:${tag}`;
-    }
-
-    return displayName;
   }
 
   shouldEnable(enabledCondition: { labels: Map<string, string> }): boolean {

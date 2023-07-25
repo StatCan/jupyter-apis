@@ -110,7 +110,6 @@ export class FormGpusComponent implements OnInit, OnChanges {
   }
 
   namespaceHasLabel() {
-    console.log(this.nsMetadata.metadata);
     return (
       this.nsMetadata?.metadata?.labels?.[
         'state.aaw.statcan.gc.ca/learning-namespace'

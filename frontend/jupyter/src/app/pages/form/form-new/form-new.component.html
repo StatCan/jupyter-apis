@@ -44,10 +44,6 @@
           [nsMetadata]="nsMetadata"
         ></app-form-image-custom>
 
-        <app-form-configurations
-          [parentForm]="formCtrl"
-        ></app-form-configurations>
-
         <app-form-cpu-ram
           [parentForm]="formCtrl"
           [readonlyCPU]="config?.cpu?.readOnly"
@@ -86,6 +82,10 @@
           [affinityConfigs]="config?.affinityConfig?.options"
           [tolerationGroups]="config?.tolerationGroup?.options"
       ></app-form-affinity-tolerations>-->
+
+        <app-form-configurations
+          [parentForm]="formCtrl"
+        ></app-form-configurations>
 
         <app-form-advanced-options
           [parentForm]="formCtrl"

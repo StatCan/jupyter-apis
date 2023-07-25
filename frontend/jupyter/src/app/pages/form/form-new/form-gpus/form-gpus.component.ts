@@ -39,8 +39,7 @@ export class FormGpusComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.handleResource();
-    console.log(changes);
+    this.handleResource();    
   }
 
   private handleResource() {

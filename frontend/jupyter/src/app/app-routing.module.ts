@@ -18,7 +18,7 @@ const routes: Routes = [
     component: VolumeDetailsPageComponent,
   },
   { path: '', component: IndexComponent },
-  { path: '**', component: PageNotFoundComponent}
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

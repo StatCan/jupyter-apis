@@ -103,6 +103,7 @@ type newnotebookrequest struct {
 	DataVolumes        []volrequest      `json:"datavols"`
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
+	Protb              bool              `json:"prob"`
 	Language           string            `json:"language"`
 	ImagePullPolicy    string            `json:"imagePullPolicy"`
 	ServerType         string            `json:"serverType"`
@@ -531,6 +532,11 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	} else {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
+	}
+
+	// AAW Customization Adding protected B
+	if req.Protb {
+		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/protected-b"] = "true"
 	}
 
 	// Add configuration items

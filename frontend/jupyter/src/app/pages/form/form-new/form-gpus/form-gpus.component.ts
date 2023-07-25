@@ -46,7 +46,6 @@ export class FormGpusComponent implements OnInit, OnChanges {
 
   private handleResource() {
     this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
-    console.log(this.nsMetadata.metadata);
     if (this.namespaceHasLabel()) {
       // Disable the GPU number input and set its value to 'none'
       this.gpuCtrl.get('num').setValue('none');

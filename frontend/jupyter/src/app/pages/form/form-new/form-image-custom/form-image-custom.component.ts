@@ -13,7 +13,6 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { environment } from '@app/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { V1Namespace } from '@kubernetes/client-node';
@@ -42,24 +41,7 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     @Inject(LOCALE_ID) public localeId: string,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-  ) {
-    iconRegistry.addSvgIcon(
-      'jupyter-icon',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.jupyterIcon),
-    );
-    iconRegistry.addSvgIcon(
-      'group-one',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupOneIcon),
-    );
-    iconRegistry.addSvgIcon(
-      'group-two',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupTwoIcon),
-    );
-    iconRegistry.addSvgIcon(
-      'group-three',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeIcon),
-    );
-  }
+  ) {}
 
   ngOnInit() {
     this.subs.add(

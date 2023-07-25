@@ -17,6 +17,8 @@ describe('New notebook form', () => {
   });
 
   it('should auto update mount value when name change', () => {
+    cy.get('.lib-advanced-options').find('.toggle-button').click();
+
     cy.get('[data-cy="add new volume"]').click();
 
     cy.get('.last[data-cy="data volumes"]').click();

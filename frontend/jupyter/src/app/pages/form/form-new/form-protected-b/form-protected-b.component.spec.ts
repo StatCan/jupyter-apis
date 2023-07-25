@@ -6,11 +6,9 @@ import { CommonModule } from '@angular/common';
 import { FormModule as KfFormModule } from 'kubeflow';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-
 describe('FormProtectedBComponent', () => {
   let component: FormProtectedBComponent;
   let fixture: ComponentFixture<FormProtectedBComponent>;
-
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -30,8 +28,8 @@ describe('FormProtectedBComponent', () => {
     component = fixture.componentInstance;
     component.parentForm = new FormGroup({
       prob: new FormControl(),
-    })
-  })
+    });
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

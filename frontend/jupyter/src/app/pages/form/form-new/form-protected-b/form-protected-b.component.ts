@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {
-  FormGroup,
-} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 import { MatIconRegistry } from '@angular/material/icon';
 
@@ -15,5 +13,5 @@ export class FormProtectedBComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {  }
+  ngOnInit() {}
 }

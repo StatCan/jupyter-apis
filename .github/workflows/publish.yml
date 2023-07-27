@@ -78,15 +78,15 @@ jobs:
       if: steps.should-i-push.outputs.boolean == 'true'
       run: |
         docker pull localhost:5000/jupyter-apis:${{ github.sha }}
-        docker tag localhost:5000/jupyter-apis:${{ github.sha }} ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
-        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
+        docker tag localhost:5000/jupyter-apis:${{ github.sha }} ${{ env.REGISTRY }}.azurecr.io/jupyter-apis:${{ github.sha }}
+        docker push ${{ env.REGISTRY }}.azurecr.io/jupyter-apis:${{ github.sha }}
     
     #- name: Build, Scan, and Push docker image
     #  if: steps.should-i-push.outputs.boolean == 'true'
     #  run: |
     #    docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
     #    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
-    #    trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+    #    trivy image ${{ env.REGISTRY}}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
     #    docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
 
     #- name: Build and scan docker image
@@ -94,4 +94,4 @@ jobs:
     #  run: |
     #    docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
     #    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
-    #    trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+    #    trivy image ${{ env.REGISTRY }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL

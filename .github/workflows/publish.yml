@@ -16,6 +16,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
     # Determine if pushing to ACR or DEV ACR
     - name: Set ENV variables for a PR
@@ -54,17 +59,39 @@ jobs:
         username: ${{ secrets.DEV_REGISTRY_USERNAME }}
         password: ${{ secrets.DEV_REGISTRY_PASSWORD }}
 
-    - name: Build, Scan, and Push docker image
+    
+    # Try the contrib containers way first
+    - name: Build image locally
+      run: |
+        docker build -f Dockerfile -t localhost:5000/jupyter-apis:${{ github.sha }} .
+        docker push localhost:5000/jupyter-apis:${{ github.sha }}
+        docker rmi localhost:5000/jupyter-apis:${{ github.sha }}
+        docker image prune
+    
+    - name: Aqua Security Trivy image scan
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+        trivy image localhost:5000/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+    
+    # Container build and push to a Azure Container registry (ACR)
+    - name: Push to ACR if necessary
       if: steps.should-i-push.outputs.boolean == 'true'
       run: |
-        docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
-        trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity
-        docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
+        docker pull localhost:5000/jupyter-apis:${{ github.sha }}
+        docker tag localhost:5000/jupyter-apis:${{ github.sha }} ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
+        docker push ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }}
+    
+    #- name: Build, Scan, and Push docker image
+    #  if: steps.should-i-push.outputs.boolean == 'true'
+    #  run: |
+    #    docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
+    #    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+    #    trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+    #    docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
 
-    - name: Build and scan docker image
-      if: steps.should-i-push.outputs.boolean != 'true'
-      run: |
-        docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
-        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
-        trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity
+    #- name: Build and scan docker image
+    #  if: steps.should-i-push.outputs.boolean != 'true'
+    #  run: |
+    #    docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
+    #    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+    #    trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL

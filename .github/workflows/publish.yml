@@ -11,6 +11,7 @@ on:
 env:
   REGISTRY_NAME: k8scc01covidacr
   DEV_REGISTRY_NAME: k8scc01covidacrdev
+  TRIVY_VERSION: "v0.43.1"
 
 jobs:
   build:
@@ -59,10 +60,7 @@ jobs:
         docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
         docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
 
-    - name: Azure containrer scan
-      if: steps.should-i-push.outputs.boolean == 'true'
-      uses: Azure/container-scan@v0
-      with:
-        image-name: ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
-        severity-threshold: CRITICAL
-        run-quality-checks: false
+    - name: Aqua Security Trivy image scan
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+        trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL

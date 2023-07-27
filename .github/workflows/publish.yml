@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # Determine if pushing to ACR or DEV ACR
-    - name: Set ENV variables for a PR containing the auto-deploy tag
+    - name: Set ENV variables for a PR
       if: github.event_name == 'pull_request'
       run: echo "REGISTRY=${{env.DEV_REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
    

@@ -54,13 +54,16 @@ jobs:
         username: ${{ secrets.DEV_REGISTRY_USERNAME }}
         password: ${{ secrets.DEV_REGISTRY_PASSWORD }}
 
-    - name: Build docker image and push
-      if: steps.should-i-push.outputs.boolean == 'true'
+    - name: Build docker image
       run: |
         docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
-        docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
 
     - name: Aqua Security Trivy image scan
       run: |
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
         trivy image ${{ env.REGISTRY_NAME }}.azurecr.io/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+
+    - name: Push docker image
+      if: steps.should-i-push.outputs.boolean == 'true'
+      run: |
+        docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}

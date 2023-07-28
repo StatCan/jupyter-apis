@@ -23,6 +23,12 @@ export class FormConfigurationsComponent implements OnInit, OnDestroy {
     const nsSub = this.ns.getSelectedNamespace().subscribe(namespace => {
       // Get the PodDefaults of the new Namespace
       this.backend.getPodDefaults(namespace).subscribe(pds => {
+        // AAW Customization
+        // This removed protected B. The entire configuration should be removed when we depricate Minio
+        pds.forEach((item, index) => {
+          if (item.label === 'notebook.statcan.gc.ca/protected-b')
+            {pds.splice(index, 1);}
+        });
         this.podDefaults = pds;
       });
     });

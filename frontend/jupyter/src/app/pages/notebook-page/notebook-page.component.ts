@@ -199,10 +199,10 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
     const buttons: ToolbarButton[] = [];
     buttons.push(
       new ToolbarButton({
-        text: 'CONNECT',
+        text: $localize`CONNECT`,
         icon: 'developer_board',
         disabled: this.status === STATUS_TYPE.READY ? false : true,
-        tooltip: 'Connect to this notebook',
+        tooltip: $localize`Connect to this notebook`,
         fn: () => {
           this.connectToNotebook();
         },
@@ -211,9 +211,9 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
     if (this.status === 'stopped') {
       buttons.push(
         new ToolbarButton({
-          text: 'START',
+          text: $localize`START`,
           icon: 'play_arrow',
-          tooltip: 'Start this notebook',
+          tooltip: $localize`Start this notebook`,
           fn: () => {
             this.startNotebook();
           },
@@ -222,10 +222,10 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
     } else {
       buttons.push(
         new ToolbarButton({
-          text: 'STOP',
+          text: $localize`STOP`,
           icon: 'stop',
           disabled: this.status === STATUS_TYPE.TERMINATING ? true : false,
-          tooltip: 'Stop this notebook',
+          tooltip: $localize`Stop this notebook`,
           fn: () => {
             this.stopNotebook();
           },
@@ -234,10 +234,10 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
     }
     buttons.push(
       new ToolbarButton({
-        text: 'DELETE',
+        text: $localize`DELETE`,
         icon: 'delete',
         disabled: this.status === STATUS_TYPE.TERMINATING ? true : false,
-        tooltip: 'Delete this notebook',
+        tooltip: $localize`Delete this notebook`,
         fn: () => {
           this.deleteNotebook();
         },

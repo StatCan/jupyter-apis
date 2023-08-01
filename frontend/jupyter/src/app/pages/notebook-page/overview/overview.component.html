@@ -1,56 +1,58 @@
-<lib-content-list-item key="Volumes">
+<lib-content-list-item key="Volumes" i18n-key>
   <app-volumes
     [volGroups]="volGroups"
     [loadCompleted]="notebookInfoLoaded"
-    [loadErrorMsg]="'No volumes available for this notebook.'"
+    loadErrorMsg="No volumes available for this notebook."
+    i18n-loadErrorMsg
   ></app-volumes>
 </lib-content-list-item>
 
-<lib-details-list-item key="Shared memory enabled">
+<lib-details-list-item key="Shared memory enabled" i18n-key>
   {{ sharedMemory }}
 </lib-details-list-item>
 
-<lib-content-list-item class="configurations" key="Configurations">
+<lib-content-list-item class="configurations" key="Configurations" i18n-key>
   <app-configurations [configurations]="configurations">
     {{ podDefaultsMessage }}
   </app-configurations>
 </lib-content-list-item>
 
-<lib-details-list-item key="Type">
+<lib-details-list-item key="Type" i18n-key>
   {{ notebookType }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="cpuRequests" key="Minimum CPU">
+<lib-details-list-item *ngIf="cpuRequests" key="Minimum CPU" i18n-key>
   {{ cpuRequests }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="cpuLimits" key="Maximum CPU">
+<lib-details-list-item *ngIf="cpuLimits" key="Maximum CPU" i18n-key>
   {{ cpuLimits }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="memoryRequests" key="Minimum memory">
+<lib-details-list-item *ngIf="memoryRequests" key="Minimum memory" i18n-key>
   {{ memoryRequests }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="memoryLimits" key="Maximum memory">
+<lib-details-list-item *ngIf="memoryLimits" key="Maximum memory" i18n-key>
   {{ memoryLimits }}
 </lib-details-list-item>
 
-<lib-details-list-item key="Image" [copyValue]="dockerImage">
+<lib-details-list-item key="Image" [copyValue]="dockerImage" i18n-key>
   {{ dockerImage }}
 </lib-details-list-item>
 
-<lib-content-list-item key="Environment">
+<lib-content-list-item key="Environment" i18n-key>
   <lib-variables-group-table
     [envGroups]="envGroups"
     [loadCompleted]="podRequestCompleted"
-    [loadErrorMsg]="'No environment variables available for this notebook.'"
+    loadErrorMsg="No environment variables available for this notebook."
+    i18n-loadErrorMsg
   ></lib-variables-group-table>
 </lib-content-list-item>
 
 <!-- Show spinner while notebooks status is being fetched -->
 <ng-container *ngIf="!notebook?.status">
-  <lib-heading-row class="heading-row" heading="Conditions"></lib-heading-row>
+  <lib-heading-row class="heading-row" heading="Conditions" i18n-heading></lib-heading-row>
   <lib-loading-spinner></lib-loading-spinner>
 </ng-container>
 
@@ -59,5 +61,6 @@
   *ngIf="notebook?.status"
   [conditions]="notebook.status?.conditions"
   title="Conditions"
+  i18n-title
   class="page-padding"
 ></lib-conditions-table>

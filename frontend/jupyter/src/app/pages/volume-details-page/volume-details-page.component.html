@@ -1,6 +1,7 @@
 <div class="lib-content-wrapper details-page">
   <lib-title-actions-toolbar
     title="Volume details"
+    i18n-title
     [buttons]="buttonsConfig"
     [backButton]="true"
     (back)="navigateBack()"
@@ -28,17 +29,17 @@
         (selectedTabChange)="onTabChange($event)"
         [selectedIndex]="selectedTab.index"
       >
-        <mat-tab label="OVERVIEW">
+        <mat-tab label="OVERVIEW" i18n-label>
           <app-overview [pvc]="pvc"></app-overview>
         </mat-tab>
 
-        <mat-tab label="EVENTS">
+        <mat-tab label="EVENTS" i18n-label>
           <ng-template matTabContent>
             <app-events [pvc]="pvc"></app-events>
           </ng-template>
         </mat-tab>
 
-        <mat-tab label="YAML">
+        <mat-tab label="YAML" i18n-label>
           <ng-template matTabContent>
             <app-yaml [pvcInfoLoaded]="pvcInfoLoaded" [pvc]="pvc"></app-yaml>
           </ng-template>

@@ -413,6 +413,13 @@
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8c4f7047175c0e066be33cfe2d8dd0c2237ddf4e" datatype="html">
+        <source>Custom Notebook</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a5f9ba9bb9faa8284bcadb1cdbc6aaf969e9c4bb" datatype="html">
         <source>Image</source>
         <context-group purpose="location">
@@ -487,6 +494,13 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
+        <source>Provide a custom Image</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6343667331017090565" datatype="html">
         <source><x id="PH" equiv-text="urlBeginning"/> is not allowed in URLs</source>
         <context-group purpose="location">
@@ -503,6 +517,34 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.ts</context>
           <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="76224ae623ed6954bcad1076767499c209014950" datatype="html">
+        <source> An interactive development environment for notebooks, code, and data. Ideal for prototyping and experimentation. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">16,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1a4d6c385fb7f45afbd058a51f477504cd8b9f7e" datatype="html">
+        <source> An integrated development environment for R, a programming language for statistical computing and graphics. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">38,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="419f2d1ac1656bc7b42b7e3dca8a42c57020f447" datatype="html">
+        <source>A ubuntu remote desktop.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2b90ec31b6f0aa2356466b2d9174360c3a0b95f4" datatype="html">
+        <source>A SAS image.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f6a53f97f76c47911a5b3128a4a34cc2995b3878" datatype="html">

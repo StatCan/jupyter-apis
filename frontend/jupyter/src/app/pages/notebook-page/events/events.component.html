@@ -1,3 +1,10 @@
 <div class="page-padding lib-flex-grow lib-overflow-auto">
-  <lib-table [config]="config" [data]="processedEvents"></lib-table>
+  <lib-table 
+    [filterHeader]="filterHeader"
+    [filterPlaceholder]="filterPlaceholder"
+    [clearButtonTooltip]="clearButtonTooltip"
+    [emptyRows]="emptyRows"
+    [config]="config" 
+    [data]="processedEvents"
+  ></lib-table>
 </div>

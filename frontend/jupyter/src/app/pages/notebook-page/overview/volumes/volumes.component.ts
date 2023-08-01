@@ -17,7 +17,7 @@ export class VolumesComponent implements OnInit {
   get volGroups() {
     return this.prvVolGroups;
   }
-  @Input() loadErrorMsg = 'Resources not available';
+  @Input() loadErrorMsg = $localize`Resources not available`;
   @Input() loadCompleted = false;
 
   volGroupsEmpty(): boolean {

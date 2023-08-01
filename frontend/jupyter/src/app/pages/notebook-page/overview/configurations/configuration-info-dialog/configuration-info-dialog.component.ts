@@ -18,7 +18,7 @@ export class ConfigurationInfoDialogComponent implements OnInit {
 
   yaml(configuration: Configuration) {
     if (!configuration) {
-      return 'No information available about the configuration';
+      return $localize`No information available about the configuration`;
     }
 
     // Keep original configuration unaffected

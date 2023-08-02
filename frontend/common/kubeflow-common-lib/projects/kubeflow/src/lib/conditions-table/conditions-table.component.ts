@@ -14,10 +14,10 @@ export class ConditionsTableComponent {
   private conditionsPrv: ConditionIR[] = [];
   public config: TableConfig = generateConfig();
 
-  filterHeader=$localize`Filter`;
-  filterPlaceholder=$localize`Enter property name or value`;
-  clearButtonTooltip=$localize`Clear filters`;
-  emptyRows=$localize`No rows to display`;
+  filterHeader = $localize`Filter`;
+  filterPlaceholder = $localize`Enter property name or value`;
+  clearButtonTooltip = $localize`Clear filters`;
+  emptyRows = $localize`No rows to display`;
 
   @Input()
   set title(t: string) {

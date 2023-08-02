@@ -36,11 +36,7 @@ export class ActionsService {
             ref.close(DIALOG_RESP.ACCEPT);
             const object = `${namespace}/${name}`;
             const message = $localize`Delete request was sent.`;
-            this.snackBar.open(
-              `${object}: ${message}`,
-              SnackType.Info,
-              5000,
-            );
+            this.snackBar.open(`${object}: ${message}`, SnackType.Info, 5000);
           },
           error: err => {
             const errorMsg = $localize`Error ${err}`;
@@ -135,11 +131,7 @@ export class ActionsService {
 
             const object = `${namespace}/${name}`;
             const message = $localize`Delete request was sent.`;
-            this.snackBar.open(
-              `${object}: ${message}`,
-              SnackType.Info,
-              3000,
-            );
+            this.snackBar.open(`${object}: ${message}`, SnackType.Info, 3000);
           },
           error: err => {
             const errorMsg = $localize`Error ${err}`;

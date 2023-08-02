@@ -2,7 +2,9 @@
 
 <!--if no logs are present at all then show a warning message-->
 <ng-container *ngIf="!logsLoading && logsEmpty">
-  <lib-panel *ngIf="!pod" i18n> No logs were found for this Notebook. </lib-panel>
+  <lib-panel *ngIf="!pod" i18n>
+    No logs were found for this Notebook.
+  </lib-panel>
   <lib-panel *ngIf="pod" icon="error" color="warn" i18n>
     Error: {{ loadErrorMsg }}
   </lib-panel>

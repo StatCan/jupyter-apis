@@ -68,10 +68,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   kubecostLoading = false;
 
-  filterHeader=$localize`Filter`;
-  filterPlaceholder=$localize`Enter property name or value`;
-  clearButtonTooltip=$localize`Clear filters`;
-  emptyRows=$localize`No rows to display`;
+  filterHeader = $localize`Filter`;
+  filterPlaceholder = $localize`Enter property name or value`;
+  clearButtonTooltip = $localize`Clear filters`;
+  emptyRows = $localize`No rows to display`;
 
   private newNotebookButton = new ToolbarButton({
     text: $localize`New Notebook`,

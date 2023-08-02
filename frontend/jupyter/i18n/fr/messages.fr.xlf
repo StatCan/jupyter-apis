@@ -1393,12 +1393,12 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5183c1fd5c54b583c49ef02f710c344f4a73c7ab" datatype="html">
+      <trans-unit id="27ba3f1a32f095bb68a5704e11f728e7a2d8731d" datatype="html">
         <source> No logs were found for this Notebook. </source>
         <target> Aucune journalisation n'a été trouvé pour ce bloc-notes. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/logs/logs.component.html</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">5,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05f66376c7d97b269be46c6cd8954658d1e7c918" datatype="html">
@@ -1406,7 +1406,7 @@
         <source> Erreur: <x id="INTERPOLATION" equiv-text="{{ loadErrorMsg }}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/logs/logs.component.html</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9a2e789688a741e5a45d19b04a5c0924e75fa172" datatype="html">
@@ -1414,7 +1414,7 @@
         <target>Journalisation du pod du bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/logs/logs.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b0de65942fc7b22924e95d5c14c75bdbc890db9f" datatype="html">
@@ -1526,7 +1526,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">158</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -1634,11 +1634,11 @@
         <target>Conditions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8343644461672729005" datatype="html">
@@ -1654,7 +1654,7 @@
         <target>Un PersistentVolumeClaim (PVC) est une demande de stockage par un utilisateur et c'est similaire à un Pod. Les pods consomment des ressources de nœud et les PVC consomment des ressources PV. Les pods peuvent demander des niveaux de ressources spécifiques (CPU et mémoire). Les réclamations peuvent demander une taille et des modes d'accès spécifiques (par exemple, elles peuvent être montées ReadWriteOnce, ReadOnlyMany ou ReadWriteMany).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">319</context>
+          <context context-type="linenumber">318</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1052337811577686285" datatype="html">
@@ -1662,7 +1662,7 @@
         <target>Un volume sauvegardé en mémoire est un type spécial de volume emptyDir qui est monté en tant que volume tmpfs (système de fichiers sauvegardé en RAM). Bien que tmpfs soit très rapide, sachez que contrairement aux disques, tmpfs est effacé au redémarrage du nœud et que tous les fichiers que vous écrivez sont pris en compte dans la limite de mémoire de votre conteneur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">324</context>
+          <context context-type="linenumber">322</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4514564479677320030" datatype="html">
@@ -1670,7 +1670,7 @@
         <target>Un volume éphémère est Kubernetes emptyDir. Un volume emptyDir est d'abord créé lorsqu'un pod est attribué à un nœud et existe tant que ce pod est exécuté sur ce nœud. Comme son nom l'indique, le volume emptyDir est initialement vide. Tous les conteneurs du pod peuvent lire et écrire les mêmes fichiers dans le volume emptyDir, bien que ce volume puisse être monté sur le même chemin ou sur des chemins différents dans chaque conteneur. Lorsqu'un pod est supprimé d'un nœud pour une raison quelconque, les données dans le emptyDir sont définitivement supprimées.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">329</context>
+          <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3342715274834135939" datatype="html">
@@ -1678,7 +1678,7 @@
         <target>Un ConfigMap fournit un moyen d'injecter des données de configuration dans des pods. Les données stockées dans un ConfigMap peuvent être référencées dans un volume de type configMap puis consommées par des applications conteneurisées s'exécutant dans un pod.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">334</context>
+          <context context-type="linenumber">330</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3348089079548024993" datatype="html">
@@ -1686,7 +1686,7 @@
         <target>Un volume secret est utilisé pour transmettre des informations sensibles, telles que des mots de passe, aux pods. Vous pouvez stocker des secrets dans l'API Kubernetes et les monter en tant que fichiers à utiliser par des pods sans couplage direct à Kubernetes. Les volumes secrets sont sauvegardés par tmpfs (un système de fichiers basé sur la RAM) afin qu'ils ne soient jamais écrits sur un stockage non volatile.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">339</context>
+          <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e5fdea24582fa8d00eed24e05bbf93ca06d77e97" datatype="html">
@@ -1962,7 +1962,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6926883898539175208" datatype="html">
@@ -1970,15 +1970,15 @@
         <target>Erreur <x id="PH" equiv-text="err"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4872314094100927318" datatype="html">
@@ -1986,7 +1986,7 @@
         <target>Démarrage le serveur bloc-notes &apos;<x id="PH" equiv-text="name"/>&apos;...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9162667715823767475" datatype="html">
@@ -1994,7 +1994,7 @@
         <target>Arrêt du serveur bloc-notes &apos;<x id="PH" equiv-text="name"/>&apos;...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5287831016434712379" datatype="html">
@@ -2002,7 +2002,7 @@
         <target>Êtres-vous sûr que vous voulez supprimer ce volume? <x id="PH" equiv-text="name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5463203516729908103" datatype="html">
@@ -2010,7 +2010,7 @@
         <target>Avertissement: Toutes données dans ce volume seront perdues.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6943486270557756671" datatype="html">
@@ -2018,7 +2018,7 @@
         <target>ANNULER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">160</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -2034,7 +2034,7 @@
         <target>SUPPRESSION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">162</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>

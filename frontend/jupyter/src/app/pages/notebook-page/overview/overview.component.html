@@ -52,7 +52,11 @@
 
 <!-- Show spinner while notebooks status is being fetched -->
 <ng-container *ngIf="!notebook?.status">
-  <lib-heading-row class="heading-row" heading="Conditions" i18n-heading></lib-heading-row>
+  <lib-heading-row
+    class="heading-row"
+    heading="Conditions"
+    i18n-heading
+  ></lib-heading-row>
   <lib-loading-spinner></lib-loading-spinner>
 </ng-container>
 

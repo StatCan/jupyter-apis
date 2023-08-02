@@ -1252,25 +1252,25 @@
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5183c1fd5c54b583c49ef02f710c344f4a73c7ab" datatype="html">
+      <trans-unit id="27ba3f1a32f095bb68a5704e11f728e7a2d8731d" datatype="html">
         <source> No logs were found for this Notebook. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/logs/logs.component.html</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">5,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05f66376c7d97b269be46c6cd8954658d1e7c918" datatype="html">
         <source> Error: <x id="INTERPOLATION" equiv-text="{{ loadErrorMsg }}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/logs/logs.component.html</context>
-          <context context-type="linenumber">6,8</context>
+          <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9a2e789688a741e5a45d19b04a5c0924e75fa172" datatype="html">
         <source>Notebook Pod Logs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/logs/logs.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b0de65942fc7b22924e95d5c14c75bdbc890db9f" datatype="html">
@@ -1371,7 +1371,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">158</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -1466,11 +1466,11 @@
         <source>Conditions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8343644461672729005" datatype="html">
@@ -1484,35 +1484,35 @@
         <source>A PersistentVolumeClaim (PVC) is a request for storage by a user and it is similar to a Pod. Pods consume node resources and PVCs consume PV resources. Pods can request specific levels of resources (CPU and Memory). Claims can request specific size and access modes (e.g., they can be mounted ReadWriteOnce, ReadOnlyMany or ReadWriteMany).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">319</context>
+          <context context-type="linenumber">318</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1052337811577686285" datatype="html">
         <source>A memory-backed volume is a special kind of emptyDir volume which is mounted as a tmpfs (RAM-backed filesystem) volume. While tmpfs is very fast, be aware that unlike disks, tmpfs is cleared on node reboot and any files you write count against your container&apos;s memory limit.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">324</context>
+          <context context-type="linenumber">322</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4514564479677320030" datatype="html">
         <source>An ephemeral volume is Kubernetes emptyDir. An emptyDir volume is first created when a Pod is assigned to a node, and exists as long as that Pod is running on that node. As the name says, the emptyDir volume is initially empty. All containers in the Pod can read and write the same files in the emptyDir volume, though that volume can be mounted at the same or different paths in each container. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted permanently.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">329</context>
+          <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3342715274834135939" datatype="html">
         <source>A ConfigMap provides a way to inject configuration data into pods. The data stored in a ConfigMap can be referenced in a volume of type configMap and then consumed by containerized applications running in a pod.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">334</context>
+          <context context-type="linenumber">330</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3348089079548024993" datatype="html">
         <source>A secret volume is used to pass sensitive information, such as passwords, to Pods. You can store secrets in the Kubernetes API and mount them as files for use by pods without coupling to Kubernetes directly. Secret volumes are backed by tmpfs (a RAM-backed filesystem) so they are never written to non-volatile storage.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
-          <context context-type="linenumber">339</context>
+          <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e5fdea24582fa8d00eed24e05bbf93ca06d77e97" datatype="html">
@@ -1750,57 +1750,57 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6926883898539175208" datatype="html">
         <source>Error <x id="PH" equiv-text="err"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4872314094100927318" datatype="html">
         <source>Starting Notebook server &apos;<x id="PH" equiv-text="name"/>&apos;...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9162667715823767475" datatype="html">
         <source>Stopping Notebook server &apos;<x id="PH" equiv-text="name"/>&apos;...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5287831016434712379" datatype="html">
         <source>Are you sure you want to delete this volume? <x id="PH" equiv-text="name"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5463203516729908103" datatype="html">
         <source>Warning: All data in this volume will be lost.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6943486270557756671" datatype="html">
         <source>CANCEL</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">160</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -1815,7 +1815,7 @@
         <source>DELETING</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">162</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>

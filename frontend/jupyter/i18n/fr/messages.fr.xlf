@@ -2,6 +2,86 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="8829497237648100098" datatype="html">
+        <source>Filter</source>
+        <target>Filtrer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/conditions-table/conditions-table.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4250248147292503105" datatype="html">
+        <source>Enter property name or value</source>
+        <target>Entrer le nom d'une propriété ou une valeur</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/conditions-table/conditions-table.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6559246822757089203" datatype="html">
+        <source>Clear filters</source>
+        <target>Effacer les filtres</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/conditions-table/conditions-table.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8789065827492404997" datatype="html">
+        <source>No rows to display</source>
+        <target>Aucune rangé à afficher</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/conditions-table/conditions-table.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1eede69e18c5ac9c0b0295b72cabb7e64e029e74" datatype="html">
         <source>Hide</source>
         <target>Cacher</target>
@@ -1186,70 +1266,6 @@
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8829497237648100098" datatype="html">
-        <source>Filter</source>
-        <target>Filtrer</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">71</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4250248147292503105" datatype="html">
-        <source>Enter property name or value</source>
-        <target>Entrer le nom d'une propriété ou une valeur</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6559246822757089203" datatype="html">
-        <source>Clear filters</source>
-        <target>Effacer les filtres</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
-          <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8789065827492404997" datatype="html">
-        <source>No rows to display</source>
-        <target>Aucune rangé à afficher</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/events/events.component.ts</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/volume-details-page/events/events.component.ts</context>
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4969890837805742985" datatype="html">
         <source>New Notebook</source>
         <target>Nouveau bloc-notes</target>
@@ -1631,6 +1647,46 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
           <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3697970706651766645" datatype="html">
+        <source>A PersistentVolumeClaim (PVC) is a request for storage by a user and it is similar to a Pod. Pods consume node resources and PVCs consume PV resources. Pods can request specific levels of resources (CPU and Memory). Claims can request specific size and access modes (e.g., they can be mounted ReadWriteOnce, ReadOnlyMany or ReadWriteMany).</source>
+        <target>Un PersistentVolumeClaim (PVC) est une demande de stockage par un utilisateur et c'est similaire à un Pod. Les pods consomment des ressources de nœud et les PVC consomment des ressources PV. Les pods peuvent demander des niveaux de ressources spécifiques (CPU et mémoire). Les réclamations peuvent demander une taille et des modes d'accès spécifiques (par exemple, elles peuvent être montées ReadWriteOnce, ReadOnlyMany ou ReadWriteMany).</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">319</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1052337811577686285" datatype="html">
+        <source>A memory-backed volume is a special kind of emptyDir volume which is mounted as a tmpfs (RAM-backed filesystem) volume. While tmpfs is very fast, be aware that unlike disks, tmpfs is cleared on node reboot and any files you write count against your container&apos;s memory limit.</source>
+        <target>Un volume sauvegardé en mémoire est un type spécial de volume emptyDir qui est monté en tant que volume tmpfs (système de fichiers sauvegardé en RAM). Bien que tmpfs soit très rapide, sachez que contrairement aux disques, tmpfs est effacé au redémarrage du nœud et que tous les fichiers que vous écrivez sont pris en compte dans la limite de mémoire de votre conteneur.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">324</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4514564479677320030" datatype="html">
+        <source>An ephemeral volume is Kubernetes emptyDir. An emptyDir volume is first created when a Pod is assigned to a node, and exists as long as that Pod is running on that node. As the name says, the emptyDir volume is initially empty. All containers in the Pod can read and write the same files in the emptyDir volume, though that volume can be mounted at the same or different paths in each container. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted permanently.</source>
+        <target>Un volume éphémère est Kubernetes emptyDir. Un volume emptyDir est d'abord créé lorsqu'un pod est attribué à un nœud et existe tant que ce pod est exécuté sur ce nœud. Comme son nom l'indique, le volume emptyDir est initialement vide. Tous les conteneurs du pod peuvent lire et écrire les mêmes fichiers dans le volume emptyDir, bien que ce volume puisse être monté sur le même chemin ou sur des chemins différents dans chaque conteneur. Lorsqu'un pod est supprimé d'un nœud pour une raison quelconque, les données dans le emptyDir sont définitivement supprimées.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">329</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3342715274834135939" datatype="html">
+        <source>A ConfigMap provides a way to inject configuration data into pods. The data stored in a ConfigMap can be referenced in a volume of type configMap and then consumed by containerized applications running in a pod.</source>
+        <target>Un ConfigMap fournit un moyen d'injecter des données de configuration dans des pods. Les données stockées dans un ConfigMap peuvent être référencées dans un volume de type configMap puis consommées par des applications conteneurisées s'exécutant dans un pod.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">334</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3348089079548024993" datatype="html">
+        <source>A secret volume is used to pass sensitive information, such as passwords, to Pods. You can store secrets in the Kubernetes API and mount them as files for use by pods without coupling to Kubernetes directly. Secret volumes are backed by tmpfs (a RAM-backed filesystem) so they are never written to non-volatile storage.</source>
+        <target>Un volume secret est utilisé pour transmettre des informations sensibles, telles que des mots de passe, aux pods. Vous pouvez stocker des secrets dans l'API Kubernetes et les monter en tant que fichiers à utiliser par des pods sans couplage direct à Kubernetes. Les volumes secrets sont sauvegardés par tmpfs (un système de fichiers basé sur la RAM) afin qu'ils ne soient jamais écrits sur un stockage non volatile.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e5fdea24582fa8d00eed24e05bbf93ca06d77e97" datatype="html">

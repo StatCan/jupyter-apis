@@ -23,6 +23,11 @@ export class ResourceTableComponent implements OnInit {
   @Input() data: any[];
   @Input() trackByFn: (index: number, r: any) => string;
 
+  @Input() filterHeader: String = 'Filter';
+  @Input() filterPlaceholder: String = 'Enter property name or value';
+  @Input() clearButtonTooltip: String = 'Clear filters';
+  @Input() emptyRows: String = 'No rows to display';
+
   // Whenever a button in a row is pressed the component will emit an event
   // with information regarding the button that was pressed as well as the
   // row's object.

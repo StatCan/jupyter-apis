@@ -661,7 +661,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 			notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceName(s.Config.SpawnerFormDefaults.GPUs.Value.Vendor)] = qty
 		}
 	} else {
-		if req.GPUs.Quantity != "none" {
+		if req.GPUs.Quantity != "none" && req.GPUs.Quantity != "" {
 			qty, err := resource.ParseQuantity(req.GPUs.Quantity)
 			if err != nil {
 				s.error(w, r, err)

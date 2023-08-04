@@ -686,7 +686,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="419f2d1ac1656bc7b42b7e3dca8a42c57020f447" datatype="html">
-        <source>A ubuntu remote desktop.</source>
+        <source>An Ubuntu remote desktop.</source>
         <target>Un bureau à distance Ubuntu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>

@@ -79,6 +79,128 @@
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6f3e563e8468f08961ef72b8e6391ad29d6534fc" datatype="html">
+        <source> Create a filter query by entering either a property name or just a value to narrow your results. </source>
+        <target> Créez une requête de filtre en saisissant soit un nom de propriété, soit simplement une valeur pour affiner vos résultats. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">13,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="51ff067a5bc7c37021ad2197510f0056f19586e1" datatype="html">
+        <source> Example:</source>
+        <target> Example :</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14a6e9e9516b54a4cc4e4b76838635a5025b376d" datatype="html">
+        <source> Name: filterValue</source>
+        <target> Nom: valeurFiltre</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b877f4b7c95a9df608724810332621b126abc72c" datatype="html">
+        <source> Filter empty values by entering double quotes:</source>
+        <target> Filtrez les valeurs vides en saisissant des guillemets :</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="472a04cb8c68549357a444ed66edc46ab1182f01" datatype="html">
+        <source> Name: &quot;&quot;</source>
+        <target> Nom: &quot;&quot;</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1" datatype="html">
+        <source>Status</source>
+        <target>Statut</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c4351955af730c098704f168c7a98f2505f3117d" datatype="html">
+        <source>Filter based on the objects&apos; status, by using:</source>
+        <target>Filtrez en fonction du statut des objets, en utilisant :</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a9466b242e6a28eb73de898fb9497db81711d142" datatype="html">
+        <source>The value shown in the tooltip</source>
+        <target>La valeur affichée dans l'info-bulle</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f26c44c9a2ed0d74cccd215366f797a768998c13" datatype="html">
+        <source> The status types (i.e. <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>ready, waiting, warning, error, unavailable, uninitialized, terminating, stopped<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i
+          &gt;"/>) </source>
+        <target> Les types de statut (c'est-à-dire <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>ready, waiting, warning, error, unavailable, uninitialized, terminating, stopped<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i
+          &gt;"/>) </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">41,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f933b826a570836cab04f683970a2d22068458c" datatype="html">
+        <source>Date</source>
+        <target>Date</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="363b2c66bcd12b2a99e00dc760cff20743f59a27" datatype="html">
+        <source>Filter timestamp values based on:</source>
+        <target>Filtrer les valeurs d'horodatage en fonction de :</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1860ddf8519c178e0c9c99b02b700b67a9f9b9cc" datatype="html">
+        <source> The &quot;-&quot; character for empty date values:</source>
+        <target> Le "-" caractère pour les valeurs de date vides :</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a81a55763a0547d3b744ed0d72105b487b91ae68" datatype="html">
+        <source> Created at: -</source>
+        <target> Créé à: -</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="25943590a80f4914fce56fb447b33bbd1e870372" datatype="html">
+        <source> The relative time text, shown in the column (i.e. <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>X months ago<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>) </source>
+        <target> Le texte de l'heure relative, affiché dans la colonne (c'est-à-dire <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>X months ago<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>) </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">65,67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10406840e7c6c592039d3158981d19449c46b4e9" datatype="html">
+        <source> The substring of the timestamp, that is shown in the UTC part of the tooltip </source>
+        <target> La sous-chaîne de l'horodatage, qui s'affiche dans la partie UTC de l'info-bulle </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
+          <context context-type="linenumber">68,71</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2061ce2524f31b7754bd310c6b0ad194b563767c" datatype="html">
         <source>Select Namespace</source>
         <target>Sélectionner l'espace de noms</target>

@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="51ff067a5bc7c37021ad2197510f0056f19586e1" datatype="html">
         <source> Example:</source>
-        <target> Example :</target>
+        <target> Exemple :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">18</context>
@@ -171,7 +171,7 @@
       </trans-unit>
       <trans-unit id="1860ddf8519c178e0c9c99b02b700b67a9f9b9cc" datatype="html">
         <source> The &quot;-&quot; character for empty date values:</source>
-        <target> Le "-" caractère pour les valeurs de date vides :</target>
+        <target> Le caractère "-" pour les valeurs de date vides :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">56</context>

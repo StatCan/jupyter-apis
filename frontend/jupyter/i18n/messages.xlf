@@ -243,39 +243,46 @@
         </context-group>
         <note priority="1" from="description">Title for the CPU/RAM form section</note>
       </trans-unit>
+      <trans-unit id="27fe1361bbf21cf10804a10e8277ab582e091061" datatype="html">
+        <source>Configure the resources allocated to the notebook. Minimum and maximum values correspond to K8s requests and limits for the resources of the underlying Pod.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="022b76f5dce062767f3350de4cba25f123980c55" datatype="html">
         <source>Minimum CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d4c644153a1a9b19e115e73a00b825d0f4572afa" datatype="html">
         <source>Minimum Memory Gi</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d4f853e6680ab5a64f1909515416c41f32debe79" datatype="html">
         <source> These limits determine the maximum amount of CPU and RAM to be used by your Notebook Server, which may be used to scale up the server if available. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">39,42</context>
+          <context context-type="linenumber">40,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a5e26341f36b5e431ec738856f068de4e0cf2464" datatype="html">
         <source>Maximum CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2c333be81c7eb4916816e8882447abd9c5180746" datatype="html">
         <source>Maximum Memory Gi</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="18447639280265814" datatype="html">
@@ -569,7 +576,7 @@
           <context context-type="linenumber">38,41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="419f2d1ac1656bc7b42b7e3dca8a42c57020f447" datatype="html">
+      <trans-unit id="1957873538dddbdd9f2cd0193bf5f70970f990e7" datatype="html">
         <source>An Ubuntu remote desktop.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>

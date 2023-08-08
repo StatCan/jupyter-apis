@@ -9,10 +9,6 @@
   <!--scrollable page content-->
   <div class="page-padding lib-flex-grow">
     <lib-table
-      [filterHeader]="filterHeader"
-      [filterPlaceholder]="filterPlaceholder"
-      [clearButtonTooltip]="clearButtonTooltip"
-      [emptyRows]="emptyRows"
       [config]="config"
       [data]="processedData"
       [trackByFn]="notebookTrackByFn"
@@ -25,10 +21,6 @@
   <!--scrollable page content-->
   <div class="page-padding lib-flex-grow">
     <lib-table
-      [filterHeader]="filterHeader"
-      [filterPlaceholder]="filterPlaceholder"
-      [clearButtonTooltip]="clearButtonTooltip"
-      [emptyRows]="emptyRows"
       [config]="volumeConfig"
       [data]="processedVolumeData"
       [trackByFn]="pvcTrackByFn"
@@ -71,10 +63,6 @@
     <mat-divider></mat-divider>
     <lib-table
       *ngIf="this.getCostStatus() === true; else error"
-      [filterHeader]="filterHeader"
-      [filterPlaceholder]="filterPlaceholder"
-      [clearButtonTooltip]="clearButtonTooltip"
-      [emptyRows]="emptyRows"
       [config]="costConfig"
       [data]="processedCostData"
       [trackByFn]="costTrackByFn"

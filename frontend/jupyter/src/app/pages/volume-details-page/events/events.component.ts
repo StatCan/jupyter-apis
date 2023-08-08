@@ -18,11 +18,6 @@ export class EventsComponent implements OnInit, OnDestroy {
   config = defaultConfig;
   pollSub = new Subscription();
 
-  filterHeader = $localize`Filter`;
-  filterPlaceholder = $localize`Enter property name or value`;
-  clearButtonTooltip = $localize`Clear filters`;
-  emptyRows = $localize`No rows to display`;
-
   constructor(
     public backend: JWABackendService,
     public poller: PollerService,

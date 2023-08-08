@@ -86,11 +86,6 @@ export class TableComponent
 
   TABLE_THEME = TABLE_THEME;
 
-  @Input() filterHeader = 'Filter';
-  @Input() filterPlaceholder = 'Enter property name or value';
-  @Input() clearButtonTooltip = 'Clear filters';
-  @Input() emptyRows = 'No rows to display';
-
   @Input()
   config: TableConfig;
 

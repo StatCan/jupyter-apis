@@ -11,14 +11,20 @@ on:
 env:
   REGISTRY_NAME: k8scc01covidacr
   DEV_REGISTRY_NAME: k8scc01covidacrdev
+  TRIVY_VERSION: "v0.43.1"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
     # Determine if pushing to ACR or DEV ACR
-    - name: Set ENV variables for a PR containing the auto-deploy tag
-      if: github.event_name == 'pull_request' && contains( github.event.pull_request.labels.*.name, 'auto-deploy')
+    - name: Set ENV variables for a PR
+      if: github.event_name == 'pull_request'
       run: echo "REGISTRY=${{env.DEV_REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
    
     - name: Set ENV variable for pushes to master
@@ -53,16 +59,23 @@ jobs:
         username: ${{ secrets.DEV_REGISTRY_USERNAME }}
         password: ${{ secrets.DEV_REGISTRY_PASSWORD }}
 
-    - name: Build docker image and push
+    
+    - name: Build image locally
+      run: |
+        docker build -f Dockerfile -t localhost:5000/jupyter-apis:${{ github.sha }} .
+        docker push localhost:5000/jupyter-apis:${{ github.sha }}
+        docker rmi localhost:5000/jupyter-apis:${{ github.sha }}
+        docker image prune
+    
+    - name: Aqua Security Trivy image scan
+      run: |
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
+        trivy image localhost:5000/jupyter-apis:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
+    
+    # Container build and push to a Azure Container registry (ACR)
+    - name: Push to ACR if necessary
       if: steps.should-i-push.outputs.boolean == 'true'
       run: |
-        docker build -f Dockerfile -t ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }} .
+        docker pull localhost:5000/jupyter-apis:${{ github.sha }}
+        docker tag localhost:5000/jupyter-apis:${{ github.sha }} ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
         docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
-
-    - name: Azure containrer scan
-      if: steps.should-i-push.outputs.boolean == 'true'
-      uses: Azure/container-scan@v0
-      with:
-        image-name: ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
-        severity-threshold: CRITICAL
-        run-quality-checks: false

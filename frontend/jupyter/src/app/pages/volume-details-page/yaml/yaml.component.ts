@@ -17,9 +17,9 @@ export class YamlComponent implements OnInit {
 
   getYaml(pvc: V1PersistentVolumeClaim, pvcInfoLoaded: boolean): string {
     if (!pvc && !pvcInfoLoaded) {
-      return 'PVC information is being loaded.';
+      return $localize`PVC information is being loaded.`;
     } else if (!pvc && pvcInfoLoaded) {
-      return 'No data has been found.';
+      return $localize`No data has been found.`;
     } else {
       return dump(pvc);
     }

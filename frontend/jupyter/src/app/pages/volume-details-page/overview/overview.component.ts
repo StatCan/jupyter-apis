@@ -210,9 +210,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   getPodsMountedMessage(error: string): string {
     if (!error) {
-      return 'No pods are using this PVC.';
+      return $localize`No pods are using this PVC.`;
     } else {
-      return `Failed to fetch mounted pods with error: ${error}`;
+      return $localize`Failed to fetch mounted pods with error: ${error}`;
     }
   }
 

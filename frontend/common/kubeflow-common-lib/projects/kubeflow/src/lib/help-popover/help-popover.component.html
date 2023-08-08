@@ -10,23 +10,24 @@
 
 <ng-template #helperTpl>
   <div class="helper-text">
-    <p>
+    <p i18n>
       Create a filter query by entering either a property name or just a value
       to narrow your results.
     </p>
     <p>
-      Example:
+      <span i18n>&nbsp;Example:</span>&nbsp;
       <mat-chip class="mat-chip-blue">
-        Name: filterValue
+        <span i18n>&nbsp;Name: filterValue</span>
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
       </mat-chip>
     </p>
     <p>
-      Filter empty values by entering double quotes:
+      <span i18n>&nbsp;Filter empty values by entering double quotes:</span
+      >&nbsp;
       <mat-chip class="mat-chip-blue">
-        Name: ""
+        <span i18n>&nbsp;Name: ""</span>
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
@@ -34,11 +35,11 @@
     </p>
     <mat-divider></mat-divider>
     <ng-template [ngIf]="showStatus">
-      <p><b>Status</b></p>
-      <p>Filter based on the objects' status, by using:</p>
+      <p><b i18n>Status</b></p>
+      <p i18n>Filter based on the objects' status, by using:</p>
       <ul>
-        <li>The value shown in the tooltip</li>
-        <li>
+        <li i18n>The value shown in the tooltip</li>
+        <li i18n>
           The status types (i.e.
           <i
             >ready, waiting, warning, error, unavailable, uninitialized,
@@ -49,24 +50,25 @@
     </ng-template>
     <mat-divider></mat-divider>
     <ng-template [ngIf]="showDate">
-      <p><b>Date</b></p>
-      <p>Filter timestamp values based on:</p>
+      <p><b i18n>Date</b></p>
+      <p i18n>Filter timestamp values based on:</p>
       <ul>
         <li>
-          <span
-            >The "-" character for empty date values:
+          <span>
+            <span i18n>&nbsp;The "-" character for empty date values:</span
+            >&nbsp;
             <mat-chip class="mat-chip-blue">
-              Created at: -
+              <span i18n>&nbsp;Created at: -</span>
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip>
           </span>
         </li>
-        <li>
+        <li i18n>
           The relative time text, shown in the column (i.e. <i>X months ago</i>)
         </li>
-        <li>
+        <li i18n>
           The substring of the timestamp, that is shown in the UTC part of the
           tooltip
         </li>

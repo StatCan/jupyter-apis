@@ -1,31 +1,33 @@
-<lib-details-list-item key="Access modes" [chipsList]="accessModes">
+<lib-details-list-item key="Access modes" [chipsList]="accessModes" i18n-key>
 </lib-details-list-item>
 
-<lib-details-list-item key="Size">
+<lib-details-list-item key="Size" i18n-key>
   {{ size }}
 </lib-details-list-item>
 
-<lib-details-list-item key="Storage class">
+<lib-details-list-item key="Storage class" i18n-key>
   {{ storageClass }}
 </lib-details-list-item>
 
-<lib-details-list-item key="Volume mode">
+<lib-details-list-item key="Volume mode" i18n-key>
   {{ volumeMode }}
 </lib-details-list-item>
 
-<lib-details-list-item key="Volume name" *ngIf="volumeName">
+<lib-details-list-item key="Volume name" *ngIf="volumeName" i18n-key>
   {{ volumeName }}
 </lib-details-list-item>
 
 <lib-details-list-item
   key="Owned by"
+  i18n-key
   keyTooltip="The pvc is owned by the objects in this list. If all objects in the list get deleted, then the PVC itself will be deleted"
+  i18n-keyTooltip
   *ngIf="ownerReferencesNotEmpty"
   [chipsList]="ownerRefs"
 >
 </lib-details-list-item>
 
-<lib-content-list-item key="Pods Mounted">
+<lib-content-list-item key="Pods Mounted" i18n-key>
   <ng-container *ngIf="!podGroupsLoaded">
     <lib-loading-spinner></lib-loading-spinner>
   </ng-container>

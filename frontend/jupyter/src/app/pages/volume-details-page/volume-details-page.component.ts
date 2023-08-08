@@ -25,9 +25,9 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
   public pvcInfoLoaded = false;
   public buttonsConfig: ToolbarButton[] = [
     new ToolbarButton({
-      text: 'DELETE',
+      text: $localize`DELETE`,
       icon: 'delete',
-      tooltip: 'Delete this volume',
+      tooltip: $localize`Delete this volume`,
       fn: () => {
         this.deleteVolume();
       },

@@ -12,8 +12,8 @@ import { NotebookRawObject } from 'src/app/types';
 export class YamlComponent implements OnInit {
   public yaml: string;
   public selection = 'notebook';
-  public infoMessage = 'Show the full YAML of the ';
-  private podYaml = 'Pod information is still being loaded.';
+  public infoMessage = $localize`Show the full YAML of the `;
+  private podYaml = $localize`Pod information is still being loaded.`;
   private prvPod: V1Pod;
 
   @Input() podRequestCompleted = false;
@@ -23,12 +23,12 @@ export class YamlComponent implements OnInit {
     this.prvPod = pod;
 
     if (!pod && !this.podRequestCompleted) {
-      this.podYaml = 'Pod information is still being loaded.';
+      this.podYaml = $localize`Pod information is still being loaded.`;
       return;
     }
 
     if (!pod) {
-      this.podYaml = 'No pod available for this notebook.';
+      this.podYaml = $localize`No pod available for this notebook.`;
       if (this.selection === 'pod') {
         this.yaml = this.podYaml;
       }
@@ -57,7 +57,7 @@ export class YamlComponent implements OnInit {
 
   get notebookYaml() {
     if (!this.notebook) {
-      return 'No data has been found...';
+      return $localize`No data has been found...`;
     }
 
     return dump(this.notebook);

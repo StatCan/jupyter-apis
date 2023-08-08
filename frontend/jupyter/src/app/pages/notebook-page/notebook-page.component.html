@@ -1,6 +1,7 @@
 <div class="lib-content-wrapper details-page">
   <lib-title-actions-toolbar
     title="Notebook details"
+    i18n-title
     [buttons]="buttonsConfig"
     [backButton]="true"
     (back)="navigateBack()"
@@ -26,7 +27,7 @@
         (selectedTabChange)="onTabChange($event)"
         [selectedIndex]="selectedTab.index"
       >
-        <mat-tab label="OVERVIEW">
+        <mat-tab label="OVERVIEW" i18n-label>
           <ng-template matTabContent>
             <app-overview
               *ngIf="notebookInfoLoaded"
@@ -38,7 +39,7 @@
           </ng-template>
         </mat-tab>
 
-        <mat-tab label="LOGS">
+        <mat-tab label="LOGS" i18n-label>
           <ng-template matTabContent>
             <app-logs
               [pod]="notebookPod"
@@ -47,13 +48,13 @@
           </ng-template>
         </mat-tab>
 
-        <mat-tab label="EVENTS">
+        <mat-tab label="EVENTS" i18n-label>
           <ng-template matTabContent>
             <app-events [notebook]="notebook"></app-events>
           </ng-template>
         </mat-tab>
 
-        <mat-tab label="YAML">
+        <mat-tab label="YAML" i18n-label>
           <ng-template matTabContent>
             <app-yaml
               [podRequestCompleted]="podRequestCompleted"

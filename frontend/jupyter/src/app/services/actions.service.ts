@@ -35,14 +35,11 @@ export class ActionsService {
           next: _ => {
             ref.close(DIALOG_RESP.ACCEPT);
             const object = `${namespace}/${name}`;
-            this.snackBar.open(
-              `${object}: Delete request was sent.`,
-              SnackType.Info,
-              5000,
-            );
+            const message = $localize`Delete request was sent.`;
+            this.snackBar.open(`${object}: ${message}`, SnackType.Info, 5000);
           },
           error: err => {
-            const errorMsg = `Error ${err}`;
+            const errorMsg = $localize`Error ${err}`;
             deleteDialogConfig.error = errorMsg;
             ref.componentInstance.applying$.next(false);
             subscriber.next(`fail`);
@@ -100,7 +97,7 @@ export class ActionsService {
             );
           },
           error: err => {
-            const errorMsg = `Error ${err}`;
+            const errorMsg = $localize`Error ${err}`;
             stopDialogConfig.error = errorMsg;
             ref.componentInstance.applying$.next(false);
             subscriber.next(`fail`);
@@ -133,14 +130,11 @@ export class ActionsService {
             ref.close(DIALOG_RESP.ACCEPT);
 
             const object = `${namespace}/${name}`;
-            this.snackBar.open(
-              `${object}: Delete request was sent.`,
-              SnackType.Info,
-              3000,
-            );
+            const message = $localize`Delete request was sent.`;
+            this.snackBar.open(`${object}: ${message}`, SnackType.Info, 3000);
           },
           error: err => {
-            const errorMsg = `Error ${err}`;
+            const errorMsg = $localize`Error ${err}`;
             deleteDialogConfig.error = errorMsg;
             ref.componentInstance.applying$.next(false);
             subscriber.next('fail');

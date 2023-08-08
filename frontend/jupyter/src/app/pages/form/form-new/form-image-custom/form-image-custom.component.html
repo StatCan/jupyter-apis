@@ -1,4 +1,4 @@
-<lib-form-section title="Custom Notebook">
+<lib-form-section title="Custom Notebook" i18n-title>
   <div class="flex-column">
     <mat-form-field
       class="wide"
@@ -107,6 +107,7 @@
         <input
           matInput
           placeholder="Provide a custom Image"
+          i18n-placeholder
           [formControl]="parentForm.get('customImage')"
           #cstmimg
         />

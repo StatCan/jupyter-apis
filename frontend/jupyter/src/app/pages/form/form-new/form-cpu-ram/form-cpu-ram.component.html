@@ -2,6 +2,7 @@
   title="CPU / RAM"
   i18n-title="Title for the CPU/RAM form section"
   helpText="Configure the resources allocated to the notebook. Minimum and maximum values correspond to K8s requests and limits for the resources of the underlying Pod."
+  i18n-helpText
 >
   <div class="row" [formGroup]="parentForm">
     <!--CPU AAW, do not take their lib-positive-input -->
@@ -44,7 +45,7 @@
     <!--CPU-->
     <div class="column">
       <mat-form-field appearance="outline" class="wide">
-        <mat-label i18n>Maximum CPU</mat-label>
+        <mat-label i18n>Maximum CPUs</mat-label>
         <input
           [attr.disabled]="readonlySpecs ? '' : null"
           matInput

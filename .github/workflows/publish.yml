@@ -75,7 +75,7 @@ jobs:
     - name: Run dockle
       uses: goodwithtech/dockle-action@main
       with:
-        image: localhost:5000/${{ matrix.image }}:${{ github.sha }}
+        image: localhost:5000/jupyter-apis:${{ github.sha }}
         format: 'list'
         exit-code: '0'
         # Must determine when / how we want to exit

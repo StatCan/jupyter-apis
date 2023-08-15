@@ -7,7 +7,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import {
+  MatPaginatorModule,
+  MatPaginatorIntl,
+} from '@angular/material/paginator';
 import { StatusComponent } from './status/status.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -34,6 +37,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { HelpPopoverModule } from '../help-popover/help-popover.module';
 import { RouterModule } from '@angular/router';
+import { getCustomPaginatorIntl } from './paginator/custom-paginator-intl';
 
 @NgModule({
   imports: [
@@ -78,5 +82,8 @@ import { RouterModule } from '@angular/router';
     ComponentValueComponent,
   ],
   exports: [ResourceTableComponent, TableComponent, ActionComponent],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getCustomPaginatorIntl() },
+  ],
 })
 export class ResourceTableModule {}

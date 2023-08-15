@@ -116,7 +116,7 @@
         <target> Nom: &quot;&quot;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1" datatype="html">
@@ -124,7 +124,7 @@
         <target>Statut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c4351955af730c098704f168c7a98f2505f3117d" datatype="html">
@@ -132,7 +132,7 @@
         <target>Filtrez en fonction du statut des objets, en utilisant :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9466b242e6a28eb73de898fb9497db81711d142" datatype="html">
@@ -140,17 +140,18 @@
         <target>La valeur affichée dans l'info-bulle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f26c44c9a2ed0d74cccd215366f797a768998c13" datatype="html">
-        <source> The status types (i.e. <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>ready, waiting, warning, error, unavailable, uninitialized, terminating, stopped<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i
+        <source> The status types (i.e. <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i
+            &gt;"/>ready, waiting, warning, error, unavailable, uninitialized, terminating, stopped<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i
           &gt;"/>) </source>
         <target> Les types de statut (c'est-à-dire <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>ready, waiting, warning, error, unavailable, uninitialized, terminating, stopped<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i
           &gt;"/>) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">41,46</context>
+          <context context-type="linenumber">42,48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f933b826a570836cab04f683970a2d22068458c" datatype="html">
@@ -158,7 +159,7 @@
         <target>Date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="363b2c66bcd12b2a99e00dc760cff20743f59a27" datatype="html">
@@ -166,7 +167,7 @@
         <target>Filtrer les valeurs d'horodatage en fonction de :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1860ddf8519c178e0c9c99b02b700b67a9f9b9cc" datatype="html">
@@ -174,7 +175,7 @@
         <target> Le caractère "-" pour les valeurs de date vides :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a81a55763a0547d3b744ed0d72105b487b91ae68" datatype="html">
@@ -182,7 +183,7 @@
         <target> Créé à: -</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="25943590a80f4914fce56fb447b33bbd1e870372" datatype="html">
@@ -190,7 +191,7 @@
         <target> Le texte de l'heure relative, affiché dans la colonne (c'est-à-dire <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>X months ago<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">65,67</context>
+          <context context-type="linenumber">68,70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="10406840e7c6c592039d3158981d19449c46b4e9" datatype="html">
@@ -198,7 +199,7 @@
         <target> La sous-chaîne de l'horodatage, qui s'affiche dans la partie UTC de l'info-bulle </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
-          <context context-type="linenumber">68,71</context>
+          <context context-type="linenumber">71,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2061ce2524f31b7754bd310c6b0ad194b563767c" datatype="html">
@@ -207,6 +208,62 @@
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/namespace-select/namespace-select.component.html</context>
           <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="125401261339317585" datatype="html">
+        <source>Page 1 of 1</source>
+        <target>Page 1 de 1</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6221116945238325541" datatype="html">
+        <source>Page <x id="PH" equiv-text="page + 1"/> of <x id="PH_1" equiv-text="amountPages"/></source>
+        <target>Page <x id="PH" equiv-text="page + 1"/> de <x id="PH_1" equiv-text="amountPages"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8642445555713453888" datatype="html">
+        <source>First page</source>
+        <target>Première page</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6784758141439994527" datatype="html">
+        <source>Last page</source>
+        <target>Dernière page</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3629960544875360046" datatype="html">
+        <source>Previous page</source>
+        <target>Page précédente</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3337301694210287595" datatype="html">
+        <source>Next page</source>
+        <target>Page suivante</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4743002849260529978" datatype="html">
+        <source>Items per page:</source>
+        <target>Objets par page :</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/paginator/custom-paginator-intl.ts</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22" datatype="html">

@@ -38,7 +38,7 @@ const memoizedDateTimeFormat = memoize(dateTimeFormat);
 
 @Injectable({ providedIn: 'root' })
 export class DateTimeService {
-  private currentLocale = enlocale;
+  private currentLocale : Object = enlocale;
   constructor(@Inject(LOCALE_ID) public locale: string) {
     if(locale.startsWith('fr')){
       this.currentLocale = frlocale;

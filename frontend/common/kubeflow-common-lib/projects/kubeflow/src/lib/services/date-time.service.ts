@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
-import { parse } from 'date-fns';
-import { isEqual } from 'date-fns';
-import { setHours } from 'date-fns';
-import { setMinutes } from 'date-fns';
-import { setSeconds } from 'date-fns';
-import { distanceInWords } from 'date-fns';
-import { differenceInSeconds } from 'date-fns';
+import { Injectable, LOCALE_ID, Inject } from '@angular/core';
+import { 
+  parse, 
+  isEqual, 
+  setHours, 
+  setMinutes, 
+  setSeconds, 
+  distanceInWords, 
+  differenceInSeconds,
+} from 'date-fns';
+import frlocale from 'date-fns/locale/fr'
+import enlocale from 'date-fns/locale/en'
 import memoize from 'lodash-es/memoize';
 
 export const defaultDateOptions: Intl.DateTimeFormatOptions = {
@@ -34,7 +38,12 @@ const memoizedDateTimeFormat = memoize(dateTimeFormat);
 
 @Injectable({ providedIn: 'root' })
 export class DateTimeService {
-  constructor() {}
+  private currentLocale = enlocale;
+  constructor(@Inject(LOCALE_ID) public locale: string) {
+    if(locale.startsWith('fr')){
+      this.currentLocale = frlocale;
+    }
+  }
 
   public parse(date: string | number | Date): Date {
     // https://date-fns.org/v1.29.0/docs/parse
@@ -99,6 +108,7 @@ export class DateTimeService {
     return distanceInWords(date, dateToCompare, {
       includeSeconds: false,
       addSuffix: true,
+      locale: this.currentLocale,
     })
       .replace('about', '')
       .replace('almost', '');

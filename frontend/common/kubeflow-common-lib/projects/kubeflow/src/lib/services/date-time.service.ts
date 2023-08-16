@@ -1,15 +1,15 @@
 import { Injectable, LOCALE_ID, Inject } from '@angular/core';
-import { 
-  parse, 
-  isEqual, 
-  setHours, 
-  setMinutes, 
-  setSeconds, 
-  distanceInWords, 
+import {
+  parse,
+  isEqual,
+  setHours,
+  setMinutes,
+  setSeconds,
+  distanceInWords,
   differenceInSeconds,
 } from 'date-fns';
-import frlocale from 'date-fns/locale/fr'
-import enlocale from 'date-fns/locale/en'
+import frlocale from 'date-fns/locale/fr';
+import enlocale from 'date-fns/locale/en';
 import memoize from 'lodash-es/memoize';
 
 export const defaultDateOptions: Intl.DateTimeFormatOptions = {
@@ -38,9 +38,9 @@ const memoizedDateTimeFormat = memoize(dateTimeFormat);
 
 @Injectable({ providedIn: 'root' })
 export class DateTimeService {
-  private currentLocale : Object = enlocale;
+  private currentLocale = enlocale;
   constructor(@Inject(LOCALE_ID) public locale: string) {
-    if(locale.startsWith('fr')){
+    if (locale.startsWith('fr')) {
       this.currentLocale = frlocale;
     }
   }

@@ -1,19 +1,16 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SnackBarService, SnackType } from 'kubeflow';
+import { SnackBarService } from 'kubeflow';
 
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import {
   createExistingSourceFormGroup,
   createNewPvcFormGroup,
-  createNewPvcVolumeFormGroup,
   getNewVolumeSize,
   getNewVolumeType,
-  getVolumeDesc,
   getVolumeName,
   getVolumeTitle,
 } from 'src/app/shared/utils/volumes';
-import { EXISTING_SOURCE, Volume } from 'src/app/types';
 
 @Component({
   selector: 'app-form-workspace-volume',

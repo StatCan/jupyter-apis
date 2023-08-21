@@ -1,10 +1,5 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,6 +8,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./mount.component.scss'],
 })
 export class VolumeMountComponent implements OnDestroy {
+  @Input() checkDuplicacy: () => void;
+
   private prvVolGroup: FormGroup;
   @Input()
   get volGroup(): FormGroup {
@@ -21,14 +18,6 @@ export class VolumeMountComponent implements OnDestroy {
 
   set volGroup(volGroup: FormGroup) {
     this.prvVolGroup = volGroup;
-    this.prvVolGroup
-      .get('mount')
-      .setValidators([
-        Validators.required,
-        Validators.pattern(
-          /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
-        ),
-      ]);
     this.valueChangeSubscription.unsubscribe();
     this.updateMountOnNameChange(volGroup);
   }
@@ -84,12 +73,16 @@ export class VolumeMountComponent implements OnDestroy {
   }
 
   showMountPathError() {
-    const mountName = this.volGroup.get('mount'); // should this be like the getNameCtrl?
+    const mountName = this.volGroup.get('mount');
+
     if (mountName.hasError('required')) {
       return $localize`Mount path is required`;
     }
     if (mountName.hasError('pattern')) {
       return $localize`The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie`;
+    }
+    if (mountName.hasError('duplicate')) {
+      return $localize`This mount path is already in use`;
     }
   }
 }

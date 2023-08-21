@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,
@@ -34,6 +34,9 @@ export class FormDataVolumesComponent implements OnInit {
     event.stopPropagation();
     this.volsArray.removeAt(id);
     this.openPanel.clear();
+    this.volsArray.controls.forEach((v, i) => {
+      (v as FormGroup).get('mount').updateValueAndValidity();
+    });
   }
 
   addNewVolume() {
@@ -45,6 +48,7 @@ export class FormDataVolumesComponent implements OnInit {
     this.volsArray.push(volGroup);
 
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
+    volGroup.get('mount').markAsTouched();
   }
 
   attachExistingVolume() {
@@ -53,5 +57,13 @@ export class FormDataVolumesComponent implements OnInit {
     this.volsArray.push(volGroup);
 
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
+  }
+
+  checkDuplicacy(index: number) {
+    this.volsArray.controls.forEach((v, i) => {
+      if (index !== i) {
+        (v as FormGroup).get('mount').updateValueAndValidity();
+      }
+    });
   }
 }

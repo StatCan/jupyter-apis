@@ -1,7 +1,10 @@
 import {
   AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { V1PersistentVolumeClaim, V1Volume } from '@kubernetes/client-node';
@@ -91,13 +94,47 @@ export function createNewPvcFormGroup(
   });
 }
 
+function duplicateMountPathValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (control.value) {
+      const formArray = control.parent
+        ? (control.parent.parent as FormArray)
+        : null;
+
+      if (formArray) {
+        const hasWorkspaceVol =
+          formArray.parent.get('workspace').value.newPvc ||
+          formArray.parent.get('workspace').value.existingSource
+            ? true
+            : false;
+
+        if (hasWorkspaceVol && control.value === '/home/jovyan') {
+          return { duplicate: true };
+        }
+
+        const mounts = formArray.value.map(e => e.mount);
+        const indexOf = mounts.indexOf(control.value);
+        return indexOf >= 0 && indexOf < mounts.lastIndexOf(control.value)
+          ? { duplicate: true }
+          : null;
+      }
+    }
+  };
+}
+
 // For volume
 export function createNewPvcVolumeFormGroup(
   name = '{notebook-name}-volume',
 ): FormGroup {
   return new FormGroup({
     name: new FormControl('', []),
-    mount: new FormControl('', Validators.required),
+    mount: new FormControl('', [
+      Validators.required,
+      Validators.pattern(
+        /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
+      ),
+      duplicateMountPathValidator(),
+    ]),
     newPvc: createNewPvcFormGroup(name),
   });
 }
@@ -106,7 +143,13 @@ export function createNewPvcVolumeFormGroup(
 export function createExistingVolumeFormGroup(): FormGroup {
   return new FormGroup({
     name: new FormControl('', []),
-    mount: new FormControl('', Validators.required),
+    mount: new FormControl('', [
+      Validators.required,
+      Validators.pattern(
+        /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
+      ),
+      duplicateMountPathValidator(),
+    ]),
     existingSource: createExistingSourceFormGroup(),
   });
 }

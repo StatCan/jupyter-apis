@@ -5,6 +5,7 @@
     matInput
     [formControl]="volGroup.get('mount')"
     data-cy="mount path"
+    (input)="(checkDuplicacy)"
   />
   <mat-error>
     {{ showMountPathError() }}

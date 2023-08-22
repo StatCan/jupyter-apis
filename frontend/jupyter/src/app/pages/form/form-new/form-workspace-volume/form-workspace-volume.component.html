@@ -84,6 +84,12 @@
 
         <!--AAW: Removed the mount path from workspace volume
         <app-volume-mount [volGroup]="volGroup"></app-volume-mount>-->
+        <div appearance="outline" class="wide">
+          <mat-label i18n>Mount path</mat-label>
+          <p data-cy="mount path">
+            {{ volGroup.get('mount').value }}
+          </p>
+        </div>
       </div>
     </mat-expansion-panel>
   </mat-accordion>

@@ -122,7 +122,7 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
 
   // AAW specific
   showNameError() {
-    const volumeName = this.getNameCtrl(this.metadataGroup); // should this be like the getNameCtrl?
+    const volumeName = this.getNameCtrl(this.metadataGroup);
 
     if (volumeName.hasError('required')) {
       return $localize`Name is required`;

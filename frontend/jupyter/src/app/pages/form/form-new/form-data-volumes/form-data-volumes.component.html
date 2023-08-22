@@ -88,7 +88,10 @@
           [sizes]="['4', '8', '16', '32', '64', '128', '256', '512']"
         ></app-new-volume>
 
-        <app-volume-mount [volGroup]="volGroup"></app-volume-mount>
+        <app-volume-mount
+          [volGroup]="volGroup"
+          [checkDuplicacy]="checkDuplicacy(i)"
+        ></app-volume-mount>
       </div>
     </mat-expansion-panel>
   </mat-accordion>

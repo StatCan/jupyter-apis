@@ -8,10 +8,14 @@ on:
       - 'opened'
       - 'synchronize'
       - 'reopened'
+  schedule: 
+    - cron: '0 23 * * *'
+
 env:
   REGISTRY_NAME: k8scc01covidacr
   DEV_REGISTRY_NAME: k8scc01covidacrdev
   TRIVY_VERSION: "v0.43.1"
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   build:
@@ -88,3 +92,10 @@ jobs:
         docker pull localhost:5000/jupyter-apis:${{ github.sha }}
         docker tag localhost:5000/jupyter-apis:${{ github.sha }} ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
         docker push ${{ env.REGISTRY }}/jupyter-apis:${{ github.sha }}
+
+    - name: Slack Notification
+      if: failure() && github.event_name=='schedule'
+      uses: act10ns/slack@v1
+      with: 
+        status: failure
+        message: jupyter-apis build failed. https://github.com/StatCan/jupyter-apis/actions/runs/${{github.run_id}}

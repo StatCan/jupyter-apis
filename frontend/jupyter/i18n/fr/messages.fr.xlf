@@ -780,12 +780,12 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="086cece82f62d5d6aa8df5a5c70561a8cf85568b" datatype="html">
-        <source>The image given will be assessed by a vulnerability scan before passing through our allowlist</source>
-        <target>L'image donnée sera évaluée par une analyse de vulnérabilité avant de passer par notre liste verte</target>
+      <trans-unit id="b481bc54cbb00292b2f5c47639c0f8b9367f5440" datatype="html">
+        <source> The image given will be assessed by a vulnerability scan before passing through our allowlist </source>
+        <target> L'image donnée sera évaluée par une analyse de vulnérabilité avant de passer par notre liste verte </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">107,110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
@@ -793,7 +793,7 @@
         <target>Fournir une image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6343667331017090565" datatype="html">

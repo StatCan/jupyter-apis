@@ -104,6 +104,11 @@
         *ngIf="parentForm?.value.customImageCheck"
       >
         <mat-label i18n>Custom Image</mat-label>
+        <mat-hint i18n>
+          The selected image will be evaluated against our allow-list. For more
+          details on using your own custom images, follow the documentation at
+          https://github.com/StatCan/aaw-contrib-containers.
+        </mat-hint>
         <input
           matInput
           placeholder="Provide a custom Image"

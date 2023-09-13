@@ -621,7 +621,7 @@
         <target> + Ajouter un nouveau volume </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-data-volumes/form-data-volumes.component.html</context>
-          <context context-type="linenumber">105,107</context>
+          <context context-type="linenumber">108,110</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>
@@ -633,7 +633,7 @@
         <target> + Attacher un volume existant </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-data-volumes/form-data-volumes.component.html</context>
-          <context context-type="linenumber">117,119</context>
+          <context context-type="linenumber">120,122</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>
@@ -780,12 +780,20 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="23b8e06185a822c1aa001bd6c7519a1407dbef5a" datatype="html">
+        <source> The selected image will be evaluated against our allow-list. For more details on using your own custom images, follow the documentation at https://github.com/StatCan/aaw-contrib-containers. </source>
+        <target> L'image sélectionnée sera évaluée par rapport à notre liste autorisée. Pour plus de détails sur l'utilisation de vos propres images personnalisées, suivez la documentation sur https://github.com/StatCan/aaw-contrib-containers. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">107,111</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
         <source>Provide a custom Image</source>
         <target>Fournir une image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6343667331017090565" datatype="html">
@@ -969,7 +977,7 @@
         <target>Chemin de monture requis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/mount/mount.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1381043506689898239" datatype="html">
@@ -977,7 +985,7 @@
         <target>Les chemins acceptés sont /home/jovyan, /opt/openmpp et leurs sous-répertoires</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/mount/mount.component.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5391147126140445214" datatype="html">
@@ -985,7 +993,7 @@
         <target>Ce chemin de monture est déjà utilisé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/mount/mount.component.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dfc76e0a631038177c1bee4388585cbd8cda5ee0" datatype="html">

@@ -54,6 +54,10 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
       this.ns.updateSelectedNamespace(params.namespace);
 
       this.name = params.pvcName;
+      if (this.namespace && this.namespace !== params.namespace) {
+        console.log('vol-details', params.namespace);
+        this.router.navigate(['/']);
+      }
       this.namespace = params.namespace;
 
       this.poll(this.namespace, this.name);

@@ -48,6 +48,10 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
       this.ns.updateSelectedNamespace(params.namespace);
 
       this.notebookName = params.notebookName;
+      if (this.namespace && this.namespace !== params.namespace) {
+        console.log('note-details', params.namespace);
+        this.router.navigate(['/']);
+      }
       this.namespace = params.namespace;
 
       this.poll(this.namespace, this.notebookName);

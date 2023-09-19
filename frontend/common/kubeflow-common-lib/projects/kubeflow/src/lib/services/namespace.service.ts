@@ -79,7 +79,6 @@ export class NamespaceService {
       this.currNamespace = namespace;
       this.selectedNamespaceSource.next(namespace);
       this.selectedNamespace2$.next(namespace);
-      console.log("curr", this.currNamespace, "win", window.location.origin);
     }
   }
 

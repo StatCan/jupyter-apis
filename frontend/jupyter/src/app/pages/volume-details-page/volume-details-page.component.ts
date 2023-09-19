@@ -65,9 +65,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
 
     this.namespaceSub.add(
       this.ns.getSelectedNamespace().subscribe(namespace => {
-        console.log('vols-details2', this.namespace, namespace);
         if (this.namespace && this.namespace !== namespace) {
-          console.log('vols-details', namespace);
           this.router.navigate(['/']);
         }
       }),

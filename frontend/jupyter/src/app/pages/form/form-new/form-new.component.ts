@@ -65,7 +65,6 @@ export class FormNewComponent
           this.goToNotebooks();
         } else {
           if (this.currNamespace && this.currNamespace !== namespace) {
-            console.log('form', namespace);
             this.router.navigate(['/']);
           }
           this.currNamespace = namespace;

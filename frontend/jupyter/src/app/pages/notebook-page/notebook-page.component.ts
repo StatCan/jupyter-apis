@@ -61,9 +61,7 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
 
     this.namespaceSub.add(
       this.ns.getSelectedNamespace().subscribe(namespace => {
-        console.log('note-details2', this.namespace, namespace);
         if (this.namespace && this.namespace !== namespace) {
-          console.log('note-details', namespace);
           this.router.navigate(['/']);
         }
       }),

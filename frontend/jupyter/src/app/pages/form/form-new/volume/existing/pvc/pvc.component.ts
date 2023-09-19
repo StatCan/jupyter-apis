@@ -23,6 +23,8 @@ export class ExistingPvcComponent implements OnInit {
   @Input() pvcGroup: FormGroup;
 
   pvcs: PVCResponseObject[] = [];
+  protectedBPvcs:Set<string> = new Set<string>();
+  unclassifiedPvcs:Set<string> = new Set<string>();
   private mountedVolumes: Set<string> = new Set<string>(); //AAW
   matcher = new PvcErrorStateMatcher(); //AAW
   subscriptions = new Subscription(); //AAW
@@ -36,6 +38,11 @@ export class ExistingPvcComponent implements OnInit {
     this.ns.getSelectedNamespace().subscribe(ns => {
       this.backend.getPVCs(ns).subscribe(pvcs => {
         this.pvcs = pvcs;
+        this.protectedBPvcs.clear();
+        this.unclassifiedPvcs.clear();
+        pvcs.forEach(pvc => {
+          pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b' ? this.protectedBPvcs.add(pvc.name): this.unclassifiedPvcs.add(pvc.name);
+        });
       });
     });
     // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
@@ -53,7 +60,7 @@ export class ExistingPvcComponent implements OnInit {
     );
     this.pvcGroup
       .get('claimName')
-      .setValidators([Validators.required, this.isMountedValidator()]); //AAW
+      .setValidators([Validators.required, this.isMountedValidator(), this.isProtectedBValidator()]); //AAW
   }
 
   // AAW
@@ -63,6 +70,13 @@ export class ExistingPvcComponent implements OnInit {
     if (volumeName.hasError('isMounted')) {
       return $localize`Is mounted`;
     }
+    // TODOWVG translate
+    if (volumeName.hasError('isNotProb')){
+      return 'Notebook is protected B but volume is unclassified';
+    }
+    if (volumeName.hasError('isNotUnclassified')){
+      return 'Notebook is unclassified but volume is protected B';
+    }
   }
 
   //Method that disables selecting a mounted pvc, AAW
@@ -71,6 +85,30 @@ export class ExistingPvcComponent implements OnInit {
       const exists = this.mountedVolumes.has(control.value);
       return exists ? { isMounted: true } : null;
     };
+  }
+
+   //Method that disables selecting a mounted pvc, AAW
+   private isProtectedBValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      const protB = control.parent.parent.parent.parent.parent.get("prob").value;
+
+      /// Check for each volume if it's ok. 
+      if(protB && !this.protectedBPvcs.has(control.value)){
+        return {isNotProb: true};
+      }
+      else if (!protB && !this.unclassifiedPvcs.has(control.value)){
+        return {isNotUnclassified: true};
+      }
+      return null;
+    };
+  }
+
+  public isProtectedLabel(pvc): string {
+    let status = "";
+    if (pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b') {
+      status = "(protected-b)";
+    }
+    return status;
   }
 }
 

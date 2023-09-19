@@ -64,6 +64,9 @@ export class FormNewComponent
         if (Array.isArray(namespace)) {
           this.goToNotebooks();
         } else {
+          if (this.currNamespace && this.currNamespace !== namespace) {
+            this.router.navigate(['/']);
+          }
           this.currNamespace = namespace;
           this.formCtrl.controls.namespace.setValue(this.currNamespace);
         }

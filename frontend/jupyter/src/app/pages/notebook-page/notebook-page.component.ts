@@ -32,6 +32,7 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
 
   pollSubNotebook = new Subscription();
   pollSubPod = new Subscription();
+  namespaceSub = new Subscription();
 
   constructor(
     public ns: NamespaceService,
@@ -46,7 +47,6 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.ns.updateSelectedNamespace(params.namespace);
-
       this.notebookName = params.notebookName;
       this.namespace = params.namespace;
 
@@ -58,11 +58,20 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
       this.selectedTab.index = this.switchTab(this.selectedTab.name).index;
       this.selectedTab.name = this.switchTab(this.selectedTab.name).name;
     });
+
+    this.namespaceSub.add(
+      this.ns.getSelectedNamespace().subscribe(namespace => {
+        if (this.namespace && this.namespace !== namespace) {
+          this.router.navigate(['/']);
+        }
+      }),
+    );
   }
 
   ngOnDestroy() {
     this.pollSubNotebook.unsubscribe();
     this.pollSubPod.unsubscribe();
+    this.namespaceSub.unsubscribe();
   }
 
   private poll(namespace: string, notebook: string) {

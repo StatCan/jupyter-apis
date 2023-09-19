@@ -52,7 +52,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.ns.updateSelectedNamespace(params.namespace);
-
+      console.log('vol-details2', this.namespace, params.namespace);
       this.name = params.pvcName;
       if (this.namespace && this.namespace !== params.namespace) {
         console.log('vol-details', params.namespace);

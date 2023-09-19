@@ -46,7 +46,7 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.ns.updateSelectedNamespace(params.namespace);
-
+      console.log('note-details2', this.namespace, params.namespace);
       this.notebookName = params.notebookName;
       if (this.namespace && this.namespace !== params.namespace) {
         console.log('note-details', params.namespace);

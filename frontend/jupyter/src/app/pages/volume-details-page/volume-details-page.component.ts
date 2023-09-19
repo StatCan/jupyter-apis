@@ -39,6 +39,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
   } = { index: 0, name: 'overview' };
 
   pollSub = new Subscription();
+  namespaceSub = new Subscription();
 
   constructor(
     public ns: NamespaceService,
@@ -52,12 +53,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.ns.updateSelectedNamespace(params.namespace);
-      console.log('vol-details2', this.namespace, params.namespace);
       this.name = params.pvcName;
-      if (this.namespace && this.namespace !== params.namespace) {
-        console.log('vol-details', params.namespace);
-        this.router.navigate(['/']);
-      }
       this.namespace = params.namespace;
 
       this.poll(this.namespace, this.name);
@@ -66,10 +62,21 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe(params => {
       this.selectedTab = this.newTab(params.tab);
     });
+
+    this.namespaceSub.add(
+      this.ns.getSelectedNamespace().subscribe(namespace => {
+        console.log('vols-details2', this.namespace, namespace);
+        if (this.namespace && this.namespace !== namespace) {
+          console.log('vols-details', namespace);
+          this.router.navigate(['/']);
+        }
+      }),
+    );
   }
 
   ngOnDestroy() {
     this.pollSub.unsubscribe();
+    this.namespaceSub.unsubscribe();
   }
 
   private poll(namespace: string, name: string) {

@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -53,13 +58,16 @@ describe('ExistingPvcComponent', () => {
             persistantVolumeClaim: new FormGroup({
               readOnly: new FormControl(),
               claimName: new FormControl(),
-            })
-          })
-        })
-      ])
+            }),
+          }),
+        }),
+      ]),
     });
 
-    component.pvcGroup = (fakeData.get('datavols') as FormArray).at(0).get('existingSource').get('persistantVolumeClaim') as FormGroup;
+    component.pvcGroup = (fakeData.get('datavols') as FormArray)
+      .at(0)
+      .get('existingSource')
+      .get('persistantVolumeClaim') as FormGroup;
 
     fixture.detectChanges();
   });

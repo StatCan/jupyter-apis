@@ -60,6 +60,9 @@ export class ExistingPvcComponent implements OnInit {
   showNameError() {
     const volumeName = this.pvcGroup.get('claimName');
 
+    if (volumeName.hasError('required')) {
+      return $localize`Name is required`;
+    }
     if (volumeName.hasError('isMounted')) {
       return $localize`Is mounted`;
     }

@@ -974,7 +974,7 @@
       </trans-unit>
       <trans-unit id="5493782202760870865" datatype="html">
         <source>Notebook is protected B but volume is unclassified</source>
-        <target>Le bloc-note est protégé mais le volume est non classifié</target>
+        <target>Le bloc-note est protégé B mais le volume est non classifié</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/existing/pvc/pvc.component.ts</context>
           <context context-type="linenumber">80</context>

@@ -17,7 +17,6 @@ export class FormProtectedBComponent implements OnInit {
     this.parentForm.get('prob').valueChanges.subscribe(val => {
       (this.parentForm.get('datavols') as FormArray).controls.forEach(
         element => {
-          console.log(element);
           (element as FormGroup)
             .get('existingSource')
             .get('persistentVolumeClaim')

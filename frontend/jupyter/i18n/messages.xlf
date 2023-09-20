@@ -861,7 +861,21 @@
         <source>Is mounted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/existing/pvc/pvc.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5493782202760870865" datatype="html">
+        <source>Notebook is protected B but volume is unclassified</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/volume/existing/pvc/pvc.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4388872362974019221" datatype="html">
+        <source>Notebook is unclassified but volume is protected B</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/volume/existing/pvc/pvc.component.ts</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="623533293782016444" datatype="html">

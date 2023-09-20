@@ -15,10 +15,16 @@ export class FormProtectedBComponent implements OnInit {
 
   ngOnInit() {
     this.parentForm.get('prob').valueChanges.subscribe(val => {
-      (this.parentForm.get('datavols') as FormArray).controls.forEach(element => {
-        console.log(element);
-        (element as FormGroup).get('existingSource').get('persistentVolumeClaim').get('claimName').updateValueAndValidity();
-      });
-    })
+      (this.parentForm.get('datavols') as FormArray).controls.forEach(
+        element => {
+          console.log(element);
+          (element as FormGroup)
+            .get('existingSource')
+            .get('persistentVolumeClaim')
+            .get('claimName')
+            .updateValueAndValidity();
+        },
+      );
+    });
   }
 }

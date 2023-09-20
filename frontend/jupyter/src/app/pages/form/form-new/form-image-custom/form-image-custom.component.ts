@@ -77,6 +77,9 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
   urlValidation(): string {
     const url = this.parentForm.get('customImage');
 
+    if (url.hasError('required')) {
+      return $localize`Custom image is required`;
+    }
     if (url.hasError('invalidUrl')) {
       let urlBeginning = 'https://';
       const schemeReg = /^http:\/\//i;

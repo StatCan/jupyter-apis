@@ -40,11 +40,11 @@ export class ExistingPvcComponent implements OnInit {
         this.pvcs = pvcs;
         this.protectedBPvcs.clear();
         this.unclassifiedPvcs.clear();
-        pvcs.forEach(pvc => {
+        pvcs.forEach(pvc => (
           pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b'
             ? this.protectedBPvcs.add(pvc.name)
-            : this.unclassifiedPvcs.add(pvc.name);
-        });
+            : this.unclassifiedPvcs.add(pvc.name)
+        ));
       });
     });
     // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW

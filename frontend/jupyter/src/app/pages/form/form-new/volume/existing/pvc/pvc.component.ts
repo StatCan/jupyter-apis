@@ -97,7 +97,7 @@ export class ExistingPvcComponent implements OnInit {
     return (control: AbstractControl): { [key: string]: any } => {
       const protB =
         control.parent.parent.parent.parent.parent.get('prob').value;
-
+      console.log(control.parent.parent.parent.parent.parent);
       /// Check for each volume if it's ok.
       if (protB && !this.protectedBPvcs.has(control.value)) {
         return { isNotProb: true };

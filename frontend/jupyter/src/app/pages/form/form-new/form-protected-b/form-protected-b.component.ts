@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 
 import { MatIconRegistry } from '@angular/material/icon';
 
@@ -13,5 +13,17 @@ export class FormProtectedBComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.parentForm.get('prob').valueChanges.subscribe(val => {
+      (this.parentForm.get('datavols') as FormArray).controls.forEach(
+        element => {
+          (element as FormGroup)
+            .get('existingSource')
+            .get('persistentVolumeClaim')
+            .get('claimName')
+            .updateValueAndValidity();
+        },
+      );
+    });
+  }
 }

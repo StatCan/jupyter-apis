@@ -10,7 +10,9 @@
   >
     <mat-option *ngFor="let pvc of pvcs" [value]="pvc.name">
       <div class="flex">
-        <div class="name truncate">{{ pvc.name }}</div>
+        <div class="name truncate">
+          {{ pvc.name }} {{ isProtectedLabel(pvc) }}
+        </div>
         <ng-container *ngIf="select.panelOpen">
           <div class="size">{{ pvc.size }}</div>
           <div class="mode">{{ pvc.mode }}</div>

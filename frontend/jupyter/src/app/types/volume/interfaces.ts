@@ -20,8 +20,8 @@ export interface PVCResponseObject {
   labels?: { [key: string]: any };
 }
 
-export interface GetPVCResponseObject{
-  pvc: V1PersistentVolumeClaim,
+export interface GetPVCResponseObject {
+  pvc: V1PersistentVolumeClaim;
   notebooks: string[];
 }
 

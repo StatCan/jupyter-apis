@@ -13,7 +13,7 @@ import {
   PVCResponseObject,
   VWABackendResponse,
   PVCPostObject,
-  GetPVCResponseObject
+  GetPVCResponseObject,
 } from '../types';
 import { V1Namespace } from '@kubernetes/client-node';
 import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
@@ -165,9 +165,7 @@ export class JWABackendService extends BackendService {
 
     return this.http.get<VWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map((resp: VWABackendResponse) => {
-        return {pvc: resp.pvc, notebooks: resp.notebooks}
-      }),
+      map((resp: VWABackendResponse) => ({ pvc: resp.pvc, notebooks: resp.notebooks })),
     );
   }
 

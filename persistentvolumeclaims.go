@@ -36,7 +36,8 @@ type pvcsresponse struct {
 
 type getpvcresponse struct {
 	APIResponseBase
-	Pvc corev1.PersistentVolumeClaim `json:"pvc"`
+	Pvc       corev1.PersistentVolumeClaim `json:"pvc"`
+	Notebooks []string                     `json:"notebooks"`
 }
 
 type pvcpodsresponse struct {
@@ -267,12 +268,20 @@ func (s *server) GetPvc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	notebooksList := GetNotebooksUsingPvc(vol.Name, notebooks)
+
 	resp := &getpvcresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Pvc: *vol,
+		Pvc:       *vol,
+		Notebooks: notebooksList,
 	}
 
 	s.respond(w, r, resp)

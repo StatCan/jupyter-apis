@@ -9,10 +9,11 @@ describe('New notebook form', () => {
       cy.mockNotebooksRequest(settings.namespace);
       cy.mockPoddefaultsRequest(settings.namespace);
     });
+
+    cy.visit('/new');
   });
 
   it('should have a "New notebook" title', () => {
-    cy.visit('/new');
     cy.get('[data-cy-toolbar-title]').contains('New notebook').should('exist');
   });
 
@@ -30,7 +31,7 @@ describe('New notebook form', () => {
         const nameValue = $nameInput.val();
         cy.get('.last[data-cy="data volumes"]')
           .find('[data-cy="mount path"]')
-          .should($mountInput => {
+          .then($mountInput => {
             const mountValue = $mountInput.val();
             expect(mountValue).equal(`/home/jovyan/${nameValue}`);
           });
@@ -38,6 +39,8 @@ describe('New notebook form', () => {
   });
 
   it('should not auto update mount value when it is dirty', () => {
+    cy.get('.lib-advanced-options').find('.toggle-button').click();
+    
     cy.get('[data-cy="add new volume"]').click();
 
     cy.get('.last[data-cy="data volumes"]').click();
@@ -53,7 +56,7 @@ describe('New notebook form', () => {
         const nameValue = $nameInput.val();
         cy.get('.last[data-cy="data volumes"]')
           .find('[data-cy="mount path"]')
-          .should($mountInput => {
+          .then($mountInput => {
             const mountValue = $mountInput.val();
             expect(mountValue).not.equal(`/home/jovyan/${nameValue}`);
           });

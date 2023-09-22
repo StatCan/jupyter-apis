@@ -25,4 +25,5 @@ export interface VWABackendResponse extends BackendResponse {
   pvc?: V1PersistentVolumeClaim;
   events?: EventObject[];
   pods?: V1Pod[];
+  notebooks?: string[];
 }

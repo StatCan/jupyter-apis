@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 
 import { OverviewComponent } from './overview.component';
 import { mockPods } from './pods-mock';
-import { mockPvc } from '../pvc-mock';
+import { mockGetPvcData } from '../pvc-mock';
 import { mockPodGroups } from './pod-groups-mock';
 
 const JWABackendServiceStub: Partial<JWABackendService> = {
@@ -44,7 +44,7 @@ describe('OverviewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OverviewComponent);
     component = fixture.componentInstance;
-    component.pvc = mockPvc;
+    component.pvc = mockGetPvcData.pvc;
     fixture.detectChanges();
   });
 

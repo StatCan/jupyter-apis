@@ -22,17 +22,9 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
   public name: string;
   public namespace: string;
   public pvc: V1PersistentVolumeClaim;
+  public notebooks: string[];
   public pvcInfoLoaded = false;
-  public buttonsConfig: ToolbarButton[] = [
-    new ToolbarButton({
-      text: $localize`DELETE`,
-      icon: 'delete',
-      tooltip: $localize`Delete this volume`,
-      fn: () => {
-        this.deleteVolume();
-      },
-    }),
-  ];
+  public buttonsConfig: ToolbarButton[] = [];
   public selectedTab: {
     index: number;
     name: string;
@@ -81,10 +73,25 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
     this.pollSub.unsubscribe();
 
     const request = this.backend.getPVC(namespace, name);
-
-    this.pollSub = this.poller.exponential(request).subscribe(pvc => {
-      this.pvc = pvc;
+    this.pollSub = this.poller.exponential(request).subscribe(resp => {
+      this.pvc = resp.pvc;
+      this.notebooks = resp.notebooks;
       this.pvcInfoLoaded = true;
+
+      this.buttonsConfig = [
+        new ToolbarButton({
+          text: $localize`DELETE`,
+          icon: 'delete',
+          tooltip:
+            this.notebooks.length !== 0
+              ? $localize`Can't delete a volume in use`
+              : $localize`Delete this volume`,
+          fn: () => {
+            this.deleteVolume();
+          },
+          disabled: this.notebooks.length !== 0 ? true : false,
+        }),
+      ];
     });
   }
 

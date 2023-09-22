@@ -21,7 +21,7 @@ import { ActionsService } from 'src/app/services/actions.service';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { EventsModule } from './events/events.module';
 import { OverviewModule } from './overview/overview.module';
-import { mockPvc } from './pvc-mock';
+import { mockGetPvcData } from './pvc-mock';
 import { VolumeDetailsPageComponent } from './volume-details-page.component';
 import { YamlModule } from './yaml/yaml.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -30,7 +30,7 @@ const ActionsServiceStub: Partial<ActionsService> = {
   deleteVolume: () => of(),
 };
 const JWABackendServiceStub: Partial<JWABackendService> = {
-  getPVC: () => of(mockPvc),
+  getPVC: () => of(mockGetPvcData),
   getPodsUsingPVC: () => of(),
   getPVCEvents: () => of(),
 };

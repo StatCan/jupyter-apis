@@ -1,6 +1,7 @@
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
+import { GetPVCResponseObject } from 'src/app/types';
 
-export const mockPvc: V1PersistentVolumeClaim = {
+const mockPvc: V1PersistentVolumeClaim = {
   metadata: {
     annotations: {
       'pv.kubernetes.io/bind-completed': 'yes',
@@ -45,4 +46,9 @@ export const mockPvc: V1PersistentVolumeClaim = {
     },
     phase: 'Bound',
   },
+};
+
+export const mockGetPvcData: GetPVCResponseObject = {
+  pvc: mockPvc,
+  notebooks: [],
 };

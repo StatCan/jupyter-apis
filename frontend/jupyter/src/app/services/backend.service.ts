@@ -165,7 +165,10 @@ export class JWABackendService extends BackendService {
 
     return this.http.get<VWABackendResponse>(url).pipe(
       catchError(error => this.handleError(error)),
-      map((resp: VWABackendResponse) => ({ pvc: resp.pvc, notebooks: resp.notebooks })),
+      map((resp: VWABackendResponse) => ({
+        pvc: resp.pvc,
+        notebooks: resp.notebooks,
+      })),
     );
   }
 

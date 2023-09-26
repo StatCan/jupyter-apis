@@ -292,7 +292,7 @@
       </trans-unit>
       <trans-unit id="0024916140cebfb5d427fab9756ce8f098ae385d" datatype="html">
         <source>No rows to display</source>
-        <target>Aucune rangé à afficher</target>
+        <target>Aucune ligne à afficher</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/table/table.component.html</context>
           <context context-type="linenumber">314</context>
@@ -1395,7 +1395,7 @@
       </trans-unit>
       <trans-unit id="b004ebe48ed71ec2e40c112eccffecd17a904d05" datatype="html">
         <source>Week-to-date</source>
-        <target>Semaine-à-ce-jour</target>
+        <target>Semaine à ce jour</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
           <context context-type="linenumber">48</context>

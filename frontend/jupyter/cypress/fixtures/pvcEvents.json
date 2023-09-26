@@ -1,0 +1,22 @@
+{
+  "success":true,
+  "status":200,
+  "events":[
+    {
+      "type": "testType",
+      "reason": "testReason",
+      "metadata": {
+        "creationTimestamp": "2023-10-31"
+      },
+      "message": "test message is a message"
+    },
+    {
+      "type": "differentType",
+      "reason": "differentReason",
+      "metadata": {
+        "creationTimestamp": "2024-02-05"
+      },
+      "message": "different message of the event"
+    }
+  ]
+}

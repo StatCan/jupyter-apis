@@ -83,6 +83,30 @@ declare global {
        * and returns array with mock cost data
        */
       mockKubecostRequest(namespace: string): Chainable<void>;
+
+      /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/pvcs/<pvc>'
+       * and returns a mock pvc and array of associated namespaces for the given volume
+       */
+      mockGetPvcRequest(namespace: string, pvc: string): Chainable<void>;
+
+      /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/pvcs/<pvc>/pods'
+       * and returns a mock pod for the given volume in the given namespace
+       */
+      mockGetPvcPodsRequest(namespace: string, pvc: string): Chainable<void>;
+
+      /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/pvcs/<volume>/events'
+       * and returns a list of mock events for the given volume in the given namespace
+       */
+      mockGetPvcEventsRequest(namespace: string, pvc: string): Chainable<void>;
+
+      /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/notebooks/<notebook>'
+       * and returns a mock notebook object for the given notebook in the given namespace
+       */
+      mockGetNotebookRequest(namespace: string, notebook: string): Chainable<void>;
     }
   }
 }

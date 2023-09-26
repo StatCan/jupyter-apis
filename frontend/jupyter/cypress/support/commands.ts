@@ -89,3 +89,27 @@ Cypress.Commands.add('mockKubecostRequest', namespace => {
     fixture: 'cost',
   }).as('mockKubecostRequest');
 });
+
+Cypress.Commands.add('mockGetPvcRequest', (namespace, pvc)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/pvcs/${pvc}`, {
+    fixture: 'pvc',
+  }).as('mockGetPvcRequest');
+});
+
+Cypress.Commands.add('mockGetPvcPodsRequest', (namespace, pvc)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/pvcs/${pvc}/pods`, {
+    fixture: 'pvcPods',
+  }).as('mockGetPvcPodsRequest');
+});
+
+Cypress.Commands.add('mockGetPvcEventsRequest', (namespace, pvc)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/pvcs/${pvc}/events`, {
+    fixture: 'pvcEvents',
+  }).as('mockGetPvcEventsRequest');
+});
+
+Cypress.Commands.add('mockGetNotebookRequest', (namespace, notebook)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/notebooks/${notebook}`, {
+    fixture: 'notebook',
+  }).as('mockGetNotebookRequest');
+});

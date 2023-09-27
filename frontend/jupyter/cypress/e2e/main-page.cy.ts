@@ -1,4 +1,4 @@
-describe('Main table', () => {
+describe('Main tables', () => {
   beforeEach(() => {
     cy.mockNamespacesRequest();
     cy.fixture('settings').then(settings => {
@@ -109,5 +109,11 @@ describe('Main table', () => {
       }
       i++;
     });
+  });
+
+
+
+  it('should open notebook details page from volume table used-by column', ()=>{
+
   });
 });

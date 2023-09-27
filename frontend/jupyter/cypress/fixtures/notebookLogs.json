@@ -1,0 +1,10 @@
+{
+  "success":true,
+  "status":200,
+  "logs":[
+    "Test logs - messages are messages.",
+    "abc",
+    "one two three",
+    ""
+  ]
+}

@@ -3,10 +3,10 @@ describe('Volume Details Page', ()=>{
     cy.mockGetPvcRequest('test-namespace', 'test-volume');
     cy.mockGetPvcPodsRequest('test-namespace', 'test-volume');
     cy.visit('/volume/details/test-namespace/test-volume');
+    cy.wait(['@mockGetPvcRequest','@mockGetPvcPodsRequest']);
   });
 
   it('should open volume details page', ()=>{
-    cy.wait(['@mockGetPvcRequest','@mockGetPvcPodsRequest']);
     // assert overview tab
     cy.get('[data-cy-toolbar-title]').should('have.text', ' Volume details ');
     cy.get('.volume-name').should('have.text', 'test-volume');
@@ -28,7 +28,6 @@ describe('Volume Details Page', ()=>{
   });
 
   it('should delete colume from volume details page', ()=>{
-    cy.wait(['@mockGetPvcRequest','@mockGetPvcPodsRequest']);
     // assert that delete is disabled on volumes attached
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.disabled');
     // aseert that delete button can delete
@@ -66,7 +65,7 @@ describe('Volume Details Page', ()=>{
       },
       "notebooks": [
       ]
-    }).as('mockGetPvcRequest2')
+    }).as('mockGetPvcRequest2');
     cy.mockGetPvcPodsRequest('test-namespace', 'test-volume2');
     cy.visit('/volume/details/test-namespace/test-volume2');
     cy.wait(['@mockGetPvcRequest2','@mockGetPvcPodsRequest']);

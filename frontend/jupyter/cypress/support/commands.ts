@@ -113,3 +113,27 @@ Cypress.Commands.add('mockGetNotebookRequest', (namespace, notebook)=>{
     fixture: 'notebook',
   }).as('mockGetNotebookRequest');
 });
+
+Cypress.Commands.add('mockGetNotebookPodRequest', (namespace, notebook)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/notebooks/${notebook}/pod`, {
+    fixture: 'notebookPod',
+  }).as('mockGetNotebookPodRequest');
+});
+
+Cypress.Commands.add('mockGetNotebookPodDefaultsRequest', (namespace)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/poddefaults`, {
+    fixture: 'podDefaults',
+  }).as('mockGetNotebookPodDefaultsRequest');
+});
+
+Cypress.Commands.add('mockGetNotebookLogsRequest', (namespace, notebook, pod)=>{
+  cy.intercept('GET', `api/namespaces/${namespace}/notebooks/${notebook}/pod/${pod}/logs`, {
+    fixture: 'notebookLogs',
+  }).as('mockGetNotebookLogsRequest');
+});
+
+Cypress.Commands.add('mockGetNotebookEventsRequest', (namespace, notebook)=>{
+  cy.intercept('GET', `/api/namespaces/${namespace}/notebooks/${notebook}/events`, {
+    fixture: 'notebookEvents',
+  }).as('mockGetNotebookEventsRequest');
+});

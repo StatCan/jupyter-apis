@@ -8,7 +8,7 @@ describe('Main table', () => {
     });
     cy.fixture('notebooks').as('notebooksRequest');
     cy.fixture('pvcs').as('pvcsRequest');
-
+    const notebookInfoLoaded = true;
     cy.visit('/');
   });
 

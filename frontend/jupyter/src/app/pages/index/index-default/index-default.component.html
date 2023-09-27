@@ -1,13 +1,10 @@
 <div class="lib-content-wrapper">
-  <div>
-    <lib-title-actions-toolbar title="Notebooks" i18n-title>
-    </lib-title-actions-toolbar>
+  <div *ngIf="!notebookInfoLoaded">
     <lib-loading-spinner
       class="center-flex"
-      *ngIf="notebookInfoLoaded"
     ></lib-loading-spinner>
   </div>
-  <ng-container *ngIf="!notebookInfoLoaded">
+  <ng-container *ngIf="notebookInfoLoaded">
     <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>
       <lib-namespace-select
         *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"

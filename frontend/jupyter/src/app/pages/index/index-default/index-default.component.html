@@ -1,76 +1,81 @@
 <div class="lib-content-wrapper">
-  <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>
-    <lib-namespace-select
-      *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
-      namespacesUrl="/api/namespaces"
-    ></lib-namespace-select>
-  </lib-title-actions-toolbar>
-
-  <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow">
-    <lib-table
-      [config]="config"
-      [data]="processedData"
-      [trackByFn]="notebookTrackByFn"
-      (actionsEmitter)="reactToAction($event)"
-    ></lib-table>
+  <lib-namespace-select
+    *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
+    namespacesUrl="/api/namespaces"
+  ></lib-namespace-select>
+  <div *ngIf="!notebookInfoLoaded">
+    <lib-loading-spinner class="center-flex"></lib-loading-spinner>
   </div>
+  <ng-container *ngIf="notebookInfoLoaded">
+    <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>
+    </lib-title-actions-toolbar>
 
-  <lib-title-actions-toolbar title="Volumes" i18n-title>
-  </lib-title-actions-toolbar>
-  <!--scrollable page content-->
-  <div class="page-padding lib-flex-grow">
-    <lib-table
-      [config]="volumeConfig"
-      [data]="processedVolumeData"
-      [trackByFn]="pvcTrackByFn"
-      (actionsEmitter)="reactVolumeToAction($event)"
-    ></lib-table>
-  </div>
-
-  <lib-title-actions-toolbar title="Cost" i18n-title>
-  </lib-title-actions-toolbar>
-  <div class="page-padding lib-flex-grow">
-    <p i18n>
-      Approximate cost of notebook server resources - summed values may not
-      match total due to rounding
-    </p>
-    <div>
-      <div class="table-header-elem">
-        <mat-form-field>
-          <mat-label i18n>Time Window</mat-label>
-          <mat-select
-            [(value)]="costWindow"
-            (selectionChange)="costWindowChanged($event.value)"
-          >
-            <mat-option value="today" i18n>Today</mat-option>
-            <mat-option value="yesterday" i18n>Yesterday</mat-option>
-            <mat-option value="week" i18n>Week-to-date</mat-option>
-            <mat-option value="month" i18n>Month-to-date</mat-option>
-            <mat-option value="lastweek" i18n>Last Week</mat-option>
-            <mat-option value="30d" i18n>Last 30 days</mat-option>
-            <!--commented out because it was throwing errors <mat-option value="lastmonth" i18n>Last Month</mat-option>-->
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div
-        *ngIf="this.kubecostLoading === true"
-        class="table-header-elem margin-left"
-      >
-        <lib-loading-spinner></lib-loading-spinner>
-      </div>
+    <!--scrollable page content-->
+    <div class="page-padding lib-flex-grow">
+      <lib-table
+        [config]="config"
+        [data]="processedData"
+        [trackByFn]="notebookTrackByFn"
+        (actionsEmitter)="reactToAction($event)"
+      ></lib-table>
     </div>
-    <mat-divider></mat-divider>
-    <lib-table
-      *ngIf="this.getCostStatus() === true; else error"
-      [config]="costConfig"
-      [data]="processedCostData"
-      [trackByFn]="costTrackByFn"
-    ></lib-table>
-  </div>
-  <ng-template #error>
-    <div *ngIf="this.getCostStatus() === false" class="center-flex costerror">
-      <p i18n>Failed to retrieve cost information</p>
+
+    <lib-title-actions-toolbar title="Volumes" i18n-title>
+    </lib-title-actions-toolbar>
+    <!--scrollable page content-->
+    <div class="page-padding lib-flex-grow">
+      <lib-table
+        [config]="volumeConfig"
+        [data]="processedVolumeData"
+        [trackByFn]="pvcTrackByFn"
+        (actionsEmitter)="reactVolumeToAction($event)"
+      ></lib-table>
     </div>
-  </ng-template>
+
+    <lib-title-actions-toolbar title="Cost" i18n-title>
+    </lib-title-actions-toolbar>
+    <div class="page-padding lib-flex-grow">
+      <p i18n>
+        Approximate cost of notebook server resources - summed values may not
+        match total due to rounding
+      </p>
+      <div>
+        <div class="table-header-elem">
+          <mat-form-field>
+            <mat-label i18n>Time Window</mat-label>
+            <mat-select
+              [(value)]="costWindow"
+              (selectionChange)="costWindowChanged($event.value)"
+            >
+              <mat-option value="today" i18n>Today</mat-option>
+              <mat-option value="yesterday" i18n>Yesterday</mat-option>
+              <mat-option value="week" i18n>Week-to-date</mat-option>
+              <mat-option value="month" i18n>Month-to-date</mat-option>
+              <mat-option value="lastweek" i18n>Last Week</mat-option>
+              <mat-option value="30d" i18n>Last 30 days</mat-option>
+              <!--commented out because it was throwing errors <mat-option value="lastmonth" i18n>Last Month</mat-option>-->
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div
+          *ngIf="this.kubecostLoading === true"
+          class="table-header-elem margin-left"
+        >
+          <lib-loading-spinner></lib-loading-spinner>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <lib-table
+        *ngIf="this.getCostStatus() === true; else error"
+        [config]="costConfig"
+        [data]="processedCostData"
+        [trackByFn]="costTrackByFn"
+      ></lib-table>
+    </div>
+    <ng-template #error>
+      <div *ngIf="this.getCostStatus() === false" class="center-flex costerror">
+        <p i18n>Failed to retrieve cost information</p>
+      </div>
+    </ng-template>
+  </ng-container>
 </div>

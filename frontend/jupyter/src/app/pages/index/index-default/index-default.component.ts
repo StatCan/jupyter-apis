@@ -67,6 +67,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   kubecostSubs = new Subscription();
 
   kubecostLoading = false;
+  notebookInfoLoaded = false;
 
   private newNotebookButton = new ToolbarButton({
     text: $localize`New Notebook`,
@@ -167,6 +168,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     this.pollSub = this.poller.exponential(request).subscribe(notebooks => {
       this.processedData = this.processIncomingData(notebooks);
     });
+    this.notebookInfoLoaded = true;
   }
 
   public volumePoll(ns: string | string[]) {

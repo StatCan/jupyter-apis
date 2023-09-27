@@ -1,8 +1,6 @@
 <div class="lib-content-wrapper">
   <div *ngIf="!notebookInfoLoaded">
-    <lib-loading-spinner
-      class="center-flex"
-    ></lib-loading-spinner>
+    <lib-loading-spinner class="center-flex"></lib-loading-spinner>
   </div>
   <ng-container *ngIf="notebookInfoLoaded">
     <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>

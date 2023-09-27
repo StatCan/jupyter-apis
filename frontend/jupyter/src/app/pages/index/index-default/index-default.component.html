@@ -1,13 +1,13 @@
 <div class="lib-content-wrapper">
+  <lib-namespace-select
+    *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
+    namespacesUrl="/api/namespaces"
+  ></lib-namespace-select>
   <div *ngIf="!notebookInfoLoaded">
     <lib-loading-spinner class="center-flex"></lib-loading-spinner>
   </div>
   <ng-container *ngIf="notebookInfoLoaded">
     <lib-title-actions-toolbar title="Notebooks" [buttons]="buttons" i18n-title>
-      <lib-namespace-select
-        *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
-        namespacesUrl="/api/namespaces"
-      ></lib-namespace-select>
     </lib-title-actions-toolbar>
 
     <!--scrollable page content-->

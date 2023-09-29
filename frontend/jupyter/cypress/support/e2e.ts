@@ -43,9 +43,7 @@ declare global {
        * Custom command to mock requests at - '/api/storageclasses/default'
        * and returns parameter defaultStorageClass
        */
-      mockDefaultStorageClassRequest(
-        defaultStorageClass: string,
-      ): Chainable<void>;
+      mockDefaultStorageClassRequest(): Chainable<void>;
 
       /**
        * Custom command to mock requests at '/api/gpus'

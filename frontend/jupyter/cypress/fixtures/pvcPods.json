@@ -4,7 +4,7 @@
   "pods": [
     {
       "metadata": {
-        "namespace": "test-namespace",
+        "namespace": "kubeflow-user",
         "labels": {
           "notebook-name": "test"
         }

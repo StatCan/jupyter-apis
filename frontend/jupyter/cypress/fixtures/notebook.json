@@ -4,7 +4,7 @@
   "notebook":{
     "metadata":{
       "name":"test-notebook",
-      "namespace":"test-namespace",
+      "namespace":"kubeflow-user",
       "annotations":{
         "kubeflow-resource-stopped":"2023-09-25T20:34:33Z",
         "notebooks.kubeflow.org/server-type":"jupyter"

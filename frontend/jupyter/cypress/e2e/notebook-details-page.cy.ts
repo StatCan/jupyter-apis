@@ -1,11 +1,11 @@
 describe('Notebook Details Page', ()=>{
   beforeEach(()=>{
-    cy.mockGetNotebookRequest('test-namespace', 'test-notebook');
-    cy.intercept('GET', `/api/namespaces/test-namespace/notebooks/test-notebook/pod`, {
+    cy.mockGetNotebookRequest('kubeflow-user', 'test-notebook');
+    cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook/pod`, {
       statusCode: 404
     }).as('mockGetNotebookPodRequest');
-    cy.mockGetNotebookPodDefaultsRequest('test-namespace');
-    cy.visit('/notebook/details/test-namespace/test-notebook');
+    cy.mockGetNotebookPodDefaultsRequest('kubeflow-user');
+    cy.visit('/notebook/details/kubeflow-user/test-notebook');
     cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest', '@mockGetNotebookPodDefaultsRequest']);
   });
 
@@ -14,7 +14,7 @@ describe('Notebook Details Page', ()=>{
     cy.get('.notebook-name').should('have.text', 'test-notebook');
     // assert overview tab
     cy.get('lib-content-list-item[key="Volumes"]').find('app-volumes').get('.vol-group-container').should('exist');
-    cy.get('lib-content-list-item[key="Volumes"]').find('app-volumes').get('.vol-group-container > lib-urls > a').should('have.text', ' test-notebook-volume\n').should('have.attr', 'href').and('eq', '/volume/details/test-namespace/test-notebook-volume');
+    cy.get('lib-content-list-item[key="Volumes"]').find('app-volumes').get('.vol-group-container > lib-urls > a').should('have.text', ' test-notebook-volume\n').should('have.attr', 'href').and('eq', '/volume/details/kubeflow-user/test-notebook-volume');
     cy.get('lib-details-list-item[key="Shared memory enabled"] > .list-entry-row > .list-entry-value > div').should('have.text', ' No\n');
     cy.get('lib-content-list-item[key="Configurations"] > .list-entry-row > .container > app-configurations').should('have.text', ' No configurations available for this notebook. ');
     cy.get('lib-details-list-item[key="Type"] > .list-entry-row > .list-entry-value > div').should('have.text', ' JupyterLab\n');
@@ -31,7 +31,7 @@ describe('Notebook Details Page', ()=>{
     cy.get('div[role="tab"]').eq(1).click();
     cy.get('lib-panel > .panel-body > .panel-message').should('have.text', '   No logs were found for this Notebook. ');
     // assert events tab
-    cy.intercept('GET', '/api/namespaces/test-namespace/notebooks/test-notebook/events', {
+    cy.intercept('GET', '/api/namespaces/kubeflow-user/notebooks/test-notebook/events', {
       "success":true,
       "status":200,
       "events":[]
@@ -56,13 +56,13 @@ describe('Notebook Details Page', ()=>{
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
     cy.get('lib-status-icon > mat-icon').should('have.text', ' stop_circle\n');
     // start the notebook
-    cy.intercept('PATCH', '/api/namespaces/test-namespace/notebooks/test-notebook', {"success":true,"status":200}).as('mockStartNotebookRequest');
+    cy.intercept('PATCH', '/api/namespaces/kubeflow-user/notebooks/test-notebook', {"success":true,"status":200}).as('mockStartNotebookRequest');
     cy.get('[data-cy-toolbar-button="START"]').click();
     cy.wait('@mockStartNotebookRequest');
-    cy.intercept('GET', `/api/namespaces/test-namespace/notebooks/test-notebook`, {
+    cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook`, {
       fixture: 'runningNotebook',
     }).as('mockGetNotebookRequest');
-    cy.mockGetNotebookPodRequest('test-namespace', 'test-notebook');
+    cy.mockGetNotebookPodRequest('kubeflow-user', 'test-notebook');
     cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest']);
     // assert changes with now running notebook
     cy.get('[data-cy-toolbar-button="CONNECT"]').should('be.enabled');
@@ -71,12 +71,12 @@ describe('Notebook Details Page', ()=>{
     cy.get('lib-status-icon > mat-icon').should('have.text', ' check_circle\n');
     cy.get('lib-conditions-table[title="Conditions"]').find('tbody > tr').should('have.length', 4);
 
-    cy.mockGetNotebookLogsRequest('test-namespace', 'test-notebook', 'test-pod');
+    cy.mockGetNotebookLogsRequest('kubeflow-user', 'test-notebook', 'test-pod');
     cy.get('div[role="tab"]').eq(1).click();
     cy.wait('@mockGetNotebookLogsRequest');
     cy.get('cdk-virtual-scroll-viewport').should('have.text', '0 Test logs - messages are messages. 1 abc 2 one two three 3  ');
 
-    cy.mockGetNotebookEventsRequest('test-namespace', 'test-notebook');
+    cy.mockGetNotebookEventsRequest('kubeflow-user', 'test-notebook');
     cy.get('div[role="tab"]').eq(2).click();
     cy.wait('@mockGetNotebookEventsRequest');
     cy.get('tbody > tr').should('have.length', 2);
@@ -92,10 +92,10 @@ describe('Notebook Details Page', ()=>{
 
   it('should stop notebook from details page', ()=>{
     // have a running notebook
-    cy.intercept('GET', `/api/namespaces/test-namespace/notebooks/test-notebook`, {
+    cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook`, {
       fixture: 'runningNotebook',
     }).as('mockGetNotebookRequest');
-    cy.mockGetNotebookPodRequest('test-namespace', 'test-notebook');
+    cy.mockGetNotebookPodRequest('kubeflow-user', 'test-notebook');
     cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest']);
     // stop the notebook
     cy.get('[data-cy-toolbar-button="STOP"]').click();
@@ -103,12 +103,12 @@ describe('Notebook Details Page', ()=>{
     cy.get('.mat-dialog-actions > button').contains('CANCEL').click();
     cy.get('mat-dialog-container').should('not.exist');
     cy.get('[data-cy-toolbar-button="STOP"]').click();
-    cy.intercept('PATCH', '/api/namespaces/test-namespace/notebooks/test-notebook', {"success":true,"status":200}).as('mockStartNotebookRequest');
+    cy.intercept('PATCH', '/api/namespaces/kubeflow-user/notebooks/test-notebook', {"success":true,"status":200}).as('mockStartNotebookRequest');
     cy.get('.mat-dialog-actions > button').contains('STOP').click();
     cy.wait('@mockStartNotebookRequest');
 
-    cy.mockGetNotebookRequest('test-namespace', 'test-notebook');
-    cy.intercept('GET', `/api/namespaces/test-namespace/notebooks/test-notebook/pod`, {
+    cy.mockGetNotebookRequest('kubeflow-user', 'test-notebook');
+    cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook/pod`, {
       statusCode: 404
     }).as('mockGetNotebookPodRequest');
     cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest']);
@@ -128,7 +128,7 @@ describe('Notebook Details Page', ()=>{
     cy.get('mat-dialog-container').should('not.exist');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();
 
-    cy.intercept('DELETE', '/api/namespaces/test-namespace/notebooks/test-notebook', {
+    cy.intercept('DELETE', '/api/namespaces/kubeflow-user/notebooks/test-notebook', {
       success: true,
       status: 200
     }).as('mockDeleteNotebookRequest');

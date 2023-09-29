@@ -67,7 +67,7 @@
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-waiting-viewer-uninitialized",
       "namespace": "kubeflow-user",
-      "notebooks": ["test-notebook-1", "test-notebook-2"],
+      "notebooks": ["test-notebook-1"],
       "status": {
         "message": "Bound",
         "phase": "waiting",
@@ -89,6 +89,29 @@
         "state": ""
       },
       "viewer": "ready"
+    },
+    {
+      "name":"test-pro-b-volume",
+      "namespace":"kubeflow-user",
+      "status":{
+        "message":"Bound",
+        "phase":"ready",
+        "state":"",
+        "key":"pvcBound",
+        "eventMessage":""
+      },
+      "age":"2023-09-28T16:30:08Z",
+      "capacity":"16Gi",
+      "modes":[
+        "ReadWriteOnce"
+      ],
+      "class":"default",
+      "notebooks":[
+        "test-pro-b"
+      ],
+      "labels":{
+        "data.statcan.gc.ca/classification":"protected-b"
+      }
     }
   ],
   "status": "200",

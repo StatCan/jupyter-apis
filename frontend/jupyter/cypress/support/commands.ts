@@ -41,23 +41,41 @@ Cypress.Commands.add('mockNotebooksAllNamespacesRequest', settingsNamespace => {
 
 Cypress.Commands.add('mockStorageClassesRequests', () => {
   cy.intercept('GET', '/api/storageclasses', {
-    storageClasses: ['rok', 'standard'],
-  });
+    success:true,
+    status:200,
+    user:null,
+    storageClasses:[
+      "azurefile-csi-premium",
+      "azurefile-premium",
+      "managed-premium",
+      "azurefile-csi",
+      "managed",
+      "managed-csi",
+      "default",
+      "managed-csi-premium",
+      "azurefile"
+    ]
+ });
 });
 
-Cypress.Commands.add('mockDefaultStorageClassRequest', defaultStorageClass => {
+Cypress.Commands.add('mockDefaultStorageClassRequest', () => {
   cy.intercept('GET', '/api/storageclasses/default', {
-    defaultStorageClass,
-  }).as('mockDefaultStorageClassRequest');
+    success:true,
+    status:200,
+    user: null,
+    defaultStorageClass:"default"
+ }).as('mockDefaultStorageClassRequest');
 });
 
 Cypress.Commands.add('mockGpusRequest', () => {
   cy.intercept('GET', '/api/gpus', {
-    status: 200,
-    success: true,
-    user: null,
-    vendors: [],
-  }).as('mockGpusRequest');
+    success:true,
+    status:200,
+    user:null,
+    vendors:[
+      "nvidia.com/gpu"
+    ]
+ }).as('mockGpusRequest');
 });
 
 Cypress.Commands.add('mockConfigRequest', () => {

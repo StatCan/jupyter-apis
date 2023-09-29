@@ -4,7 +4,7 @@
   "pod":{
       "metadata":{
          "name":"test-pod",
-         "namespace":"test-namespace",
+         "namespace":"kubeflow-user",
          "creationTimestamp":"2023-09-27T12:07:38Z",
          "labels":{
             "controller-revision-hash":"test-notebook-768bf599dd",

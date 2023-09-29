@@ -4,7 +4,7 @@
   "pvc": {
     "metadata": {
       "name": "test-volume",
-      "namespace": "test-namespace"
+      "namespace": "kubeflow-user"
     },
     "spec": {
       "accessModes": [

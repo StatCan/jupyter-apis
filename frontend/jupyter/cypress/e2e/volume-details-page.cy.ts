@@ -1,8 +1,8 @@
 describe('Volume Details Page', ()=>{
   beforeEach(()=>{
-    cy.mockGetPvcRequest('test-namespace', 'test-volume');
-    cy.mockGetPvcPodsRequest('test-namespace', 'test-volume');
-    cy.visit('/volume/details/test-namespace/test-volume');
+    cy.mockGetPvcRequest('kubeflow-user', 'test-volume');
+    cy.mockGetPvcPodsRequest('kubeflow-user', 'test-volume');
+    cy.visit('/volume/details/kubeflow-user/test-volume');
     cy.wait(['@mockGetPvcRequest','@mockGetPvcPodsRequest']);
   });
 
@@ -16,9 +16,9 @@ describe('Volume Details Page', ()=>{
     cy.get('lib-details-list-item[key="Volume mode"] > .list-entry-row > .list-entry-value > div').should('have.text', ' Filesystem\n');
     cy.get('lib-details-list-item[key="Volume name"] > .list-entry-row > .list-entry-value > div').should('have.text', ' pvc-a9dd7d1a-c4c0-4b36-9302-beb8cccbcfbd\n');
     cy.get('lib-content-list-item[key="Pods Mounted"] > .list-entry-row > div.container > app-link-groups-table > div > .group-key').should('have.text', 'Notebooks');
-    cy.get('lib-content-list-item[key="Pods Mounted"] > .list-entry-row > div.container > app-link-groups-table > div > .link-group-container > lib-urls > a').should('have.text', ' test\n').should('have.attr', 'href').and('eq', '/notebook/details/test-namespace/test');
+    cy.get('lib-content-list-item[key="Pods Mounted"] > .list-entry-row > div.container > app-link-groups-table > div > .link-group-container > lib-urls > a').should('have.text', ' test\n').should('have.attr', 'href').and('eq', '/notebook/details/kubeflow-user/test');
     // assert events tab
-    cy.mockGetPvcEventsRequest('test-namespace', 'test-volume');
+    cy.mockGetPvcEventsRequest('kubeflow-user', 'test-volume');
     cy.get('div[role="tab"]').eq(1).click();
     cy.wait('@mockGetPvcEventsRequest');
     cy.get('tbody > tr').should('have.length', 2);
@@ -31,14 +31,14 @@ describe('Volume Details Page', ()=>{
     // assert that delete is disabled on volumes attached
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.disabled');
     // aseert that delete button can delete
-    cy.intercept('GET', `/api/namespaces/test-namespace/pvcs/test-volume2`, {
+    cy.intercept('GET', `/api/namespaces/kubeflow-user/pvcs/test-volume2`, {
       "success": true,
       "status": 200,
       "user": null,
       "pvc": {
         "metadata": {
           "name": "test-volume2",
-          "namespace": "test-namespace"
+          "namespace": "kubeflow-user"
         },
         "spec": {
           "accessModes": [
@@ -66,8 +66,8 @@ describe('Volume Details Page', ()=>{
       "notebooks": [
       ]
     }).as('mockGetPvcRequest2');
-    cy.mockGetPvcPodsRequest('test-namespace', 'test-volume2');
-    cy.visit('/volume/details/test-namespace/test-volume2');
+    cy.mockGetPvcPodsRequest('kubeflow-user', 'test-volume2');
+    cy.visit('/volume/details/kubeflow-user/test-volume2');
     cy.wait(['@mockGetPvcRequest2','@mockGetPvcPodsRequest']);
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();
@@ -76,7 +76,7 @@ describe('Volume Details Page', ()=>{
     cy.get('[ng-reflect-dialog-result="cancel"]').click();
     cy.get('mat-dialog-container').should('not.exist');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();
-    cy.intercept('DELETE', '/api/namespaces/test-namespace/pvcs/test-volume2', {
+    cy.intercept('DELETE', '/api/namespaces/kubeflow-user/pvcs/test-volume2', {
       success: true,
       status: 200
     }).as('mockDeleteVolumeRequest');

@@ -4,9 +4,9 @@ describe('Notebook Details Page', ()=>{
     cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook/pod`, {
       statusCode: 404
     }).as('mockGetNotebookPodRequest');
-    cy.mockGetNotebookPodDefaultsRequest('kubeflow-user');
+    cy.mockPoddefaultsRequest('kubeflow-user');
     cy.visit('/notebook/details/kubeflow-user/test-notebook');
-    cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest', '@mockGetNotebookPodDefaultsRequest']);
+    cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest', '@mockPoddefaultsRequest']);
   });
 
   it('should open notebook details page', ()=>{

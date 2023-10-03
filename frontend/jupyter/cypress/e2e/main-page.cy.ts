@@ -8,7 +8,6 @@ describe('Main tables', () => {
     });
     cy.fixture('notebooks').as('notebooksRequest');
     cy.fixture('pvcs').as('pvcsRequest');
-
     cy.visit('/');
   });
 

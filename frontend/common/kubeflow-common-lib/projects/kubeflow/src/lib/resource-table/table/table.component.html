@@ -22,6 +22,7 @@
       [matAutocomplete]="auto"
       [matChipInputFor]="chipList"
       (matChipInputTokenEnd)="add($event)"
+      [attr.data-cy-table-filter-id]="config?.id"
     />
   </mat-chip-list>
   <button

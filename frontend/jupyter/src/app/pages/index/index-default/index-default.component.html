@@ -46,6 +46,7 @@
             <mat-select
               [(value)]="costWindow"
               (selectionChange)="costWindowChanged($event.value)"
+              data-cy-time-window-dropdown
             >
               <mat-option value="today" i18n>Today</mat-option>
               <mat-option value="yesterday" i18n>Yesterday</mat-option>

@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "status": 200,
+  "pods": [
+    {
+      "metadata": {
+        "namespace": "kubeflow-user",
+        "labels": {
+          "notebook-name": "test"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "status": 200,
+  "pvc": {
+    "metadata": {
+      "name": "test-volume",
+      "namespace": "kubeflow-user"
+    },
+    "spec": {
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "resources": {
+        "requests": {
+          "storage": "16Gi"
+        }
+      },
+      "volumeName": "pvc-a9dd7d1a-c4c0-4b36-9302-beb8cccbcfbd",
+      "storageClassName": "default",
+      "volumeMode": "Filesystem"
+    },
+    "status": {
+      "phase": "Bound",
+      "accessModes": [
+        "ReadWriteOnce"
+      ],
+      "capacity": {
+        "storage": "16Gi"
+      }
+    }
+  },
+  "notebooks": [
+    "test"
+  ]
+}

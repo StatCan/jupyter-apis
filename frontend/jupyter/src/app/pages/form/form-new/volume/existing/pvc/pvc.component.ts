@@ -98,8 +98,12 @@ export class ExistingPvcComponent implements OnInit {
   //Method that disables selecting a mounted pvc, AAW
   private isProtectedBValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
+      // if its a workspace volume or a data volume
       const protB =
+        control.parent.parent.parent.parent.get('prob') ? 
+        control.parent.parent.parent.parent.get('prob').value :
         control.parent.parent.parent.parent.parent.get('prob').value;
+
       // Check for each volume if it's ok.
       if (protB && !this.protectedBPvcs.has(control.value)) {
         return { isNotProb: true };

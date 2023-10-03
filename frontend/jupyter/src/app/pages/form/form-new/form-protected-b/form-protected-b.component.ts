@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 import { MatIconRegistry } from '@angular/material/icon';
 
@@ -24,6 +24,10 @@ export class FormProtectedBComponent implements OnInit {
             .updateValueAndValidity();
         },
       );
+      this.parentForm.get('workspace').get('existingSource')
+      .get('persistentVolumeClaim')
+      .get('claimName')
+      .updateValueAndValidity();
     });
   }
 }

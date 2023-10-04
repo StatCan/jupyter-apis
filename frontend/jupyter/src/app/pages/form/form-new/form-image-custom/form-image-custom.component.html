@@ -94,6 +94,7 @@
         [formControl]="parentForm.get('customImageCheck')"
         (change)="onSelect($event)"
         i18n
+        data-cy-form-input="customImageCheck"
       >
         Custom Image
       </mat-checkbox>
@@ -102,6 +103,7 @@
         class="wide"
         appearance="outline"
         *ngIf="parentForm?.value.customImageCheck"
+        data-cy-form-input="customImage"
       >
         <mat-label i18n>Custom Image</mat-label>
         <mat-hint i18n>

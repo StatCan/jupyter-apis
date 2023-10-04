@@ -20,6 +20,12 @@ Cypress.Commands.add('mockNamespacesRequest', () => {
   }).as('mockNamespacesRequest');
 });
 
+Cypress.Commands.add('mockNamespaceMetadataRequest', (namespace) => {
+  cy.intercept('GET', `/api/namespaces/${namespace}`, {
+    fixture: 'namespaceMetadata',
+  }).as('mockNamespaceMetadataRequest');
+});
+
 Cypress.Commands.add('mockNotebooksRequest', namespace => {
   cy.intercept('GET', `/api/namespaces/${namespace}/notebooks`, {
     fixture: 'notebooks',
@@ -55,7 +61,7 @@ Cypress.Commands.add('mockStorageClassesRequests', () => {
       "managed-csi-premium",
       "azurefile"
     ]
- });
+ }).as('mockStorageClassesRequests');
 });
 
 Cypress.Commands.add('mockDefaultStorageClassRequest', () => {
@@ -86,14 +92,8 @@ Cypress.Commands.add('mockConfigRequest', () => {
 
 Cypress.Commands.add('mockPoddefaultsRequest', namespace => {
   cy.intercept('GET', `/api/namespaces/${namespace}/poddefaults`, {
-    fixture: 'poddefaults',
+    fixture: 'podDefaults',
   }).as('mockPoddefaultsRequest');
-});
-
-Cypress.Commands.add('mockEmptyPVCsRequest', namespace => {
-  cy.intercept('GET', `/api/namespaces/${namespace}/pvcs`, {
-    pvcs: [],
-  }).as('mockEmptyPVCsRequest');
 });
 
 Cypress.Commands.add('mockPVCsRequest', namespace => {
@@ -136,12 +136,6 @@ Cypress.Commands.add('mockGetNotebookPodRequest', (namespace, notebook)=>{
   cy.intercept('GET', `/api/namespaces/${namespace}/notebooks/${notebook}/pod`, {
     fixture: 'notebookPod',
   }).as('mockGetNotebookPodRequest');
-});
-
-Cypress.Commands.add('mockGetNotebookPodDefaultsRequest', (namespace)=>{
-  cy.intercept('GET', `/api/namespaces/${namespace}/poddefaults`, {
-    fixture: 'podDefaults',
-  }).as('mockGetNotebookPodDefaultsRequest');
 });
 
 Cypress.Commands.add('mockGetNotebookLogsRequest', (namespace, notebook, pod)=>{

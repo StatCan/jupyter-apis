@@ -4,7 +4,7 @@
   text="Volume that will be mounted in your home directory."
   i18n-text
 >
-  <mat-accordion>
+  <mat-accordion data-cy-form-input="workspaceVolume">
     <mat-expansion-panel
       hideToggle
       *ngIf="!volGroup.disabled"
@@ -86,7 +86,7 @@
         <app-volume-mount [volGroup]="volGroup"></app-volume-mount>-->
         <div appearance="outline" class="wide">
           <mat-label i18n>Mount path</mat-label>
-          <p data-cy="mount path">
+          <p>
             {{ volGroup.get('mount').value }}
           </p>
         </div>
@@ -102,6 +102,7 @@
       (click)="addNewVolume()"
       mat-stroked-button
       i18n
+      data-cy-form-button="workspaceVolume-new"
     >
       + Add new volume
     </button>
@@ -113,6 +114,7 @@
       (click)="attachExistingVolume()"
       mat-stroked-button
       i18n
+      data-cy-form-button="workspaceVolume-existing"
     >
       + Attach existing volume
     </button>

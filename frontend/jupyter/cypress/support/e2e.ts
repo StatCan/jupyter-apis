@@ -21,6 +21,12 @@ declare global {
       mockNamespacesRequest(): Chainable<void>;
 
       /**
+       * Custom command to mock request at '/api/namespaces/<namespace>'
+       * to return metadata information for the given namespace
+       */
+      mockNamespaceMetadataRequest(namespace: string): Chainable<void>;
+
+      /**
        * Custom command to mock request at '/api/namespaces/<namespace>/notebooks'
        * and returns array with mock notebooks []
        */
@@ -58,16 +64,9 @@ declare global {
 
       /**
        * Custom command to mock request at '/api/namespaces/<namespace>/poddefaults'
-       * and returns array with mock poddefaults []
+       * and returns a mock array of PodDefaults for the given namespace
        */
       mockPoddefaultsRequest(namespace: string): Chainable<void>;
-
-      /**
-       * Custom command to mock request at '/api/namespaces/<namespace>/pvcs'
-       * and returns emtpy array []
-       * @example cy.mockEmptyPVCsRequest()
-       */
-      mockEmptyPVCsRequest(namespace: string): Chainable<void>;
 
       /**
        * Custom command to mock request at '/api/namespaces/<namespace>/pvcs'
@@ -111,12 +110,6 @@ declare global {
        * and returns a mock pod for the given notebook in the given namespace
        */
       mockGetNotebookPodRequest(namespace: string, notebook: string): Chainable<void>;
-
-      /**
-       * Custom command to mock request at '/api/namespaces/<namespace>/poddefaults'
-       * and returns a mock array of PodDefaults for the given namespace
-       */
-      mockGetNotebookPodDefaultsRequest(namespace: string): Chainable<void>;
 
       /**
        * Custom command to mock request at 'api/namespaces/<namespace>/notebooks/<notebook>/pod/<pod>/logs'

@@ -4,7 +4,7 @@
   i18n-title
   i18n-text
 >
-  <mat-accordion>
+  <mat-accordion data-cy-form-input="dataVolumes">
     <mat-expansion-panel
       hideToggle
       *ngFor="
@@ -104,7 +104,7 @@
       (click)="addNewVolume()"
       mat-stroked-button
       i18n
-      data-cy="add new volume"
+      data-cy-form-button="dataVolumes-new"
     >
       + Add new volume
     </button>
@@ -116,7 +116,7 @@
       (click)="attachExistingVolume()"
       mat-stroked-button
       i18n
-      data-cy="attach existing volume"
+      data-cy-form-button="dataVolumes-existing"
     >
       + Attach existing volume
     </button>

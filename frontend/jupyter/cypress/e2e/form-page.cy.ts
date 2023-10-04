@@ -1,5 +1,5 @@
 describe('New notebook form', () => {
-  beforeEach(() =>     
+  beforeEach(() => {
     cy.mockDashboardRequest();
     cy.mockStorageClassesRequests();
     cy.mockDefaultStorageClassRequest();

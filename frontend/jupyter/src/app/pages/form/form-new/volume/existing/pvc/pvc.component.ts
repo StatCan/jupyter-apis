@@ -8,7 +8,6 @@ import {
   FormGroupDirective,
   NgForm,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { NamespaceService } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { PVCResponseObject } from 'src/app/types';
@@ -21,13 +20,13 @@ import { ErrorStateMatcher } from '@angular/material/core';
 })
 export class ExistingPvcComponent implements OnInit {
   @Input() pvcGroup: FormGroup;
+  @Input() mountedVolumes: Set<string>;
 
   pvcs: PVCResponseObject[] = [];
   protectedBPvcs: Set<string> = new Set<string>();
   unclassifiedPvcs: Set<string> = new Set<string>();
-  private mountedVolumes: Set<string> = new Set<string>(); //AAW
+  
   matcher = new PvcErrorStateMatcher(); //AAW
-  subscriptions = new Subscription(); //AAW
 
   constructor(
     private backend: JWABackendService,
@@ -47,19 +46,7 @@ export class ExistingPvcComponent implements OnInit {
         );
       });
     });
-    // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
-    this.subscriptions.add(
-      this.ns.getSelectedNamespace().subscribe(ns => {
-        this.backend.getNotebooks(ns).subscribe(notebooks => {
-          this.mountedVolumes.clear();
-          notebooks.map(nb =>
-            nb.volumes.map(v => {
-              this.mountedVolumes.add(v);
-            }),
-          );
-        });
-      }),
-    );
+    
     this.pvcGroup
       .get('claimName')
       .setValidators([

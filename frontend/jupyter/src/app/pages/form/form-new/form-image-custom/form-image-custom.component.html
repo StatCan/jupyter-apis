@@ -4,6 +4,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'jupyter'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -23,6 +24,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'group-one'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -46,6 +48,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'group-two'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -69,6 +72,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'group-three'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>

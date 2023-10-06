@@ -104,6 +104,7 @@
           (click)="onSubmit()"
           [disabled]="!formCtrl.valid"
           i18n
+          data-cy-form-button="submit"
         >
           LAUNCH
         </button>
@@ -115,6 +116,7 @@
         class="cancel-button"
         (click)="onCancel()"
         i18n
+        data-cy-form-button="cancel"
       >
         CANCEL
       </button>

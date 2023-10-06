@@ -11,7 +11,7 @@ describe('New notebook form', () => {
       cy.mockNamespaceMetadataRequest(settings.namespace);
       cy.mockPVCsRequest(settings.namespace);
     });
-    
+
     cy.visit('/new');
     cy.wait([
       '@mockDashboardRequest',
@@ -29,7 +29,7 @@ describe('New notebook form', () => {
     cy.get('[data-cy-toolbar-title]').contains('New notebook').should('exist');
   });
 
-  describe('should validate every input', ()=>{
+  describe('validate inputs', ()=>{
     it('notebook name', ()=>{
       // invalid pattern
       cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-NOTEBOOK-');
@@ -312,6 +312,182 @@ describe('New notebook form', () => {
       cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('-with-extra');
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="volume-name"]').find('input').invoke('val').should('eq', 'test-notebook-datavol-1-dirty');
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="mount-path"]').find('input').invoke('val').should('eq', '/home/jovyan/test-notebook-datavol-1-dirty-mount');
+    });
+  });
+
+  describe('notebook creation', ()=>{
+    it('should create a jupyter notebook', ()=>{
+      // cancel notebook creation
+      cy.get('[data-cy-form-button="cancel"]').click();
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should create a jupyter notebook', ()=>{
+      cy.get('[data-cy-form-button="submit"]').should('be.disabled');
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-jupyter');
+      cy.get('[data-cy-form-input="serverType"] > mat-button-toggle[value="jupyter"]').should('have.class', 'mat-button-toggle-checked');
+
+      cy.get('[data-cy-advanced-options-button]').click();
+      // assert default values
+      cy.get('[data-cy-form-input="serverImage"]').find('.mat-select-value').should('have.text', 'jupyterlab-cpu');
+
+      cy.get('[data-cy-form-input="cpu"]').find('input').invoke('val').should('eq', '0.5');
+      cy.get('[data-cy-form-input="memory"]').find('input').invoke('val').should('eq', '2.0');
+      cy.get('[data-cy-form-input="cpuLimit"]').find('input').invoke('val').should('eq', '4.0');
+      cy.get('[data-cy-form-input="memoryLimit"]').find('input').invoke('val').should('eq', '4.0');
+
+      cy.get('[data-cy-form-input="gpus"]').find('.mat-select-value').should('have.text', 'None');
+      cy.get('[data-cy-form-input="vendor"]').find('.mat-select-value').should('have.text', 'NVIDIA');
+
+      cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel').should('exist');
+      cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="volume-name"]').find('input').invoke('val').should('eq', 'test-notebook-jupyter-volume');
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should('not.exist');
+
+      cy.get('[data-cy-form-input="language"]').find('.mat-select-value').should('have.text', 'English');
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
+        success: true,
+        status: 200
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should create a RStudio notebook in french with data volumes', ()=>{
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-rstudio');
+      // select rstudio notebook
+      cy.get('[data-cy-form-input="serverType"] > mat-button-toggle[value="group-one"]').click();
+      cy.get('[data-cy-advanced-options-button]').click();
+      //add data volumes
+      cy.get('[data-cy-form-button="dataVolumes-new"]').click();
+      cy.get('[data-cy-form-button="dataVolumes-existing"]').click();
+      cy.get('[data-cy-form-button="submit"]').should('be.disabled');
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').eq(1).click();
+      cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').click();
+      cy.get('[role="listbox"] > mat-option').contains('a-pvc-phase-ready-viewer-ready').click();
+      // change language to french
+      cy.get('[data-cy-form-input="language"]').click();
+      cy.get('[role="listbox"] > mat-option').contains('Français').click();
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
+        success: true,
+        status: 200
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should create a protected B Ubuntu notebook', ()=>{
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-protectedb');
+      // select ubuntu notebook
+      cy.get('[data-cy-form-input="serverType"] > mat-button-toggle[value="group-two"]').click();
+      cy.get('[data-cy-form-input="prob"]').click();
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
+        success: true,
+        status: 200
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should create a SAS notebook', ()=>{
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-sas');
+      // select sas notebook
+      cy.get('[data-cy-form-input="serverType"] > mat-button-toggle[value="group-three"]').click();
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
+        success: true,
+        status: 200
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+      // mock non-sas namespace
+      cy.intercept('GET', '/api/namespaces/kubeflow-user', {
+        "success":true,
+        "status":200,
+        "user":null,
+        "namespace":{
+          "metadata":{
+            "name":"kubeflow-user",
+            "creationTimestamp":null,
+            "labels":{
+                "app.kubernetes.io/part-of":"kubeflow-profile",
+                "istio-injection":"enabled",
+                "katib-metricscollector-injection":"enabled",
+                "kubernetes.io/metadata.name":"kubeflow-user",
+                "pipelines.kubeflow.org/enabled":"false",
+                "serving.kubeflow.org/inferenceservice":"enabled",
+                "state.aaw.statcan.gc.ca/exists-internal-blob-storage":"false",
+                "state.aaw.statcan.gc.ca/exists-non-cloud-main-user":"false",
+                "state.aaw.statcan.gc.ca/exists-non-sas-notebook-user":"true",
+                "state.aaw.statcan.gc.ca/has-sas-notebook-feature":"false",
+                "state.aaw.statcan.gc.ca/non-employee-users":"false"
+            }
+          },
+          "spec":{},
+          "status":{}
+        }
+      }).as('mockNamespaceMetadataRequest');
+      cy.get('[data-cy-toolbar-button="New Notebook"]').click();
+      cy.wait('@mockNamespaceMetadataRequest');
+      // assert that the sas image is disabled
+      cy.get('[data-cy-form-input="serverType"] > mat-button-toggle[value="group-three"] > button').should('be.disabled');
+    });
+
+    it('should create a jupyter GPU notebook', ()=>{
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-gpu');
+      cy.get('[data-cy-advanced-options-button]').click();
+      // select different jupyter image
+      cy.get('[data-cy-form-input="serverImage"]').click();
+      cy.get('[role="listbox"] > mat-option').contains('jupyterlab-tensorflow').click();
+      // set a gpu
+      cy.get('[data-cy-form-input="vendor"]').find('mat-select').should('have.class', 'mat-select-disabled');
+      cy.get('[data-cy-form-input="gpus"]').click();
+      cy.get('[role="listbox"] > mat-option').should('have.length', 2);
+      cy.get('[role="listbox"] > mat-option').contains('1').click();
+      cy.get('[data-cy-form-input="vendor"]').find('mat-select').should('not.have.class', 'mat-select-disabled');
+      cy.get('[data-cy-form-input="vendor"]').click();
+      cy.get('[role="listbox"] > mat-option').should('have.length', 1);
+      cy.get('[role="listbox"] > mat-option').contains('NVIDIA').click();
+      cy.get('[data-cy-form-input="cpu"]').find('input').invoke('val').should('eq', '4.0');
+      cy.get('[data-cy-form-input="memory"]').find('input').invoke('val').should('eq', '96.0');
+      cy.get('[data-cy-form-input="cpuLimit"]').find('input').invoke('val').should('eq', '4.0');
+      cy.get('[data-cy-form-input="memoryLimit"]').find('input').invoke('val').should('eq', '96.0');
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
+        success: true,
+        status: 200
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should create a custom image notebook', ()=>{
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-custom');
+      cy.get('[data-cy-advanced-options-button]').click();
+      // set custom image
+      cy.get('[data-cy-form-input="customImageCheck"]').find('input').check({force: true});
+      cy.get('[data-cy-form-input="customImage"]').find('input').type('test/image:latest');
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
+        success: true,
+        status: 200
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
     });
   });
 });

@@ -1,7 +1,11 @@
 <!--AAW: Removed input
 <mat-checkbox [formControl]="pvcGroup.get('readOnly')">ReadOnly</mat-checkbox>-->
 
-<mat-form-field appearance="outline" class="wide" data-cy-form-input="existing-volume">
+<mat-form-field
+  appearance="outline"
+  class="wide"
+  data-cy-form-input="existing-volume"
+>
   <mat-label i18n>Name</mat-label>
   <mat-select
     [formControl]="pvcGroup.get('claimName')"

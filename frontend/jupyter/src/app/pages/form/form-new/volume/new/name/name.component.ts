@@ -88,15 +88,19 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
 
   private initComponent(): void {
     // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
+    console.log('def');
     this.subs.add(
       this.ns.getSelectedNamespace().subscribe(ns => {
+        console.log('ns', ns);
         this.backend.getNotebooks(ns).subscribe(notebooks => {
+          console.log('nb', notebooks);
           this.mountedVolumes.clear();
           notebooks.map(nb =>
             nb.volumes.map(v => {
               this.mountedVolumes.add(v);
             }),
           );
+          console.log('abc', this.mountedVolumes);
         });
       }),
     );

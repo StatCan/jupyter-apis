@@ -15,7 +15,10 @@
       (ngSubmit)="onSubmit()"
       [formGroup]="formCtrl"
     >
-      <app-form-name [parentForm]="formCtrl" [existingNotebooks]="existingNotebooks"></app-form-name>
+      <app-form-name
+        [parentForm]="formCtrl"
+        [existingNotebooks]="existingNotebooks"
+      ></app-form-name>
 
       <app-form-image
         [parentForm]="formCtrl"

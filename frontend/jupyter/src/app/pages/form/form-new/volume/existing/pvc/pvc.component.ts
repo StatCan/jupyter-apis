@@ -25,7 +25,7 @@ export class ExistingPvcComponent implements OnInit {
   pvcs: PVCResponseObject[] = [];
   protectedBPvcs: Set<string> = new Set<string>();
   unclassifiedPvcs: Set<string> = new Set<string>();
-  
+
   matcher = new PvcErrorStateMatcher(); //AAW
 
   constructor(
@@ -46,7 +46,7 @@ export class ExistingPvcComponent implements OnInit {
         );
       });
     });
-    
+
     this.pvcGroup
       .get('claimName')
       .setValidators([

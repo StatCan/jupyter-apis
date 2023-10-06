@@ -20,7 +20,10 @@
 
 <!-- PVC -->
 <ng-container *ngIf="type === EXISTING_VOLUME_TYPE.PVC; else customSrc">
-  <app-existing-pvc [pvcGroup]="getPvcFormGroup()" [mountedVolumes]="mountedVolumes"></app-existing-pvc>
+  <app-existing-pvc
+    [pvcGroup]="getPvcFormGroup()"
+    [mountedVolumes]="mountedVolumes"
+  ></app-existing-pvc>
 </ng-container>
 
 <!--YAML editor

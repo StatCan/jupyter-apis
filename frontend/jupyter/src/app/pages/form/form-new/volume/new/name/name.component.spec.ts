@@ -35,6 +35,7 @@ describe('VolumeNameComponent', () => {
     component.metadataGroup = new FormGroup({
       name: new FormControl(''),
     });
+    component.mountedVolumes = new Set();
 
     fixture.detectChanges();
   });

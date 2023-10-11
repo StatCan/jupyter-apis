@@ -4,7 +4,11 @@
   </mat-slide-toggle>
 
   <!--Select System Language-->
-  <mat-form-field class="wide column" appearance="outline">
+  <mat-form-field
+    class="wide column"
+    appearance="outline"
+    data-cy-form-input="language"
+  >
     <mat-label i18n> System Language </mat-label>
     <mat-select [formControl]="parentForm.get('language')">
       <mat-option *ngFor="let v of languageList" [value]="v.id">

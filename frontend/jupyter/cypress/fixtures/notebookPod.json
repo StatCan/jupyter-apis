@@ -124,7 +124,7 @@
                   },
                   {
                      "name":"ISTIO_META_OWNER",
-                     "value":"kubernetes://apis/apps/v1/namespaces/mathis-marcotte/statefulsets/test123"
+                     "value":"kubernetes://apis/apps/v1/namespaces/kubeflow-user/statefulsets/test123"
                   },
                   {
                      "name":"ISTIO_META_MESH_ID",
@@ -241,7 +241,7 @@
                   },
                   {
                      "name":"NB_PREFIX",
-                     "value":"/notebook/mathis-marcotte/test123"
+                     "value":"/notebook/kubeflow-user/test-notebook"
                   }
                ],
                "resources":{

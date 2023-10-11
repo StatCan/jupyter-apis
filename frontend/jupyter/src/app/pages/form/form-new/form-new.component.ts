@@ -34,6 +34,9 @@ export class FormNewComponent
 
   nsMetadata: V1Namespace;
 
+  existingNotebooks: Set<string> = new Set<string>();
+  mountedVolumes: Set<string> = new Set<string>();
+
   constructor(
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
@@ -73,6 +76,18 @@ export class FormNewComponent
 
         this.backend.getNSMetadata(namespace).subscribe(nsMetadata => {
           this.nsMetadata = nsMetadata;
+        });
+
+        this.backend.getNotebooks(namespace).subscribe(notebooks => {
+          this.existingNotebooks.clear();
+          notebooks.map(nb => this.existingNotebooks.add(nb.name));
+
+          this.mountedVolumes.clear();
+          notebooks.map(nb =>
+            nb.volumes.map(v => {
+              this.mountedVolumes.add(v);
+            }),
+          );
         });
       }),
     );

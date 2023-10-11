@@ -4,6 +4,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'jupyter'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -23,6 +24,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'group-one'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -46,6 +48,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'group-two'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -69,6 +72,7 @@
       class="wide"
       appearance="outline"
       *ngIf="parentForm?.value.serverType === 'group-three'"
+      data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
@@ -94,6 +98,7 @@
         [formControl]="parentForm.get('customImageCheck')"
         (change)="onSelect($event)"
         i18n
+        data-cy-form-input="customImageCheck"
       >
         Custom Image
       </mat-checkbox>
@@ -102,6 +107,7 @@
         class="wide"
         appearance="outline"
         *ngIf="parentForm?.value.customImageCheck"
+        data-cy-form-input="customImage"
       >
         <mat-label i18n>Custom Image</mat-label>
         <mat-hint i18n>

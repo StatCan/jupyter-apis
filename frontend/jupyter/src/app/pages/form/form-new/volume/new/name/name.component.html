@@ -5,6 +5,7 @@
   appearance="outline"
   class="wide"
   *ngIf="metadataGroup.get('name')"
+  data-cy-form-input="volume-name"
 >
   <!--This errorStateMatcher and mat-error are AAW specific-->
   <mat-label i18n>Name</mat-label>
@@ -12,7 +13,6 @@
     autocomplete="off"
     matInput
     [formControl]="metadataGroup.get('name')"
-    data-cy="volume name input"
     [errorStateMatcher]="matcher"
   />
   <mat-error>

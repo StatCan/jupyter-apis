@@ -1,7 +1,10 @@
 <lib-form-section title="Protected B" i18n-title>
   <div class="row">
     <div class="flex-column">
-      <mat-checkbox [formControl]="parentForm.get('prob')">
+      <mat-checkbox
+        [formControl]="parentForm.get('prob')"
+        data-cy-form-input="prob"
+      >
         <mat-icon matTooltip="Protected B" i18n-matTooltip> lock </mat-icon>
         <span i18n>&nbsp;Run a Protected B notebook</span>
       </mat-checkbox>

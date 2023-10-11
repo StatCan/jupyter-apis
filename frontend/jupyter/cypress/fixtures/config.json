@@ -1,108 +1,127 @@
 {
-  "config": {
-    "affinityConfig": {
-      "options": [],
-      "value": ""
-    },
-    "allowCustomImage": true,
-    "configurations": {
-      "readOnly": false,
-      "value": []
-    },
-    "cpu": {
-      "limitFactor": "none",
-      "readOnly": false,
-      "value": "0.5"
-    },
-    "dataVolumes": {
-      "readOnly": false,
-      "value": []
-    },
-    "environment": {
-      "readOnly": false,
-      "value": {}
-    },
-    "gpus": {
-      "readOnly": false,
-      "value": {
-        "num": "none",
-        "vendor": "",
-        "vendors": [
-          {
-            "limitsKey": "nvidia.com/gpu",
-            "uiName": "NVIDIA"
-          },
-          {
-            "limitsKey": "amd.com/gpu",
-            "uiName": "AMD"
-          }
+  "success":true,
+  "status":200,
+  "user":null,
+  "config":{
+     "image":{
+        "value":"k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
+        "options":[
+           "k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
+           "k8scc01covidacr.azurecr.io/jupyterlab-pytorch:v1",
+           "k8scc01covidacr.azurecr.io/jupyterlab-tensorflow:v1"
+        ],
+        "readOnly":false,
+        "hideRegistry":false,
+        "hideVersion":false
+     },
+     "imageGroupOne":{
+        "value":"k8scc01covidacr.azurecr.io/rstudio:v1",
+        "options":[
+           "k8scc01covidacr.azurecr.io/rstudio:v1"
         ]
-      }
-    },
-    "hideRegistry": true,
-    "hideTag": false,
-    "image": {
-      "options": [
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy:master-6e4ad3b4",
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-full:master-6e4ad3b4",
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-pytorch-cuda-full:master-6e4ad3b4",
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-full:master-6e4ad3b4",
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-tensorflow-cuda-full:master-6e4ad3b4"
-      ],
-      "value": "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy:master-6e4ad3b4"
-    },
-    "imageGroupOne": {
-      "options": [
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/codeserver-python:master-e9324d39"
-      ],
-      "value": "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/codeserver-python:master-e9324d39"
-    },
-    "imageGroupTwo": {
-      "options": [
-        "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/rstudio-tidyverse:master-e9324d39"
-      ],
-      "value": "public.ecr.aws/j1r0q0g6/notebooks/notebook-servers/rstudio-tidyverse:master-e9324d39"
-    },
-    "imagePullPolicy": {
-      "readOnly": false,
-      "value": "IfNotPresent"
-    },
-    "memory": {
-      "limitFactor": "none",
-      "readOnly": false,
-      "value": "1.0Gi"
-    },
-    "shm": {
-      "readOnly": false,
-      "value": true
-    },
-    "storageClass": "{none}",
-    "tolerationGroup": {
-      "options": [],
-      "readOnly": false,
-      "value": ""
-    },
-    "workspaceVolume": {
-      "readOnly": false,
-      "value": {
-        "mount": "/home/jovyan",
-        "newPvc": {
-          "metadata": {
-            "name": "{notebook-name}-workspace"
-          },
-          "spec": {
-            "accessModes": ["ReadWriteOnce"],
-            "resources": {
-              "requests": {
-                "storage": "5Gi"
+     },
+     "imageGroupTwo":{
+        "value":"k8scc01covidacr.azurecr.io/remote-desktop:v1",
+        "options":[
+           "k8scc01covidacr.azurecr.io/remote-desktop:v1"
+        ]
+     },
+     "imageGroupThree":{
+        "disabledMessage":{
+           "en":"SAS is unavailable while non-employees have access to this profile.",
+           "fr":"SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."
+        },
+        "enabledCondition":{
+           "labels":{
+              "state.aaw.statcan.gc.ca/exists-non-sas-notebook-user":"false"
+           }
+        },
+        "value":"k8scc01covidacr.azurecr.io/sas:latest",
+        "options":[
+           "k8scc01covidacr.azurecr.io/sas:latest"
+        ]
+     },
+     "allowCustomImage":true,
+     "imagePullPolicy":{
+        "value":"Always"
+     },
+     "cpu":{
+        "value":"0.5",
+        "gpuDefault":"4.0",
+        "limitFactor":"1.0",
+        "limitValue":"4.0",
+        "readOnly":false
+     },
+     "memory":{
+        "value":"2.0",
+        "gpuDefault":"96.0",
+        "limitFactor":"1.0",
+        "limitValue":"4.0",
+        "readOnly":false
+     },
+     "workspaceVolume":{
+        "value":{
+           "mount":"/home/jovyan",
+           "newPvc":{
+              "metadata":{
+                 "name":"{notebook-name}-workspace"
+              },
+              "spec":{
+                 "resources":{
+                    "requests":{
+                       "storage":"16Gi"
+                    }
+                 },
+                 "accessModes":[
+                    "ReadWriteOnce"
+                 ]
               }
-            }
-          }
-        }
-      }
-    }
-  },
-  "status": 200,
-  "success": true,
-  "user": null
+           }
+        },
+        "readOnly":false
+     },
+     "dataVolumes":{
+        "value":[
+           
+        ],
+        "readOnly":false
+     },
+     "gpus":{
+        "value":{
+           "num":"none",
+           "vendors":[
+              {
+                 "limitsKey":"nvidia.com/gpu",
+                 "uiName":"NVIDIA"
+              }
+           ],
+           "vendor":"nvidia.com/gpu"
+        },
+        "readOnly":false
+     },
+     "shm":{
+        "value":false,
+        "readOnly":false
+     },
+     "configurations":{
+        "value":null,
+        "readOnly":false
+     },
+     "affinityConfig":{
+        "value":"none",
+        "options":[
+           
+        ],
+        "readOnly":false
+     },
+     "tolerationGroup":{
+        "value":"none",
+        "options":[
+           
+        ],
+        "readOnly":false
+     },
+     "hideRegistry":true,
+     "hideTag":true
+  }
 }

@@ -29,6 +29,7 @@ export class FormWorkspaceVolumeComponent implements OnInit, OnDestroy {
   @Input() readonly: boolean;
   @Input() volGroup: FormGroup;
   @Input() externalName: string;
+  @Input() mountedVolumes: Set<string>;
 
   constructor(private snackBar: SnackBarService) {}
 

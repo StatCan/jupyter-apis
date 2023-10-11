@@ -68,6 +68,7 @@ describe('ExistingPvcComponent', () => {
       .at(0)
       .get('existingSource')
       .get('persistantVolumeClaim') as FormGroup;
+    component.mountedVolumes = new Set();
 
     fixture.detectChanges();
   });

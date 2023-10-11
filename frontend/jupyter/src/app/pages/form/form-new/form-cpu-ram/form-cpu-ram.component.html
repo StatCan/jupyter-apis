@@ -6,7 +6,11 @@
 >
   <div class="row" [formGroup]="parentForm">
     <!--CPU AAW, do not take their lib-positive-input -->
-    <mat-form-field appearance="outline" class="column">
+    <mat-form-field
+      appearance="outline"
+      class="column"
+      data-cy-form-input="cpu"
+    >
       <mat-label i18n>Minimum CPUs</mat-label>
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
@@ -21,7 +25,11 @@
     </mat-form-field>
 
     <!--RAM AAW, do not take their lib-positive-input-->
-    <mat-form-field appearance="outline" class="column">
+    <mat-form-field
+      appearance="outline"
+      class="column"
+      data-cy-form-input="memory"
+    >
       <mat-label i18n>Minimum Memory Gi</mat-label>
       <input
         [attr.disabled]="readonlySpecs ? '' : null"
@@ -44,7 +52,11 @@
   <div class="row">
     <!--CPU-->
     <div class="column">
-      <mat-form-field appearance="outline" class="wide">
+      <mat-form-field
+        appearance="outline"
+        class="wide"
+        data-cy-form-input="cpuLimit"
+      >
         <mat-label i18n>Maximum CPUs</mat-label>
         <input
           [attr.disabled]="readonlySpecs ? '' : null"
@@ -61,7 +73,11 @@
 
     <!--RAM-->
     <div class="column">
-      <mat-form-field appearance="outline" class="wide">
+      <mat-form-field
+        appearance="outline"
+        class="wide"
+        data-cy-form-input="memoryLimit"
+      >
         <mat-label i18n>Maximum Memory Gi</mat-label>
         <input
           [attr.disabled]="readonlySpecs ? '' : null"

@@ -20,6 +20,7 @@ export class FormDataVolumesComponent implements OnInit {
   @Input() volsArray: FormArray;
   @Input() readonly: boolean;
   @Input() externalName: string;
+  @Input() mountedVolumes: Set<string>;
 
   getVolumeTitle = getVolumeTitle;
   getVolumeName = getVolumeName;

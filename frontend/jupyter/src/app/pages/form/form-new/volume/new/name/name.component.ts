@@ -8,9 +8,6 @@ import {
   FormGroupDirective,
   NgForm,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { NamespaceService } from 'kubeflow';
-import { JWABackendService } from 'src/app/services/backend.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 const NB_NAME_SUBST = '{notebook-name}';
@@ -20,21 +17,19 @@ const NB_NAME_SUBST = '{notebook-name}';
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.scss'],
 })
-export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
+export class VolumeNameComponent implements OnInit, OnChanges {
   private templatedName = '';
-  private subs = new Subscription();
   private group: FormGroup;
   private externalNamePrv = '';
-  private mountedVolumes: Set<string> = new Set<string>();
   matcher = new PvcErrorStateMatcher();
 
+  @Input() mountedVolumes: Set<string>;
   @Input()
   get metadataGroup(): FormGroup {
     return this.group;
   }
   set metadataGroup(meta: FormGroup) {
     this.group = meta;
-    this.subs.unsubscribe();
 
     // substitute {notebook-name}
     const nameCtrl = this.getNameCtrl(this.metadataGroup);
@@ -66,19 +61,12 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
-  constructor(
-    private backend: JWABackendService,
-    private ns: NamespaceService,
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.templatedName = this.getNameCtrl(this.metadataGroup).value as string;
 
     this.initComponent();
-  }
-
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
   }
 
   ngOnChanges(): void {
@@ -87,20 +75,6 @@ export class VolumeNameComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private initComponent(): void {
-    // Get the list of mounted volumes of the existing Notebooks in the selected Namespace, AAW
-    this.subs.add(
-      this.ns.getSelectedNamespace().subscribe(ns => {
-        this.backend.getNotebooks(ns).subscribe(notebooks => {
-          this.mountedVolumes.clear();
-          notebooks.map(nb =>
-            nb.volumes.map(v => {
-              this.mountedVolumes.add(v);
-            }),
-          );
-        });
-      }),
-    );
-
     this.getNameCtrl(this.metadataGroup).setValidators([
       Validators.required,
       this.isMountedValidator(),

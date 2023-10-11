@@ -16,6 +16,7 @@ import { parseYAML } from 'src/app/shared/utils/yaml';
 })
 export class ExistingVolumeComponent implements OnInit {
   @Input() volGroup: FormGroup;
+  @Input() mountedVolumes: Set<string>;
 
   EXISTING_VOLUME_TYPE = EXISTING_VOLUME_TYPE;
 

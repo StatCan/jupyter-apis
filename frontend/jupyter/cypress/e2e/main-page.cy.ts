@@ -152,7 +152,7 @@ describe('Main tables', () => {
 
     it('should have the Volumes table', () => {
       cy.get('[data-cy-table-id="volumes-table"]').should('exist');
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 7);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 8);
     });
 
     // We use function () in order to access aliases via this
@@ -216,15 +216,15 @@ describe('Main tables', () => {
       });
       // clear filters
       cy.get('[mattooltip="Clear filters"]').click();
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 7);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 8);
 
       // generic filter
       cy.get('[data-cy-table-filter-id="volumes-table"]').type('default{enter}');
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 1);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 2);
 
       //clear filters
       cy.get('[matchipremove]').click();
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 7);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should('have.length', 8);
     });
 
     it('should open the volume details page', ()=>{

@@ -4,7 +4,7 @@
   i18n-title
   i18n-text
 >
-  <mat-accordion>
+  <mat-accordion data-cy-form-input="dataVolumes">
     <mat-expansion-panel
       hideToggle
       *ngFor="
@@ -78,6 +78,7 @@
         <app-existing-volume
           *ngIf="volGroup.get('existingSource')"
           [volGroup]="volGroup"
+          [mountedVolumes]="mountedVolumes"
         ></app-existing-volume>
 
         <!--AAW: sizes here has to get passed down because size options for workspace vol and data vol are not the same-->
@@ -86,6 +87,7 @@
           [volGroup]="volGroup"
           [externalName]="externalName"
           [sizes]="['4', '8', '16', '32', '64', '128', '256', '512']"
+          [mountedVolumes]="mountedVolumes"
         ></app-new-volume>
 
         <app-volume-mount
@@ -104,7 +106,7 @@
       (click)="addNewVolume()"
       mat-stroked-button
       i18n
-      data-cy="add new volume"
+      data-cy-form-button="dataVolumes-new"
     >
       + Add new volume
     </button>
@@ -116,7 +118,7 @@
       (click)="attachExistingVolume()"
       mat-stroked-button
       i18n
-      data-cy="attach existing volume"
+      data-cy-form-button="dataVolumes-existing"
     >
       + Attach existing volume
     </button>

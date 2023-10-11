@@ -15,7 +15,10 @@
       (ngSubmit)="onSubmit()"
       [formGroup]="formCtrl"
     >
-      <app-form-name [parentForm]="formCtrl"></app-form-name>
+      <app-form-name
+        [parentForm]="formCtrl"
+        [existingNotebooks]="existingNotebooks"
+      ></app-form-name>
 
       <app-form-image
         [parentForm]="formCtrl"
@@ -66,6 +69,7 @@
           [readonly]="config?.workspaceVolume?.readOnly"
           [volGroup]="formCtrl.get('workspace')"
           [externalName]="formCtrl.get('name').value"
+          [mountedVolumes]="mountedVolumes"
         >
         </app-form-workspace-volume>
 
@@ -73,6 +77,7 @@
           [volsArray]="formCtrl.get('datavols')"
           [readonly]="config?.dataVolumes?.readOnly"
           [externalName]="formCtrl.get('name').value"
+          [mountedVolumes]="mountedVolumes"
         >
         </app-form-data-volumes>
 
@@ -104,6 +109,7 @@
           (click)="onSubmit()"
           [disabled]="!formCtrl.valid"
           i18n
+          data-cy-form-button="submit"
         >
           LAUNCH
         </button>
@@ -115,6 +121,7 @@
         class="cancel-button"
         (click)="onCancel()"
         i18n
+        data-cy-form-button="cancel"
       >
         CANCEL
       </button>

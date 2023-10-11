@@ -112,6 +112,26 @@
       "labels":{
         "data.statcan.gc.ca/classification":"protected-b"
       }
+    },
+    {
+      "name":"titanic-ml-47xh5-data-m57vq-2md82",
+      "namespace":"kubeflow-user",
+      "status":{
+        "message":"Bound",
+        "phase":"ready",
+        "state":"",
+        "key":"pvcBound",
+        "eventMessage":""
+      },
+      "age":"2023-09-28T16:30:08Z",
+      "capacity":"16Gi",
+      "modes":[
+        "ReadWriteOnce"
+      ],
+      "class":"default",
+      "notebooks":[
+        "random-forest-waiting"
+      ]
     }
   ],
   "status": "200",

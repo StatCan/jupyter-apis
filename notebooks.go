@@ -473,6 +473,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	if s.Config.SpawnerFormDefaults.Image.ReadOnly {
 		image = s.Config.SpawnerFormDefaults.Image.Value
 	}
+	image = strings.TrimSpace(image)
 
 	// Setup the notebook
 	notebook := kubeflowv1.Notebook{

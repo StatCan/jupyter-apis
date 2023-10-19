@@ -392,13 +392,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return pvcsCopy;
   }
 
-  // Status Terminating allows action to be enabled.
-  // If there is a pvc in use, we want to block actions
   public parseDeletionActionStatus(pvc: PVCProcessedObject) {
-    if (pvc.usedBy != null) {
-      return STATUS_TYPE.TERMINATING;
-    }
-
     if (pvc.notebooks.length) {
       return STATUS_TYPE.UNAVAILABLE;
     }

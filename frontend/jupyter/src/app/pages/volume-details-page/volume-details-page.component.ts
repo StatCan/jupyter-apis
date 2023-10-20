@@ -8,7 +8,7 @@ import {
   PollerService,
   STATUS_TYPE,
   ToolbarButton,
-  UrlItem
+  UrlItem,
 } from 'kubeflow';
 import { Subscription } from 'rxjs';
 import { ActionsService } from 'src/app/services/actions.service';
@@ -144,7 +144,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  get notebooksURLs(): UrlItem[]{
+  get notebooksURLs(): UrlItem[] {
     let urls = [];
     for (const nb of this.notebooks) {
       urls.push({

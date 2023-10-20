@@ -26,9 +26,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
   @Input()
   public notebooksURLs: UrlItem[];
 
-  get notebooksGroup(): LinkGroup[]{
+  get notebooksGroup(): LinkGroup[] {
     const podsGroup: LinkGroup = {
-      name: "Notebooks",
+      name: 'Notebooks',
       links: this.notebooksURLs,
     };
     return [podsGroup];

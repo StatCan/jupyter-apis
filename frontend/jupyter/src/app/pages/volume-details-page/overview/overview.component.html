@@ -27,7 +27,11 @@
 >
 </lib-details-list-item>
 
-<lib-content-list-item key="Used by notebooks" i18n-key *ngIf="notebooksURLs.length > 0">
+<lib-content-list-item
+  key="Used by notebooks"
+  i18n-key
+  *ngIf="notebooksURLs.length > 0"
+>
   <lib-urls [urlList]="notebooksURLs"></lib-urls>
 </lib-content-list-item>
 

@@ -36,7 +36,7 @@ export class DeleteButtonComponent
   }
 
   getDisabledTooltip(element: any) {
-    let tooltip = `Cannot delete PVC because it is being used by the following notebooks:\n`;
+    let tooltip = $localize`Cannot delete PVC because it is being used by the following notebooks:\n`;
 
     for (const nb of element.notebooks) {
       tooltip += `\n ${nb}`;

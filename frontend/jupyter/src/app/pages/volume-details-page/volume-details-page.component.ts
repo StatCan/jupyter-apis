@@ -8,6 +8,7 @@ import {
   PollerService,
   STATUS_TYPE,
   ToolbarButton,
+  UrlItem
 } from 'kubeflow';
 import { Subscription } from 'rxjs';
 import { ActionsService } from 'src/app/services/actions.service';
@@ -141,5 +142,16 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
     } else {
       return STATUS_TYPE.WARNING;
     }
+  }
+
+  get notebooksURLs(): UrlItem[]{
+    let urls = [];
+    for (const nb of this.notebooks) {
+      urls.push({
+        name: nb,
+        url: `/notebook/details/${this.namespace}/${nb}`,
+      });
+    }
+    return urls;
   }
 }

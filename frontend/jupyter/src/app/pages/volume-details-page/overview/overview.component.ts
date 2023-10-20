@@ -24,6 +24,17 @@ export class OverviewComponent implements OnInit, OnDestroy {
   private prvPvc: V1PersistentVolumeClaim;
 
   @Input()
+  public notebooksURLs: UrlItem[];
+
+  get notebooksGroup(): LinkGroup[]{
+    const podsGroup: LinkGroup = {
+      name: "Notebooks",
+      links: this.notebooksURLs,
+    };
+    return [podsGroup];
+  }
+
+  @Input()
   set pvc(pvc: V1PersistentVolumeClaim) {
     this.prvPvc = pvc;
 

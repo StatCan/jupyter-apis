@@ -145,7 +145,7 @@ export class VolumeDetailsPageComponent implements OnInit, OnDestroy {
   }
 
   get notebooksURLs(): UrlItem[] {
-    let urls = [];
+    const urls = [];
     for (const nb of this.notebooks) {
       urls.push({
         name: nb,

@@ -27,6 +27,14 @@
 >
 </lib-details-list-item>
 
+<lib-content-list-item
+  key="Used by notebooks"
+  i18n-key
+  *ngIf="notebooksURLs.length > 0"
+>
+  <lib-urls [urlList]="notebooksURLs"></lib-urls>
+</lib-content-list-item>
+
 <lib-content-list-item key="Pods Mounted" i18n-key>
   <ng-container *ngIf="!podGroupsLoaded">
     <lib-loading-spinner></lib-loading-spinner>

@@ -15,8 +15,9 @@ describe('Volume Details Page', ()=>{
     cy.get('lib-details-list-item[key="Storage class"] > .list-entry-row > .list-entry-value > div').should('have.text', ' default\n');
     cy.get('lib-details-list-item[key="Volume mode"] > .list-entry-row > .list-entry-value > div').should('have.text', ' Filesystem\n');
     cy.get('lib-details-list-item[key="Volume name"] > .list-entry-row > .list-entry-value > div').should('have.text', ' pvc-a9dd7d1a-c4c0-4b36-9302-beb8cccbcfbd\n');
+    cy.get('lib-content-list-item[key="Used by notebooks"] > .list-entry-row > div.container > lib-urls > a').should('have.text', ' test\n').and('have.attr', 'href').and('eq', '/notebook/details/kubeflow-user/test');
     cy.get('lib-content-list-item[key="Pods Mounted"] > .list-entry-row > div.container > app-link-groups-table > div > .group-key').should('have.text', 'Notebooks');
-    cy.get('lib-content-list-item[key="Pods Mounted"] > .list-entry-row > div.container > app-link-groups-table > div > .link-group-container > lib-urls > a').should('have.text', ' test\n').should('have.attr', 'href').and('eq', '/notebook/details/kubeflow-user/test');
+    cy.get('lib-content-list-item[key="Pods Mounted"] > .list-entry-row > div.container > app-link-groups-table > div > .link-group-container > lib-urls > a').should('have.text', ' test\n').and('have.attr', 'href').and('eq', '/notebook/details/kubeflow-user/test');
     // assert events tab
     cy.mockGetPvcEventsRequest('kubeflow-user', 'test-volume');
     cy.get('div[role="tab"]').eq(1).click();
@@ -26,7 +27,7 @@ describe('Volume Details Page', ()=>{
     cy.get('div[role="tab"]').eq(2).click();
     cy.get('div.monaco-editor').should('exist');
   });
-
+  
   it('should delete colume from volume details page', ()=>{
     // assert that delete is disabled on volumes attached
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.disabled');

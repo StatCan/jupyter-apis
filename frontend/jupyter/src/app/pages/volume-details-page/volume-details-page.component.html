@@ -30,7 +30,10 @@
         [selectedIndex]="selectedTab.index"
       >
         <mat-tab label="OVERVIEW" i18n-label>
-          <app-overview [pvc]="pvc"></app-overview>
+          <app-overview
+            [pvc]="pvc"
+            [notebooksURLs]="notebooksURLs"
+          ></app-overview>
         </mat-tab>
 
         <mat-tab label="EVENTS" i18n-label>

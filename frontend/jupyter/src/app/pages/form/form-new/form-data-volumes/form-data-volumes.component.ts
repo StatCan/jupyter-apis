@@ -51,7 +51,7 @@ export class FormDataVolumesComponent implements OnInit {
 
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
     volGroup.get('mount').markAsTouched();
-    this.newestItem= volId;
+    this.newestItem = volId;
   }
 
   attachExistingVolume() {

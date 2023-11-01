@@ -235,7 +235,6 @@ describe('New notebook form', () => {
     it('data volume', ()=>{
       cy.get('[data-cy-advanced-options-button]').click();
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
-      cy.get('[data-cy-form-input="dataVolumes"]  > mat-expansion-panel').click();
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="volume-name"]').find('input').clear();
       // volume name invalid pattern
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="volume-name"]').find('input').type('-volume-');
@@ -262,7 +261,6 @@ describe('New notebook form', () => {
       // mount path duplicate value
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="mount-path"]').find('input').type('/home/jovyan/mount1');
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
-      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').eq(1).click();
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="mount-path"]').eq(1).find('input').clear();
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="mount-path"]').eq(1).find('input').type('/home/jovyan/mount1');
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="mount-path"]').eq(1).find('input').should('have.class', 'ng-invalid');
@@ -300,7 +298,6 @@ describe('New notebook form', () => {
     it('data volume auto update name', ()=>{
       cy.get('.lib-advanced-options').find('.toggle-button').click();
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
-      cy.get('[data-cy-form-input="dataVolumes"]').click();
       // assert volume name and mount path auto updates when not dirty
       cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook');
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="volume-name"]').find('input').invoke('val').should('eq', 'test-notebook-datavol-1');

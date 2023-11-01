@@ -364,7 +364,7 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
       cy.get('[data-cy-form-button="dataVolumes-existing"]').click();
       cy.get('[data-cy-form-button="submit"]').should('be.disabled');
-      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').eq(1).click();
+      // cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').eq(1).click();
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').click();
       cy.get('[role="listbox"] > mat-option').contains('a-pvc-phase-ready-viewer-ready').click();
       // change language to french

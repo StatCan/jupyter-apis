@@ -22,12 +22,14 @@ export class FormProtectedBComponent implements OnInit {
             .updateValueAndValidity();
         },
       );
-      this.parentForm
-        .get('workspace')
-        .get('existingSource')
-        .get('persistentVolumeClaim')
-        .get('claimName')
-        .updateValueAndValidity();
+      if (this.parentForm.get('workspace').get('existingSource')) {
+        this.parentForm
+          .get('workspace')
+          .get('existingSource')
+          .get('persistentVolumeClaim')
+          .get('claimName')
+          .updateValueAndValidity();
+      }
     });
   }
 }

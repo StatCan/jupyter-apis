@@ -10,6 +10,7 @@
       *ngIf="!volGroup.disabled"
       (opened)="panelOpen = true"
       (closed)="panelOpen = false"
+      [expanded]="this.panelOpen"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>

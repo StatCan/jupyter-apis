@@ -58,6 +58,7 @@ export class FormWorkspaceVolumeComponent implements OnInit, OnDestroy {
     this.volGroup.addControl('existingSource', createExistingSourceFormGroup());
     this.volGroup.get('mount').setValue('/home/jovyan');
     this.volGroup.enable();
+    this.panelOpen = true;
   }
 
   private removeVolumeFields(vol: FormGroup) {

@@ -48,7 +48,7 @@ func (s *server) GetPodDefaults(w http.ResponseWriter, r *http.Request) {
 			desc = pd.Name
 		}
 
-		// Ignore the protected-b pod default
+		// Ignore the protected-b poddefault
 		labelMapped := reflect.ValueOf(pd.Spec.Selector.MatchLabels).MapKeys()[0].String()
 
 		if labelMapped != "notebook.statcan.gc.ca/protected-b" {

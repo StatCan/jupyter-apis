@@ -13,7 +13,7 @@ import { JWABackendService } from 'src/app/services/backend.service';
 export class FormConfigurationsComponent implements OnInit, OnDestroy {
   podDefaults: PodDefault[];
   subscriptions = new Subscription();
-  isVisible = true;
+  isVisible = false; //Hidding the configuration by default
   @Input() parentForm: FormGroup;
 
   constructor(public ns: NamespaceService, public backend: JWABackendService) {}
@@ -24,6 +24,8 @@ export class FormConfigurationsComponent implements OnInit, OnDestroy {
       // Get the PodDefaults of the new Namespace
       this.backend.getPodDefaults(namespace).subscribe(pds => {
         this.podDefaults = pds;
+        // If a poddefault exists, display configuration
+        // Note: poddefault.go handles removing protected B from the list
         this.isVisible = this.podDefaults.length > 0;
       });
     });

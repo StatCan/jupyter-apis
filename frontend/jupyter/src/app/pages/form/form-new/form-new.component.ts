@@ -133,19 +133,7 @@ export class FormNewComponent
     // Use the custom image instead
     if (notebook.customImageCheck) {
       notebook.image = notebook.customImage;
-    } else if (notebook.serverType === 'group-one') {
-      // Set notebook image from imageGroupOne
-      notebook.image = notebook.imageGroupOne;
-    } else if (notebook.serverType === 'group-two') {
-      // Set notebook image from imageGroupTwo
-      notebook.image = notebook.imageGroupTwo;
-    } else if (notebook.serverType === 'group-three') {
-      // Set notebook image from imageGroupThree
-      notebook.image = notebook.imageGroupThree;
-    }
-
-    // Set serverType for custom image
-    if (notebook.customImageCheck) {
+      // Set serverType for custom image
       if (notebook.image.match(/\/rstudio:/)) {
         notebook.serverType = 'group-one';
       } else if (notebook.image.match(/\/remote-desktop:/)) {
@@ -155,6 +143,15 @@ export class FormNewComponent
       } else {
         notebook.serverType = 'jupyter';
       }
+    } else if (notebook.serverType === 'group-one') {
+      // Set notebook image from imageGroupOne
+      notebook.image = notebook.imageGroupOne;
+    } else if (notebook.serverType === 'group-two') {
+      // Set notebook image from imageGroupTwo
+      notebook.image = notebook.imageGroupTwo;
+    } else if (notebook.serverType === 'group-three') {
+      // Set notebook image from imageGroupThree
+      notebook.image = notebook.imageGroupThree;
     }
 
     // Remove unnecessary images from the request sent to the backend
@@ -215,7 +212,7 @@ export class FormNewComponent
 
   onSubmit() {
     this.popup.open('Submitting new Notebook...', SnackType.Info, 3000);
-
+    
     const notebook = this.getSubmitNotebook();
     this.backend.createNotebook(notebook).subscribe(() => {
       this.popup.close();

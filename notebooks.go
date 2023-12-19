@@ -109,6 +109,7 @@ type newnotebookrequest struct {
 	ServerType         string            `json:"serverType"`
 	AffinityConfig     string            `json:"affinityConfig"`
 	TolerationGroup    string            `json:"tolerationGroup"`
+	DefaultNotebook    bool              `json:"defaultNotebook"`
 }
 
 type gpuresponse struct {
@@ -545,6 +546,7 @@ func (s *server) createDefaultNotebook(namespace string) (newnotebookrequest, er
 		ServerType:         "jupyter",
 		AffinityConfig:     s.Config.SpawnerFormDefaults.AffinityConfig.Value,
 		TolerationGroup:    s.Config.SpawnerFormDefaults.TolerationGroup.Value,
+		DefaultNotebook:    true,
 	}
 
 	return notebook, nil
@@ -661,6 +663,11 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	// AAW Customization Adding protected B
 	if req.Protb {
 		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/protected-b"] = "true"
+	}
+
+	// AAW Customization Creating default notebook
+	if req.DefaultNotebook {
+		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/default-notebook"] = "true"
 	}
 
 	// Add configuration items

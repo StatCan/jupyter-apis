@@ -26,8 +26,6 @@ export class FormNewComponent
   formCtrl: FormGroup;
   config: Config;
 
-  defaultStorageclass = false;
-
   subscriptions = new Subscription();
 
   readonlySpecs: boolean;
@@ -91,20 +89,6 @@ export class FormNewComponent
         });
       }),
     );
-
-    // Check if a default StorageClass is set
-    this.backend.getDefaultStorageClass().subscribe(defaultClass => {
-      if (defaultClass.length === 0) {
-        this.defaultStorageclass = false;
-        this.popup.open(
-          $localize`No default Storage Class is set. Can't create new Disks for the new Notebook. Please use an Existing Disk.`,
-          SnackType.Warning,
-          0,
-        );
-      } else {
-        this.defaultStorageclass = true;
-      }
-    });
   }
 
   ngOnDestroy() {
@@ -133,19 +117,7 @@ export class FormNewComponent
     // Use the custom image instead
     if (notebook.customImageCheck) {
       notebook.image = notebook.customImage;
-    } else if (notebook.serverType === 'group-one') {
-      // Set notebook image from imageGroupOne
-      notebook.image = notebook.imageGroupOne;
-    } else if (notebook.serverType === 'group-two') {
-      // Set notebook image from imageGroupTwo
-      notebook.image = notebook.imageGroupTwo;
-    } else if (notebook.serverType === 'group-three') {
-      // Set notebook image from imageGroupThree
-      notebook.image = notebook.imageGroupThree;
-    }
-
-    // Set serverType for custom image
-    if (notebook.customImageCheck) {
+      // Set serverType for custom image
       if (notebook.image.match(/\/rstudio:/)) {
         notebook.serverType = 'group-one';
       } else if (notebook.image.match(/\/remote-desktop:/)) {
@@ -155,6 +127,15 @@ export class FormNewComponent
       } else {
         notebook.serverType = 'jupyter';
       }
+    } else if (notebook.serverType === 'group-one') {
+      // Set notebook image from imageGroupOne
+      notebook.image = notebook.imageGroupOne;
+    } else if (notebook.serverType === 'group-two') {
+      // Set notebook image from imageGroupTwo
+      notebook.image = notebook.imageGroupTwo;
+    } else if (notebook.serverType === 'group-three') {
+      // Set notebook image from imageGroupThree
+      notebook.image = notebook.imageGroupThree;
     }
 
     // Remove unnecessary images from the request sent to the backend

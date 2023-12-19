@@ -196,7 +196,7 @@ export class FormNewComponent
 
   onSubmit() {
     this.popup.open('Submitting new Notebook...', SnackType.Info, 3000);
-    
+
     const notebook = this.getSubmitNotebook();
     this.backend.createNotebook(notebook).subscribe(() => {
       this.popup.close();

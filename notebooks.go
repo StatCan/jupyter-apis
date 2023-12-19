@@ -447,6 +447,130 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 	return nil
 }
 
+// Sets default values to notebook request if missing
+func (s *server) createDefaultNotebook(namespace string) (newnotebookrequest, error) {
+	var notebook newnotebookrequest
+	notebookname := namespace + "-notebook"
+	cpuvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
+	if err != nil {
+		return notebook, err
+	}
+
+	cpulimitvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.LimitValue)
+	if err != nil {
+		return notebook, err
+	}
+
+	memoryvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.Memory.Value + "Gi")
+	if err != nil {
+		return notebook, err
+	}
+
+	memorylimitvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.Memory.LimitValue + "Gi")
+	if err != nil {
+		return notebook, err
+	}
+
+	size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
+	if err != nil {
+		return notebook, err
+	}
+	workspacevolumename := notebookname + "-workspace"
+	workspaceVol := volrequest{
+		Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount,
+		NewPvc: NewPvc{
+			NewPvcMetadata: NewPvcMetadata{
+				Name: &workspacevolumename,
+			},
+			NewPvcSpec: NewPvcSpec{
+				Resources: Resources{
+					Requests: Requests{
+						Storage: size,
+					},
+				},
+				AccessModes:      s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.AccessModes,
+				StorageClassName: "",
+			},
+		},
+	}
+
+	var datavols []volrequest
+	for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
+		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
+		if err != nil {
+			return notebook, err
+		}
+		vol := volrequest{
+			Mount: volreq.Value.Mount,
+			NewPvc: NewPvc{
+				NewPvcMetadata: NewPvcMetadata{
+					Name: &volreq.Value.NewPvc.Metadata.Name,
+				},
+				NewPvcSpec: NewPvcSpec{
+					Resources: Resources{
+						Requests: Requests{
+							Storage: size,
+						},
+					},
+					AccessModes:      workspaceVol.NewPvc.NewPvcSpec.AccessModes,
+					StorageClassName: "",
+				},
+			},
+		}
+		datavols = append(datavols, vol)
+	}
+
+	notebook = newnotebookrequest{
+		Name:             notebookname,
+		Namespace:        namespace,
+		Image:            s.Config.SpawnerFormDefaults.Image.Value,
+		CustomImage:      "",
+		CustomImageCheck: false,
+		CPU:              cpuvalue,
+		CPULimit:         cpulimitvalue,
+		Memory:           memoryvalue,
+		MemoryLimit:      memorylimitvalue,
+		GPUs: gpurequest{
+			Quantity: s.Config.SpawnerFormDefaults.GPUs.Value.Num,
+			Vendor:   s.Config.SpawnerFormDefaults.GPUs.Value.Vendor,
+		},
+		NoWorkspace:        false,
+		Workspace:          workspaceVol,
+		DataVolumes:        datavols,
+		EnableSharedMemory: s.Config.SpawnerFormDefaults.Shm.Value,
+		Configurations:     s.Config.SpawnerFormDefaults.Configurations.Value,
+		Protb:              false,
+		Language:           "en",
+		ImagePullPolicy:    s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
+		ServerType:         "jupyter",
+		AffinityConfig:     s.Config.SpawnerFormDefaults.AffinityConfig.Value,
+		TolerationGroup:    s.Config.SpawnerFormDefaults.TolerationGroup.Value,
+	}
+
+	return notebook, nil
+}
+
+func (s *server) NewDefaultNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	req, err := s.createDefaultNotebook(namespace)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	newnotebook, err := json.Marshal(req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	r.Body = io.NopCloser(bytes.NewBuffer(newnotebook))
+
+	s.NewNotebook(w, r)
+}
+
 func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
@@ -469,8 +593,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	image := req.Image
 	if req.CustomImageCheck {
 		image = req.CustomImage
-	}
-	if s.Config.SpawnerFormDefaults.Image.ReadOnly {
+	} else if s.Config.SpawnerFormDefaults.Image.ReadOnly {
 		image = s.Config.SpawnerFormDefaults.Image.Value
 	}
 	image = strings.TrimSpace(image)

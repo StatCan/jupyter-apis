@@ -83,7 +83,7 @@ export class PopoverComponent {
     this.hideTimeoutId = window.setTimeout(() => {
       // TODO: When we start to use @angular/animations move the
       // "onHide.next()" method to animation's finished callback
-      this.onHide.next();
+      this.onHide.next(null);
       this.visibilityPrv = 'hidden';
       // Mark for check in case the parent has set ChangeDetectionStrategy
       // to OnPush.

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PositiveNumberInputComponent } from './positive-number-input.component';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FormModule } from '../form.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -20,7 +20,7 @@ describe('PositiveNumberInputComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PositiveNumberInputComponent);
     component = fixture.componentInstance;
-    component.sizeControl = new FormControl();
+    component.sizeControl = new UntypedFormControl();
 
     fixture.detectChanges();
   });

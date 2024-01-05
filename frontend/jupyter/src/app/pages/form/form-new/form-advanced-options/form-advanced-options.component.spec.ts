@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormModule as KfFormModule } from 'kubeflow';
@@ -25,9 +25,9 @@ describe('FormAdvancedOptionsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormAdvancedOptionsComponent);
     component = fixture.componentInstance;
-    component.parentForm = new FormGroup({
-      shm: new FormControl(),
-      language: new FormControl(),
+    component.parentForm = new UntypedFormGroup({
+      shm: new UntypedFormControl(),
+      language: new UntypedFormControl(),
     });
 
     fixture.detectChanges();

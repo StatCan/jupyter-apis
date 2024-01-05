@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { EXISTING_SOURCE, EXISTING_VOLUME_TYPE } from 'src/app/types';
 import {
   createExistingSourceFormGroup,
@@ -15,7 +15,7 @@ import { parseYAML } from 'src/app/shared/utils/yaml';
   styleUrls: ['./existing-volume.component.scss'],
 })
 export class ExistingVolumeComponent implements OnInit {
-  @Input() volGroup: FormGroup;
+  @Input() volGroup: UntypedFormGroup;
   @Input() mountedVolumes: Set<string>;
 
   EXISTING_VOLUME_TYPE = EXISTING_VOLUME_TYPE;
@@ -45,11 +45,11 @@ export class ExistingVolumeComponent implements OnInit {
       return EXISTING_VOLUME_TYPE.CUSTOM;
     }
 
-    if (this.volGroup.get('existingSource') instanceof FormControl) {
+    if (this.volGroup.get('existingSource') instanceof UntypedFormControl) {
       return EXISTING_VOLUME_TYPE.CUSTOM;
     }
 
-    if (this.volGroup.get('existingSource') instanceof FormGroup) {
+    if (this.volGroup.get('existingSource') instanceof UntypedFormGroup) {
       return EXISTING_VOLUME_TYPE.PVC;
     }
   }
@@ -67,14 +67,14 @@ export class ExistingVolumeComponent implements OnInit {
     if (type === EXISTING_VOLUME_TYPE.CUSTOM) {
       const currSrc = this.volGroup.get('existingSource').value;
       this.yamlInternal = dump(currSrc);
-      this.volGroup.setControl('existingSource', new FormControl(currSrc));
+      this.volGroup.setControl('existingSource', new UntypedFormControl(currSrc));
       return;
     }
 
     // Use a FormGroup for PVC, since there will be a form with subfields
     this.volGroup.setControl('existingSource', createExistingSourceFormGroup());
 
-    const sourceGroup = this.volGroup.get('existingSource') as FormGroup;
+    const sourceGroup = this.volGroup.get('existingSource') as UntypedFormGroup;
     const source = EXISTING_SOURCE.PERSISTENT_VOLUME_CLAIM;
 
     sourceGroup.addControl(source, createSourceFormGroup(source));

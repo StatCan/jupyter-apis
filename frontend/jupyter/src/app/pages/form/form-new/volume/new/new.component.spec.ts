@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -31,8 +31,8 @@ describe('NewVolumeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewVolumeComponent);
     component = fixture.componentInstance;
-    component.volGroup = new FormGroup({
-      newPvc: new FormControl(),
+    component.volGroup = new UntypedFormGroup({
+      newPvc: new UntypedFormControl(),
     });
 
     fixture.detectChanges();

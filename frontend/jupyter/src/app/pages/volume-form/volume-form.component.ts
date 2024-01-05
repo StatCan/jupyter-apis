@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
   FormControl,
   ValidatorFn,
@@ -28,7 +28,7 @@ export class VolumeFormComponent implements OnInit, OnDestroy {
   public TYPE_EMPTY = 'empty';
 
   public subs = new Subscription();
-  public formCtrl: FormGroup;
+  public formCtrl: UntypedFormGroup;
   public blockSubmit = false;
 
   public currNamespace = '';
@@ -38,7 +38,7 @@ export class VolumeFormComponent implements OnInit, OnDestroy {
 
   constructor(
     public ns: NamespaceService,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public backend: JWABackendService,
     public dialog: MatDialogRef<VolumeFormComponent>,
   ) {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { NamespaceService } from 'kubeflow';
 import { of } from 'rxjs';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -34,9 +34,9 @@ describe('FormNameComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormNameComponent);
     component = fixture.componentInstance;
-    component.parentForm = new FormGroup({
-      name: new FormControl(),
-      namespace: new FormControl(),
+    component.parentForm = new UntypedFormGroup({
+      name: new UntypedFormControl(),
+      namespace: new UntypedFormControl(),
     });
 
     fixture.detectChanges();

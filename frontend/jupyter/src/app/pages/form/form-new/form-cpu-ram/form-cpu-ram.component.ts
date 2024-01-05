@@ -6,11 +6,11 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {
-  FormGroup,
+  UntypedFormGroup,
   AbstractControl,
   Validators,
   ValidatorFn,
-  FormControl,
+  UntypedFormControl,
   FormGroupDirective,
   NgForm,
   ValidationErrors,
@@ -34,7 +34,7 @@ type MaxResourceSpec = {
   styleUrls: ['./form-cpu-ram.component.scss'],
 })
 export class FormCpuRamComponent implements OnInit, OnChanges {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
   @Input() readonlySpecs: boolean;
@@ -233,7 +233,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 // Error when invalid control is dirty, touched, or submitted, AAW
 export class parentErrorKeysErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: FormControl | null,
+    control: UntypedFormControl | null,
     form: FormGroupDirective | NgForm | null,
   ): boolean {
     return !!(

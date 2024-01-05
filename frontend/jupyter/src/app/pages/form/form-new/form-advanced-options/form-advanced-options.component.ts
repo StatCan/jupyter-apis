@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, LOCALE_ID, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-form-advanced-options',
@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./form-advanced-options.component.scss'],
 })
 export class FormAdvancedOptionsComponent implements OnInit {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   languageList = [
     { id: 'en', label: 'English' },
     { id: 'fr', label: 'Français' },

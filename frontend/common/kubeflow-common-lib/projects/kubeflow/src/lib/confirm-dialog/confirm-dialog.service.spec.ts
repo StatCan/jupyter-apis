@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { ConfirmDialogService } from './confirm-dialog.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ConfirmDialogModule } from './confirm-dialog.module';
 
 describe('ConfirmDialogService', () => {

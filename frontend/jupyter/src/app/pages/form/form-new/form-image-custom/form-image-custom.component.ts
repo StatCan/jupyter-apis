@@ -17,7 +17,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { V1Namespace } from '@kubernetes/client-node';
 import { Config } from 'src/app/types';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
 
 @Component({
   selector: 'app-form-image-custom',

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatLegacyTabChangeEvent as MatTabChangeEvent } from '@angular/material/legacy-tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import {

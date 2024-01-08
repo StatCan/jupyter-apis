@@ -14,7 +14,7 @@ import {
   PollerService,
   DashboardState,
 } from 'kubeflow';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
 import {
   KubecostService,

@@ -9,8 +9,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormModule as KfFormModule } from 'kubeflow';
 import { FormWorkspaceVolumeComponent } from './form-workspace-volume.component';
 import { VolumeModule } from '../volume/volume.module';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSelectModule } from '@angular/material/select';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { HttpClientModule } from '@angular/common/http';
 
 const SnackBarServiceStub: Partial<SnackBarService> = {

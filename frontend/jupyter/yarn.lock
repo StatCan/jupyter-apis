@@ -6580,12 +6580,6 @@
   "resolved" "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   "version" "2.0.6"
 
-"kubeflow@file:../common/kubeflow-common-lib/dist/kubeflow":
-  "resolved" "file:../common/kubeflow-common-lib/dist/kubeflow"
-  "version" "0.0.4"
-  dependencies:
-    "tslib" "^2.0.0"
-
 "lazy-ass@^1.6.0":
   "integrity" "sha512-cc8oEVoctTvsFZ/Oje/kGnHbpWHYBe8IAJe4C0QNc3t8uM/0Y8+erSz/7Y1ALuXTEZTMvxXwO6YbX1ey3ujiZw=="
   "resolved" "https://registry.npmjs.org/lazy-ass/-/lazy-ass-1.6.0.tgz"
@@ -9726,9 +9720,9 @@
   "resolved" "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   "version" "0.1.0"
 
-"zone.js@~0.11.4", "zone.js@~0.11.4 || ~0.12.0 || ~0.13.0":
-  "integrity" "sha512-82bctBg2hKcEJ21humWIkXRlLBBmrc3nN7DFh5LGGhcyycO2S7FN8NmdvlcKaGFDNVL4/9kFLmwmInTavdJERA=="
-  "resolved" "https://registry.npmjs.org/zone.js/-/zone.js-0.11.8.tgz"
-  "version" "0.11.8"
+"zone.js@^0.13.3", "zone.js@~0.11.4 || ~0.12.0 || ~0.13.0":
+  "integrity" "sha512-MKPbmZie6fASC/ps4dkmIhaT5eonHkEt6eAy80K42tAm0G2W+AahLJjbfi6X9NPdciOE9GRFTTM8u2IiF6O3ww=="
+  "resolved" "https://registry.npmjs.org/zone.js/-/zone.js-0.13.3.tgz"
+  "version" "0.13.3"
   dependencies:
     "tslib" "^2.3.0"

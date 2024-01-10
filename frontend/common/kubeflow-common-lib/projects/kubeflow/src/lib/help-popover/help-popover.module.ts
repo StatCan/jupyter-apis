@@ -4,7 +4,7 @@ import { PopoverModule } from '../popover/popover.module';
 import { HelpPopoverComponent } from './help-popover.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [HelpPopoverComponent],

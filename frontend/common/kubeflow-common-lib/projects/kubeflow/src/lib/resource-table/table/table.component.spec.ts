@@ -11,14 +11,14 @@ import {
   LinkValue,
   LinkType,
 } from '../types';
-import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { TableColumnComponent } from '../component-value/component-value.component';
 import { Component, SimpleChange } from '@angular/core';
 import subMonths from 'date-fns/sub_months';
 import { cloneDeep } from 'lodash-es';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lib-server-type',

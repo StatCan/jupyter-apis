@@ -4,7 +4,7 @@ import { RokUrlInputComponent } from './rok-url-input.component';
 import { UntypedFormControl } from '@angular/forms';
 import { FormModule } from '../form.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
 
 describe('RokUrlInputComponent', () => {

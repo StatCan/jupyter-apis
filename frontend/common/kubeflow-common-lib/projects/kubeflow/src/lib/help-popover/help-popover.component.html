@@ -16,22 +16,22 @@
     </p>
     <p>
       <span i18n>&nbsp;Example:</span>&nbsp;
-      <mat-chip class="mat-chip-blue">
+      <mat-chip-option class="mat-chip-blue">
         <span i18n>&nbsp;Name: filterValue</span>
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
-      </mat-chip>
+      </mat-chip-option>
     </p>
     <p>
       <span i18n>&nbsp;Filter empty values by entering double quotes:</span
       >&nbsp;
-      <mat-chip class="mat-chip-blue">
+      <mat-chip-option class="mat-chip-blue">
         <span i18n>&nbsp;Name: ""</span>
         <button matChipRemove>
           <mat-icon>cancel</mat-icon>
         </button>
-      </mat-chip>
+      </mat-chip-option>
     </p>
     <mat-divider></mat-divider>
     <ng-template [ngIf]="showStatus">
@@ -57,12 +57,12 @@
           <span>
             <span i18n>&nbsp;The "-" character for empty date values:</span
             >&nbsp;
-            <mat-chip class="mat-chip-blue">
+            <mat-chip-option class="mat-chip-blue">
               <span i18n>&nbsp;Created at: -</span>
               <button matChipRemove>
                 <mat-icon>cancel</mat-icon>
               </button>
-            </mat-chip>
+            </mat-chip-option>
           </span>
         </li>
         <li i18n>

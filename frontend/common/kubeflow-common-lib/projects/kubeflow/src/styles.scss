@@ -10,9 +10,9 @@
 //  If you specify typography styles for the components you use elsewhere, you should delete this line.
 //  If you don't need the default component typographies but still want the hierarchy styles,
 //  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+//    `@include mat.legacy-typography-hierarchy(mat.define-typography-config());`
+@include mat.all-component-typographies();
+@include mat.core();
 
 // Primary color is not used
 $kubeflow-theme-primary: mat.define-palette(mat.$blue-palette, 600, 700, 900);
@@ -36,14 +36,14 @@ $kubeflow-theme: mat.define-light-theme(
   $kubeflow-theme-accent
 );
 
-@include mat.all-legacy-component-themes($kubeflow-theme);
+@include mat.all-component-themes($kubeflow-theme);
 
 // Use the material icons offline
 $material-icons-font-path: '~material-icons/iconfont/';
 @import '~material-icons/iconfont/material-icons.scss';
 
 // Material Form Field error message
-mat-form-field .mat-form-field {
+mat-form-field .mat-mdc-form-field {
   &-underline {
     position: static;
   }
@@ -100,20 +100,21 @@ body {
   text-align: right;
 }
 
-.mat-tooltip-panel .mat-tooltip {
+.mat-mdc-tooltip-panel .mat-tooltip {
   font-size: 14px !important;
 }
 
-.mat-snack-bar-container {
+.mat-mdc-snack-bar-container {
   max-width: 100% !important;
   width: 700px;
 }
 
-.form--container.mat-dialog-content {
+.form--container.mat-mdc-dialog-content {
   max-height: 88vh;
   padding: 16px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .mat-form-field-wrapper {
   padding-bottom: 0.2rem !important;
 }
@@ -128,29 +129,31 @@ body {
 /*
  * common table
  */
-.lib-table .mat-paginator-container {
+.lib-table .mat-mdc-paginator-container {
   min-height: 48px;
 }
 
 // Form global css
-.form--dialog-padding .mat-dialog-container {
+.form--dialog-padding .mat-mdc-dialog-container {
   padding: 0 24px;
 }
 
-.mat-button-base.form--button-margin {
+.mat-mdc-button-base.form--button-margin {
   margin-right: 16px;
 }
 
 // Make the outline grey instead of black
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   color: rgba(0, 0, 0, 0.16);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 .mat-checkbox-layout {
   margin-bottom: 10px;
 }
 
-.form--input-padding .mat-form-field {
+.form--input-padding .mat-mdc-form-field {
   // Get the select and input elements have the same height
   line-height: 0;
 }
@@ -175,7 +178,8 @@ body {
   padding-left: 0.5rem;
 }
 
-.mat-button.button-with-icon .mat-button-wrapper {
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+.mat-mdc-button.button-with-icon .mat-button-wrapper {
   display: flex;
   align-items: center;
 }
@@ -243,7 +247,8 @@ body {
   overflow: auto;
 }
 
-.mat-chip {
+.mat-mdc-chip {
+  /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
   &.mat-chip-blue {
     background-color: var(--accent-color);
     color: white;

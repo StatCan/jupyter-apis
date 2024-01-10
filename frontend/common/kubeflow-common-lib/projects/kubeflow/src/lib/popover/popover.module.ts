@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatCardModule } from '@angular/material/card';
 
 import { PopoverDirective } from './popover.directive';
 import { PopoverComponent } from './popover.component';

@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -88,7 +87,7 @@ func main() {
 	s := server{}
 
 	// Parse config
-	cfdata, err := ioutil.ReadFile(spawnerConfigPath)
+	cfdata, err := os.ReadFile(spawnerConfigPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -178,6 +177,17 @@ func main() {
 			},
 		},
 	}, s.GetNotebooks)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/default", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
+				Verb:     "create",
+				Resource: "notebooks",
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.NewDefaultNotebook)).Headers("Content-Type", "application/json").Methods("POST")
 
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{

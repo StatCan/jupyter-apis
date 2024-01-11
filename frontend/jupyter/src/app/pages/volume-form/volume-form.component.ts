@@ -16,7 +16,7 @@ import {
 } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { PVCPostObject } from 'src/app/types';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-volume-form',

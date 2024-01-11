@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfigurationsComponent } from './configurations.component';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import {
   ContentListItemModule,
   DetailsListModule,
@@ -9,7 +9,7 @@ import {
   EditorModule,
 } from 'kubeflow';
 import { ConfigurationInfoDialogComponent } from './configuration-info-dialog/configuration-info-dialog.component';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [ConfigurationsComponent, ConfigurationInfoDialogComponent],

@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { IndexDefaultComponent } from '../index-default/index-default.component';
 import { ActionsService } from 'src/app/services/actions.service';
 import { KubecostService } from 'src/app/services/kubecost.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-index-rok',

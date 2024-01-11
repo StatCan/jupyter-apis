@@ -5,7 +5,7 @@ import { IndexRokModule } from './index-rok/index-rok.module';
 import { IndexDefaultModule } from './index-default/index-default.module';
 import { IndexComponent } from './index.component';
 import { ServerTypeComponent } from './index-default/server-type/server-type.component';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProtBComponent } from './index-default/protb-icon/protb-icon.component';
 
 @NgModule({

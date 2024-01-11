@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { VolumeSizeComponent } from './size.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [VolumeSizeComponent],

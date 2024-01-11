@@ -14,7 +14,7 @@ import { ActionsService } from 'src/app/services/actions.service';
 import { KubeflowModule, NamespaceService, STATUS_TYPE } from 'kubeflow';
 import { ActivatedRoute } from '@angular/router';
 import { By } from '@angular/platform-browser';
-import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { OverviewModule } from './overview/overview.module';
 import { LogsModule } from './logs/logs.module';
 import { YamlModule } from './yaml/yaml.module';

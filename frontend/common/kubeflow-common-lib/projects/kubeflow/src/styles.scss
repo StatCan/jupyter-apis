@@ -39,8 +39,10 @@ $kubeflow-theme: mat.define-light-theme(
 @include mat.all-component-themes($kubeflow-theme);
 
 // Use the material icons offline
-$material-icons-font-path: '~material-icons/iconfont/';
-@import '~material-icons/iconfont/material-icons.scss';
+// AAW: Leaving this blank was the way to make this work 
+// after angular version update without returning errors
+$material-icons-font-path: '';
+@import 'node_modules/material-icons/iconfont/material-icons.scss';
 
 // Material Form Field error message
 mat-form-field .mat-mdc-form-field {

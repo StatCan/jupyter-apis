@@ -8,6 +8,7 @@ mat-form-field {
 }
 
 .yaml-tab-container {
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-flex > .mat-form-field-infix {
     margin-bottom: -0.4em;
     margin-top: -0.6em;
@@ -15,9 +16,11 @@ mat-form-field {
 }
 
 // AAW: to fix server image button group
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
 .server-type-wrapper .mat-button-toggle-button {
   height: 100%;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
   .mat-button-toggle-label-content {
     height: 100%;
   }

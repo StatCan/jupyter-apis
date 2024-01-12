@@ -10,7 +10,7 @@ describe('Volume Details Page', ()=>{
     // assert overview tab
     cy.get('[data-cy-toolbar-title]').should('have.text', ' Volume details ');
     cy.get('.volume-name').should('have.text', 'test-volume');
-    cy.get('lib-details-list-item[key="Access modes"] > .list-entry-row > .list-entry-value > mat-chip-list > div > mat-chip').should('have.text', ' ReadWriteOnce ');
+    cy.get('lib-details-list-item[key="Access modes"] > .list-entry-row > .list-entry-value > mat-chip-listbox > div > mat-chip-option').should('have.text', ' ReadWriteOnce ');
     cy.get('lib-details-list-item[key="Size"] > .list-entry-row > .list-entry-value > div').should('have.text', ' 16Gi\n');
     cy.get('lib-details-list-item[key="Storage class"] > .list-entry-row > .list-entry-value > div').should('have.text', ' default\n');
     cy.get('lib-details-list-item[key="Volume mode"] > .list-entry-row > .list-entry-value > div').should('have.text', ' Filesystem\n');
@@ -73,7 +73,7 @@ describe('Volume Details Page', ()=>{
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();
     cy.get('mat-dialog-container').should('exist');
-    cy.get('.mat-dialog-title').should('have.text', 'Are you sure you want to delete this volume? test-volume2');
+    cy.get('.mat-mdc-dialog-title').should('have.text', 'Are you sure you want to delete this volume? test-volume2');
     cy.get('[ng-reflect-dialog-result="cancel"]').click();
     cy.get('mat-dialog-container').should('not.exist');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();

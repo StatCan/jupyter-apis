@@ -129,7 +129,7 @@ describe('New notebook form', () => {
       // not smaller than minimum cpu
       cy.get('[data-cy-form-input="cpu"]').clear();
       cy.get('[data-cy-form-input="cpu"]').find('input').type('5.0');
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('4.0');
+      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('4.0', {force: true});
       cy.get('[data-cy-form-input="cpuLimit"]').find('input').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="cpuLimit"]').find('mat-error').should('have.text', 'Can\'t be lower than requested CPUs');
       cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
@@ -139,7 +139,7 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="cpuLimit"]').find('input').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="cpuLimit"]').find('mat-error').should('have.text', 'Specify number of CPUs');
       // valid value
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('4');
+      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('4', {force: true});
       cy.get('[data-cy-form-input="cpuLimit"]').find('input').should('have.class', 'ng-valid');
     });
 
@@ -159,7 +159,7 @@ describe('New notebook form', () => {
       // not smaller than minimum memory
       cy.get('[data-cy-form-input="memory"]').clear();
       cy.get('[data-cy-form-input="memory"]').find('input').type('20.0');
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('10.0');
+      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('10.0', {force: true});
       cy.get('[data-cy-form-input="memoryLimit"]').find('input').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="memoryLimit"]').find('mat-error').should('have.text', 'Can\'t be lower than requested memory');
       cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
@@ -169,7 +169,7 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="memoryLimit"]').find('input').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="memoryLimit"]').find('mat-error').should('have.text', 'Specify amount of memory (e.g. 2Gi)');
       // valid value
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('4');
+      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('4', {force: true});
       cy.get('[data-cy-form-input="memoryLimit"]').find('input').should('have.class', 'ng-valid');
     });
 
@@ -283,11 +283,13 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').find('mat-error').should('have.text', ' Name is required ');
       // existing volume name already in use
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').click();
+      cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').find('mat-select').click({force: true});
       cy.get('[role="listbox"] > mat-option').contains('titanic-ml-47xh5-data-m57vq-2md82').click({force: true});
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').find('mat-error').should('have.text', ' Is mounted ');
       // existing volume protected b
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').click();
+      cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').find('mat-select').click({force: true});
       cy.get('[role="listbox"] > mat-option').contains('test-pro-b-volume').click({force: true});
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="dataVolumes"]').find('[data-cy-form-input="existing-volume"]').find('mat-error').should('have.text', ' Notebook is unclassified but volume is protected B ');
@@ -326,21 +328,21 @@ describe('New notebook form', () => {
 
       cy.get('[data-cy-advanced-options-button]').click();
       // assert default values
-      cy.get('[data-cy-form-input="serverImage"]').find('.mat-select-value').should('have.text', 'jupyterlab-cpu');
+      cy.get('[data-cy-form-input="serverImage"]').find('.mat-mdc-select-value').should('have.text', 'jupyterlab-cpu');
 
       cy.get('[data-cy-form-input="cpu"]').find('input').invoke('val').should('eq', '0.5');
       cy.get('[data-cy-form-input="memory"]').find('input').invoke('val').should('eq', '2.0');
       cy.get('[data-cy-form-input="cpuLimit"]').find('input').invoke('val').should('eq', '4.0');
       cy.get('[data-cy-form-input="memoryLimit"]').find('input').invoke('val').should('eq', '4.0');
 
-      cy.get('[data-cy-form-input="gpus"]').find('.mat-select-value').should('have.text', 'None');
-      cy.get('[data-cy-form-input="vendor"]').find('.mat-select-value').should('have.text', 'NVIDIA');
+      cy.get('[data-cy-form-input="gpus"]').find('.mat-mdc-select-value').should('have.text', 'None');
+      cy.get('[data-cy-form-input="vendor"]').find('.mat-mdc-select-value').should('have.text', 'NVIDIA');
 
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel').should('exist');
       cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="volume-name"]').find('input').invoke('val').should('eq', 'test-notebook-jupyter-volume');
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should('not.exist');
 
-      cy.get('[data-cy-form-input="language"]').find('.mat-select-value').should('have.text', 'English');
+      cy.get('[data-cy-form-input="language"]').find('.mat-mdc-select-value').should('have.text', 'English');
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
@@ -446,11 +448,11 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="serverImage"]').click();
       cy.get('[role="listbox"] > mat-option').contains('jupyterlab-tensorflow').click();
       // set a gpu
-      cy.get('[data-cy-form-input="vendor"]').find('mat-select').should('have.class', 'mat-select-disabled');
+      cy.get('[data-cy-form-input="vendor"]').find('mat-select').should('have.class', 'mat-mdc-select-disabled');
       cy.get('[data-cy-form-input="gpus"]').click();
       cy.get('[role="listbox"] > mat-option').should('have.length', 2);
       cy.get('[role="listbox"] > mat-option').contains('1').click();
-      cy.get('[data-cy-form-input="vendor"]').find('mat-select').should('not.have.class', 'mat-select-disabled');
+      cy.get('[data-cy-form-input="vendor"]').find('mat-select').should('not.have.class', 'mat-mdc-select-disabled');
       cy.get('[data-cy-form-input="vendor"]').click();
       cy.get('[role="listbox"] > mat-option').should('have.length', 1);
       cy.get('[role="listbox"] > mat-option').contains('NVIDIA').click();

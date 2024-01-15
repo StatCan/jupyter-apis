@@ -178,7 +178,7 @@ func main() {
 		},
 	}, s.GetNotebooks)).Methods("GET")
 
-	router.HandleFunc("/api/namespaces/{namespace}/notebooks/default", s.checkAccess(authorizationv1.SubjectAccessReview{
+	router.HandleFunc("/api/namespaces/{namespace}/createdefault", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Group:    kubeflowv1.SchemeGroupVersion.Group,

@@ -85,6 +85,11 @@
     "prettier": "^2.3.1",
     "ts-node": "^10.4.0",
     "typescript": "~5.2.2",
-    "wait-on": "^7.0.1"
+    "wait-on": "^7.2.0"
+  },
+  "overrides": {
+    "@angular-devkit/build-angular": {
+      "axios": "1.6.5"
+    }
   }
 }

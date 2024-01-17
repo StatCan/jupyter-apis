@@ -3,13 +3,13 @@
   border: none;
   justify-content: space-between;
   width: fit-content;
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+  
   .mat-button-toggle {
     width: 188px;
     border: solid 1px rgba(0, 0, 0, 0.12);
     border-radius: 5px;
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version. */
+  
   .mat-button-toggle-checked {
     border: 2px solid #1e88e5;
     background-color: white;

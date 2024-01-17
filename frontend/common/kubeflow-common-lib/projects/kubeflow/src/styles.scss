@@ -44,16 +44,6 @@ $kubeflow-theme: mat.define-light-theme(
 $material-icons-font-path: '';
 @import 'node_modules/material-icons/iconfont/material-icons.scss';
 
-// Material Form Field error message
-mat-form-field .mat-mdc-form-field {
-  &-underline {
-    position: static;
-  }
-  &-subscript-wrapper {
-    position: static;
-  }
-}
-
 // Custom css
 html,
 body {
@@ -116,11 +106,6 @@ body {
   padding: 16px;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.mat-form-field-wrapper {
-  padding-bottom: 0.2rem !important;
-}
-
 // Truncate text
 .truncate {
   white-space: nowrap;
@@ -142,17 +127,6 @@ body {
 
 .mat-mdc-button-base.form--button-margin {
   margin-right: 16px;
-}
-
-// Make the outline grey instead of black
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-.mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  color: rgba(0, 0, 0, 0.16);
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-.mat-checkbox-layout {
-  margin-bottom: 10px;
 }
 
 .form--input-padding .mat-mdc-form-field {
@@ -180,8 +154,7 @@ body {
   padding-left: 0.5rem;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
-.mat-mdc-button.button-with-icon .mat-button-wrapper {
+.mat-mdc-button.button-with-icon .mdc-button__label {
   display: flex;
   align-items: center;
 }
@@ -250,13 +223,16 @@ body {
 }
 
 .mat-mdc-chip {
-  /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
   &.mat-chip-blue {
-    background-color: var(--accent-color);
-    color: white;
+    background-color: var(--accent-color) !important;
+    color: white !important;
 
     .mat-icon {
-      color: white;
+      color: white !important;
+    }
+
+    .mdc-evolution-chip__text-label{
+      color: white !important;
     }
   }
 }

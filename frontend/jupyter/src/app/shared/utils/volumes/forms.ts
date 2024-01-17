@@ -31,7 +31,10 @@ export function setGenerateNameCtrl(meta: UntypedFormGroup, name = '') {
     meta.removeControl('name');
   }
 
-  meta.addControl('generateName', new UntypedFormControl(name, [Validators.required]));
+  meta.addControl(
+    'generateName',
+    new UntypedFormControl(name, [Validators.required]),
+  );
 }
 
 // For volume.existingSource
@@ -227,9 +230,10 @@ export function createExistingSourceFormGroupFromVolume(
   if (volume.persistentVolumeClaim) {
     return new UntypedFormGroup({
       persistentVolumeClaim: new UntypedFormGroup({
-        claimName: new UntypedFormControl(volume.persistentVolumeClaim.claimName, [
-          Validators.required,
-        ]),
+        claimName: new UntypedFormControl(
+          volume.persistentVolumeClaim.claimName,
+          [Validators.required],
+        ),
         readOnly: new UntypedFormControl(volume.persistentVolumeClaim.readOnly),
       }),
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import {
   createExistingVolumeFormGroup,
@@ -14,7 +14,7 @@ import {
   templateUrl: './form-data-volumes.component.html',
   styleUrls: ['./form-data-volumes.component.scss'],
 })
-export class FormDataVolumesComponent implements OnInit {
+export class FormDataVolumesComponent {
   openPanel = new Set();
 
   @Input() volsArray: UntypedFormArray;
@@ -29,8 +29,6 @@ export class FormDataVolumesComponent implements OnInit {
   getNewVolumeType = getNewVolumeType;
 
   constructor() {}
-
-  ngOnInit() {}
 
   onDelete(id: number, event: PointerEvent) {
     event.stopPropagation();

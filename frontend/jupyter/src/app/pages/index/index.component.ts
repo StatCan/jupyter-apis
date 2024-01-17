@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { environment } from '@app/environment';
 
 @Component({
@@ -6,10 +6,8 @@ import { environment } from '@app/environment';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss'],
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent {
   env = environment;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

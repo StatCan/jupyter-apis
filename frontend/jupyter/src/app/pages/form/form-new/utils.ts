@@ -1,4 +1,9 @@
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormArray } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  UntypedFormArray,
+} from '@angular/forms';
 import { GPU, Config } from 'src/app/types';
 import { createFormGroupFromVolume } from 'src/app/shared/utils/volumes';
 
@@ -83,7 +88,10 @@ export function calculateLimits(
   return limit.toFixed(1);
 }
 
-export function initCpuFormControls(formCtrl: UntypedFormGroup, config: Config) {
+export function initCpuFormControls(
+  formCtrl: UntypedFormGroup,
+  config: Config,
+) {
   const cpu = Number(config.cpu.value);
   if (!isNaN(cpu)) {
     formCtrl.controls.cpu.setValue(cpu);
@@ -102,7 +110,10 @@ export function initCpuFormControls(formCtrl: UntypedFormGroup, config: Config) 
   );
 }
 
-export function initMemoryFormControls(formCtrl: UntypedFormGroup, config: Config) {
+export function initMemoryFormControls(
+  formCtrl: UntypedFormGroup,
+  config: Config,
+) {
   const memory = configSizeToNumber(config.memory.value);
   if (!isNaN(memory)) {
     formCtrl.controls.memory.setValue(memory);
@@ -184,7 +195,10 @@ export function initFormControls(formCtrl: UntypedFormGroup, config: Config) {
   }
 }
 
-export function initWorkspaceVolumeControl(form: UntypedFormGroup, config: Config) {
+export function initWorkspaceVolumeControl(
+  form: UntypedFormGroup,
+  config: Config,
+) {
   const workspace = config.workspaceVolume.value;
   if (!workspace) {
     form.get('workspace').disable();

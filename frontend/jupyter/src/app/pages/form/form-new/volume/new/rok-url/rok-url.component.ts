@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { SnackBarService, SnackType } from 'kubeflow';
 import { setGenerateNameCtrl } from 'src/app/shared/utils/volumes';
@@ -9,12 +9,10 @@ import { setGenerateNameCtrl } from 'src/app/shared/utils/volumes';
   templateUrl: './rok-url.component.html',
   styleUrls: ['./rok-url.component.scss'],
 })
-export class RokUrlComponent implements OnInit {
+export class RokUrlComponent {
   @Input() volGroup: UntypedFormGroup;
 
   constructor(private snack: SnackBarService) {}
-
-  ngOnInit(): void {}
 
   public autofillRokVolume(headers: HttpHeaders) {
     const name =

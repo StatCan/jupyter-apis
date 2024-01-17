@@ -1,5 +1,9 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormArray,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({

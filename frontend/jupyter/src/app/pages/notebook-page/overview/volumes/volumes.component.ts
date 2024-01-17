@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TrackByFunction } from '@angular/core';
+import { Component, Input, TrackByFunction } from '@angular/core';
 import { ChipDescriptor, UrlItem } from 'kubeflow';
 import { VolumesGroup } from './types';
 import { PVCS } from '../volumes.constants';
@@ -8,7 +8,7 @@ import { PVCS } from '../volumes.constants';
   templateUrl: './volumes.component.html',
   styleUrls: ['./volumes.component.scss'],
 })
-export class VolumesComponent implements OnInit {
+export class VolumesComponent {
   private prvVolGroups: VolumesGroup[];
   @Input()
   set volGroups(groups: VolumesGroup[]) {
@@ -39,6 +39,4 @@ export class VolumesComponent implements OnInit {
   ) => chip.value;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

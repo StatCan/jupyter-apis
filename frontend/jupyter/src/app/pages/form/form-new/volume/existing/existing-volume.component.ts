@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { EXISTING_SOURCE, EXISTING_VOLUME_TYPE } from 'src/app/types';
 import {
   createExistingSourceFormGroup,
@@ -67,7 +71,10 @@ export class ExistingVolumeComponent implements OnInit {
     if (type === EXISTING_VOLUME_TYPE.CUSTOM) {
       const currSrc = this.volGroup.get('existingSource').value;
       this.yamlInternal = dump(currSrc);
-      this.volGroup.setControl('existingSource', new UntypedFormControl(currSrc));
+      this.volGroup.setControl(
+        'existingSource',
+        new UntypedFormControl(currSrc),
+      );
       return;
     }
 

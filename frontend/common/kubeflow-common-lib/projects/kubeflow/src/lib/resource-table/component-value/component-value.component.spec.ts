@@ -30,9 +30,9 @@ class MockDictComponent implements TableColumnComponent {
 }
 
 @NgModule({
-    declarations: [MockComponent, MockDictComponent],
-    imports: [],
-    exports: [MockComponent, MockDictComponent]
+  declarations: [MockComponent, MockDictComponent],
+  imports: [],
+  exports: [MockComponent, MockDictComponent],
 })
 class MockModule {}
 

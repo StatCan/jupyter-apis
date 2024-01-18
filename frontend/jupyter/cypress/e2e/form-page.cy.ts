@@ -208,11 +208,13 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').find('mat-error').should('have.text', ' Name is required ');
       // existing volume name already in use
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel').click();
+      cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').find('mat-select').click({force: true});
       cy.get('mat-option').contains('titanic-ml-47xh5-data-m57vq-2md82').click({force: true});
       cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').find('mat-error').should('have.text', ' Is mounted ');
       // existing volume protected b
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel').click();
+      cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').find('mat-select').click({force: true});
       cy.get('mat-option').contains('test-pro-b-volume').click({force: true});
       cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="workspaceVolume"]').find('[data-cy-form-input="existing-volume"]').find('mat-error').should('have.text', ' Notebook is unclassified but volume is protected B ');

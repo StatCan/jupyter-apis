@@ -1,5 +1,5 @@
 # Stage 0: UI Build Stage
-FROM node:16-alpine as frontend
+FROM node:18-alpine as frontend
 WORKDIR /src
 ENV NG_CLI_ANALYTICS "ci"
 RUN apk add --no-cache --virtual .gyp python3 make g++

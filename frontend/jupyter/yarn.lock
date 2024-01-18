@@ -6832,6 +6832,12 @@ klona@^2.0.4:
   resolved "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   integrity sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==
 
+"kubeflow@file:../common/kubeflow-common-lib/dist/kubeflow":
+  version "0.0.4"
+  resolved "file:../common/kubeflow-common-lib/dist/kubeflow"
+  dependencies:
+    tslib "^2.0.0"
+
 launch-editor@^2.6.0:
   version "2.6.1"
   resolved "https://registry.npmjs.org/launch-editor/-/launch-editor-2.6.1.tgz"

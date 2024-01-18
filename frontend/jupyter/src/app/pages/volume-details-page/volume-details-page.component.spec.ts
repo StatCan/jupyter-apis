@@ -82,7 +82,7 @@ describe('VolumeDetailsPageComponent', () => {
       const activeTab = fixture.debugElement.query(By.css(`app-${name}`));
       expect(activeTab).toBeTruthy();
       expect(
-        activeTab.parent.parent.classes['mat-tab-body-active'],
+        activeTab.parent.parent.classes['mat-mdc-tab-body-active'],
       ).toBeTruthy();
     };
 
@@ -92,9 +92,9 @@ describe('VolumeDetailsPageComponent', () => {
       const allTabs = ['overview', 'events', 'yaml'];
       allTabs.forEach((tab, index) => {
         const tabBodies = fixture.debugElement.queryAll(
-          By.css('.mat-tab-body'),
+          By.css('.mat-mdc-tab-body'),
         );
-        const isActive = tabBodies[index].classes['mat-tab-body-active'];
+        const isActive = tabBodies[index].classes['mat-mdc-tab-body-active'];
         if (tab === name) {
           expect(isActive).toBeTrue();
         } else {

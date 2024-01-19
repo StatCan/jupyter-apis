@@ -12,7 +12,7 @@ vars:
 
   CLUSTER_NAME: jupyter-apis
   CONTEXT_NAME: "k3d-{{.CLUSTER_NAME}}"
-  CONTAINER_IMAGE_NAME: jupyter-apis
+  CONTAINER_IMAGE_NAME: jupyter-apis-aaw2
   CONTAINER_IMAGE_TAG: {sh: git rev-parse HEAD}
   CONTAINER_IMAGE: "{{.CONTAINER_IMAGE_NAME}}:{{.CONTAINER_IMAGE_TAG}}"
   KUBECTL: "kubectl --context={{.CONTEXT_NAME}}"

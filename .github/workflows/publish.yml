@@ -96,6 +96,6 @@ jobs:
     - name: Slack Notification
       if: failure() && github.event_name=='schedule'
       uses: act10ns/slack@v1
-      with: 
+      with:
         status: failure
         message: jupyter-apis build failed. https://github.com/StatCan/jupyter-apis/actions/runs/${{github.run_id}}

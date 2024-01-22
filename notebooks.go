@@ -139,6 +139,11 @@ type notebooksresponse struct {
 	Notebooks []notebookresponse `json:"notebooks"`
 }
 
+type notebookapiresponse struct {
+	APIResponseBase
+	Notebook notebookresponse `json:"notebook"`
+}
+
 type getnotebookresponse struct {
 	APIResponseBase
 	Notebook kubeflowv1.Notebook `json:"notebook"`
@@ -375,19 +380,16 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sort.Sort(notebooksByName(notebooks))
-
-	resp := &notebooksresponse{
+	resp := &notebookapiresponse{
 		APIResponseBase: APIResponseBase{
-			Success: true,
+			Success: false,
 			Status:  http.StatusOK,
 		},
-		Notebooks: make([]notebookresponse, 0),
 	}
 
 	for _, notebook := range notebooks {
 
-		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
+		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook=true"]; ok {
 			if val == "true" {
 
 			}
@@ -422,8 +424,9 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 			if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
 				cpulimit = req.AsDec()
 			}
+			resp.APIResponseBase.Success = true
 
-			resp.Notebooks = append(resp.Notebooks, notebookresponse{
+			resp.Notebook = notebookresponse{
 				Age:          notebook.CreationTimestamp.Time,
 				Name:         notebook.Name,
 				Namespace:    notebook.Namespace,
@@ -438,7 +441,9 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 				Volumes:      volumes,
 				Labels:       notebook.Labels,
 				Metadata:     notebook.ObjectMeta,
-			})
+			}
+			s.respond(w, r, resp)
+			return
 		}
 	}
 

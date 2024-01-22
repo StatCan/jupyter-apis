@@ -363,6 +363,88 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
+func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	log.Printf("loading notebooks for %q", namespace)
+
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	sort.Sort(notebooksByName(notebooks))
+
+	resp := &notebooksresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Notebooks: make([]notebookresponse, 0),
+	}
+
+	for _, notebook := range notebooks {
+
+		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
+			if val == "true" {
+
+			}
+			// Load events
+			allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
+			if err != nil {
+				log.Printf("failed to load events for %s/%s: %v", notebook.Namespace, notebook.Name, err)
+			}
+
+			// Filter past events
+			events := make([]*corev1.Event, 0)
+			for _, event := range allevents {
+				if event.InvolvedObject.Kind != "Notebook" || event.InvolvedObject.Name != notebook.Name || event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
+					continue
+				}
+
+				events = append(events, event)
+			}
+			sort.Sort(eventsByTimestamp(events))
+
+			imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
+
+			// Process current status + reason
+			status := processStatus(notebook, events)
+
+			volumes := []string{}
+			for _, vol := range notebook.Spec.Template.Spec.Volumes {
+				volumes = append(volumes, vol.Name)
+			}
+
+			cpulimit := resource.Zero.AsDec()
+			if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
+				cpulimit = req.AsDec()
+			}
+
+			resp.Notebooks = append(resp.Notebooks, notebookresponse{
+				Age:          notebook.CreationTimestamp.Time,
+				Name:         notebook.Name,
+				Namespace:    notebook.Namespace,
+				Image:        notebook.Spec.Template.Spec.Containers[0].Image,
+				LastActivity: notebook.Annotations[LastActivityAnnotation],
+				ServerType:   notebook.Annotations[ServerTypeAnnotation],
+				ShortImage:   imageparts[len(imageparts)-1],
+				CPU:          cpulimit,
+				GPUs:         s.processGPUs(notebook),
+				Memory:       notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
+				Status:       status,
+				Volumes:      volumes,
+				Labels:       notebook.Labels,
+				Metadata:     notebook.ObjectMeta,
+			})
+		}
+	}
+
+	s.respond(w, r, resp)
+}
+
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
 	var pvc = corev1.PersistentVolumeClaim{}
 	var pvcClaimName string = ""

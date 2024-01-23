@@ -444,7 +444,6 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
 	s.respond(w, r, resp)
 }
 

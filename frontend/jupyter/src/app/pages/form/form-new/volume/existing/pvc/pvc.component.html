@@ -13,13 +13,12 @@
     [errorStateMatcher]="matcher"
   >
     <mat-option *ngFor="let pvc of pvcs" [value]="pvc.name">
-      <div class="flex">
+      <div class="flex space-between">
         <div class="name truncate">
           {{ pvc.name }} {{ isProtectedLabel(pvc) }}
         </div>
         <ng-container *ngIf="select.panelOpen">
-          <div class="size">{{ pvc.size }}</div>
-          <div class="mode">{{ pvc.mode }}</div>
+          <div class="size">{{ pvc.capacity }}</div>
         </ng-container>
       </div>
     </mat-option>

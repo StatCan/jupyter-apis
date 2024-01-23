@@ -3,14 +3,21 @@
 }
 
 .name {
-  width: 60%;
+  width: 70%;
   margin-right: 1rem;
 }
 
 .size {
   width: 15%;
+  text-align: right;
 }
 
-.mode {
-  width: 25%;
+.space-between {
+  justify-content: space-between;
+}
+
+::ng-deep{
+  .mdc-list-item__primary-text {
+    flex-grow: 1;
+  }
 }

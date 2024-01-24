@@ -315,7 +315,7 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, notebook := range notebooks {
-		resp.Notebooks = append(resp.Notebooks, getNotebookData(notebook, s))
+		resp.Notebooks = append(resp.Notebooks, s.getNotebookData(notebook))
 	}
 
 	s.respond(w, r, resp)
@@ -343,7 +343,7 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	for _, notebook := range notebooks {
 		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
 			if val == "true" {
-				resp.Notebook = getNotebookData(notebook, s)
+				resp.Notebook = s.getNotebookData(notebook)
 				resp.APIResponseBase.Success = true
 				break
 			}
@@ -352,7 +352,7 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func getNotebookData(notebook *kubeflowv1.Notebook, s *server) notebookresponse {
+func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) notebookresponse {
 	// Load events
 	allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
 	if err != nil {

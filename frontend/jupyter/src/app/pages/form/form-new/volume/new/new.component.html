@@ -68,10 +68,12 @@
       [sizes]="sizes"
     ></app-volume-size>
 
+    <!--- AAW Change
     <app-storage-class
       *ngIf="volumeType === NEW_VOLUME_TYPE.EMPTY"
       [scControl]="volGroup.get('newPvc.spec.storageClassName')"
     ></app-storage-class>
+    -->
 
     <app-volume-access-modes
       [modesCtrl]="volGroup.get('newPvc.spec.accessModes')"

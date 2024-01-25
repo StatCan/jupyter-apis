@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { VolumeNameComponent } from './name.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormModule } from 'kubeflow';
@@ -19,5 +19,11 @@ import { FormModule } from 'kubeflow';
     FormModule,
   ],
   exports: [VolumeNameComponent],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, 
+      useValue: {subscriptSizing: 'dynamic'}
+    }
+  ]
 })
 export class VolumeNameModule {}

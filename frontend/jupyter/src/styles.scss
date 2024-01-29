@@ -5,7 +5,10 @@
 // Give some space after each input
 mat-form-field {
   margin-bottom: 0.25rem;
+}
 
+// Give some space
+.dynamic-form-field-margin-bottom {
   .mat-mdc-form-field-subscript-dynamic-size{
     margin-bottom: 14px;
   }

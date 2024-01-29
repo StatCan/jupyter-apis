@@ -56,18 +56,24 @@
 
   <!-- Empty volume -->
   <ng-container *ngSwitchDefault>
-    <app-volume-name
-      [metadataGroup]="volGroup.get('newPvc.metadata')"
-      [externalName]="externalName"
-      [mountedVolumes]="mountedVolumes"
-    ></app-volume-name>
-
-    <!--Sizes is an AAW specific change-->
-    <app-volume-size
-      [sizeCtrl]="volGroup.get('newPvc.spec.resources.requests.storage')"
-      [sizes]="sizes"
-    ></app-volume-size>
-
+    <div class="row">
+      <div class="column">
+        <app-volume-name
+          [metadataGroup]="volGroup.get('newPvc.metadata')"
+          [externalName]="externalName"
+          [mountedVolumes]="mountedVolumes"
+        ></app-volume-name>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <!--Sizes is an AAW specific change-->
+        <app-volume-size
+          [sizeCtrl]="volGroup.get('newPvc.spec.resources.requests.storage')"
+          [sizes]="sizes"
+        ></app-volume-size>
+      </div>
+    </div>
     <!--- AAW Change
     <app-storage-class
       *ngIf="volumeType === NEW_VOLUME_TYPE.EMPTY"

@@ -5,43 +5,47 @@
   i18n-helpText
 >
   <div class="row" [formGroup]="parentForm">
-    <!--CPU AAW, do not take their lib-positive-input -->
-    <mat-form-field
-      appearance="outline"
-      class="column"
-      data-cy-form-input="cpu"
-    >
-      <mat-label i18n>Minimum CPUs</mat-label>
-      <input
-        [attr.disabled]="readonlySpecs ? '' : null"
-        matInput
-        type="number"
-        min="0.5"
-        step="0.1"
-        formControlName="cpu"
-        [errorStateMatcher]="matcher"
-      />
-      <mat-error>{{ getCPUError('cpu') }}</mat-error>
-    </mat-form-field>
+    <div class="column">
+      <!--CPU AAW, do not take their lib-positive-input -->
+      <mat-form-field
+        appearance="outline"
+        class="wide"
+        data-cy-form-input="cpu"
+      >
+        <mat-label i18n>Minimum CPUs</mat-label>
+        <input
+          [attr.disabled]="readonlySpecs ? '' : null"
+          matInput
+          type="number"
+          min="0.5"
+          step="0.1"
+          formControlName="cpu"
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error>{{ getCPUError('cpu') }}</mat-error>
+      </mat-form-field>
+    </div>
 
-    <!--RAM AAW, do not take their lib-positive-input-->
-    <mat-form-field
-      appearance="outline"
-      class="column"
-      data-cy-form-input="memory"
-    >
-      <mat-label i18n>Minimum Memory Gi</mat-label>
-      <input
-        [attr.disabled]="readonlySpecs ? '' : null"
-        matInput
-        type="number"
-        min="1"
-        step="0.1"
-        formControlName="memory"
-        [errorStateMatcher]="matcher"
-      />
-      <mat-error>{{ getRAMError('memory') }}</mat-error>
-    </mat-form-field>
+    <div class="column">
+      <!--RAM AAW, do not take their lib-positive-input-->
+      <mat-form-field
+        appearance="outline"
+        class="wide"
+        data-cy-form-input="memory"
+      >
+        <mat-label i18n>Minimum Memory Gi</mat-label>
+        <input
+          [attr.disabled]="readonlySpecs ? '' : null"
+          matInput
+          type="number"
+          min="1"
+          step="0.1"
+          formControlName="memory"
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error>{{ getRAMError('memory') }}</mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
   <!-- AAW removed <lib-advanced-options>-->
@@ -50,7 +54,7 @@
     Notebook Server, which may be used to scale up the server if available.
   </p>
   <div class="row">
-    <!--CPU-->
+    <!--CPU Limit-->
     <div class="column">
       <mat-form-field
         appearance="outline"
@@ -71,7 +75,7 @@
       </mat-form-field>
     </div>
 
-    <!--RAM-->
+    <!--RAM Limit-->
     <div class="column">
       <mat-form-field
         appearance="outline"

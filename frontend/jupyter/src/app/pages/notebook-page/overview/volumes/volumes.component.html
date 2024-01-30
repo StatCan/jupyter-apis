@@ -4,16 +4,17 @@
 >
   <div class="group-key">
     <div>{{ volGroup.name }}</div>
-    <button matSuffix mat-icon-button aria-label="Help">
-      <span
-        [libPopover]="popoverCard"
-        [libPopoverPosition]="'after'"
-        [libPopoverHideDelay]="100"
-        [libPopoverShowDelay]="100"
-        class="truncate"
-      >
-        <mat-icon class="icon">help_outline</mat-icon>
-      </span>
+    <button 
+      matSuffix
+      mat-icon-button 
+      aria-label="Help"
+      [libPopover]="popoverCard"
+      [libPopoverPosition]="'after'"
+      [libPopoverHideDelay]="100"
+      [libPopoverShowDelay]="100"
+      class="truncate"
+    >
+      <mat-icon class="icon">help_outline</mat-icon>
     </button>
   </div>
 

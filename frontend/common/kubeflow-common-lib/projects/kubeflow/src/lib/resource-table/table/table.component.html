@@ -36,15 +36,24 @@
   >
     <mat-icon>close</mat-icon>
   </button>
+
   <button
     matSuffix
     mat-icon-button
     aria-label="Help"
     (click)="$event.stopPropagation()"
+    [libPopover]="helperTpl"
+    [libPopoverPosition]="'below'"
+    [libPopoverHideDelay]="100"
+    [libPopoverShowDelay]="100"
+    class="truncate"
   >
-    <lib-help-popover [showStatus]="showStatus" [showDate]="showDate">
-    </lib-help-popover>
+    <mat-icon>help</mat-icon>
   </button>
+  <ng-template #helperTpl>
+    <lib-help-popover [showStatus]="showStatus" [showDate]="showDate" />
+  </ng-template>
+
   <mat-autocomplete
     #auto="matAutocomplete"
     panelWidth="270px"

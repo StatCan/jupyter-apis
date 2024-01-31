@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - jupyter-apis-aaw2.0
 
 env:
   K3D_VERSION: 4.4.7

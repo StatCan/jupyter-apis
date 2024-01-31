@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - jupyter-apis-aaw2.0
   pull_request:
     types:
       - 'opened'

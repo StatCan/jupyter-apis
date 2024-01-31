@@ -1,8 +1,6 @@
 describe('New notebook form', () => {
   beforeEach(() => {
     cy.mockDashboardRequest();
-    cy.mockStorageClassesRequests();
-    cy.mockDefaultStorageClassRequest();
     cy.mockGpusRequest();
     cy.mockConfigRequest();
     cy.fixture('settings').then(settings => {
@@ -15,8 +13,6 @@ describe('New notebook form', () => {
     cy.visit('/new');
     cy.wait([
       '@mockDashboardRequest',
-      '@mockStorageClassesRequests',
-      '@mockDefaultStorageClassRequest',
       '@mockGpusRequest',
       '@mockConfigRequest',
       '@mockNotebooksRequest',

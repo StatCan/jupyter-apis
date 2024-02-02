@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { STATUS_TYPE } from '../resource-table/status/types';
 
 @Component({
@@ -6,7 +6,7 @@ import { STATUS_TYPE } from '../resource-table/status/types';
   templateUrl: './status-icon.component.html',
   styleUrls: ['./status-icon.component.scss'],
 })
-export class StatusIconComponent implements OnInit {
+export class StatusIconComponent {
   @Input() status: STATUS_TYPE;
   @Input() stateChanging: boolean;
 
@@ -29,6 +29,4 @@ export class StatusIconComponent implements OnInit {
   }
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

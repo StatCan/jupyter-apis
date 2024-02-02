@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'lib-form-section',
   templateUrl: './section.component.html',
   styleUrls: ['./section.component.scss'],
 })
-export class FormSectionComponent implements OnInit {
+export class FormSectionComponent {
   @Input()
   title: string;
 
@@ -33,6 +33,4 @@ export class FormSectionComponent implements OnInit {
   linkText: string;
 
   constructor() {}
-
-  ngOnInit() {}
 }

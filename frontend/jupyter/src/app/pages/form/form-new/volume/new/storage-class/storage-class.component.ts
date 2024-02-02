@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { JWABackendService } from 'src/app/services/backend.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class StorageClassComponent implements OnInit {
   defaultStoraceClass: string;
 
   @Input()
-  scControl: FormControl;
+  scControl: UntypedFormControl;
 
   constructor(private backend: JWABackendService) {}
 

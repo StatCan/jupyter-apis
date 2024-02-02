@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,
@@ -14,10 +14,10 @@ import {
   templateUrl: './form-data-volumes.component.html',
   styleUrls: ['./form-data-volumes.component.scss'],
 })
-export class FormDataVolumesComponent implements OnInit {
+export class FormDataVolumesComponent {
   openPanel = new Set();
 
-  @Input() volsArray: FormArray;
+  @Input() volsArray: UntypedFormArray;
   @Input() readonly: boolean;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
@@ -30,14 +30,12 @@ export class FormDataVolumesComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
-
   onDelete(id: number, event: PointerEvent) {
     event.stopPropagation();
     this.volsArray.removeAt(id);
     this.openPanel.clear();
     this.volsArray.controls.forEach((v, i) => {
-      (v as FormGroup).get('mount').updateValueAndValidity();
+      (v as UntypedFormGroup).get('mount').updateValueAndValidity();
     });
   }
 
@@ -65,7 +63,7 @@ export class FormDataVolumesComponent implements OnInit {
   checkDuplicacy(index: number) {
     this.volsArray.controls.forEach((v, i) => {
       if (index !== i) {
-        (v as FormGroup).get('mount').updateValueAndValidity();
+        (v as UntypedFormGroup).get('mount').updateValueAndValidity();
       }
     });
   }

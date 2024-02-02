@@ -1,8 +1,8 @@
-<mat-form-field class="example-chip-list" appearance="none">
-  <mat-chip-list #chipList>
+<mat-form-field class="example-chip-list" appearance="fill">
+  <mat-chip-grid #chipList>
     <mat-icon matPrefix class="filter-icon">filter_list</mat-icon>
     <span class="filter-header" i18n>Filter</span>
-    <mat-chip
+    <mat-chip-row
       *ngFor="let chip of chips"
       (removed)="remove(chip)"
       class="mat-chip-blue"
@@ -11,7 +11,7 @@
       <button matChipRemove>
         <mat-icon>cancel</mat-icon>
       </button>
-    </mat-chip>
+    </mat-chip-row>
     <input
       id="filterInput"
       placeholder="Enter property name or value"
@@ -24,9 +24,8 @@
       (matChipInputTokenEnd)="add($event)"
       [attr.data-cy-table-filter-id]="config?.id"
     />
-  </mat-chip-list>
+  </mat-chip-grid>
   <button
-    mat-button
     *ngIf="chipCtrl.value || isClear"
     matSuffix
     mat-icon-button
@@ -37,16 +36,27 @@
   >
     <mat-icon>close</mat-icon>
   </button>
+
   <button
-    mat-button
     matSuffix
     mat-icon-button
     aria-label="Help"
     (click)="$event.stopPropagation()"
+    [libPopover]="helperTpl"
+    [libPopoverPosition]="'below'"
+    [libPopoverHideDelay]="100"
+    [libPopoverShowDelay]="100"
+    class="truncate"
   >
-    <lib-help-popover [showStatus]="showStatus" [showDate]="showDate">
-    </lib-help-popover>
+    <mat-icon>help</mat-icon>
   </button>
+  <ng-template #helperTpl>
+    <lib-help-popover
+      [showStatus]="showStatus"
+      [showDate]="showDate"
+    ></lib-help-popover>
+  </ng-template>
+
   <mat-autocomplete
     #auto="matAutocomplete"
     panelWidth="270px"

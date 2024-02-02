@@ -1,7 +1,13 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": false
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "analytics": false,
+    "cache": {
+      "enabled": false
+    }
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -44,8 +50,12 @@
       }
     }
   },
-  "defaultProject": "kubeflow",
-  "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }

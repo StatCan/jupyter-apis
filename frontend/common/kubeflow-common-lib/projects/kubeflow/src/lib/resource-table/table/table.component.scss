@@ -32,21 +32,21 @@ tr th.right-align {
   max-width: 20px;
 }
 
-th.mat-header-cell {
+th.mat-mdc-header-cell {
   padding-right: $row-padding;
   padding-left: $row-padding;
 }
 
-td.mat-cell {
+td.mat-mdc-cell {
   padding-right: $row-padding;
   padding-left: $row-padding;
 }
 
-.mat-row:hover {
+.mat-mdc-row:hover {
   background-color: rgb(245, 245, 245);
 }
 
-.mat-row:hover .link {
+.mat-mdc-row:hover .link {
   text-decoration: underline;
 }
 
@@ -70,7 +70,7 @@ lib-action {
   height: 40px;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   width: 100%;
 }
 

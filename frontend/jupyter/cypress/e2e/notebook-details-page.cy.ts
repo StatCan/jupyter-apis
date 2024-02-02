@@ -24,7 +24,7 @@ describe('Notebook Details Page', ()=>{
     cy.get('lib-details-list-item[key="Maximum memory"] > .list-entry-row > .list-entry-value > div').should('have.text', ' 4Gi\n');
     cy.get('lib-details-list-item[key="Image"] > .list-entry-row > .list-entry-value > div').should('have.text', ' k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1\n content_copy ');
     cy.get('lib-content-list-item[key="Environment"] > .list-entry-row > .container > lib-variables-group-table > .env-group-container > .group-key').should('have.text', 'Notebook CR');
-    cy.get('lib-content-list-item[key="Environment"] > .list-entry-row > .container > lib-variables-group-table > .env-group-container > mat-chip-list').should('have.text', ' KF_LANG: en ');
+    cy.get('lib-content-list-item[key="Environment"] > .list-entry-row > .container > lib-variables-group-table > .env-group-container > mat-chip-listbox').should('have.text', ' KF_LANG: en ');
     cy.get('lib-conditions-table[title="Conditions"]').should('exist');
     cy.get('lib-conditions-table[title="Conditions"]').find('tbody > tr > td').should('have.text', 'No rows to display');
     // assert log tab
@@ -99,12 +99,12 @@ describe('Notebook Details Page', ()=>{
     cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest']);
     // stop the notebook
     cy.get('[data-cy-toolbar-button="STOP"]').click();
-    cy.get('.mat-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to stop this notebook server? test-notebook');
-    cy.get('.mat-dialog-actions > button').contains('CANCEL').click();
+    cy.get('.mat-mdc-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to stop this notebook server? test-notebook');
+    cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
     cy.get('mat-dialog-container').should('not.exist');
     cy.get('[data-cy-toolbar-button="STOP"]').click();
     cy.intercept('PATCH', '/api/namespaces/kubeflow-user/notebooks/test-notebook', {"success":true,"status":200}).as('mockStartNotebookRequest');
-    cy.get('.mat-dialog-actions > button').contains('STOP').click();
+    cy.get('.mat-mdc-dialog-actions > button').contains('STOP').click();
     cy.wait('@mockStartNotebookRequest');
 
     cy.mockGetNotebookRequest('kubeflow-user', 'test-notebook');
@@ -123,8 +123,8 @@ describe('Notebook Details Page', ()=>{
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();
 
-    cy.get('.mat-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to delete this notebook server? test-notebook');
-    cy.get('.mat-dialog-actions > button').contains('CANCEL').click();
+    cy.get('.mat-mdc-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to delete this notebook server? test-notebook');
+    cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
     cy.get('mat-dialog-container').should('not.exist');
     cy.get('[data-cy-toolbar-button="DELETE"]').click();
 
@@ -132,7 +132,7 @@ describe('Notebook Details Page', ()=>{
       success: true,
       status: 200
     }).as('mockDeleteNotebookRequest');
-    cy.get('.mat-dialog-actions > button').contains('DELETE').click();
+    cy.get('.mat-mdc-dialog-actions > button').contains('DELETE').click();
     cy.wait('@mockDeleteNotebookRequest');
     cy.url().should('eq', "http://localhost:4200/");
   });

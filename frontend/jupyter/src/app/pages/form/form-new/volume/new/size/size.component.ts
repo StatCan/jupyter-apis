@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -8,13 +8,13 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./size.component.scss'],
 })
 export class VolumeSizeComponent implements OnInit {
-  private ctrl: FormControl;
+  private ctrl: UntypedFormControl;
   private sub: Subscription;
-  public sizeNum = new FormControl(1, Validators.required);
+  public sizeNum = new UntypedFormControl(1, Validators.required);
 
   @Input() sizes: Set<string>; // AAW change, this appears to be where you input your chosen size anyways
   @Input()
-  get sizeCtrl(): FormControl {
+  get sizeCtrl(): UntypedFormControl {
     return this.ctrl;
   }
   set sizeCtrl(ctrl) {

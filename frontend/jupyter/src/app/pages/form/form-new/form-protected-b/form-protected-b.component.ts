@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-form-protected-b',
@@ -7,15 +7,15 @@ import { FormArray, FormGroup } from '@angular/forms';
   styleUrls: ['./form-protected-b.component.scss'],
 })
 export class FormProtectedBComponent implements OnInit {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
 
   constructor() {}
 
   ngOnInit() {
     this.parentForm.get('prob').valueChanges.subscribe(val => {
-      (this.parentForm.get('datavols') as FormArray).controls.forEach(
+      (this.parentForm.get('datavols') as UntypedFormArray).controls.forEach(
         element => {
-          (element as FormGroup)
+          (element as UntypedFormGroup)
             .get('existingSource')
             .get('persistentVolumeClaim')
             .get('claimName')

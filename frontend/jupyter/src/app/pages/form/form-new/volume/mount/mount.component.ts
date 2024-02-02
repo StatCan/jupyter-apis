@@ -1,5 +1,9 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  UntypedFormArray,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -10,13 +14,13 @@ import { Subscription } from 'rxjs';
 export class VolumeMountComponent implements OnDestroy {
   @Input() checkDuplicacy: () => void;
 
-  private prvVolGroup: FormGroup;
+  private prvVolGroup: UntypedFormGroup;
   @Input()
-  get volGroup(): FormGroup {
+  get volGroup(): UntypedFormGroup {
     return this.prvVolGroup;
   }
 
-  set volGroup(volGroup: FormGroup) {
+  set volGroup(volGroup: UntypedFormGroup) {
     this.prvVolGroup = volGroup;
     this.valueChangeSubscription.unsubscribe();
     this.updateMountOnNameChange(volGroup);
@@ -30,10 +34,10 @@ export class VolumeMountComponent implements OnDestroy {
     this.valueChangeSubscription.unsubscribe();
   }
 
-  updateMountOnNameChange(volGroup: FormGroup) {
+  updateMountOnNameChange(volGroup: UntypedFormGroup) {
     // If volGroup's parent is a FormArray it means that this component is used
     // in Data volumes else we disable this feature.
-    if (!(volGroup.parent instanceof FormArray)) {
+    if (!(volGroup.parent instanceof UntypedFormArray)) {
       return;
     }
 
@@ -49,7 +53,7 @@ export class VolumeMountComponent implements OnDestroy {
     }
   }
 
-  updateMountPath(volGroup: FormGroup, nameCtrl: AbstractControl) {
+  updateMountPath(volGroup: UntypedFormGroup, nameCtrl: AbstractControl) {
     const mountPathCtrl = volGroup.get('mount');
     this.valueChangeSubscription = nameCtrl.valueChanges.subscribe(v => {
       const mount = v;
@@ -61,8 +65,8 @@ export class VolumeMountComponent implements OnDestroy {
     });
   }
 
-  getNewVolumeNameCtrl(volGroup: FormGroup): AbstractControl {
-    const metadata = volGroup.get('newPvc.metadata') as FormGroup;
+  getNewVolumeNameCtrl(volGroup: UntypedFormGroup): AbstractControl {
+    const metadata = volGroup.get('newPvc.metadata') as UntypedFormGroup;
     if (metadata.contains('name')) {
       return metadata.get('name');
     }

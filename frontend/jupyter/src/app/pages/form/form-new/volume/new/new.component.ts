@@ -1,5 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import { dump } from 'js-yaml';
 import { parseYAML } from 'src/app/shared/utils/yaml';
@@ -16,7 +20,7 @@ import { environment } from '@app/environment';
   templateUrl: './new.component.html',
   styleUrls: ['./new.component.scss'],
 })
-export class NewVolumeComponent implements OnInit {
+export class NewVolumeComponent {
   env = environment;
 
   get volumeType(): NEW_VOLUME_TYPE {
@@ -27,7 +31,7 @@ export class NewVolumeComponent implements OnInit {
     const pvcGroup = this.volGroup.get('newPvc');
 
     // if we have a form-control then we expect the user to be typing yaml text
-    if (pvcGroup instanceof FormControl) {
+    if (pvcGroup instanceof UntypedFormControl) {
       return NEW_VOLUME_TYPE.CUSTOM;
     }
 
@@ -40,7 +44,7 @@ export class NewVolumeComponent implements OnInit {
     return NEW_VOLUME_TYPE.EMPTY;
   }
 
-  @Input() volGroup: FormGroup;
+  @Input() volGroup: UntypedFormGroup;
   @Input() externalName: string;
   @Input() sizes: Set<string>; // AAW change, has to take place here to control difference between workspace and data vol sizes.
   @Input() mountedVolumes: Set<string>;
@@ -70,14 +74,12 @@ export class NewVolumeComponent implements OnInit {
 
   constructor(private rok: RokService) {}
 
-  ngOnInit(): void {}
-
   typeChanged(type: NEW_VOLUME_TYPE) {
     if (type === NEW_VOLUME_TYPE.CUSTOM) {
       // Remove the FormGroup and make newPvc a FormControl, since it's value
       // will be updated from the parsed YAML that the user will write
       const currPvc = this.volGroup.get('newPvc').value;
-      this.volGroup.setControl('newPvc', new FormControl({}));
+      this.volGroup.setControl('newPvc', new UntypedFormControl({}));
       this.yaml = dump(currPvc);
       return;
     }
@@ -90,10 +92,10 @@ export class NewVolumeComponent implements OnInit {
     }
 
     // Add annotations for Rok snapshot
-    const meta = this.volGroup.get('newPvc.metadata') as FormGroup;
+    const meta = this.volGroup.get('newPvc.metadata') as UntypedFormGroup;
     setGenerateNameCtrl(meta);
-    const annotations = new FormGroup({
-      'rok/origin': new FormControl(
+    const annotations = new UntypedFormGroup({
+      'rok/origin': new UntypedFormControl(
         '',
         [Validators.required],
         [rokUrlValidator(this.rok)],

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RokUrlInputComponent } from './rok-url-input.component';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FormModule } from '../form.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -27,7 +27,7 @@ describe('RokUrlInputComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RokUrlInputComponent);
     component = fixture.componentInstance;
-    component.control = new FormControl();
+    component.control = new UntypedFormControl();
 
     fixture.detectChanges();
   });

@@ -1,8 +1,9 @@
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 @import './kubeflow.css';
 @import './lib/variables.scss';
 
 // always include only once per project
+@include mat.all-component-typographies();
 @include mat.core();
 
 // Primary color is not used
@@ -30,18 +31,10 @@ $kubeflow-theme: mat.define-light-theme(
 @include mat.all-component-themes($kubeflow-theme);
 
 // Use the material icons offline
-$material-icons-font-path: '~material-icons/iconfont/';
-@import '~material-icons/iconfont/material-icons.scss';
-
-// Material Form Field error message
-mat-form-field .mat-form-field {
-  &-underline {
-    position: static;
-  }
-  &-subscript-wrapper {
-    position: static;
-  }
-}
+// AAW: Leaving this blank was the way to make this work
+// after angular version update without returning errors
+$material-icons-font-path: '';
+@import 'node_modules/material-icons/iconfont/material-icons.scss';
 
 // Custom css
 html,
@@ -88,25 +81,21 @@ body {
 }
 
 .right-align {
-  text-align: right;
+  text-align: right !important;
 }
 
-.mat-tooltip-panel .mat-tooltip {
+.mat-mdc-tooltip-panel .mat-tooltip {
   font-size: 14px !important;
 }
 
-.mat-snack-bar-container {
+.mat-mdc-snack-bar-container {
   max-width: 100% !important;
   width: 700px;
 }
 
-.form--container.mat-dialog-content {
+.form--container.mat-mdc-dialog-content {
   max-height: 88vh;
   padding: 16px;
-}
-
-.mat-form-field-wrapper {
-  padding-bottom: 0.2rem !important;
 }
 
 // Truncate text
@@ -119,29 +108,20 @@ body {
 /*
  * common table
  */
-.lib-table .mat-paginator-container {
+.lib-table .mat-mdc-paginator-container {
   min-height: 48px;
 }
 
 // Form global css
-.form--dialog-padding .mat-dialog-container {
+.form--dialog-padding .mat-mdc-dialog-container {
   padding: 0 24px;
 }
 
-.mat-button-base.form--button-margin {
+.mat-mdc-button-base.form--button-margin {
   margin-right: 16px;
 }
 
-// Make the outline grey instead of black
-.mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  color: rgba(0, 0, 0, 0.16);
-}
-
-.mat-checkbox-layout {
-  margin-bottom: 10px;
-}
-
-.form--input-padding .mat-form-field {
+.form--input-padding .mat-mdc-form-field {
   // Get the select and input elements have the same height
   line-height: 0;
 }
@@ -166,7 +146,7 @@ body {
   padding-left: 0.5rem;
 }
 
-.mat-button.button-with-icon .mat-button-wrapper {
+.mat-mdc-button.button-with-icon .mdc-button__label {
   display: flex;
   align-items: center;
 }
@@ -234,13 +214,17 @@ body {
   overflow: auto;
 }
 
-.mat-chip {
+.mat-mdc-chip {
   &.mat-chip-blue {
-    background-color: var(--accent-color);
-    color: white;
+    background-color: var(--accent-color) !important;
+    color: white !important;
 
     .mat-icon {
-      color: white;
+      color: white !important;
+    }
+
+    .mdc-evolution-chip__text-label {
+      color: white !important;
     }
   }
 }

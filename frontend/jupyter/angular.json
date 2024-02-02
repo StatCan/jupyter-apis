@@ -2,7 +2,12 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
     "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "cache": {
+      "enabled": false
+    }
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -42,7 +47,9 @@
                 "output": "static/assets/monaco-editor"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss"
+            ],
             "crossOrigin": "use-credentials",
             "vendorChunk": true,
             "extractLicenses": false,
@@ -58,7 +65,9 @@
           },
           "configurations": {
             "fr": {
-              "localize": ["fr"]
+              "localize": [
+                "fr"
+              ]
             },
             "rok": {
               "budgets": [
@@ -144,25 +153,25 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "frontend:build"
+            "buildTarget": "frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "frontend:build:production"
+              "buildTarget": "frontend:build:production"
             },
             "rok": {
-              "browserTarget": "frontend:build:rok"
+              "buildTarget": "frontend:build:rok"
             },
             "fr": {
-              "browserTarget": "frontend:build:fr",
-              "proxyConfig": "src/proxy.conf.json"
+              "proxyConfig": "src/proxy.conf.json",
+              "buildTarget": "frontend:build:fr"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "frontend:build"
+            "buildTarget": "frontend:build"
           }
         },
         "test": {
@@ -172,8 +181,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.scss"
+            ],
             "scripts": [],
             "preserveSymlinks": true
           }
@@ -181,11 +195,21 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "frontend"
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
+  }
 }

@@ -1,78 +1,64 @@
-<span
-  [libPopover]="helperTpl"
-  [libPopoverPosition]="popoverPosition"
-  [libPopoverHideDelay]="100"
-  [libPopoverShowDelay]="100"
-  class="truncate"
->
-  <mat-icon>help</mat-icon>
-</span>
-
-<ng-template #helperTpl>
-  <div class="helper-text">
-    <p i18n>
-      Create a filter query by entering either a property name or just a value
-      to narrow your results.
-    </p>
-    <p>
-      <span i18n>&nbsp;Example:</span>&nbsp;
-      <mat-chip class="mat-chip-blue">
-        <span i18n>&nbsp;Name: filterValue</span>
-        <button matChipRemove>
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip>
-    </p>
-    <p>
-      <span i18n>&nbsp;Filter empty values by entering double quotes:</span
-      >&nbsp;
-      <mat-chip class="mat-chip-blue">
-        <span i18n>&nbsp;Name: ""</span>
-        <button matChipRemove>
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip>
-    </p>
+<div class="helper-text">
+  <p i18n>
+    Create a filter query by entering either a property name or just a value to
+    narrow your results.
+  </p>
+  <p>
+    <span i18n>&nbsp;Example:</span>&nbsp;
+    <mat-chip-option class="mat-chip-blue">
+      <span i18n>&nbsp;Name: filterValue</span>
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-option>
+  </p>
+  <p>
+    <span i18n>&nbsp;Filter empty values by entering double quotes:</span>&nbsp;
+    <mat-chip-option class="mat-chip-blue">
+      <span i18n>&nbsp;Name: ""</span>
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-option>
+  </p>
+  <ng-template [ngIf]="showStatus">
     <mat-divider></mat-divider>
-    <ng-template [ngIf]="showStatus">
-      <p><b i18n>Status</b></p>
-      <p i18n>Filter based on the objects' status, by using:</p>
-      <ul>
-        <li i18n>The value shown in the tooltip</li>
-        <li i18n>
-          The status types (i.e.
-          <i
-            >ready, waiting, warning, error, unavailable, uninitialized,
-            terminating, stopped</i
-          >)
-        </li>
-      </ul>
-    </ng-template>
+    <p><b i18n>Status</b></p>
+    <p i18n>Filter based on the objects' status, by using:</p>
+    <ul>
+      <li i18n>The value shown in the tooltip</li>
+      <li i18n>
+        The status types (i.e.
+        <i
+          >ready, waiting, warning, error, unavailable, uninitialized,
+          terminating, stopped</i
+        >)
+      </li>
+    </ul>
+  </ng-template>
+  <ng-template [ngIf]="showDate">
     <mat-divider></mat-divider>
-    <ng-template [ngIf]="showDate">
-      <p><b i18n>Date</b></p>
-      <p i18n>Filter timestamp values based on:</p>
-      <ul>
-        <li>
-          <span>
-            <span i18n>&nbsp;The "-" character for empty date values:</span
-            >&nbsp;
-            <mat-chip class="mat-chip-blue">
-              <span i18n>&nbsp;Created at: -</span>
-              <button matChipRemove>
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-          </span>
-        </li>
-        <li i18n>
-          The relative time text, shown in the column (i.e. <i>X months ago</i>)
-        </li>
-        <li i18n>
-          The substring of the timestamp, that is shown in the UTC part of the
-          tooltip
-        </li>
-      </ul>
-    </ng-template>
-  </div>
-</ng-template>
+    <p><b i18n>Date</b></p>
+    <p i18n>Filter timestamp values based on:</p>
+    <ul>
+      <li>
+        <span>
+          <span i18n>&nbsp;The "-" character for empty date values:</span>&nbsp;
+          <mat-chip-option class="mat-chip-blue">
+            <span i18n>&nbsp;Created at: -</span>
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-option>
+        </span>
+      </li>
+      <li i18n>
+        The relative time text, shown in the column (i.e. <i>X months ago</i>)
+      </li>
+      <li i18n>
+        The substring of the timestamp, that is shown in the UTC part of the
+        tooltip
+      </li>
+    </ul>
+  </ng-template>
+</div>

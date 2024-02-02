@@ -7,7 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GPUVendor } from 'src/app/types';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -19,12 +19,12 @@ import { V1Namespace } from '@kubernetes/client-node';
   styleUrls: ['./form-gpus.component.scss'],
 })
 export class FormGpusComponent implements OnInit, OnChanges {
-  @Input() parentForm: FormGroup;
+  @Input() parentForm: UntypedFormGroup;
   @Input() vendors: GPUVendor[] = [];
   @Input() nsMetadata: V1Namespace;
   @Output() gpuValueEvent = new EventEmitter<string>();
 
-  private gpuCtrl: FormGroup;
+  private gpuCtrl: UntypedFormGroup;
   public installedVendors = new Set<string>();
 
   subscriptions = new Subscription();
@@ -43,7 +43,7 @@ export class FormGpusComponent implements OnInit, OnChanges {
   }
 
   private handleResource() {
-    this.gpuCtrl = this.parentForm.get('gpus') as FormGroup;
+    this.gpuCtrl = this.parentForm.get('gpus') as UntypedFormGroup;
     if (this.namespaceHasLabel()) {
       // Disable the GPU number input and set its value to 'none'
       this.gpuCtrl.get('num').setValue('none');

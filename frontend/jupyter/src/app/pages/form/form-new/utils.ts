@@ -1,9 +1,14 @@
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  UntypedFormArray,
+} from '@angular/forms';
 import { GPU, Config } from 'src/app/types';
 import { createFormGroupFromVolume } from 'src/app/shared/utils/volumes';
 
-export function getFormDefaults(): FormGroup {
-  const fb = new FormBuilder();
+export function getFormDefaults(): UntypedFormGroup {
+  const fb = new UntypedFormBuilder();
 
   return fb.group({
     name: ['', [Validators.required]],
@@ -51,7 +56,7 @@ export function getFormDefaults(): FormGroup {
   });
 }
 
-export function updateGPUControl(formCtrl: FormGroup, gpuConf: any) {
+export function updateGPUControl(formCtrl: UntypedFormGroup, gpuConf: any) {
   // If the backend didn't send the value, default to none
   if (gpuConf == null) {
     formCtrl.get('num').setValue('none');
@@ -83,7 +88,10 @@ export function calculateLimits(
   return limit.toFixed(1);
 }
 
-export function initCpuFormControls(formCtrl: FormGroup, config: Config) {
+export function initCpuFormControls(
+  formCtrl: UntypedFormGroup,
+  config: Config,
+) {
   const cpu = Number(config.cpu.value);
   if (!isNaN(cpu)) {
     formCtrl.controls.cpu.setValue(cpu);
@@ -102,7 +110,10 @@ export function initCpuFormControls(formCtrl: FormGroup, config: Config) {
   );
 }
 
-export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
+export function initMemoryFormControls(
+  formCtrl: UntypedFormGroup,
+  config: Config,
+) {
   const memory = configSizeToNumber(config.memory.value);
   if (!isNaN(memory)) {
     formCtrl.controls.memory.setValue(memory);
@@ -121,7 +132,7 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   );
 }
 
-export function initFormControls(formCtrl: FormGroup, config: Config) {
+export function initFormControls(formCtrl: UntypedFormGroup, config: Config) {
   initCpuFormControls(formCtrl, config);
 
   initMemoryFormControls(formCtrl, config);
@@ -170,7 +181,7 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
   }
 
   // GPUs
-  updateGPUControl(formCtrl.get('gpus') as FormGroup, config.gpus);
+  updateGPUControl(formCtrl.get('gpus') as UntypedFormGroup, config.gpus);
 
   formCtrl.controls.shm.setValue(config.shm.value);
   if (config.shm.readOnly) {
@@ -184,7 +195,10 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
   }
 }
 
-export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
+export function initWorkspaceVolumeControl(
+  form: UntypedFormGroup,
+  config: Config,
+) {
   const workspace = config.workspaceVolume.value;
   if (!workspace) {
     form.get('workspace').disable();
@@ -194,10 +208,10 @@ export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
   form.setControl('workspace', createFormGroupFromVolume(workspace));
 }
 
-export function initDataVolumeControl(form: FormGroup, config: Config) {
+export function initDataVolumeControl(form: UntypedFormGroup, config: Config) {
   const datavols = config.dataVolumes.value;
 
-  const datavolsArray = new FormArray([]);
+  const datavolsArray = new UntypedFormArray([]);
   form.setControl('datavols', datavolsArray);
 
   for (const vol of datavols) {

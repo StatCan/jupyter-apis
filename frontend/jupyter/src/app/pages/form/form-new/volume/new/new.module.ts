@@ -8,7 +8,10 @@ import { VolumeSizeModule } from './size/size.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { RokUrlModule } from './rok-url/rok-url.module';
 import { EditorModule } from 'kubeflow';
 
@@ -28,5 +31,11 @@ import { EditorModule } from 'kubeflow';
     EditorModule,
   ],
   exports: [NewVolumeComponent],
+  providers: [
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { subscriptSizing: 'dynamic' },
+    },
+  ],
 })
 export class NewVolumeModule {}

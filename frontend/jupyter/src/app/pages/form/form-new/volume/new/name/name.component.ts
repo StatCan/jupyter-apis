@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
-  FormGroup,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
   ValidatorFn,
   FormGroupDirective,
@@ -19,16 +19,16 @@ const NB_NAME_SUBST = '{notebook-name}';
 })
 export class VolumeNameComponent implements OnInit, OnChanges {
   private templatedName = '';
-  private group: FormGroup;
+  private group: UntypedFormGroup;
   private externalNamePrv = '';
   matcher = new PvcErrorStateMatcher();
 
   @Input() mountedVolumes: Set<string>;
   @Input()
-  get metadataGroup(): FormGroup {
+  get metadataGroup(): UntypedFormGroup {
     return this.group;
   }
-  set metadataGroup(meta: FormGroup) {
+  set metadataGroup(meta: UntypedFormGroup) {
     this.group = meta;
 
     // substitute {notebook-name}
@@ -84,7 +84,7 @@ export class VolumeNameComponent implements OnInit, OnChanges {
     ]);
   }
 
-  private getNameCtrl(metadata: FormGroup): AbstractControl {
+  private getNameCtrl(metadata: UntypedFormGroup): AbstractControl {
     if (metadata.contains('name')) {
       return metadata.get('name');
     }
@@ -121,7 +121,7 @@ export class VolumeNameComponent implements OnInit, OnChanges {
 // Error when invalid control is dirty, touched, or submitted, AAW Specific
 export class PvcErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: FormControl | null,
+    control: UntypedFormControl | null,
     form: FormGroupDirective | NgForm | null,
   ): boolean {
     const isSubmitted = form && form.submitted;

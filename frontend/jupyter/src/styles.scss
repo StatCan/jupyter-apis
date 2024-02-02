@@ -1,16 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~kubeflow/styles.scss';
-@import '~kubeflow/lib/fonts.scss';
+@import 'node_modules/kubeflow/styles.scss';
+@import 'node_modules/kubeflow/lib/fonts.scss';
 
 // Give some space after each input
 mat-form-field {
   margin-bottom: 0.25rem;
 }
 
-.yaml-tab-container {
-  .mat-form-field-flex > .mat-form-field-infix {
-    margin-bottom: -0.4em;
-    margin-top: -0.6em;
+// Give some space
+.dynamic-form-field-margin-bottom {
+  .mat-mdc-form-field-subscript-dynamic-size {
+    margin-bottom: 14px;
   }
 }
 

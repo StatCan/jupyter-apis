@@ -88,24 +88,24 @@ describe('Main tables', () => {
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-button="connect"] > button').should('be.enabled');
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-icon="start-stop"] > button').should('have.text', ' stop\n');
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-icon="start-stop"]').click();
-      cy.get('.mat-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to stop this notebook server? a-test-01');
-      cy.get('.mat-dialog-actions > button').contains('CANCEL').click();
+      cy.get('.mat-mdc-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to stop this notebook server? a-test-01');
+      cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
       cy.get('mat-dialog-container').should('not.exist');
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-icon="start-stop"]').click();
       cy.intercept('PATCH', '/api/namespaces/kubeflow-user/notebooks/a-test-01', {"success":true,"status":200}).as('mockStopNotebook');
-      cy.get('.mat-dialog-actions > button').contains('STOP').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('STOP').click();
       cy.wait('@mockStopNotebook').its('response.statusCode').should('eq', 200);
     });
 
     it('should delete a notebook', ()=>{
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-icon="delete"] > button').should('have.text', ' delete\n');
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-icon="delete"]').click();
-      cy.get('.mat-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to delete this notebook server? a-test-01');
-      cy.get('.mat-dialog-actions > button').contains('CANCEL').click();
+      cy.get('.mat-mdc-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to delete this notebook server? a-test-01');
+      cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
       cy.get('mat-dialog-container').should('not.exist');
       cy.get('[data-cy-table-id="notebooks-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-test-01').parent().parent().find('[data-cy-resource-table-action-icon="delete"]').click();
       cy.intercept('DELETE', '/api/namespaces/kubeflow-user/notebooks/a-test-01', {"success":true,"status":200}).as('mockDeleteNotebook');
-      cy.get('.mat-dialog-actions > button').contains('DELETE').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('DELETE').click();
       cy.wait('@mockDeleteNotebook').its('response.statusCode').should('eq', 200);
     });
 
@@ -191,12 +191,12 @@ describe('Main tables', () => {
       // assert that a non-mounted volume has an enabled delete button
       cy.get('[data-cy-table-id="volumes-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-pvc-phase-warning-viewer-ready').parent().parent().find('app-delete-button').find('button').should('be.enabled');
       cy.get('[data-cy-table-id="volumes-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-pvc-phase-warning-viewer-ready').parent().parent().find('app-delete-button').find('button').click();
-      cy.get('.mat-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to delete this volume? a-pvc-phase-warning-viewer-ready');
-      cy.get('.mat-dialog-actions > button').contains('CANCEL').click();
+      cy.get('.mat-mdc-dialog-title').should('be.visible').and('have.text', 'Are you sure you want to delete this volume? a-pvc-phase-warning-viewer-ready');
+      cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
       cy.get('mat-dialog-container').should('not.exist');
       cy.get('[data-cy-table-id="volumes-table"]').find(`[data-cy-resource-table-row="Name"]`).contains('a-pvc-phase-warning-viewer-ready').parent().parent().find('app-delete-button').find('button').click();
       cy.intercept('DELETE', '/api/namespaces/kubeflow-user/pvcs/a-pvc-phase-warning-viewer-ready', {"success":true,"status":200}).as('mockDeleteVolume');
-      cy.get('.mat-dialog-actions > button').contains('DELETE').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('DELETE').click();
       cy.wait('@mockDeleteVolume').its('response.statusCode').should('eq', 200);
     });
 

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -40,7 +40,7 @@ describe('StorageClassComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(StorageClassComponent);
     component = fixture.componentInstance;
-    component.scControl = new FormControl();
+    component.scControl = new UntypedFormControl();
 
     fixture.detectChanges();
   });

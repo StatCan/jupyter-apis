@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'lib-form-section-image',
   templateUrl: './section.image.component.html',
   styleUrls: ['./section.image.component.scss'],
 })
-export class FormSectionImageComponent implements OnInit {
+export class FormSectionImageComponent {
   @Input()
   title: string;
 
@@ -28,6 +28,4 @@ export class FormSectionImageComponent implements OnInit {
   icon: string;
 
   constructor() {}
-
-  ngOnInit() {}
 }

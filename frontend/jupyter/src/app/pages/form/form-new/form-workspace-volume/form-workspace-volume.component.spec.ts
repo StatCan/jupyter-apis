@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,10 +44,10 @@ describe('FormWorkspaceVolumeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormWorkspaceVolumeComponent);
     component = fixture.componentInstance;
-    component.volGroup = new FormGroup({
-      mount: new FormControl(),
-      newPvc: new FormControl({ spec: { storageClassName: '' } }),
-      existingSource: new FormControl(),
+    component.volGroup = new UntypedFormGroup({
+      mount: new UntypedFormControl(),
+      newPvc: new UntypedFormControl({ spec: { storageClassName: '' } }),
+      existingSource: new UntypedFormControl(),
     });
 
     fixture.detectChanges();

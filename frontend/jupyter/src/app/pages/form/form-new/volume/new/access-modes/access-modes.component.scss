@@ -9,15 +9,15 @@
   display: block;
 }
 
-.mat-radio-group {
+.mat-mdc-radio-group {
   display: flex;
   flex-direction: column;
 
-  .mat-radio-button {
+  .mat-mdc-radio-button {
     margin-bottom: 0.5rem;
   }
 
-  .mat-radio-button:last-child {
+  .mat-mdc-radio-button:last-child {
     margin-bottom: 1rem;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ChipsListValue } from '../types';
 import { ChipDescriptor } from '../../details-list/types';
 

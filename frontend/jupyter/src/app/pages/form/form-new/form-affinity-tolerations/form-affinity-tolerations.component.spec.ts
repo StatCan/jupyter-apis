@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -30,9 +34,9 @@ describe('FormAffinityTolerationsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormAffinityTolerationsComponent);
     component = fixture.componentInstance;
-    component.parentForm = new FormGroup({
-      affinityConfig: new FormControl(),
-      tolerationGroup: new FormControl(),
+    component.parentForm = new UntypedFormGroup({
+      affinityConfig: new UntypedFormControl(),
+      tolerationGroup: new UntypedFormControl(),
     });
 
     fixture.detectChanges();

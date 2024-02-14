@@ -349,6 +349,12 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+
+	if !resp.APIResponseBase.Success {
+		s.error(w, r, errors.New("No default notebook found"))
+		return
+	}
+
 	s.respond(w, r, resp)
 }
 

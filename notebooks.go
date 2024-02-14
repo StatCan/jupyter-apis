@@ -1016,7 +1016,6 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 	// Read existing notebook
 	nb, err := s.listers.notebooks.Notebooks(namespace).Get(notebook)
 	if err != nil {
-		log.Printf("error getting notebook %q", err)
 		s.error(w, r, err)
 		return
 	}

@@ -356,7 +356,6 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 			Status:  http.StatusNotFound,
 			Log:     "No default notebook found",
 		})
-    
 		return
 	}
 

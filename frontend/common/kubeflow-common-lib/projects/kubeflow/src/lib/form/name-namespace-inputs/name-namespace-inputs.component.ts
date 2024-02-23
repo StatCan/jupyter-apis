@@ -9,10 +9,10 @@ import { MAX_NAME_LENGTH } from '../validators';
 })
 export class NameNamespaceInputsComponent {
   @Input()
-  nameControl: FormControl<string|null>;
+  nameControl: FormControl<string | null>;
 
   @Input()
-  namespaceControl: FormControl<string|null>;
+  namespaceControl: FormControl<string | null>;
 
   @Input()
   resourceName: string;

@@ -16,7 +16,7 @@ export class NameInputComponent implements OnInit {
   private existingNamesPrv = new Set<string>();
 
   @Input()
-  nameControl: FormControl<string|null>;
+  nameControl: FormControl<string | null>;
 
   @Input()
   resourceName = '';

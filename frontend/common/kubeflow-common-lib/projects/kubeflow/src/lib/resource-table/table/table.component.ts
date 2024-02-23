@@ -73,7 +73,7 @@ export class TableComponent
   headers: { title: string }[] = [];
   isClear: boolean;
   filteredHeaders: { title: string }[] = [];
-  chipCtrl = new FormControl<string|null>(null);
+  chipCtrl = new FormControl<string | null>(null);
   showDate = false;
   showStatus = false;
   LinkType = LinkType;

@@ -1,9 +1,5 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-} from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -48,7 +44,9 @@ export class VolumeMountComponent implements OnDestroy {
     if (volGroup.contains('existingSource')) {
       this.updateMountPath(
         volGroup,
-        volGroup.get('existingSource.persistentVolumeClaim.claimName') as FormControl,
+        volGroup.get(
+          'existingSource.persistentVolumeClaim.claimName',
+        ) as FormControl,
       );
     }
   }

@@ -1,9 +1,4 @@
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { GPU, Config } from 'src/app/types';
 import { createFormGroupFromVolume } from 'src/app/shared/utils/volumes';
 
@@ -88,10 +83,7 @@ export function calculateLimits(
   return limit.toFixed(1);
 }
 
-export function initCpuFormControls(
-  formCtrl: FormGroup,
-  config: Config,
-) {
+export function initCpuFormControls(formCtrl: FormGroup, config: Config) {
   const cpu = Number(config.cpu.value);
   if (!isNaN(cpu)) {
     formCtrl.controls.cpu.setValue(cpu);
@@ -110,10 +102,7 @@ export function initCpuFormControls(
   );
 }
 
-export function initMemoryFormControls(
-  formCtrl: FormGroup,
-  config: Config,
-) {
+export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   const memory = configSizeToNumber(config.memory.value);
   if (!isNaN(memory)) {
     formCtrl.controls.memory.setValue(memory);
@@ -195,10 +184,7 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
   }
 }
 
-export function initWorkspaceVolumeControl(
-  form: FormGroup,
-  config: Config,
-) {
+export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
   const workspace = config.workspaceVolume.value;
   if (!workspace) {
     form.get('workspace').disable();

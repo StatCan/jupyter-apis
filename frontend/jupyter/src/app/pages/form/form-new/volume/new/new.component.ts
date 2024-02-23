@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import { dump } from 'js-yaml';
 import { parseYAML } from 'src/app/shared/utils/yaml';

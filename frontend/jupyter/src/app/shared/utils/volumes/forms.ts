@@ -31,10 +31,7 @@ export function setGenerateNameCtrl(meta: FormGroup, name = '') {
     meta.removeControl('name');
   }
 
-  meta.addControl(
-    'generateName',
-    new FormControl(name, [Validators.required]),
-  );
+  meta.addControl('generateName', new FormControl(name, [Validators.required]));
 }
 
 // For volume.existingSource
@@ -230,10 +227,9 @@ export function createExistingSourceFormGroupFromVolume(
   if (volume.persistentVolumeClaim) {
     return new FormGroup({
       persistentVolumeClaim: new FormGroup({
-        claimName: new FormControl(
-          volume.persistentVolumeClaim.claimName,
-          [Validators.required],
-        ),
+        claimName: new FormControl(volume.persistentVolumeClaim.claimName, [
+          Validators.required,
+        ]),
         readOnly: new FormControl(volume.persistentVolumeClaim.readOnly),
       }),
     });
@@ -262,12 +258,14 @@ export function createFormGroupFromVolume(volume: Volume): FormGroup {
   if (volume.newPvc) {
     return new FormGroup({
       mount: new FormControl(volume.mount, [Validators.required]),
-      newPvc: createNewPvcFormGroupFromVolume(volume.newPvc)
+      newPvc: createNewPvcFormGroupFromVolume(volume.newPvc),
     });
   }
 
   return new FormGroup({
     mount: new FormControl(volume.mount, [Validators.required]),
-    existingSource: createExistingSourceFormGroupFromVolume(volume.existingSource)
+    existingSource: createExistingSourceFormGroupFromVolume(
+      volume.existingSource,
+    ),
   });
 }

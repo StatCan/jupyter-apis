@@ -6,11 +6,7 @@ import {
   LOCALE_ID,
   Inject,
 } from '@angular/core';
-import {
-  FormGroup,
-  ValidatorFn,
-  AbstractControl,
-} from '@angular/forms';
+import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';

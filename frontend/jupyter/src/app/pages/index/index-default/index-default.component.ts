@@ -301,12 +301,20 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
       nb.protB = this.parseProtBNotebook(nb);
+      nb.default = this.parseDefaultNotebook(nb);
     }
     return notebooksCopy;
   }
 
   parseProtBNotebook(notebook: NotebookProcessedObject) {
     if (notebook.labels?.['notebook.statcan.gc.ca/protected-b'] === 'true') {
+      return true;
+    }
+    return false;
+  }
+
+  parseDefaultNotebook(notebook: NotebookProcessedObject) {
+    if (notebook.labels?.['notebook.statcan.gc.ca/default-notebook'] === 'true') {
       return true;
     }
     return false;

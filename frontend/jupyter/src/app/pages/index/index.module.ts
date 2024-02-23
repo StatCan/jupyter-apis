@@ -7,9 +7,10 @@ import { IndexComponent } from './index.component';
 import { ServerTypeComponent } from './index-default/server-type/server-type.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProtBComponent } from './index-default/protb-icon/protb-icon.component';
+import { DefaultComponent } from './index-default/default-icon/default-icon.component';
 
 @NgModule({
-  declarations: [IndexComponent, ServerTypeComponent, ProtBComponent],
+  declarations: [IndexComponent, ServerTypeComponent, ProtBComponent, DefaultComponent],
   imports: [
     CommonModule,
     IndexRokModule,

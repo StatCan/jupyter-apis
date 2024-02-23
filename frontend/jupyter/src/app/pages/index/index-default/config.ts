@@ -32,7 +32,7 @@ export const defaultConfig: TableConfig = {
     },
     {
       matHeaderCellDef: '',
-      matColumnDef: 'default-n',
+      matColumnDef: 'default-notebook',
       value: new ComponentValue({
         component: DefaultComponent,
       }),
@@ -77,14 +77,6 @@ export const defaultConfig: TableConfig = {
           return 'jupyterlab';
         }
       },
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'default-no',
-      value: new ComponentValue({
-        component: DefaultComponent,
-      }),
-      sort: false,
     },
     {
       matHeaderCellDef: $localize`Created at`,

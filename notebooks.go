@@ -109,6 +109,7 @@ type newnotebookrequest struct {
 	ServerType         string            `json:"serverType"`
 	AffinityConfig     string            `json:"affinityConfig"`
 	TolerationGroup    string            `json:"tolerationGroup"`
+	DefaultNotebook    bool              `json:"defaultNotebook"`
 }
 
 type gpuresponse struct {
@@ -136,6 +137,11 @@ type notebookresponse struct {
 type notebooksresponse struct {
 	APIResponseBase
 	Notebooks []notebookresponse `json:"notebooks"`
+}
+
+type notebookapiresponse struct {
+	APIResponseBase
+	Notebook notebookresponse `json:"notebook"`
 }
 
 type getnotebookresponse struct {
@@ -309,57 +315,101 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, notebook := range notebooks {
-		// Load events
-		allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
-		if err != nil {
-			log.Printf("failed to load events for %s/%s: %v", notebook.Namespace, notebook.Name, err)
-		}
-
-		// Filter past events
-		events := make([]*corev1.Event, 0)
-		for _, event := range allevents {
-			if event.InvolvedObject.Kind != "Notebook" || event.InvolvedObject.Name != notebook.Name || event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
-				continue
-			}
-
-			events = append(events, event)
-		}
-		sort.Sort(eventsByTimestamp(events))
-
-		imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
-
-		// Process current status + reason
-		status := processStatus(notebook, events)
-
-		volumes := []string{}
-		for _, vol := range notebook.Spec.Template.Spec.Volumes {
-			volumes = append(volumes, vol.Name)
-		}
-
-		cpulimit := resource.Zero.AsDec()
-		if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
-			cpulimit = req.AsDec()
-		}
-
-		resp.Notebooks = append(resp.Notebooks, notebookresponse{
-			Age:          notebook.CreationTimestamp.Time,
-			Name:         notebook.Name,
-			Namespace:    notebook.Namespace,
-			Image:        notebook.Spec.Template.Spec.Containers[0].Image,
-			LastActivity: notebook.Annotations[LastActivityAnnotation],
-			ServerType:   notebook.Annotations[ServerTypeAnnotation],
-			ShortImage:   imageparts[len(imageparts)-1],
-			CPU:          cpulimit,
-			GPUs:         s.processGPUs(notebook),
-			Memory:       notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
-			Status:       status,
-			Volumes:      volumes,
-			Labels:       notebook.Labels,
-			Metadata:     notebook.ObjectMeta,
-		})
+		resp.Notebooks = append(resp.Notebooks, s.getNotebookData(notebook))
 	}
 
 	s.respond(w, r, resp)
+}
+
+func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	log.Printf("loading notebooks for %q", namespace)
+
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := &notebookapiresponse{
+		APIResponseBase: APIResponseBase{
+			Success: false,
+			Status:  http.StatusOK,
+		},
+	}
+
+	for _, notebook := range notebooks {
+		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
+			if val == "true" {
+				resp.Notebook = s.getNotebookData(notebook)
+				resp.APIResponseBase.Success = true
+				break
+			}
+		}
+	}
+
+	if !resp.APIResponseBase.Success {
+		s.respond(w, r, &APIResponseBase{
+			Success: false,
+			Status:  http.StatusNotFound,
+			Log:     "No default notebook found",
+		})
+		return
+	}
+
+	s.respond(w, r, resp)
+}
+
+func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) notebookresponse {
+	// Load events
+	allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
+	if err != nil {
+		log.Printf("failed to load events for %s/%s: %v", notebook.Namespace, notebook.Name, err)
+	}
+
+	// Filter past events
+	events := make([]*corev1.Event, 0)
+	for _, event := range allevents {
+		if event.InvolvedObject.Kind != "Notebook" || event.InvolvedObject.Name != notebook.Name || event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
+			continue
+		}
+
+		events = append(events, event)
+	}
+	sort.Sort(eventsByTimestamp(events))
+
+	imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
+
+	// Process current status + reason
+	status := processStatus(notebook, events)
+
+	volumes := []string{}
+	for _, vol := range notebook.Spec.Template.Spec.Volumes {
+		volumes = append(volumes, vol.Name)
+	}
+
+	cpulimit := resource.Zero.AsDec()
+	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
+		cpulimit = req.AsDec()
+	}
+	return notebookresponse{
+		Age:          notebook.CreationTimestamp.Time,
+		Name:         notebook.Name,
+		Namespace:    notebook.Namespace,
+		Image:        notebook.Spec.Template.Spec.Containers[0].Image,
+		LastActivity: notebook.Annotations[LastActivityAnnotation],
+		ServerType:   notebook.Annotations[ServerTypeAnnotation],
+		ShortImage:   imageparts[len(imageparts)-1],
+		CPU:          cpulimit,
+		GPUs:         s.processGPUs(notebook),
+		Memory:       notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory],
+		Status:       status,
+		Volumes:      volumes,
+		Labels:       notebook.Labels,
+		Metadata:     notebook.ObjectMeta,
+	}
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
@@ -447,6 +497,131 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 	return nil
 }
 
+// Sets default values to notebook request if missing
+func (s *server) createDefaultNotebook(namespace string) (newnotebookrequest, error) {
+	var notebook newnotebookrequest
+	notebookname := namespace + "-notebook"
+	cpuvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
+	if err != nil {
+		return notebook, err
+	}
+
+	cpulimitvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.LimitValue)
+	if err != nil {
+		return notebook, err
+	}
+
+	memoryvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.Memory.Value + "Gi")
+	if err != nil {
+		return notebook, err
+	}
+
+	memorylimitvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.Memory.LimitValue + "Gi")
+	if err != nil {
+		return notebook, err
+	}
+
+	size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
+	if err != nil {
+		return notebook, err
+	}
+	workspacevolumename := notebookname + "-workspace"
+	workspaceVol := volrequest{
+		Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount,
+		NewPvc: NewPvc{
+			NewPvcMetadata: NewPvcMetadata{
+				Name: &workspacevolumename,
+			},
+			NewPvcSpec: NewPvcSpec{
+				Resources: Resources{
+					Requests: Requests{
+						Storage: size,
+					},
+				},
+				AccessModes:      s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.AccessModes,
+				StorageClassName: "",
+			},
+		},
+	}
+
+	var datavols []volrequest
+	for _, volreq := range s.Config.SpawnerFormDefaults.DataVolumes.Value {
+		size, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.NewPvc.Spec.Resources.Requests.Storage)
+		if err != nil {
+			return notebook, err
+		}
+		vol := volrequest{
+			Mount: volreq.Value.Mount,
+			NewPvc: NewPvc{
+				NewPvcMetadata: NewPvcMetadata{
+					Name: &volreq.Value.NewPvc.Metadata.Name,
+				},
+				NewPvcSpec: NewPvcSpec{
+					Resources: Resources{
+						Requests: Requests{
+							Storage: size,
+						},
+					},
+					AccessModes:      workspaceVol.NewPvc.NewPvcSpec.AccessModes,
+					StorageClassName: "",
+				},
+			},
+		}
+		datavols = append(datavols, vol)
+	}
+
+	notebook = newnotebookrequest{
+		Name:             notebookname,
+		Namespace:        namespace,
+		Image:            s.Config.SpawnerFormDefaults.Image.Value,
+		CustomImage:      "",
+		CustomImageCheck: false,
+		CPU:              cpuvalue,
+		CPULimit:         cpulimitvalue,
+		Memory:           memoryvalue,
+		MemoryLimit:      memorylimitvalue,
+		GPUs: gpurequest{
+			Quantity: s.Config.SpawnerFormDefaults.GPUs.Value.Num,
+			Vendor:   s.Config.SpawnerFormDefaults.GPUs.Value.Vendor,
+		},
+		NoWorkspace:        false,
+		Workspace:          workspaceVol,
+		DataVolumes:        datavols,
+		EnableSharedMemory: s.Config.SpawnerFormDefaults.Shm.Value,
+		Configurations:     s.Config.SpawnerFormDefaults.Configurations.Value,
+		Protb:              false,
+		Language:           "en",
+		ImagePullPolicy:    s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
+		ServerType:         "jupyter",
+		AffinityConfig:     s.Config.SpawnerFormDefaults.AffinityConfig.Value,
+		TolerationGroup:    s.Config.SpawnerFormDefaults.TolerationGroup.Value,
+		DefaultNotebook:    true,
+	}
+
+	return notebook, nil
+}
+
+func (s *server) NewDefaultNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	req, err := s.createDefaultNotebook(namespace)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	newnotebook, err := json.Marshal(req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	r.Body = io.NopCloser(bytes.NewBuffer(newnotebook))
+
+	s.NewNotebook(w, r)
+}
+
 func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
@@ -469,8 +644,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	image := req.Image
 	if req.CustomImageCheck {
 		image = req.CustomImage
-	}
-	if s.Config.SpawnerFormDefaults.Image.ReadOnly {
+	} else if s.Config.SpawnerFormDefaults.Image.ReadOnly {
 		image = s.Config.SpawnerFormDefaults.Image.Value
 	}
 	image = strings.TrimSpace(image)
@@ -538,6 +712,11 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	// AAW Customization Adding protected B
 	if req.Protb {
 		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/protected-b"] = "true"
+	}
+
+	// AAW Customization Creating default notebook
+	if req.DefaultNotebook {
+		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/default-notebook"] = "true"
 	}
 
 	// Add configuration items

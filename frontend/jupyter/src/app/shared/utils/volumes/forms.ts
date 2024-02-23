@@ -1,8 +1,8 @@
 import {
   AbstractControl,
-  UntypedFormArray,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormArray,
+  FormControl,
+  FormGroup,
   ValidationErrors,
   ValidatorFn,
   Validators,
@@ -13,7 +13,7 @@ import { EXISTING_SOURCE, Volume } from 'src/app/types';
 /*
  * Form Group helpers
  */
-export function setGenerateNameCtrl(meta: UntypedFormGroup, name = '') {
+export function setGenerateNameCtrl(meta: FormGroup, name = '') {
   if (meta.get('generateName')) {
     if (name) {
       meta.get('generateName').setValue(name);
@@ -33,7 +33,7 @@ export function setGenerateNameCtrl(meta: UntypedFormGroup, name = '') {
 
   meta.addControl(
     'generateName',
-    new UntypedFormControl(name, [Validators.required]),
+    new FormControl(name, [Validators.required]),
   );
 }
 
@@ -55,21 +55,21 @@ export function createSourceFormGroup(
 // In this case the user will type a yaml to fill the spec
 export function createGenericSourceFormGroup(
   source: EXISTING_SOURCE,
-): AbstractControl {
-  return new UntypedFormControl('', []);
+): FormControl {
+  return new FormControl('', []);
 }
 
 // for volume.existingSource.persistentVolumeClaim
-export function createPvcFormGroup(): UntypedFormGroup {
-  return new UntypedFormGroup({
-    readOnly: new UntypedFormControl(false, []),
-    claimName: new UntypedFormControl('', [Validators.required]),
+export function createPvcFormGroup(): FormGroup {
+  return new FormGroup({
+    readOnly: new FormControl(false, []),
+    claimName: new FormControl('', [Validators.required]),
   });
 }
 
 // for volume.existingSource
-export function createExistingSourceFormGroup(): UntypedFormGroup {
-  return new UntypedFormGroup({
+export function createExistingSourceFormGroup(): FormGroup {
+  return new FormGroup({
     persistentVolumeClaim: createPvcFormGroup(),
   });
 }
@@ -77,19 +77,19 @@ export function createExistingSourceFormGroup(): UntypedFormGroup {
 // for volume.newPvc
 export function createNewPvcFormGroup(
   name = '{notebook-name}-volume',
-): UntypedFormGroup {
-  return new UntypedFormGroup({
-    metadata: new UntypedFormGroup({
-      name: new UntypedFormControl(name, Validators.required),
+): FormGroup {
+  return new FormGroup({
+    metadata: new FormGroup({
+      name: new FormControl(name, Validators.required),
     }),
-    spec: new UntypedFormGroup({
-      accessModes: new UntypedFormControl(['ReadWriteOnce']),
-      resources: new UntypedFormGroup({
-        requests: new UntypedFormGroup({
-          storage: new UntypedFormControl('16Gi', []), //AAW change, do not remove
+    spec: new FormGroup({
+      accessModes: new FormControl(['ReadWriteOnce']),
+      resources: new FormGroup({
+        requests: new FormGroup({
+          storage: new FormControl('16Gi', []), //AAW change, do not remove
         }),
       }),
-      storageClassName: new UntypedFormControl({
+      storageClassName: new FormControl({
         value: '',
         disabled: true,
       }),
@@ -101,7 +101,7 @@ function duplicateMountPathValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (control.value) {
       const formArray = control.parent
-        ? (control.parent.parent as UntypedFormArray)
+        ? (control.parent.parent as FormArray)
         : null;
 
       if (formArray) {
@@ -128,10 +128,10 @@ function duplicateMountPathValidator(): ValidatorFn {
 // For volume
 export function createNewPvcVolumeFormGroup(
   name = '{notebook-name}-volume',
-): UntypedFormGroup {
-  return new UntypedFormGroup({
-    name: new UntypedFormControl('', []),
-    mount: new UntypedFormControl('', [
+): FormGroup {
+  return new FormGroup({
+    name: new FormControl('', []),
+    mount: new FormControl('', [
       Validators.required,
       Validators.pattern(
         /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
@@ -143,10 +143,10 @@ export function createNewPvcVolumeFormGroup(
 }
 
 // For volume
-export function createExistingVolumeFormGroup(): UntypedFormGroup {
-  return new UntypedFormGroup({
-    name: new UntypedFormControl('', []),
-    mount: new UntypedFormControl('', [
+export function createExistingVolumeFormGroup(): FormGroup {
+  return new FormGroup({
+    name: new FormControl('', []),
+    mount: new FormControl('', [
       Validators.required,
       Validators.pattern(
         /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
@@ -162,41 +162,41 @@ export function createExistingVolumeFormGroup(): UntypedFormGroup {
  */
 export function createMetadataFormGroupFromPvc(
   pvc: V1PersistentVolumeClaim,
-): UntypedFormGroup {
+): FormGroup {
   const metadata = pvc.metadata;
 
-  const group = new UntypedFormGroup({});
+  const group = new FormGroup({});
 
   if (metadata.name) {
     group.addControl(
       'name',
-      new UntypedFormControl(metadata.name, Validators.required),
+      new FormControl(metadata.name, Validators.required),
     );
   }
 
   if (metadata.generateName) {
     group.addControl(
       'generateName',
-      new UntypedFormControl(metadata.generateName, Validators.required),
+      new FormControl(metadata.generateName, Validators.required),
     );
   }
 
   if (metadata.annotations) {
-    group.addControl('annotations', new UntypedFormGroup({}));
-
-    const annotationsGroup = group.get('annotations') as UntypedFormGroup;
+    const annotationsGroup = new FormGroup({});
     for (const [key, val] of Object.entries(metadata.annotations)) {
-      annotationsGroup.addControl(key, new UntypedFormControl(val, []));
+      annotationsGroup.addControl(key, new FormControl(val, []));
     }
+
+    group.addControl('annotations', annotationsGroup);
   }
 
   if (metadata.labels) {
-    group.addControl('labels', new UntypedFormGroup({}));
-
-    const labelsGroup = group.get('labels') as UntypedFormGroup;
+    const labelsGroup = new FormGroup({});
     for (const [key, val] of Object.entries(metadata.labels)) {
-      labelsGroup.addControl(key, new UntypedFormControl(val, []));
+      labelsGroup.addControl(key, new FormControl(val, []));
     }
+
+    group.addControl('labels', labelsGroup);
   }
 
   return group;
@@ -204,17 +204,17 @@ export function createMetadataFormGroupFromPvc(
 
 export function createPvcSpecFormGroupFromPvc(
   pvc: V1PersistentVolumeClaim,
-): UntypedFormGroup {
+): FormGroup {
   const spec = pvc.spec;
 
-  const group = new UntypedFormGroup({
-    accessModes: new UntypedFormControl(spec.accessModes),
-    resources: new UntypedFormGroup({
-      requests: new UntypedFormGroup({
-        storage: new UntypedFormControl(spec.resources.requests.storage),
+  const group = new FormGroup({
+    accessModes: new FormControl(spec.accessModes),
+    resources: new FormGroup({
+      requests: new FormGroup({
+        storage: new FormControl(spec.resources.requests.storage),
       }),
     }),
-    storageClassName: new UntypedFormControl({
+    storageClassName: new FormControl({
       value: spec.storageClassName,
       disabled: !spec.storageClassName,
     }),
@@ -225,25 +225,25 @@ export function createPvcSpecFormGroupFromPvc(
 
 export function createExistingSourceFormGroupFromVolume(
   volume: V1Volume,
-): UntypedFormGroup {
+): FormGroup {
   // only PVC is currently implemented in the UI
   if (volume.persistentVolumeClaim) {
-    return new UntypedFormGroup({
-      persistentVolumeClaim: new UntypedFormGroup({
-        claimName: new UntypedFormControl(
+    return new FormGroup({
+      persistentVolumeClaim: new FormGroup({
+        claimName: new FormControl(
           volume.persistentVolumeClaim.claimName,
           [Validators.required],
         ),
-        readOnly: new UntypedFormControl(volume.persistentVolumeClaim.readOnly),
+        readOnly: new FormControl(volume.persistentVolumeClaim.readOnly),
       }),
     });
   }
 
   // create generic form control for all other options
   // https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#volume-v1-core
-  const group = new UntypedFormGroup({});
+  const group = new FormGroup({});
   for (const [key, val] of Object.entries(volume)) {
-    group.addControl(key, new UntypedFormControl(val));
+    group.addControl(key, new FormControl(val));
   }
 
   return group;
@@ -251,28 +251,23 @@ export function createExistingSourceFormGroupFromVolume(
 
 export function createNewPvcFormGroupFromVolume(
   pvc: V1PersistentVolumeClaim,
-): UntypedFormGroup {
-  return new UntypedFormGroup({
+): FormGroup {
+  return new FormGroup({
     metadata: createMetadataFormGroupFromPvc(pvc),
     spec: createPvcSpecFormGroupFromPvc(pvc),
   });
 }
 
-export function createFormGroupFromVolume(volume: Volume): UntypedFormGroup {
-  const group = new UntypedFormGroup({
-    mount: new UntypedFormControl(volume.mount, [Validators.required]),
-  });
-
+export function createFormGroupFromVolume(volume: Volume): FormGroup {
   if (volume.newPvc) {
-    group.addControl('newPvc', createNewPvcFormGroupFromVolume(volume.newPvc));
-
-    return group;
+    return new FormGroup({
+      mount: new FormControl(volume.mount, [Validators.required]),
+      newPvc: createNewPvcFormGroupFromVolume(volume.newPvc)
+    });
   }
 
-  group.addControl(
-    'existingSource',
-    createExistingSourceFormGroupFromVolume(volume.existingSource),
-  );
-
-  return group;
+  return new FormGroup({
+    mount: new FormControl(volume.mount, [Validators.required]),
+    existingSource: createExistingSourceFormGroupFromVolume(volume.existingSource)
+  });
 }

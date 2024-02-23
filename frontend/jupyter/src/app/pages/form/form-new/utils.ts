@@ -1,14 +1,14 @@
 import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
+  FormBuilder,
+  FormGroup,
   Validators,
-  UntypedFormArray,
+  FormArray,
 } from '@angular/forms';
 import { GPU, Config } from 'src/app/types';
 import { createFormGroupFromVolume } from 'src/app/shared/utils/volumes';
 
-export function getFormDefaults(): UntypedFormGroup {
-  const fb = new UntypedFormBuilder();
+export function getFormDefaults(): FormGroup {
+  const fb = new FormBuilder();
 
   return fb.group({
     name: ['', [Validators.required]],
@@ -56,7 +56,7 @@ export function getFormDefaults(): UntypedFormGroup {
   });
 }
 
-export function updateGPUControl(formCtrl: UntypedFormGroup, gpuConf: any) {
+export function updateGPUControl(formCtrl: FormGroup, gpuConf: any) {
   // If the backend didn't send the value, default to none
   if (gpuConf == null) {
     formCtrl.get('num').setValue('none');
@@ -89,7 +89,7 @@ export function calculateLimits(
 }
 
 export function initCpuFormControls(
-  formCtrl: UntypedFormGroup,
+  formCtrl: FormGroup,
   config: Config,
 ) {
   const cpu = Number(config.cpu.value);
@@ -111,7 +111,7 @@ export function initCpuFormControls(
 }
 
 export function initMemoryFormControls(
-  formCtrl: UntypedFormGroup,
+  formCtrl: FormGroup,
   config: Config,
 ) {
   const memory = configSizeToNumber(config.memory.value);
@@ -132,7 +132,7 @@ export function initMemoryFormControls(
   );
 }
 
-export function initFormControls(formCtrl: UntypedFormGroup, config: Config) {
+export function initFormControls(formCtrl: FormGroup, config: Config) {
   initCpuFormControls(formCtrl, config);
 
   initMemoryFormControls(formCtrl, config);
@@ -181,7 +181,7 @@ export function initFormControls(formCtrl: UntypedFormGroup, config: Config) {
   }
 
   // GPUs
-  updateGPUControl(formCtrl.get('gpus') as UntypedFormGroup, config.gpus);
+  updateGPUControl(formCtrl.get('gpus') as FormGroup, config.gpus);
 
   formCtrl.controls.shm.setValue(config.shm.value);
   if (config.shm.readOnly) {
@@ -196,7 +196,7 @@ export function initFormControls(formCtrl: UntypedFormGroup, config: Config) {
 }
 
 export function initWorkspaceVolumeControl(
-  form: UntypedFormGroup,
+  form: FormGroup,
   config: Config,
 ) {
   const workspace = config.workspaceVolume.value;
@@ -208,10 +208,10 @@ export function initWorkspaceVolumeControl(
   form.setControl('workspace', createFormGroupFromVolume(workspace));
 }
 
-export function initDataVolumeControl(form: UntypedFormGroup, config: Config) {
+export function initDataVolumeControl(form: FormGroup, config: Config) {
   const datavols = config.dataVolumes.value;
 
-  const datavolsArray = new UntypedFormArray([]);
+  const datavolsArray = new FormArray([]);
   form.setControl('datavols', datavolsArray);
 
   for (const vol of datavols) {

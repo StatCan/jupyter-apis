@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 export class FormNameComponent {
   subscriptions = new Subscription();
 
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
   @Input() existingNotebooks: Set<string>;
 
   constructor() {}

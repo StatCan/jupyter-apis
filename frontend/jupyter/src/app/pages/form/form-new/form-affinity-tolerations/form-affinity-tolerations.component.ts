@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { TolerationGroup, AffinityConfig } from 'src/app/types';
 
 @Component({
@@ -8,7 +8,7 @@ import { TolerationGroup, AffinityConfig } from 'src/app/types';
   styleUrls: ['./form-affinity-tolerations.component.scss'],
 })
 export class FormAffinityTolerationsComponent {
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
   @Input() tolerationGroups: TolerationGroup[];
   @Input() affinityConfigs: AffinityConfig[];
 

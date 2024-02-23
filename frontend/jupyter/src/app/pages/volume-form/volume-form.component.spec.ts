@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
+  FormBuilder,
+  FormGroup,
   Validators,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -17,12 +17,12 @@ const JWABackendServiceStub: Partial<JWABackendService> = {
   getPVCs: () => of(),
   createPVC: () => of(),
 };
-const FormBuilderStub: Partial<UntypedFormBuilder> = {
+const FormBuilderStub: Partial<FormBuilder> = {
   group: () => mockFormGroup,
 };
 
-function getFormDefaults(): UntypedFormGroup {
-  const fb = new UntypedFormBuilder();
+function getFormDefaults(): FormGroup {
+  const fb = new FormBuilder();
 
   return fb.group({
     type: ['empty', [Validators.required]],
@@ -33,7 +33,7 @@ function getFormDefaults(): UntypedFormGroup {
     mode: ['ReadWriteOnce', [Validators.required]],
   });
 }
-const mockFormGroup: UntypedFormGroup = getFormDefaults();
+const mockFormGroup: FormGroup = getFormDefaults();
 
 describe('VolumeFormComponent', () => {
   let component: VolumeFormComponent;
@@ -43,7 +43,7 @@ describe('VolumeFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [VolumeFormComponent],
       providers: [
-        { provide: UntypedFormBuilder, useValue: FormBuilderStub },
+        { provide: FormBuilder, useValue: FormBuilderStub },
         { provide: JWABackendService, useValue: JWABackendServiceStub },
         { provide: MatDialogRef, useValue: {} },
       ],

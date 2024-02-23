@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'kubeflow';
 
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import {
   createExistingSourceFormGroup,
   createNewPvcFormGroup,
@@ -27,7 +27,7 @@ export class FormWorkspaceVolumeComponent implements OnDestroy {
   getNewVolumeType = getNewVolumeType;
 
   @Input() readonly: boolean;
-  @Input() volGroup: UntypedFormGroup;
+  @Input() volGroup: FormGroup;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
 
@@ -59,7 +59,7 @@ export class FormWorkspaceVolumeComponent implements OnDestroy {
     this.panelOpen = true;
   }
 
-  private removeVolumeFields(vol: UntypedFormGroup) {
+  private removeVolumeFields(vol: FormGroup) {
     if (vol.get('newPvc')) {
       vol.removeControl('newPvc');
     }

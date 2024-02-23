@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  UntypedFormGroup,
+  FormGroup,
   Validators,
   ValidatorFn,
   AbstractControl,
-  UntypedFormControl,
+  FormControl,
   FormGroupDirective,
   NgForm,
 } from '@angular/forms';
@@ -19,7 +19,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
   styleUrls: ['./pvc.component.scss'],
 })
 export class ExistingPvcComponent implements OnInit {
-  @Input() pvcGroup: UntypedFormGroup;
+  @Input() pvcGroup: FormGroup;
   @Input() mountedVolumes: Set<string>;
 
   pvcs: PVCResponseObject[] = [];
@@ -112,7 +112,7 @@ export class ExistingPvcComponent implements OnInit {
 // Error when invalid control is dirty, touched, or submitted, AAW
 export class PvcErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: UntypedFormControl | null,
+    control: FormControl | null,
     form: FormGroupDirective | NgForm | null,
   ): boolean {
     const isSubmitted = form && form.submitted;

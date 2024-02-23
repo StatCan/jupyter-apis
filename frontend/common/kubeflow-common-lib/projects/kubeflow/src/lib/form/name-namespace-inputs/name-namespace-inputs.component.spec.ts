@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NameNamespaceInputsComponent } from './name-namespace-inputs.component';
-import { NameInputComponent } from './name-input/name-input.component';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { FormModule } from '../form.module';
 
 describe('NameNamespaceInputsComponent', () => {
@@ -21,8 +20,8 @@ describe('NameNamespaceInputsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NameNamespaceInputsComponent);
     component = fixture.componentInstance;
-    component.nameControl = new UntypedFormControl();
-    component.namespaceControl = new UntypedFormControl();
+    component.nameControl = new FormControl();
+    component.namespaceControl = new FormControl();
 
     fixture.detectChanges();
   });

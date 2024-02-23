@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
-import { getNameError, MAX_NAME_LENGTH } from '../validators';
+import { FormControl } from '@angular/forms';
+import { MAX_NAME_LENGTH } from '../validators';
 
 @Component({
   selector: 'lib-form-name-namespace-inputs',
@@ -8,13 +8,11 @@ import { getNameError, MAX_NAME_LENGTH } from '../validators';
   styleUrls: ['./name-namespace-inputs.component.scss'],
 })
 export class NameNamespaceInputsComponent {
-  private existingNamesPrv: Set<string>;
+  @Input()
+  nameControl: FormControl<string|null>;
 
   @Input()
-  nameControl: AbstractControl;
-
-  @Input()
-  namespaceControl: AbstractControl;
+  namespaceControl: FormControl<string|null>;
 
   @Input()
   resourceName: string;

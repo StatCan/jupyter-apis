@@ -5,7 +5,7 @@ import {
   ChangeDetectorRef,
   AfterContentChecked,
 } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import { NamespaceService, SnackBarService, SnackType } from 'kubeflow';
@@ -23,7 +23,7 @@ export class FormNewComponent
   implements OnInit, OnDestroy, AfterContentChecked
 {
   currNamespace = '';
-  formCtrl: UntypedFormGroup;
+  formCtrl: FormGroup;
   config: Config;
 
   subscriptions = new Subscription();
@@ -105,7 +105,7 @@ export class FormNewComponent
     this.cdr.detectChanges();
   }
 
-  initFormControls(formCtrl: UntypedFormGroup, config: Config) {
+  initFormControls(formCtrl: FormGroup, config: Config) {
     initFormControls(formCtrl, config);
   }
 
@@ -184,7 +184,7 @@ export class FormNewComponent
   }
 
   // Set the tooltip text based on form's validity
-  setTooltipText(form: UntypedFormGroup): string {
+  setTooltipText(form: FormGroup): string {
     let text: string;
     if (!form.get('name').valid) {
       text = 'No value of the Notebook name was provided';

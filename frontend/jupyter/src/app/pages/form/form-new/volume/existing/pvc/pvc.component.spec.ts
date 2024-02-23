@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  UntypedFormArray,
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormArray,
+  FormControl,
+  FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -50,24 +50,24 @@ describe('ExistingPvcComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ExistingPvcComponent);
     component = fixture.componentInstance;
-    const fakeData = new UntypedFormGroup({
-      prob: new UntypedFormControl(),
-      datavols: new UntypedFormArray([
-        new UntypedFormGroup({
-          existingSource: new UntypedFormGroup({
-            persistantVolumeClaim: new UntypedFormGroup({
-              readOnly: new UntypedFormControl(),
-              claimName: new UntypedFormControl(),
+    const fakeData = new FormGroup({
+      prob: new FormControl(),
+      datavols: new FormArray([
+        new FormGroup({
+          existingSource: new FormGroup({
+            persistantVolumeClaim: new FormGroup({
+              readOnly: new FormControl(),
+              claimName: new FormControl(),
             }),
           }),
         }),
       ]),
     });
 
-    component.pvcGroup = (fakeData.get('datavols') as UntypedFormArray)
+    component.pvcGroup = (fakeData.get('datavols') as FormArray)
       .at(0)
       .get('existingSource')
-      .get('persistantVolumeClaim') as UntypedFormGroup;
+      .get('persistantVolumeClaim') as FormGroup;
     component.mountedVolumes = new Set();
 
     fixture.detectChanges();

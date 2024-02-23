@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormControl,
+  FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -49,10 +49,10 @@ describe('FormGpusComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormGpusComponent);
     component = fixture.componentInstance;
-    component.parentForm = new UntypedFormGroup({
-      gpus: new UntypedFormGroup({
-        vendor: new UntypedFormControl(),
-        num: new UntypedFormControl(),
+    component.parentForm = new FormGroup({
+      gpus: new FormGroup({
+        vendor: new FormControl(),
+        num: new FormControl(),
       }),
     });
 

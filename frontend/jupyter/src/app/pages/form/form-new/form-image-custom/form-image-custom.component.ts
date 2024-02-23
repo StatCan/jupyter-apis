@@ -7,8 +7,7 @@ import {
   Inject,
 } from '@angular/core';
 import {
-  UntypedFormGroup,
-  Validators,
+  FormGroup,
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
@@ -25,7 +24,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   styleUrls: ['./form-image-custom.component.scss'],
 })
 export class FormImageCustomComponent implements OnInit, OnDestroy {
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
   @Input() images: string[];
   @Input() imagesGroupOne: Config['imageGroupOne'];
   @Input() imagesGroupTwo: Config['imageGroupTwo'];

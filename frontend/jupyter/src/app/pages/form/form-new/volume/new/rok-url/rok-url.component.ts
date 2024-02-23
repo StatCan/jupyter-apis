@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SnackBarService, SnackType } from 'kubeflow';
 import { setGenerateNameCtrl } from 'src/app/shared/utils/volumes';
 
@@ -10,7 +10,7 @@ import { setGenerateNameCtrl } from 'src/app/shared/utils/volumes';
   styleUrls: ['./rok-url.component.scss'],
 })
 export class RokUrlComponent {
-  @Input() volGroup: UntypedFormGroup;
+  @Input() volGroup: FormGroup;
 
   constructor(private snack: SnackBarService) {}
 
@@ -25,12 +25,12 @@ export class RokUrlComponent {
 
     const path = headers.get('X-Object-Meta-mountpoint');
 
-    const pvcGroup = this.volGroup.get('newPvc') as UntypedFormGroup;
+    const pvcGroup = this.volGroup.get('newPvc') as FormGroup;
     pvcGroup.get('spec.resources.requests.storage').setValue(`${size}Gi`);
     this.volGroup.get('mount').setValue(path);
 
     // ensure we use generateName
-    const meta = this.volGroup.get('newPvc.metadata') as UntypedFormGroup;
+    const meta = this.volGroup.get('newPvc.metadata') as FormGroup;
     setGenerateNameCtrl(meta, `${name}-`);
 
     this.snack.open(

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { UntypedFormArray } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +30,7 @@ describe('FormDataVolumesComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormDataVolumesComponent);
     component = fixture.componentInstance;
-    component.volsArray = new UntypedFormArray([]);
+    component.volsArray = new FormArray([]);
 
     fixture.detectChanges();
   });

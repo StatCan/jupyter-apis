@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,7 +26,7 @@ describe('VolumeSizeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VolumeSizeComponent);
     component = fixture.componentInstance;
-    component.sizeCtrl = new UntypedFormControl('');
+    component.sizeCtrl = new FormControl('');
 
     fixture.detectChanges();
   });

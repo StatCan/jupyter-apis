@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  UntypedFormControl,
-  UntypedFormGroup,
+  FormControl,
+  FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -34,9 +34,9 @@ describe('VolumeMountComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VolumeMountComponent);
     component = fixture.componentInstance;
-    component.volGroup = new UntypedFormGroup({
-      mount: new UntypedFormControl(),
-      newPvc: new UntypedFormControl({
+    component.volGroup = new FormGroup({
+      mount: new FormControl(),
+      newPvc: new FormControl({
         metadata: {},
       }),
     });

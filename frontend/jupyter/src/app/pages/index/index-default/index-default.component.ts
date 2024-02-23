@@ -314,7 +314,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   }
 
   parseDefaultNotebook(notebook: NotebookProcessedObject) {
-    if (notebook.labels?.['notebook.statcan.gc.ca/default-notebook'] === 'true') {
+    if (
+      notebook.labels?.['notebook.statcan.gc.ca/default-notebook'] === 'true'
+    ) {
       return true;
     }
     return false;

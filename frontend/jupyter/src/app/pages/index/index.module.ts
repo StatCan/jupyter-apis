@@ -10,7 +10,12 @@ import { ProtBComponent } from './index-default/protb-icon/protb-icon.component'
 import { DefaultComponent } from './index-default/default-icon/default-icon.component';
 
 @NgModule({
-  declarations: [IndexComponent, ServerTypeComponent, ProtBComponent, DefaultComponent],
+  declarations: [
+    IndexComponent,
+    ServerTypeComponent,
+    ProtBComponent,
+    DefaultComponent,
+  ],
   imports: [
     CommonModule,
     IndexRokModule,

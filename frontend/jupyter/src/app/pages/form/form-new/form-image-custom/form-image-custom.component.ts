@@ -135,8 +135,6 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     const currentLanguage = this.localeId;
 
     const msg = {
-      'group-one': this.imagesGroupOne.disabledMessage,
-      'group-two': this.imagesGroupTwo.disabledMessage,
       'group-three': this.imagesGroupThree.disabledMessage,
     };
 

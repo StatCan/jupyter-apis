@@ -15,6 +15,7 @@ import {
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { quantityToScalar } from '@kubernetes/client-node/dist/util';
 import { ProtBComponent } from './protb-icon/protb-icon.component';
+import { DefaultComponent } from './default-icon/default-icon.component';
 import { tableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 
@@ -28,6 +29,14 @@ export const defaultConfig: TableConfig = {
       matColumnDef: 'status',
       value: new StatusValue(),
       sort: true,
+    },
+    {
+      matHeaderCellDef: '',
+      matColumnDef: 'default-notebook',
+      value: new ComponentValue({
+        component: DefaultComponent,
+      }),
+      sort: false,
     },
     {
       matHeaderCellDef: $localize`Name`,

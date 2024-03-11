@@ -103,25 +103,38 @@ declare global {
        * Custom command to mock request at '/api/namespaces/<namespace>/notebooks/<notebook>'
        * and returns a mock notebook object for the given notebook in the given namespace
        */
-      mockGetNotebookRequest(namespace: string, notebook: string): Chainable<void>;
+      mockGetNotebookRequest(
+        namespace: string,
+        notebook: string,
+      ): Chainable<void>;
 
       /**
        * Custom command to mock request at '/api/namespaces/<namespace>/notebooks/<notebook>/pod'
        * and returns a mock pod for the given notebook in the given namespace
        */
-      mockGetNotebookPodRequest(namespace: string, notebook: string): Chainable<void>;
+      mockGetNotebookPodRequest(
+        namespace: string,
+        notebook: string,
+      ): Chainable<void>;
 
       /**
        * Custom command to mock request at 'api/namespaces/<namespace>/notebooks/<notebook>/pod/<pod>/logs'
        * and returns a mock array of logs for the given notebook in the given namespace
        */
-      mockGetNotebookLogsRequest(namespace: string, notebook: string, pod: string): Chainable<void>;
+      mockGetNotebookLogsRequest(
+        namespace: string,
+        notebook: string,
+        pod: string,
+      ): Chainable<void>;
 
       /**
        * Custom command to mock request at '/api/namespaces/<namespace>/notebooks/<notebook>/events'
        * and returns a mock array of events for the given notebook in the given namespace
        */
-      mockGetNotebookEventsRequest(namespace: string, notebook: string): Chainable<void>;
+      mockGetNotebookEventsRequest(
+        namespace: string,
+        notebook: string,
+      ): Chainable<void>;
     }
   }
 }

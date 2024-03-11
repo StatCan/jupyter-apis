@@ -27,8 +27,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class FormImageCustomComponent implements OnInit, OnDestroy {
   @Input() parentForm: UntypedFormGroup;
   @Input() images: string[];
-  @Input() imagesGroupOne: Config['imageGroupOne'];
-  @Input() imagesGroupTwo: Config['imageGroupTwo'];
   @Input() imagesGroupThree: Config['imageGroupThree'];
   @Input() allowCustomImage: boolean;
   @Input() hideRegistry: boolean;
@@ -63,13 +61,9 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
   onSelect(event: MatCheckboxChange): void {
     if (event.checked) {
       this.parentForm.get('image').disable();
-      this.parentForm.get('imageGroupOne').disable();
-      this.parentForm.get('imageGroupTwo').disable();
       this.parentForm.get('imageGroupThree').disable();
     } else {
       this.parentForm.get('image').enable();
-      this.parentForm.get('imageGroupOne').enable();
-      this.parentForm.get('imageGroupTwo').enable();
       this.parentForm.get('imageGroupThree').enable();
     }
   }

@@ -46,8 +46,6 @@ describe('FormImageComponent', () => {
       customImage: new UntypedFormControl(),
       customImageCheck: new UntypedFormControl(),
       image: new UntypedFormControl(),
-      imageGroupOne: new UntypedFormControl(),
-      imageGroupTwo: new UntypedFormControl(),
       imageGroupThree: new UntypedFormControl(),
       serverType: new UntypedFormControl(),
       imagePullPolicy: new UntypedFormControl(),

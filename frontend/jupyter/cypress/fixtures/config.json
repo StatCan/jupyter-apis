@@ -14,18 +14,6 @@
         "hideRegistry":false,
         "hideVersion":false
      },
-     "imageGroupOne":{
-        "value":"k8scc01covidacr.azurecr.io/rstudio:v1",
-        "options":[
-           "k8scc01covidacr.azurecr.io/rstudio:v1"
-        ]
-     },
-     "imageGroupTwo":{
-        "value":"k8scc01covidacr.azurecr.io/remote-desktop:v1",
-        "options":[
-           "k8scc01covidacr.azurecr.io/remote-desktop:v1"
-        ]
-     },
      "imageGroupThree":{
         "disabledMessage":{
            "en":"SAS is unavailable while non-employees have access to this profile.",

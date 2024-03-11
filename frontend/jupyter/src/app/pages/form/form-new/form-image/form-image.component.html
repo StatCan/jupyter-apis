@@ -21,47 +21,6 @@
       </mat-button-toggle>
 
       <mat-button-toggle
-        value="group-one"
-        attr.aria-label="Use Group One based server"
-        i18n-aria-label="Aria label for Group One server"
-        [disabled]="!shouldEnable(imagesGroupOne?.enabledCondition)"
-        [matTooltip]="
-          !shouldEnable(imagesGroupOne?.enabledCondition)
-            ? getDisabledMessage('group-one')
-            : ''
-        "
-        [class.toolbar-icon-disabled]="
-          !shouldEnable(imagesGroupOne?.enabledCondition)
-        "
-      >
-        <mat-icon class="server-type-icon" svgIcon="group-one"></mat-icon>
-        <p class="server-type-title">RStudio</p>
-        <p class="server-type-content" i18n>
-          An integrated development environment for R, a programming language
-          for statistical computing and graphics.
-        </p>
-      </mat-button-toggle>
-
-      <mat-button-toggle
-        value="group-two"
-        attr.aria-label="Use Group Two based server"
-        i18n-aria-label="Aria label for Group Two server"
-        [disabled]="!shouldEnable(imagesGroupTwo?.enabledCondition)"
-        [matTooltip]="
-          !shouldEnable(imagesGroupTwo?.enabledCondition)
-            ? getDisabledMessage('group-two')
-            : ''
-        "
-        [class.toolbar-icon-disabled]="
-          !shouldEnable(imagesGroupTwo?.enabledCondition)
-        "
-      >
-        <mat-icon class="server-type-icon" svgIcon="group-two"></mat-icon>
-        <p class="server-type-title">Ubuntu</p>
-        <p class="server-type-content" i18n>An Ubuntu remote desktop.</p>
-      </mat-button-toggle>
-
-      <mat-button-toggle
         value="group-three"
         attr.aria-label="Use Group Three based server"
         [disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"

@@ -767,59 +767,6 @@ describe('New notebook form', () => {
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
-    it('should create a RStudio notebook in french with data volumes', () => {
-      cy.get('lib-name-input[resourcename="Notebook Server"]')
-        .find('input')
-        .type('test-notebook-rstudio');
-      // select rstudio notebook
-      cy.get(
-        '[data-cy-form-input="serverType"] > mat-button-toggle[value="group-one"]',
-      ).click();
-      cy.get('[data-cy-advanced-options-button]').click();
-      //add data volumes
-      cy.get('[data-cy-form-button="dataVolumes-new"]').click();
-      cy.get('[data-cy-form-button="dataVolumes-existing"]').click();
-      cy.get('[data-cy-form-button="submit"]').should('be.disabled');
-      cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .click();
-      cy.get('[role="listbox"] > mat-option')
-        .contains('a-pvc-phase-ready-viewer-ready')
-        .click();
-      // change language to french
-      cy.get('[data-cy-form-input="language"]').click();
-      cy.get('[role="listbox"] > mat-option').contains('Français').click();
-      // submit the notebook
-      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
-      cy.wait('@mockSubmitNotebook');
-      cy.url().should('eq', 'http://localhost:4200/');
-    });
-
-    it('should create a protected B Ubuntu notebook', () => {
-      cy.get('lib-name-input[resourcename="Notebook Server"]')
-        .find('input')
-        .type('test-notebook-protectedb');
-      // select ubuntu notebook
-      cy.get(
-        '[data-cy-form-input="serverType"] > mat-button-toggle[value="group-two"]',
-      ).click();
-      cy.get('[data-cy-form-input="prob"]').click();
-      // submit the notebook
-      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
-      cy.wait('@mockSubmitNotebook');
-      cy.url().should('eq', 'http://localhost:4200/');
-    });
-
     it('should create a SAS notebook', () => {
       cy.get('lib-name-input[resourcename="Notebook Server"]')
         .find('input')

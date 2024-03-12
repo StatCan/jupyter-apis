@@ -9,11 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DefaultComponent } from './index-default/default-icon/default-icon.component';
 
 @NgModule({
-  declarations: [
-    IndexComponent,
-    ServerTypeComponent,
-    DefaultComponent,
-  ],
+  declarations: [IndexComponent, ServerTypeComponent, DefaultComponent],
   imports: [
     CommonModule,
     IndexRokModule,

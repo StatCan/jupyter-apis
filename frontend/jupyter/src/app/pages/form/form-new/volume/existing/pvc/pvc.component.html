@@ -15,7 +15,7 @@
     <mat-option *ngFor="let pvc of pvcs" [value]="pvc.name">
       <div class="flex space-between">
         <div class="name truncate">
-          {{ pvc.name }} {{ isProtectedLabel(pvc) }}
+          {{ pvc.name }}
         </div>
         <ng-container *ngIf="select.panelOpen">
           <div class="size">{{ pvc.capacity }}</div>

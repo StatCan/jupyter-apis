@@ -56,12 +56,6 @@ export class ExistingPvcComponent implements OnInit {
     if (volumeName.hasError('isMounted')) {
       return $localize`Is mounted`;
     }
-    if (volumeName.hasError('isNotProb')) {
-      return $localize`Notebook is protected B but volume is unclassified`;
-    }
-    if (volumeName.hasError('isNotUnclassified')) {
-      return $localize`Notebook is unclassified but volume is protected B`;
-    }
   }
 
   //Method that disables selecting a mounted pvc, AAW

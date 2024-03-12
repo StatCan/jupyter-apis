@@ -103,7 +103,6 @@ type newnotebookrequest struct {
 	DataVolumes        []volrequest      `json:"datavols"`
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
-	Protb              bool              `json:"prob"`
 	Language           string            `json:"language"`
 	ImagePullPolicy    string            `json:"imagePullPolicy"`
 	ServerType         string            `json:"serverType"`
@@ -418,39 +417,22 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 	// Check if it is a new PVC by checking if the value exists https://stackoverflow.com/a/31505089
 	if req.NewPvc.NewPvcMetadata.Name != nil {
 		pvcClaimName = *req.NewPvc.NewPvcMetadata.Name
-		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
-			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      *req.NewPvc.NewPvcMetadata.Name,
-					Namespace: notebook.Namespace,
-					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
-				},
-				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-					Resources: corev1.ResourceRequirements{
-						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
-						},
+		// Create the PVC
+		pvc = corev1.PersistentVolumeClaim{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      *req.NewPvc.NewPvcMetadata.Name,
+				Namespace: notebook.Namespace,
+			},
+			Spec: corev1.PersistentVolumeClaimSpec{
+				AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
+				Resources: corev1.ResourceRequirements{
+					Requests: corev1.ResourceList{
+						corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 					},
 				},
-			}
-		} else {
-			// Create the PVC
-			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      *req.NewPvc.NewPvcMetadata.Name,
-					Namespace: notebook.Namespace,
-				},
-				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-					Resources: corev1.ResourceRequirements{
-						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
-						},
-					},
-				},
-			}
+			},
 		}
+
 		// Add the storage class, if set and not set to an "empty" value
 		if req.NewPvc.NewPvcSpec.StorageClassName != "" &&
 			req.NewPvc.NewPvcSpec.StorageClassName != "{none}" &&
@@ -589,7 +571,6 @@ func (s *server) createDefaultNotebook(namespace string) (newnotebookrequest, er
 		DataVolumes:        datavols,
 		EnableSharedMemory: s.Config.SpawnerFormDefaults.Shm.Value,
 		Configurations:     s.Config.SpawnerFormDefaults.Configurations.Value,
-		Protb:              false,
 		Language:           "en",
 		ImagePullPolicy:    s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
 		ServerType:         "jupyter",
@@ -707,11 +688,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	} else {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
-	}
-
-	// AAW Customization Adding protected B
-	if req.Protb {
-		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/protected-b"] = "true"
 	}
 
 	// AAW Customization Creating default notebook
@@ -887,22 +863,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
 			Name:  EnvKfLanguage,
 			Value: req.Language,
-		})
-	}
-	// Add empty dir on protected-b notebooks
-	if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
-
-		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-			Name: "protb-nb",
-			VolumeSource: corev1.VolumeSource{
-				EmptyDir: &corev1.EmptyDirVolumeSource{
-					Medium: corev1.StorageMediumMemory,
-				},
-			},
-		})
-		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-			Name:      "protb-nb",
-			MountPath: "/etc/protb",
 		})
 	}
 

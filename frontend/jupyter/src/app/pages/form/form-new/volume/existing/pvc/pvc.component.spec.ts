@@ -51,7 +51,6 @@ describe('ExistingPvcComponent', () => {
     fixture = TestBed.createComponent(ExistingPvcComponent);
     component = fixture.componentInstance;
     const fakeData = new UntypedFormGroup({
-      prob: new UntypedFormControl(),
       datavols: new UntypedFormArray([
         new UntypedFormGroup({
           existingSource: new UntypedFormGroup({

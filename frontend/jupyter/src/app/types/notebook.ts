@@ -36,7 +36,6 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
   deleteAction?: string;
   connectAction?: string;
   startStopAction?: string;
-  protB?: boolean;
   default?: boolean;
   link: {
     text: string;

@@ -49,7 +49,6 @@ export function getFormDefaults(): UntypedFormGroup {
     datavols: fb.array([]),
     shm: [true, []],
     configurations: [[], []],
-    prob: [false, []],
     language: ['', [Validators.required]],
   });
 }

@@ -23,7 +23,6 @@ import { FormImageCustomModule } from './form-image-custom/form-image-custom.mod
 import { FormNameModule } from './form-name/form-name.module';
 import { FormWorkspaceVolumeModule } from './form-workspace-volume/form-workspace-volume.module';
 import { FormNewComponent } from './form-new.component';
-import { FormProtectedBModule } from './form-protected-b/form-protected-b.module';
 
 @NgModule({
   declarations: [FormNewComponent],
@@ -47,7 +46,6 @@ import { FormProtectedBModule } from './form-protected-b/form-protected-b.module
     FormImageCustomModule,
     FormNameModule,
     FormWorkspaceVolumeModule,
-    FormProtectedBModule,
   ],
   exports: [FormNewComponent],
 })

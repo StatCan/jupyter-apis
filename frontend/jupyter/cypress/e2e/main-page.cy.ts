@@ -204,16 +204,6 @@ describe('Main tables', () => {
         .should('eq', 200);
     });
 
-    it('should have protected B icon on protected B notebook', () => {
-      cy.get('[data-cy-table-id="notebooks-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('test-pro-b')
-        .parent()
-        .parent()
-        .find('app-protb-icon')
-        .should('exist');
-    });
-
     it('should filter the notebook table', () => {
       // filter on notebook name
       cy.get('[data-cy-table-filter-id="notebooks-table"]').click();
@@ -371,16 +361,6 @@ describe('Main tables', () => {
       ).as('mockDeleteVolume');
       cy.get('.mat-mdc-dialog-actions > button').contains('DELETE').click();
       cy.wait('@mockDeleteVolume').its('response.statusCode').should('eq', 200);
-    });
-
-    it('should have protected B icon on protected B volume', () => {
-      cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('test-pro-b-volume')
-        .parent()
-        .parent()
-        .find('app-protb-icon')
-        .should('exist');
     });
 
     it('should filter the volume table', () => {

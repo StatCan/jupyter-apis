@@ -418,14 +418,6 @@ describe('New notebook form', () => {
         .should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="workspaceVolume"]')
         .find('[data-cy-form-input="existing-volume"]')
-        .find('mat-error')
-        .should(
-          'have.text',
-          ' Notebook is unclassified but volume is protected B ',
-        );
-      cy.get('[data-cy-form-input="prob"]').click();
-      cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('[data-cy-form-input="existing-volume"]')
         .should('have.class', 'ng-valid');
     });
 
@@ -635,14 +627,6 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="existing-volume"]')
         .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .find('mat-error')
-        .should(
-          'have.text',
-          ' Notebook is unclassified but volume is protected B ',
-        );
-      cy.get('[data-cy-form-input="prob"]').click();
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="existing-volume"]')
         .should('have.class', 'ng-valid');

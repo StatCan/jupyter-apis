@@ -81,32 +81,6 @@ export class ExistingPvcComponent implements OnInit {
       return exists ? { isMounted: true } : null;
     };
   }
-
-  //Method that disables selecting a mounted pvc, AAW
-  private isProtectedBValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-      // if its a workspace volume or a data volume
-      const protB = control.parent.parent.parent.parent.get('prob')
-        ? control.parent.parent.parent.parent.get('prob').value
-        : control.parent.parent.parent.parent.parent.get('prob').value;
-
-      // Check for each volume if it's ok.
-      if (protB && !this.protectedBPvcs.has(control.value)) {
-        return { isNotProb: true };
-      } else if (!protB && !this.unclassifiedPvcs.has(control.value)) {
-        return { isNotUnclassified: true };
-      }
-      return null;
-    };
-  }
-
-  public isProtectedLabel(pvc): string {
-    let status = '';
-    if (pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b') {
-      status = '(protected-b)';
-    }
-    return status;
-  }
 }
 
 // Error when invalid control is dirty, touched, or submitted, AAW

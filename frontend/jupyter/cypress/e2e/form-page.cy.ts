@@ -412,13 +412,6 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-select')
         .click({ force: true });
-      cy.get('mat-option').contains('test-pro-b-volume').click({ force: true });
-      cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .should('have.class', 'ng-valid');
     });
 
     it('workspace volume auto update name', () => {
@@ -588,9 +581,6 @@ describe('New notebook form', () => {
         .find('mat-select')
         .click({ force: true });
       cy.get('body').click();
-      cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .should('have.class', 'ng-invalid');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-error')

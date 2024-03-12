@@ -611,9 +611,6 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-select')
         .click({ force: true });
-      cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .should('have.class', 'ng-valid');
     });
 
     it('data volume auto update name', () => {

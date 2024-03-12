@@ -90,7 +90,7 @@ Cypress.Commands.add('mockConfigRequest', () => {
 
 Cypress.Commands.add('mockPoddefaultsRequest', namespace => {
   cy.intercept('GET', `/api/namespaces/${namespace}/poddefaults`, {
-    fixture: 'podDefaults',
+    fixture: 'poddefaults',
   }).as('mockPoddefaultsRequest');
 });
 

@@ -46,7 +46,6 @@ import { FormNewComponent } from './form-new.component';
     FormImageCustomModule,
     FormNameModule,
     FormWorkspaceVolumeModule,
-    FormProtectedBModule,
   ],
   exports: [FormNewComponent],
 })

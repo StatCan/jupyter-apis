@@ -23,7 +23,6 @@ export class ExistingPvcComponent implements OnInit {
   @Input() mountedVolumes: Set<string>;
 
   pvcs: PVCResponseObject[] = [];
-  protectedBPvcs: Set<string> = new Set<string>();
   unclassifiedPvcs: Set<string> = new Set<string>();
 
   matcher = new PvcErrorStateMatcher(); //AAW
@@ -37,23 +36,14 @@ export class ExistingPvcComponent implements OnInit {
     this.ns.getSelectedNamespace().subscribe(ns => {
       this.backend.getPVCs(ns).subscribe(pvcs => {
         this.pvcs = pvcs;
-        this.protectedBPvcs.clear();
         this.unclassifiedPvcs.clear();
-        pvcs.forEach(pvc =>
-          pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b'
-            ? this.protectedBPvcs.add(pvc.name)
-            : this.unclassifiedPvcs.add(pvc.name),
-        );
+        pvcs.forEach(pvc => this.unclassifiedPvcs.add(pvc.name));
       });
     });
 
     this.pvcGroup
       .get('claimName')
-      .setValidators([
-        Validators.required,
-        this.isMountedValidator(),
-        this.isProtectedBValidator(),
-      ]); //AAW
+      .setValidators([Validators.required, this.isMountedValidator()]); //AAW
   }
 
   // AAW

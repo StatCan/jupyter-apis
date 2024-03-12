@@ -417,39 +417,22 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 	// Check if it is a new PVC by checking if the value exists https://stackoverflow.com/a/31505089
 	if req.NewPvc.NewPvcMetadata.Name != nil {
 		pvcClaimName = *req.NewPvc.NewPvcMetadata.Name
-		if _, ok := notebook.GetObjectMeta().GetLabels()["notebook.statcan.gc.ca/protected-b"]; ok {
-			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      *req.NewPvc.NewPvcMetadata.Name,
-					Namespace: notebook.Namespace,
-					Labels:    map[string]string{"data.statcan.gc.ca/classification": "protected-b"},
-				},
-				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-					Resources: corev1.ResourceRequirements{
-						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
-						},
+		// Create the PVC
+		pvc = corev1.PersistentVolumeClaim{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      *req.NewPvc.NewPvcMetadata.Name,
+				Namespace: notebook.Namespace,
+			},
+			Spec: corev1.PersistentVolumeClaimSpec{
+				AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
+				Resources: corev1.ResourceRequirements{
+					Requests: corev1.ResourceList{
+						corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 					},
 				},
-			}
-		} else {
-			// Create the PVC
-			pvc = corev1.PersistentVolumeClaim{
-				ObjectMeta: metav1.ObjectMeta{
-					Name:      *req.NewPvc.NewPvcMetadata.Name,
-					Namespace: notebook.Namespace,
-				},
-				Spec: corev1.PersistentVolumeClaimSpec{
-					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-					Resources: corev1.ResourceRequirements{
-						Requests: corev1.ResourceList{
-							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
-						},
-					},
-				},
-			}
+			},
 		}
+
 		// Add the storage class, if set and not set to an "empty" value
 		if req.NewPvc.NewPvcSpec.StorageClassName != "" &&
 			req.NewPvc.NewPvcSpec.StorageClassName != "{none}" &&

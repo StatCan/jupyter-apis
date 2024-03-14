@@ -300,13 +300,15 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
-      nb.protB = this.parseProtBNotebook(nb);
+      nb.default = this.parseDefaultNotebook(nb);
     }
     return notebooksCopy;
   }
 
-  parseProtBNotebook(notebook: NotebookProcessedObject) {
-    if (notebook.labels?.['notebook.statcan.gc.ca/protected-b'] === 'true') {
+  parseDefaultNotebook(notebook: NotebookProcessedObject) {
+    if (
+      notebook.labels?.['notebook.statcan.gc.ca/default-notebook'] === 'true'
+    ) {
       return true;
     }
     return false;
@@ -380,7 +382,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
-      pvc.protB = this.parseProtBVolume(pvc);
       pvc.ageValue = pvc.age.uptime;
       pvc.ageTooltip = pvc.age.timestamp;
       pvc.link = {
@@ -402,13 +403,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
 
     return STATUS_TYPE.TERMINATING;
-  }
-
-  parseProtBVolume(pvc: PVCProcessedObject) {
-    if (pvc.labels?.['data.statcan.gc.ca/classification'] === 'protected-b') {
-      return true;
-    }
-    return false;
   }
 
   public reactVolumeToAction(a: ActionEvent) {

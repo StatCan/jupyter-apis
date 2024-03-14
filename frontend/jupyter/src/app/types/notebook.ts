@@ -36,7 +36,7 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
   deleteAction?: string;
   connectAction?: string;
   startStopAction?: string;
-  protB?: boolean;
+  default?: boolean;
   link: {
     text: string;
     url: string;
@@ -48,8 +48,6 @@ export interface NotebookFormObject {
   name: string;
   namespace: string;
   image: string;
-  imageGroupOne: string;
-  imageGroupTwo: string;
   imageGroupThree: string;
   allowCustomImage: boolean;
   imagePullPolicy: string;

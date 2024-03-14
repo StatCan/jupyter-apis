@@ -157,12 +157,8 @@
         "phase": "ready",
         "state": ""
       },
-      "volumes":[
-        "protb-nb"
-      ],
       "labels":{
-        "data.statcan.gc.ca/inject-blob-volumes":"true",
-        "notebook.statcan.gc.ca/protected-b":"true"
+        "data.statcan.gc.ca/inject-blob-volumes":"true"
       }
    }
   ],

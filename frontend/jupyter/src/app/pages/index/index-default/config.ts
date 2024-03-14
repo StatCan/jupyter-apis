@@ -14,7 +14,7 @@ import {
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { quantityToScalar } from '@kubernetes/client-node/dist/util';
-import { ProtBComponent } from './protb-icon/protb-icon.component';
+import { DefaultComponent } from './default-icon/default-icon.component';
 import { tableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 
@@ -30,6 +30,14 @@ export const defaultConfig: TableConfig = {
       sort: true,
     },
     {
+      matHeaderCellDef: '',
+      matColumnDef: 'default-notebook',
+      value: new ComponentValue({
+        component: DefaultComponent,
+      }),
+      sort: false,
+    },
+    {
       matHeaderCellDef: $localize`Name`,
       matColumnDef: 'name',
       style: { width: '25%' },
@@ -38,14 +46,6 @@ export const defaultConfig: TableConfig = {
         popoverField: 'name',
         truncate: true,
         linkType: LinkType.Internal,
-      }),
-      sort: true,
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'prot-b',
-      value: new ComponentValue({
-        component: ProtBComponent,
       }),
       sort: true,
     },

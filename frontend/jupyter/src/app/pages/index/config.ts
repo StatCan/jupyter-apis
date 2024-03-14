@@ -9,7 +9,6 @@ import {
 } from 'kubeflow';
 import { quantityToScalar } from '@kubernetes/client-node/dist/util';
 import { UsedByComponent } from './columns/used-by/used-by.component';
-import { ProtBComponent } from './index-default/protb-icon/protb-icon.component';
 
 export const tableConfig: TableConfig = {
   columns: [
@@ -31,14 +30,6 @@ export const tableConfig: TableConfig = {
         linkType: LinkType.Internal,
       }),
       sort: true,
-    },
-    {
-      matHeaderCellDef: '',
-      matColumnDef: 'prot-b',
-      value: new ComponentValue({
-        component: ProtBComponent,
-      }),
-      sort: false,
     },
     {
       matHeaderCellDef: $localize`Created at`,

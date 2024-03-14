@@ -42,8 +42,6 @@ describe('FormImageComponent', () => {
       customImage: new FormControl(),
       customImageCheck: new FormControl(),
       image: new FormControl(),
-      imageGroupOne: new FormControl(),
-      imageGroupTwo: new FormControl(),
       imageGroupThree: new FormControl(),
       serverType: new FormControl(),
       imagePullPolicy: new FormControl(),

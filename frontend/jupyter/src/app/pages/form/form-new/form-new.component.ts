@@ -127,20 +127,12 @@ export class FormNewComponent
       } else {
         notebook.serverType = 'jupyter';
       }
-    } else if (notebook.serverType === 'group-one') {
-      // Set notebook image from imageGroupOne
-      notebook.image = notebook.imageGroupOne;
-    } else if (notebook.serverType === 'group-two') {
-      // Set notebook image from imageGroupTwo
-      notebook.image = notebook.imageGroupTwo;
     } else if (notebook.serverType === 'group-three') {
       // Set notebook image from imageGroupThree
       notebook.image = notebook.imageGroupThree;
     }
 
     // Remove unnecessary images from the request sent to the backend
-    delete notebook.imageGroupOne;
-    delete notebook.imageGroupTwo;
     delete notebook.imageGroupThree;
 
     // Ensure CPU input is a string

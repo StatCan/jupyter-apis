@@ -45,8 +45,6 @@ describe('FormImageCustomComponent', () => {
       customImage: new FormControl(),
       customImageCheck: new FormControl(),
       image: new FormControl(),
-      imageGroupOne: new FormControl(),
-      imageGroupTwo: new FormControl(),
       imageGroupThree: new FormControl(),
     });
 
@@ -59,24 +57,18 @@ describe('FormImageCustomComponent', () => {
 
   it('should toggle image controls when custom image is checked', () => {
     const image = component.parentForm.get('image');
-    const imageGroupOne = component.parentForm.get('imageGroupOne');
-    const imageGroupTwo = component.parentForm.get('imageGroupTwo');
     const imageGroupThree = component.parentForm.get('imageGroupThree');
 
     let event = { checked: true } as MatCheckboxChange;
     component.onSelect(event);
 
     expect(image.disabled).toBe(true);
-    expect(imageGroupOne.disabled).toBe(true);
-    expect(imageGroupTwo.disabled).toBe(true);
     expect(imageGroupThree.disabled).toBe(true);
 
     event = { checked: false } as MatCheckboxChange;
     component.onSelect(event);
 
     expect(image.enabled).toBe(true);
-    expect(imageGroupOne.enabled).toBe(true);
-    expect(imageGroupTwo.enabled).toBe(true);
     expect(imageGroupThree.enabled).toBe(true);
   });
 });

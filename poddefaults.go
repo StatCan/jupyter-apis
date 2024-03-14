@@ -47,17 +47,14 @@ func (s *server) GetPodDefaults(w http.ResponseWriter, r *http.Request) {
 		if desc == "" {
 			desc = pd.Name
 		}
-
-		// Ignore the protected-b poddefault
 		labelMapped := reflect.ValueOf(pd.Spec.Selector.MatchLabels).MapKeys()[0].String()
 
-		if labelMapped != "notebook.statcan.gc.ca/protected-b" {
-			resp.PodDefaults = append(resp.PodDefaults, poddefaultresponse{
-				PodDefault:  *pd,
-				Label:       labelMapped,
-				Description: desc,
-			})
-		}
+		resp.PodDefaults = append(resp.PodDefaults, poddefaultresponse{
+			PodDefault:  *pd,
+			Label:       labelMapped,
+			Description: desc,
+		})
+
 	}
 
 	s.respond(w, r, resp)

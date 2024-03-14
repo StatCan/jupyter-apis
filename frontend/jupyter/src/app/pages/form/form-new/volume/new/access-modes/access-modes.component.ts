@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-volume-access-modes',
@@ -8,9 +8,9 @@ import { UntypedFormControl, Validators } from '@angular/forms';
 })
 export class VolumeAccessModesComponent implements OnInit {
   // modesArray is always an array
-  @Input() modesCtrl: UntypedFormControl;
+  @Input() modesCtrl: FormControl;
 
-  mode = new UntypedFormControl('', Validators.required);
+  mode = new FormControl('', Validators.required);
 
   constructor() {}
 

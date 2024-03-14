@@ -36,7 +36,7 @@ import { Subscription } from 'rxjs';
 import { addColumn, NAMESPACE_COLUMN, removeColumn } from './utils';
 import { MatSort } from '@angular/material/sort';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import {
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
@@ -73,7 +73,7 @@ export class TableComponent
   headers: { title: string }[] = [];
   isClear: boolean;
   filteredHeaders: { title: string }[] = [];
-  chipCtrl = new UntypedFormControl();
+  chipCtrl = new FormControl<string | null>(null);
   showDate = false;
   showStatus = false;
   LinkType = LinkType;

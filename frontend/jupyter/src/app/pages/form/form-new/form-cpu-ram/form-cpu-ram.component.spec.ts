@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -40,14 +36,14 @@ describe('FormCpuRamComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormCpuRamComponent);
     component = fixture.componentInstance;
-    component.parentForm = new UntypedFormGroup({
-      cpu: new UntypedFormControl(),
-      cpuLimit: new UntypedFormControl(),
-      memory: new UntypedFormControl(),
-      memoryLimit: new UntypedFormControl(),
-      gpus: new UntypedFormGroup({
-        vendor: new UntypedFormControl(),
-        num: new UntypedFormControl(),
+    component.parentForm = new FormGroup({
+      cpu: new FormControl(),
+      cpuLimit: new FormControl(),
+      memory: new FormControl(),
+      memoryLimit: new FormControl(),
+      gpus: new FormGroup({
+        vendor: new FormControl(),
+        num: new FormControl(),
       }),
     });
 

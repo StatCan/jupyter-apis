@@ -1,19 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-  FormControl,
-  ValidatorFn,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import {
-  NamespaceService,
-  getExistingNameValidator,
-  dns1035Validator,
-  getNameError,
-  DIALOG_RESP,
-} from 'kubeflow';
+import { NamespaceService, DIALOG_RESP } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { PVCPostObject } from 'src/app/types';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -28,7 +16,7 @@ export class VolumeFormComponent implements OnInit, OnDestroy {
   public TYPE_EMPTY = 'empty';
 
   public subs = new Subscription();
-  public formCtrl: UntypedFormGroup;
+  public formCtrl: FormGroup;
   public blockSubmit = false;
 
   public currNamespace = '';
@@ -38,7 +26,7 @@ export class VolumeFormComponent implements OnInit, OnDestroy {
 
   constructor(
     public ns: NamespaceService,
-    public fb: UntypedFormBuilder,
+    public fb: FormBuilder,
     public backend: JWABackendService,
     public dialog: MatDialogRef<VolumeFormComponent>,
   ) {

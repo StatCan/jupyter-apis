@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
-
-import { UntypedFormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 
 import { ErrorStateMatcher } from '@angular/material/core';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class ImmediateErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: UntypedFormControl | null,
+    control: FormControl | null,
     form: FormGroupDirective | NgForm | null,
   ): boolean {
     const isSubmitted = form && form.submitted;

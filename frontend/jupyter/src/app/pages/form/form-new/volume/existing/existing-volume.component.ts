@@ -1,9 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  UntypedFormControl,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { EXISTING_SOURCE, EXISTING_VOLUME_TYPE } from 'src/app/types';
 import {
   createExistingSourceFormGroup,
@@ -19,7 +15,7 @@ import { parseYAML } from 'src/app/shared/utils/yaml';
   styleUrls: ['./existing-volume.component.scss'],
 })
 export class ExistingVolumeComponent implements OnInit {
-  @Input() volGroup: UntypedFormGroup;
+  @Input() volGroup: FormGroup;
   @Input() mountedVolumes: Set<string>;
 
   EXISTING_VOLUME_TYPE = EXISTING_VOLUME_TYPE;
@@ -49,11 +45,11 @@ export class ExistingVolumeComponent implements OnInit {
       return EXISTING_VOLUME_TYPE.CUSTOM;
     }
 
-    if (this.volGroup.get('existingSource') instanceof UntypedFormControl) {
+    if (this.volGroup.get('existingSource') instanceof FormControl) {
       return EXISTING_VOLUME_TYPE.CUSTOM;
     }
 
-    if (this.volGroup.get('existingSource') instanceof UntypedFormGroup) {
+    if (this.volGroup.get('existingSource') instanceof FormGroup) {
       return EXISTING_VOLUME_TYPE.PVC;
     }
   }
@@ -71,23 +67,22 @@ export class ExistingVolumeComponent implements OnInit {
     if (type === EXISTING_VOLUME_TYPE.CUSTOM) {
       const currSrc = this.volGroup.get('existingSource').value;
       this.yamlInternal = dump(currSrc);
-      this.volGroup.setControl(
-        'existingSource',
-        new UntypedFormControl(currSrc),
-      );
+      this.volGroup.setControl('existingSource', new FormControl(currSrc));
       return;
     }
 
     // Use a FormGroup for PVC, since there will be a form with subfields
     this.volGroup.setControl('existingSource', createExistingSourceFormGroup());
 
-    const sourceGroup = this.volGroup.get('existingSource') as UntypedFormGroup;
+    const sourceGroup = this.volGroup.get('existingSource') as FormGroup;
     const source = EXISTING_SOURCE.PERSISTENT_VOLUME_CLAIM;
 
     sourceGroup.addControl(source, createSourceFormGroup(source));
   }
 
-  getPvcFormGroup(): AbstractControl {
-    return this.volGroup.get('existingSource.persistentVolumeClaim');
+  getPvcFormGroup(): FormGroup {
+    return this.volGroup.get(
+      'existingSource.persistentVolumeClaim',
+    ) as FormGroup;
   }
 }

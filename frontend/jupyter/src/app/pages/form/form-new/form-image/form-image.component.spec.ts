@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,13 +38,13 @@ describe('FormImageComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormImageComponent);
     component = fixture.componentInstance;
-    component.parentForm = new UntypedFormGroup({
-      customImage: new UntypedFormControl(),
-      customImageCheck: new UntypedFormControl(),
-      image: new UntypedFormControl(),
-      imageGroupThree: new UntypedFormControl(),
-      serverType: new UntypedFormControl(),
-      imagePullPolicy: new UntypedFormControl(),
+    component.parentForm = new FormGroup({
+      customImage: new FormControl(),
+      customImageCheck: new FormControl(),
+      image: new FormControl(),
+      imageGroupThree: new FormControl(),
+      serverType: new FormControl(),
+      imagePullPolicy: new FormControl(),
     });
 
     fixture.detectChanges();

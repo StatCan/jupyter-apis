@@ -6,16 +6,15 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {
-  UntypedFormGroup,
+  FormGroup,
   AbstractControl,
   Validators,
   ValidatorFn,
-  UntypedFormControl,
+  FormControl,
   FormGroupDirective,
   NgForm,
   ValidationErrors,
 } from '@angular/forms';
-import { calculateLimits } from '../utils';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { V1Namespace } from '@kubernetes/client-node';
 
@@ -34,7 +33,7 @@ type MaxResourceSpec = {
   styleUrls: ['./form-cpu-ram.component.scss'],
 })
 export class FormCpuRamComponent implements OnInit, OnChanges {
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
   @Input() readonlyCPU: boolean;
   @Input() readonlyMemory: boolean;
   @Input() readonlySpecs: boolean;
@@ -233,7 +232,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 // Error when invalid control is dirty, touched, or submitted, AAW
 export class parentErrorKeysErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(
-    control: UntypedFormControl | null,
+    control: FormControl | null,
     form: FormGroupDirective | NgForm | null,
   ): boolean {
     return !!(

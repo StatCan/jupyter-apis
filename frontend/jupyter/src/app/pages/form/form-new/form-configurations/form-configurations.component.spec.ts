@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -44,8 +44,8 @@ describe('FormConfigurationsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormConfigurationsComponent);
     component = fixture.componentInstance;
-    component.parentForm = new UntypedFormGroup({
-      configurations: new UntypedFormControl(),
+    component.parentForm = new FormGroup({
+      configurations: new FormControl(),
     });
 
     fixture.detectChanges();

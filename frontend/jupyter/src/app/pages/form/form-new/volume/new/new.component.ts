@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { V1PersistentVolumeClaim } from '@kubernetes/client-node';
 import { dump } from 'js-yaml';
 import { parseYAML } from 'src/app/shared/utils/yaml';
@@ -31,7 +27,7 @@ export class NewVolumeComponent {
     const pvcGroup = this.volGroup.get('newPvc');
 
     // if we have a form-control then we expect the user to be typing yaml text
-    if (pvcGroup instanceof UntypedFormControl) {
+    if (pvcGroup instanceof FormControl) {
       return NEW_VOLUME_TYPE.CUSTOM;
     }
 
@@ -44,7 +40,7 @@ export class NewVolumeComponent {
     return NEW_VOLUME_TYPE.EMPTY;
   }
 
-  @Input() volGroup: UntypedFormGroup;
+  @Input() volGroup: FormGroup;
   @Input() externalName: string;
   @Input() sizes: Set<string>; // AAW change, has to take place here to control difference between workspace and data vol sizes.
   @Input() mountedVolumes: Set<string>;
@@ -79,7 +75,7 @@ export class NewVolumeComponent {
       // Remove the FormGroup and make newPvc a FormControl, since it's value
       // will be updated from the parsed YAML that the user will write
       const currPvc = this.volGroup.get('newPvc').value;
-      this.volGroup.setControl('newPvc', new UntypedFormControl({}));
+      this.volGroup.setControl('newPvc', new FormControl({}));
       this.yaml = dump(currPvc);
       return;
     }
@@ -92,10 +88,10 @@ export class NewVolumeComponent {
     }
 
     // Add annotations for Rok snapshot
-    const meta = this.volGroup.get('newPvc.metadata') as UntypedFormGroup;
+    const meta = this.volGroup.get('newPvc.metadata') as FormGroup;
     setGenerateNameCtrl(meta);
-    const annotations = new UntypedFormGroup({
-      'rok/origin': new UntypedFormControl(
+    const annotations = new FormGroup({
+      'rok/origin': new FormControl(
         '',
         [Validators.required],
         [rokUrlValidator(this.rok)],

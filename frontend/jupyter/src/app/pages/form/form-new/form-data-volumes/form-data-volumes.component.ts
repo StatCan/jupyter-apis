@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import {
   createExistingVolumeFormGroup,
   createNewPvcVolumeFormGroup,
@@ -17,7 +17,7 @@ import {
 export class FormDataVolumesComponent {
   openPanel = new Set();
 
-  @Input() volsArray: UntypedFormArray;
+  @Input() volsArray: FormArray;
   @Input() readonly: boolean;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
@@ -35,7 +35,7 @@ export class FormDataVolumesComponent {
     this.volsArray.removeAt(id);
     this.openPanel.clear();
     this.volsArray.controls.forEach((v, i) => {
-      (v as UntypedFormGroup).get('mount').updateValueAndValidity();
+      (v as FormGroup).get('mount').updateValueAndValidity();
     });
   }
 
@@ -63,7 +63,7 @@ export class FormDataVolumesComponent {
   checkDuplicacy(index: number) {
     this.volsArray.controls.forEach((v, i) => {
       if (index !== i) {
-        (v as UntypedFormGroup).get('mount').updateValueAndValidity();
+        (v as FormGroup).get('mount').updateValueAndValidity();
       }
     });
   }

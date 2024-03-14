@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { PodDefault } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import { NamespaceService } from 'kubeflow';
@@ -14,7 +14,7 @@ export class FormConfigurationsComponent implements OnInit, OnDestroy {
   podDefaults: PodDefault[];
   subscriptions = new Subscription();
   isVisible = false; //Hidding the configuration by default
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
 
   constructor(public ns: NamespaceService, public backend: JWABackendService) {}
 

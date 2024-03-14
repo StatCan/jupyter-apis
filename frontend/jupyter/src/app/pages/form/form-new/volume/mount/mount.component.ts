@@ -1,9 +1,5 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import {
-  AbstractControl,
-  UntypedFormArray,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,13 +10,13 @@ import { Subscription } from 'rxjs';
 export class VolumeMountComponent implements OnDestroy {
   @Input() checkDuplicacy: () => void;
 
-  private prvVolGroup: UntypedFormGroup;
+  private prvVolGroup: FormGroup;
   @Input()
-  get volGroup(): UntypedFormGroup {
+  get volGroup(): FormGroup {
     return this.prvVolGroup;
   }
 
-  set volGroup(volGroup: UntypedFormGroup) {
+  set volGroup(volGroup: FormGroup) {
     this.prvVolGroup = volGroup;
     this.valueChangeSubscription.unsubscribe();
     this.updateMountOnNameChange(volGroup);
@@ -34,10 +30,10 @@ export class VolumeMountComponent implements OnDestroy {
     this.valueChangeSubscription.unsubscribe();
   }
 
-  updateMountOnNameChange(volGroup: UntypedFormGroup) {
+  updateMountOnNameChange(volGroup: FormGroup) {
     // If volGroup's parent is a FormArray it means that this component is used
     // in Data volumes else we disable this feature.
-    if (!(volGroup.parent instanceof UntypedFormArray)) {
+    if (!(volGroup.parent instanceof FormArray)) {
       return;
     }
 
@@ -48,12 +44,14 @@ export class VolumeMountComponent implements OnDestroy {
     if (volGroup.contains('existingSource')) {
       this.updateMountPath(
         volGroup,
-        volGroup.get('existingSource.persistentVolumeClaim.claimName'),
+        volGroup.get(
+          'existingSource.persistentVolumeClaim.claimName',
+        ) as FormControl,
       );
     }
   }
 
-  updateMountPath(volGroup: UntypedFormGroup, nameCtrl: AbstractControl) {
+  updateMountPath(volGroup: FormGroup, nameCtrl: FormControl) {
     const mountPathCtrl = volGroup.get('mount');
     this.valueChangeSubscription = nameCtrl.valueChanges.subscribe(v => {
       const mount = v;
@@ -65,14 +63,14 @@ export class VolumeMountComponent implements OnDestroy {
     });
   }
 
-  getNewVolumeNameCtrl(volGroup: UntypedFormGroup): AbstractControl {
-    const metadata = volGroup.get('newPvc.metadata') as UntypedFormGroup;
+  getNewVolumeNameCtrl(volGroup: FormGroup): FormControl {
+    const metadata = volGroup.get('newPvc.metadata') as FormGroup;
     if (metadata.contains('name')) {
-      return metadata.get('name');
+      return metadata.get('name') as FormControl;
     }
 
     if (metadata.contains('generateName')) {
-      return metadata.get('generateName');
+      return metadata.get('generateName') as FormControl;
     }
   }
 

@@ -6,12 +6,7 @@ import {
   LOCALE_ID,
   Inject,
 } from '@angular/core';
-import {
-  UntypedFormGroup,
-  Validators,
-  ValidatorFn,
-  AbstractControl,
-} from '@angular/forms';
+import { FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -25,7 +20,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   styleUrls: ['./form-image-custom.component.scss'],
 })
 export class FormImageCustomComponent implements OnInit, OnDestroy {
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
   @Input() images: string[];
   @Input() imagesGroupThree: Config['imageGroupThree'];
   @Input() allowCustomImage: boolean;

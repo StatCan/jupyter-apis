@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormModule, RokService, SnackBarService } from 'kubeflow';
 
@@ -38,23 +34,23 @@ describe('RokUrlComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RokUrlComponent);
     component = fixture.componentInstance;
-    component.volGroup = new UntypedFormGroup({
-      mount: new UntypedFormControl(),
-      newPvc: new UntypedFormGroup({
-        metadata: new UntypedFormGroup({
-          annotations: new UntypedFormGroup({
-            ['rok/origin']: new UntypedFormControl(),
+    component.volGroup = new FormGroup({
+      mount: new FormControl(),
+      newPvc: new FormGroup({
+        metadata: new FormGroup({
+          annotations: new FormGroup({
+            ['rok/origin']: new FormControl(),
           }),
         }),
-        spec: new UntypedFormGroup({
-          resources: new UntypedFormGroup({
-            requests: new UntypedFormGroup({
-              storage: new UntypedFormControl(),
+        spec: new FormGroup({
+          resources: new FormGroup({
+            requests: new FormGroup({
+              storage: new FormControl(),
             }),
           }),
         }),
       }),
-      existingSource: new UntypedFormControl(),
+      existingSource: new FormControl(),
     });
 
     fixture.detectChanges();

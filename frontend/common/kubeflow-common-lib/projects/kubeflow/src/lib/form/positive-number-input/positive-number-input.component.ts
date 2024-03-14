@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AbstractControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'lib-positive-number-input',
@@ -7,7 +7,7 @@ import { AbstractControl, Validators } from '@angular/forms';
   styleUrls: ['./positive-number-input.component.scss'],
 })
 export class PositiveNumberInputComponent implements OnInit {
-  @Input() sizeControl: AbstractControl;
+  @Input() sizeControl: FormControl<number | string>;
 
   @Input() label: string;
 

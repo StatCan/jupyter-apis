@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@angular/core';
 import {
-  UntypedFormGroup,
+  FormGroup,
   Validators,
   ValidatorFn,
   AbstractControl,
@@ -25,7 +25,7 @@ import { Config } from 'src/app/types';
   styleUrls: ['./form-image.component.scss'],
 })
 export class FormImageComponent implements OnInit, OnDestroy {
-  @Input() parentForm: UntypedFormGroup;
+  @Input() parentForm: FormGroup;
   @Input() images: string[];
   @Input() imagesGroupThree: Config['imageGroupThree'];
   @Input() allowCustomImage: boolean;

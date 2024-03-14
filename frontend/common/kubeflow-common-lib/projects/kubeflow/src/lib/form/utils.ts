@@ -1,5 +1,4 @@
-import { FormControl, AbstractControl } from '@angular/forms';
-import { HttpHeaders } from '@angular/common/http';
+import { AbstractControl } from '@angular/forms';
 
 export function updateNonDirtyControl(control: AbstractControl, value: any) {
   if (!control.dirty) {

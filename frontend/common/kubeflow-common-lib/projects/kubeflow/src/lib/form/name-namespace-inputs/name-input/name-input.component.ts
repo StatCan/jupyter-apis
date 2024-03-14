@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import {
   getNameError,
   MAX_NAME_LENGTH,
@@ -16,7 +16,7 @@ export class NameInputComponent implements OnInit {
   private existingNamesPrv = new Set<string>();
 
   @Input()
-  nameControl: AbstractControl;
+  nameControl: FormControl<string | null>;
 
   @Input()
   resourceName = '';

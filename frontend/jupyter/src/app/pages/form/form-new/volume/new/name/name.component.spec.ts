@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,8 +32,8 @@ describe('VolumeNameComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VolumeNameComponent);
     component = fixture.componentInstance;
-    component.metadataGroup = new UntypedFormGroup({
-      name: new UntypedFormControl(''),
+    component.metadataGroup = new FormGroup({
+      name: new FormControl(''),
     });
     component.mountedVolumes = new Set();
 

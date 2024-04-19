@@ -222,16 +222,16 @@ func main() {
 		},
 	}, s.GetDefaultNotebook)).Methods("GET")
 
-	// router.HandleFunc("/api/namespaces/{namespace}/defaultvolume", s.checkAccess(authorizationv1.SubjectAccessReview{
-	// 	Spec: authorizationv1.SubjectAccessReviewSpec{
-	// 		ResourceAttributes: &authorizationv1.ResourceAttributes{
-	// 			Group:    kubeflowv1.SchemeGroupVersion.Group,
-	// 			Verb:     "get",
-	// 			Resource: "persistentvolumeclaims",
-	// 			Version:  kubeflowv1.SchemeGroupVersion.Version,
-	// 		},
-	// 	},
-	// }, s.GetDefaultVolume)).Methods("GET")
+	router.HandleFunc("/api/namespaces/{namespace}/defaultvolume", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
+				Verb:     "get",
+				Resource: "persistentvolumeclaims",
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetDefaultVolume)).Methods("GET")
 
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}/pod", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{

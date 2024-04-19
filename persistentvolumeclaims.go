@@ -34,6 +34,11 @@ type pvcsresponse struct {
 	PersistentVolumeClaims []pvcresponse `json:"pvcs"`
 }
 
+type pvcapiresponse struct {
+	APIResponseBase
+	PersistentVolumeClaim pvcresponse `json:"pvcs"`
+}
+
 type getpvcresponse struct {
 	APIResponseBase
 	Pvc       corev1.PersistentVolumeClaim `json:"pvc"`
@@ -204,32 +209,57 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 	}
 
 	for _, pvc := range pvcs {
-		size := pvc.Status.Capacity.Storage()
-		if size == nil {
-			size = pvc.Spec.Resources.Requests.Storage()
-		}
-
-		allevents, err := s.listers.events.Events(pvc.Namespace).List(labels.Everything())
-		if err != nil {
-			log.Printf("failed to load events for %s/%s: %v", pvc.Namespace, pvc.Name, err)
-		}
-
-		status := GetPvcStatus(pvc, allevents)
-		notebooksList := GetNotebooksUsingPvc(pvc.Name, notebooks)
-		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, pvcresponse{
-			Name:      pvc.Name,
-			Namespace: pvc.Namespace,
-			Status:    status,
-			Age:       pvc.CreationTimestamp.Time,
-			Capacity:  *size,
-			Modes:     pvc.Spec.AccessModes,
-			Class:     *pvc.Spec.StorageClassName,
-			Notebooks: notebooksList,
-			Labels:    pvc.Labels,
-		})
+		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, s.getPvcData(pvc, notebooks))
 	}
 
 	s.respond(w, r, &resp)
+}
+
+// GetPersistentVolumeClaims returns the PVCs in the requested namespace.
+func (s *server) GetDefaultVolume(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	log.Printf("loading persistent volume claims for %q", namespace)
+
+	pvcs, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := &pvcapiresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+	}
+
+	for _, pvc := range pvcs {
+		if val, ok := pvc.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
+			if val == "true" {
+				resp.PersistentVolumeClaim = s.getPvcData(pvc, notebooks)
+				resp.APIResponseBase.Success = true
+				break
+			}
+		}
+	}
+	if !resp.APIResponseBase.Success {
+		s.respond(w, r, &APIResponseBase{
+			Success: false,
+			Status:  http.StatusNotFound,
+			Log:     "No default volume found",
+		})
+		return
+	}
+
+	s.respond(w, r, resp)
 }
 
 // TODO: Delete pvc
@@ -364,4 +394,30 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 		Events: events.Items,
 	}
 	s.respond(w, r, resp)
+}
+
+func (s *server) getPvcData(pvc *corev1.PersistentVolumeClaim, notebooks []*kf_v1.Notebook) pvcresponse {
+	size := pvc.Status.Capacity.Storage()
+	if size == nil {
+		size = pvc.Spec.Resources.Requests.Storage()
+	}
+
+	allevents, err := s.listers.events.Events(pvc.Namespace).List(labels.Everything())
+	if err != nil {
+		log.Printf("failed to load events for %s/%s: %v", pvc.Namespace, pvc.Name, err)
+	}
+
+	status := GetPvcStatus(pvc, allevents)
+	notebooksList := GetNotebooksUsingPvc(pvc.Name, notebooks)
+	return pvcresponse{
+		Name:      pvc.Name,
+		Namespace: pvc.Namespace,
+		Status:    status,
+		Age:       pvc.CreationTimestamp.Time,
+		Capacity:  *size,
+		Modes:     pvc.Spec.AccessModes,
+		Class:     *pvc.Spec.StorageClassName,
+		Notebooks: notebooksList,
+		Labels:    pvc.Labels,
+	}
 }

@@ -17,27 +17,21 @@
 spawnerFormDefaults:
   image:
     # The container Image for the user's Jupyter Notebook
-    value: k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1
+    value: artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2
     # The list of available standard container Images
     options:
-      - k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1
-      - k8scc01covidacr.azurecr.io/jupyterlab-pytorch:v1
-      - k8scc01covidacr.azurecr.io/jupyterlab-tensorflow:v1
+      - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2
+      - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-pytorch:v2
+      - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-tensorflow:v2
     readOnly: false
   imageGroupThree:
     # The container Image for the user's Group Three Server (SAS)
     # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
     # is applied to notebook in this group, configuring
     # the Istio rewrite for containers that host their web UI at `/`
-    enabledCondition:
-      labels:
-        state.aaw.statcan.gc.ca/exists-non-sas-notebook-user: false
-    disabledMessage:
-      en: "SAS is unavailable while non-employees have access to this profile."
-      fr: "SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."
-    value: k8scc01covidacr.azurecr.io/sas:latest    # The list of available standard container Images
+    value: artifactory.cloud.statcan.ca/das-aaw-docker/sas:v2    # The list of available standard container Images
     options:
-    - k8scc01covidacr.azurecr.io/sas:latest
+    - artifactory.cloud.statcan.ca/das-aaw-docker/sas:v2
   hideRegistry: true
   hideTag: true
   allowCustomImage: true
@@ -172,7 +166,7 @@ spawnerFormDefaults:
     readOnly: false
   tolerationGroup:
     # The default `groupKey` from the options list
-    # If readonly, the default value will be the only option 
+    # If readonly, the default value will be the only option
     value: "none"
     # The list of available tolerationGroup configs
     options: []

@@ -11,11 +11,13 @@ import (
 	"net/http"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
 	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	"github.com/gorilla/mux"
+	"golang.org/x/exp/slices"
 	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -479,10 +481,27 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 	return nil
 }
 
+func (s *server) enumerateNames(name string, nameList []string) string {
+	if !slices.Contains(nameList, name) {
+		return name
+	}
+
+	count := 1
+	for slices.Contains(nameList, name+"-"+strconv.Itoa(count)) {
+		count++
+	}
+
+	return name + "-" + strconv.Itoa(count)
+}
+
 // Sets default values to notebook request if missing
-func (s *server) createDefaultNotebook(namespace string) (newnotebookrequest, error) {
+func (s *server) createDefaultNotebook(namespace string, notebookNames []string, pvcNames []string) (newnotebookrequest, error) {
 	var notebook newnotebookrequest
 	notebookname := namespace + "-notebook"
+
+	// updates the notebook name with a trailing number to avoid duplicate values
+	notebookname = s.enumerateNames(notebookname, notebookNames)
+
 	cpuvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
 	if err != nil {
 		return notebook, err
@@ -508,6 +527,10 @@ func (s *server) createDefaultNotebook(namespace string) (newnotebookrequest, er
 		return notebook, err
 	}
 	workspacevolumename := notebookname + "-workspace"
+
+	// updates the volume name with a trailing number to avoid duplicate values
+	workspacevolumename = s.enumerateNames(workspacevolumename, pvcNames)
+
 	workspaceVol := volrequest{
 		Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount,
 		NewPvc: NewPvc{
@@ -586,7 +609,29 @@ func (s *server) NewDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
 
-	req, err := s.createDefaultNotebook(namespace)
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	var notebookNames []string
+	for _, notebook := range notebooks {
+		notebookNames = append(notebookNames, notebook.Name)
+	}
+
+	pvcs, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	var pvcNames []string
+	for _, pvc := range pvcs {
+		pvcNames = append(pvcNames, pvc.Name)
+	}
+
+	req, err := s.createDefaultNotebook(namespace, notebookNames, pvcNames)
 	if err != nil {
 		s.error(w, r, err)
 		return

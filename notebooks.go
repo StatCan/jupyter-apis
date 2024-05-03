@@ -498,7 +498,10 @@ func (s *server) enumerateNames(name string, nameList []string) string {
 func (s *server) createDefaultNotebook(namespace string, notebookNames []string, pvcNames []string) (newnotebookrequest, error) {
 	var notebook newnotebookrequest
 	notebookname := namespace + "-notebook"
+
+	// updates the notebook name with a trailing number to avoid duplicate values
 	notebookname = s.enumerateNames(notebookname, notebookNames)
+
 	cpuvalue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
 	if err != nil {
 		return notebook, err
@@ -524,7 +527,10 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 		return notebook, err
 	}
 	workspacevolumename := notebookname + "-workspace"
+
+	// updates the volume name with a trailing number to avoid duplicate values
 	workspacevolumename = s.enumerateNames(workspacevolumename, pvcNames)
+
 	workspaceVol := volrequest{
 		Mount: s.Config.SpawnerFormDefaults.WorkspaceVolume.Value.Mount,
 		NewPvc: NewPvc{

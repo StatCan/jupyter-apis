@@ -499,18 +499,18 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 	var notebook newnotebookrequest
 	notebookname := namespace + "-notebook"
 
-	// Check if a default notebook exists
-	notebooks, errNotebook := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
-	if errNotebook != nil {
-		return notebook, errNotebook
+	notebookRequirement, err := labels.NewRequirement("notebook.statcan.gc.ca/default-notebook", selection.Exists, []string{})
+	if err != nil {
+		return notebook, errors.New("an error occurent checking for a default notebook")
+	}
+	labelSelector := labels.NewSelector().Add(*notebookRequirement)
+	pods, err := s.listers.notebooks.Notebooks(namespace).List(labelSelector)
+	if err != nil {
+		return notebook, errors.New("an error occurent checking for a default notebook")
 	}
 
-	for _, notebookItem := range notebooks {
-		if val, ok := notebookItem.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
-			if val == "true" {
-				return notebook, errors.New("Notebook Already Exists")
-			}
-		}
+	if len(pods) != 0 {
+		return notebook, errors.New("a default notebook already exists")
 	}
 
 	// updates the notebook name with a trailing number to avoid duplicate values

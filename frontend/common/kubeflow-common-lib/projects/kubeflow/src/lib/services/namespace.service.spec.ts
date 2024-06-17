@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 
 export class MockNamespaceService {
   getSelectedNamespace(): Observable<string> {
-    return of('kubeflow-user');
+    return of('wendy-gaultier1');
   }
 }
 

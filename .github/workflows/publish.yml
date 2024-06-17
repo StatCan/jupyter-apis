@@ -75,15 +75,15 @@ jobs:
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
         trivy image localhost:5000/jupyter-apis-aaw2:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
   
-    # Run Dockle
-    - name: Run dockle
-      uses: goodwithtech/dockle-action@main
-      with:
-        image: localhost:5000/jupyter-apis-aaw2:${{ github.sha }}
-        format: 'list'
-        exit-code: '0'
-        exit-level: 'fatal'
-        ignore: 'DKL-DI-0006'
+    # Run Dockle -> Will need to be replace to hadolint but on hold
+    # - name: Run dockle
+    #   uses: goodwithtech/dockle-action@main
+    #   with:
+    #     image: localhost:5000/jupyter-apis-aaw2:${{ github.sha }}
+    #     format: 'list'
+    #     exit-code: '0'
+    #     exit-level: 'fatal'
+    #     ignore: 'DKL-DI-0006'
 
     # Container build and push to a Azure Container registry (ACR)
     - name: Push to ACR if necessary

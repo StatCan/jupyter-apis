@@ -30,7 +30,7 @@ jobs:
     # Determine if pushing to ACR or DEV ACR
     # Bypassed for dev, only push if has auto-deploy tag
     - name: Set ENV variables for a PR
-      if: github.event_name == 'pull_request' && contains( github.event.pull_request.labels.*.name, 'auto-deploy')
+      if: github.event_name == 'pull_request'
       run: echo "REGISTRY=${{env.REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
    
     - name: Set ENV variable for pushes to main branch of 2.0

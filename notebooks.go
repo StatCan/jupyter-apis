@@ -504,12 +504,12 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 		return notebook, errors.New("an error occurent checking for a default notebook")
 	}
 	labelSelector := labels.NewSelector().Add(*notebookRequirement)
-	pods, err := s.listers.notebooks.Notebooks(namespace).List(labelSelector)
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labelSelector)
 	if err != nil {
 		return notebook, errors.New("an error occurent checking for a default notebook")
 	}
 
-	if len(pods) != 0 {
+	if len(notebooks) != 0 {
 		return notebook, errors.New("a default notebook already exists")
 	}
 

@@ -13,6 +13,7 @@ on:
 
 env:
   REGISTRY_NAME: k8scc01covidacr
+  # Dev Registry cannot be used in 2.0 since we don't have access to the acrdev
   DEV_REGISTRY_NAME: k8scc01covidacrdev
   TRIVY_VERSION: "v0.43.1"
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -27,11 +28,12 @@ jobs:
           - 5000:5000
     steps:
     # Determine if pushing to ACR or DEV ACR
+    # Bypassed for dev, only push if has auto-deploy tag
     - name: Set ENV variables for a PR
       if: github.event_name == 'pull_request'
-      run: echo "REGISTRY=${{env.DEV_REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
+      run: echo "REGISTRY=${{env.REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
    
-    - name: Set ENV variable for pushes to master
+    - name: Set ENV variable for pushes to main branch of 2.0
       if: github.event_name == 'push' && github.ref == 'refs/heads/jupyter-apis-aaw2.0'
       run: echo "REGISTRY=${{env.REGISTRY_NAME}}.azurecr.io" >> "$GITHUB_ENV"
 
@@ -75,15 +77,15 @@ jobs:
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin ${{ env.TRIVY_VERSION }}
         trivy image localhost:5000/jupyter-apis-aaw2:${{ github.sha }} --exit-code 1 --timeout=20m --security-checks vuln --severity CRITICAL
   
-    # Run Dockle
-    - name: Run dockle
-      uses: goodwithtech/dockle-action@main
-      with:
-        image: localhost:5000/jupyter-apis-aaw2:${{ github.sha }}
-        format: 'list'
-        exit-code: '0'
-        exit-level: 'fatal'
-        ignore: 'DKL-DI-0006'
+    # Run Dockle -> Will need to be replace to hadolint but on hold
+    # - name: Run dockle
+    #   uses: goodwithtech/dockle-action@main
+    #   with:
+    #     image: localhost:5000/jupyter-apis-aaw2:${{ github.sha }}
+    #     format: 'list'
+    #     exit-code: '0'
+    #     exit-level: 'fatal'
+    #     ignore: 'DKL-DI-0006'
 
     # Container build and push to a Azure Container registry (ACR)
     - name: Push to ACR if necessary

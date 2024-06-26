@@ -16,6 +16,7 @@ env:
   DEV_REGISTRY_NAME: k8scc01covidacrdev
   TRIVY_VERSION: "v0.43.1"
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  HADOLINT_VERSION: "2.12.0"
 
 jobs:
   build:

@@ -63,7 +63,7 @@ jobs:
         username: ${{ secrets.DEV_REGISTRY_USERNAME }}
         password: ${{ secrets.DEV_REGISTRY_PASSWORD }}
 
-- name: Run Hadolint
+    - name: Run Hadolint
       run:  |
         sudo curl -L https://github.com/hadolint/hadolint/releases/download/v${{ env.HADOLINT_VERSION }}/hadolint-Linux-x86_64 --output hadolint
         sudo chmod +x hadolint

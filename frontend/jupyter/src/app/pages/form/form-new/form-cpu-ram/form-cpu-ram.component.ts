@@ -210,10 +210,9 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
 
   private maxResourcesValidator(input: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const gpuNumValue = this.parentForm.get('gpus').get('num').value;
-      const gpu = gpuNumValue === 'none' ? 0 : parseInt(gpuNumValue, 10) || 0;
-      const max = this.MAX_FOR_GPU.get(gpu)[input];
-
+      // Hardcoding to 0 for gpu value to minimize code changes
+      // BTIS-409
+      const max = this.MAX_FOR_GPU.get(0)[input];
       return control.value > max
         ? { max: { max, actual: control.value } }
         : null;

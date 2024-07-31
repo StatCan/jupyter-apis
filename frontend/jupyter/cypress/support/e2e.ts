@@ -52,17 +52,6 @@ declare global {
       mockDefaultStorageClassRequest(): Chainable<void>;
 
       /**
-       * Custom command to mock requests at '/api/gpus'
-       * and returns an object with empty vendors list [].
-       */
-      mockGpusRequest(): Chainable<void>;
-
-      /**
-       * Custom command to mock requests at '/api/config'
-       */
-      mockConfigRequest(): Chainable<void>;
-
-      /**
        * Custom command to mock request at '/api/namespaces/<namespace>/poddefaults'
        * and returns a mock array of PodDefaults for the given namespace
        */

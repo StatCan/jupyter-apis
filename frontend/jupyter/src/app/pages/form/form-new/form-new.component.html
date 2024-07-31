@@ -51,13 +51,6 @@
           [nsMetadata]="nsMetadata"
         ></app-form-cpu-ram>
 
-        <app-form-gpus
-          [parentForm]="formCtrl"
-          [vendors]="config?.gpus?.value.vendors"
-          (gpuValueEvent)="checkGPU($event)"
-          [nsMetadata]="nsMetadata"
-        ></app-form-gpus>
-
         <app-form-workspace-volume
           *ngIf="formCtrl.get('workspace')"
           [readonly]="config?.workspaceVolume?.readOnly"

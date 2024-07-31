@@ -1,7 +1,6 @@
 describe('New notebook form', () => {
   beforeEach(() => {
     cy.mockDashboardRequest();
-    cy.mockGpusRequest();
     cy.mockConfigRequest();
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
@@ -13,7 +12,6 @@ describe('New notebook form', () => {
     cy.visit('/new');
     cy.wait([
       '@mockDashboardRequest',
-      '@mockGpusRequest',
       '@mockConfigRequest',
       '@mockNotebooksRequest',
       '@mockPoddefaultsRequest',
@@ -689,22 +687,15 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="memory"]')
         .find('input')
         .invoke('val')
-        .should('eq', '2.0');
+        .should('eq', '2');
       cy.get('[data-cy-form-input="cpuLimit"]')
         .find('input')
         .invoke('val')
-        .should('eq', '4.0');
+        .should('eq', '4');
       cy.get('[data-cy-form-input="memoryLimit"]')
         .find('input')
         .invoke('val')
-        .should('eq', '4.0');
-
-      cy.get('[data-cy-form-input="gpus"]')
-        .find('.mat-mdc-select-value')
-        .should('have.text', 'None');
-      cy.get('[data-cy-form-input="vendor"]')
-        .find('.mat-mdc-select-value')
-        .should('have.text', 'NVIDIA');
+        .should('eq', '4');
 
       cy.get(
         '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',
@@ -782,56 +773,6 @@ describe('New notebook form', () => {
       cy.get(
         '[data-cy-form-input="serverType"] > mat-button-toggle[value="group-three"] > button',
       ).should('be.disabled');
-    });
-
-    it('should create a jupyter GPU notebook', () => {
-      cy.get('lib-name-input[resourcename="Notebook Server"]')
-        .find('input')
-        .type('test-notebook-gpu');
-      cy.get('[data-cy-advanced-options-button]').click();
-      // select different jupyter image
-      cy.get('[data-cy-form-input="serverImage"]').click();
-      cy.get('[role="listbox"] > mat-option')
-        .contains('jupyterlab-tensorflow')
-        .click();
-      // set a gpu
-      cy.get('[data-cy-form-input="vendor"]')
-        .find('mat-select')
-        .should('have.class', 'mat-mdc-select-disabled');
-      cy.get('[data-cy-form-input="gpus"]').click();
-      cy.get('[role="listbox"] > mat-option').should('have.length', 2);
-      cy.get('[role="listbox"] > mat-option').contains('1').click();
-      cy.get('[data-cy-form-input="vendor"]')
-        .find('mat-select')
-        .should('not.have.class', 'mat-mdc-select-disabled');
-      cy.get('[data-cy-form-input="vendor"]').click();
-      cy.get('[role="listbox"] > mat-option').should('have.length', 1);
-      cy.get('[role="listbox"] > mat-option').contains('NVIDIA').click();
-      cy.get('[data-cy-form-input="cpu"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '4.0');
-      cy.get('[data-cy-form-input="memory"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '96.0');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '4.0');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '96.0');
-      // submit the notebook
-      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
-      cy.wait('@mockSubmitNotebook');
-      cy.url().should('eq', 'http://localhost:4200/');
     });
 
     it('should create a custom image notebook', () => {

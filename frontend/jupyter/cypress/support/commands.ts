@@ -73,15 +73,6 @@ Cypress.Commands.add('mockDefaultStorageClassRequest', () => {
   }).as('mockDefaultStorageClassRequest');
 });
 
-Cypress.Commands.add('mockGpusRequest', () => {
-  cy.intercept('GET', '/api/gpus', {
-    success: true,
-    status: 200,
-    user: null,
-    vendors: ['nvidia.com/gpu'],
-  }).as('mockGpusRequest');
-});
-
 Cypress.Commands.add('mockConfigRequest', () => {
   cy.intercept('GET', '/api/config', {
     fixture: 'config',

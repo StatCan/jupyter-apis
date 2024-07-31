@@ -202,6 +202,7 @@ export class FormNewComponent
   }
 
   // Automatically set values of CPU and Memory if GPU is 1
+  // Removing GPU BTIS-409
   checkGPU(gpu: string) {
     if (gpu === 'none') {
       this.readonlySpecs = false;

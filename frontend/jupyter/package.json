@@ -20,7 +20,7 @@
     "test:prod": "ng test --browsers=ChromeHeadless --watch=false",
     "ui-test": "cypress open . --e2e",
     "ui-test-ci": "cypress run . --e2e",
-    "ui-test-ci-all": "cypress run . --e2e --browser=chrome && cypress run . --e2e --browser=firefox",
+    "ui-test-ci-all": "cypress run . --e2e --browser=chrome && cypress run . --e2e --browser=edge",
     "lint-check": "ng lint",
     "lint": "ng lint --fix",
     "build:test": "ng build --configuration production --localize"

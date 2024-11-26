@@ -141,6 +141,7 @@ export const defaultConfig: TableConfig = {
           name: 'start-stop',
           tooltipInit: $localize`Stop this notebook server`,
           tooltipReady: $localize`Start this notebook server`,
+          // tooltip: $localize`test`,
           color: '',
           field: 'startStopAction',
           iconInit: 'material:stop',

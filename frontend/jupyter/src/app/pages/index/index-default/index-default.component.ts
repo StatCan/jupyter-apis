@@ -71,6 +71,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   private newNotebookButton = new ToolbarButton({
     text: $localize`New Notebook`,
+    tooltip: $localize`Add a new notebook`,
     icon: 'add',
     stroked: true,
     fn: () => {

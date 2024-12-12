@@ -74,7 +74,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       .setValidators([
         Validators.required,
         Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
-        Validators.min(0.5),
+        Validators.min(0.1),
         this.maxResourcesValidator('cpuLimit'),
         this.limitValidator('cpu'),
       ]);
@@ -83,7 +83,7 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
       .setValidators([
         Validators.required,
         Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
-        Validators.min(1),
+        Validators.min(0.5),
         this.maxResourcesValidator('memoryLimit'),
         this.limitValidator('memory'),
       ]);

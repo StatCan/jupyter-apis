@@ -377,7 +377,7 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
 					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-					Resources: corev1.ResourceRequirements{
+					Resources: corev1.VolumeResourceRequirements{
 						Requests: corev1.ResourceList{
 							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 						},
@@ -393,7 +393,7 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 				},
 				Spec: corev1.PersistentVolumeClaimSpec{
 					AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-					Resources: corev1.ResourceRequirements{
+					Resources: corev1.VolumeResourceRequirements{
 						Requests: corev1.ResourceList{
 							corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 						},

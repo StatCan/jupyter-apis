@@ -22,7 +22,7 @@ RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
 RUN ./node_modules/.bin/ng build --configuration production --localize
 
 # Stage 1: Build with the golang image
-FROM golang:1.20-alpine AS backend
+FROM golang:1.23-alpine AS backend
 RUN apk add git
 WORKDIR /go/src/github.com/StatCan/jupyter-apis
 COPY go.mod .

@@ -75,9 +75,9 @@ describe('New notebook form', () => {
       cy.get('[data-cy-advanced-options-button]').click();
       cy.get('[data-cy-form-input="cpu"]').find('input').clear();
       // minimum value
-      cy.get('[data-cy-form-input="cpu"]').find('input').type('0.1');
+      cy.get('[data-cy-form-input="cpu"]').find('input').type('0.01');
       cy.get('[data-cy-form-input="cpu"]').find('input').should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpu"]').find('mat-error').should('have.text', 'Specify at least 0.5 CPUs');
+      cy.get('[data-cy-form-input="cpu"]').find('mat-error').should('have.text', 'Specify at least 0.1 CPUs');
       cy.get('[data-cy-form-input="cpu"]').find('input').clear();
       // maximum value
       cy.get('[data-cy-form-input="cpu"]').find('input').type('40.0');
@@ -98,7 +98,7 @@ describe('New notebook form', () => {
       // minimum value
       cy.get('[data-cy-form-input="memory"]').find('input').type('0.1');
       cy.get('[data-cy-form-input="memory"]').find('input').should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memory"]').find('mat-error').should('have.text', 'Specify at least 1Gi of memory');
+      cy.get('[data-cy-form-input="memory"]').find('mat-error').should('have.text', 'Specify at least 0.5Gi of memory');
       cy.get('[data-cy-form-input="memory"]').find('input').clear();
       // maximum value
       cy.get('[data-cy-form-input="memory"]').find('input').type('90.0');

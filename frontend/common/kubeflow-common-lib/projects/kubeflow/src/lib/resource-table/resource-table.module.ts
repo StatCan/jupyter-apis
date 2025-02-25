@@ -38,6 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { HelpPopoverModule } from '../help-popover/help-popover.module';
 import { RouterModule } from '@angular/router';
 import { getCustomPaginatorIntl } from './paginator/custom-paginator-intl';
+import { StatusIconModule } from '../status-icon/status-icon.module';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { getCustomPaginatorIntl } from './paginator/custom-paginator-intl';
     MatSelectModule,
     HelpPopoverModule,
     RouterModule,
+    StatusIconModule,
   ],
   declarations: [
     ResourceTableComponent,

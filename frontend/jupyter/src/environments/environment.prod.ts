@@ -12,8 +12,6 @@ export const environment = {
   groupThreeLogo: 'assets/logos/group-three-logo.svg',
   groupThreeIcon: 'assets/logos/group-three-icon.svg',
 
-  // Rok
-  rokUrl: '',
   //AAW: from upstream volumes crud-web-app
   viewerUrl: '',
 };

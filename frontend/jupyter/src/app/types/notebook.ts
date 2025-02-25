@@ -81,4 +81,5 @@ export interface NotebookRawObject {
     containerState: V1ContainerState;
     readyReplicas: number;
   };
+  processed_status: Status;
 }

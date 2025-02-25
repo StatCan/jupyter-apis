@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { IndexModule } from './pages/index/index.module';
 import {
   KubeflowModule,
   ResourceTableModule,
@@ -26,6 +25,20 @@ import { ColumnsModule } from './pages/index/columns/columns.module';
 
 import { ErrorStateMatcher } from '@angular/material/core';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import {
+  MatSnackBarConfig,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+} from '@angular/material/snack-bar';
+import { IndexDefaultModule } from './pages/index/index-default/index-default.module';
+
+/**
+ * MAT_SNACK_BAR_DEFAULT_OPTIONS values can be found
+ * here
+ * https://github.com/angular/components/blob/main/src/material/snack-bar/snack-bar-config.ts#L25-L58
+ */
+const JwaSnackBarConfig: MatSnackBarConfig = {
+  duration: 3000,
+};
 
 @NgModule({
   declarations: [AppComponent, VolumeFormComponent, PageNotFoundComponent],
@@ -35,7 +48,6 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     AppRoutingModule,
     CommonModule,
     KubeflowModule,
-    IndexModule,
     NotebookPageModule,
     FormNewModule,
     ResourceTableModule,
@@ -44,10 +56,12 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
     FormModule,
     VolumeDetailsPageModule,
     ColumnsModule,
+    IndexDefaultModule,
   ],
   providers: [
     KubecostService,
     { provide: ErrorStateMatcher, useClass: ImmediateErrorStateMatcher },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: JwaSnackBarConfig },
   ],
   bootstrap: [AppComponent],
 })

@@ -15,5 +15,4 @@ export interface Status {
   phase: STATUS_TYPE;
   state: string;
   message: string;
-  key: string;
 }

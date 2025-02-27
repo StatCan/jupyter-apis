@@ -33,6 +33,11 @@ export class VolumeNameComponent implements OnInit, OnChanges {
 
     // substitute {notebook-name}
     const nameCtrl = this.getNameCtrl(this.metadataGroup);
+
+    // update the templated path, with the new initial value
+    this.templatedName = nameCtrl.value;
+
+    // set the form's value based on the templated name
     setTimeout(() => {
       nameCtrl.setValue(
         this.templatedName.replace(NB_NAME_SUBST, this.externalName),
@@ -64,8 +69,6 @@ export class VolumeNameComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit(): void {
-    this.templatedName = this.getNameCtrl(this.metadataGroup).value as string;
-
     this.initComponent();
   }
 

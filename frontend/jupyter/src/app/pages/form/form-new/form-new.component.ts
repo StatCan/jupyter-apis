@@ -8,7 +8,12 @@ import {
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
-import { NamespaceService, SnackBarService, SnackType } from 'kubeflow';
+import {
+  NamespaceService,
+  SnackBarConfig,
+  SnackBarService,
+  SnackType,
+} from 'kubeflow';
 import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -116,7 +121,7 @@ export class FormNewComponent
 
     // Use the custom image instead
     if (notebook.customImageCheck) {
-      notebook.image = notebook.customImage;
+      notebook.image = notebook.customImage?.trim();
       // Set serverType for custom image
       if (notebook.image.match(/\/rstudio:/)) {
         notebook.serverType = 'group-one';
@@ -187,16 +192,24 @@ export class FormNewComponent
   }
 
   onSubmit() {
-    this.popup.open('Submitting new Notebook...', SnackType.Info, 3000);
+    const configInfo: SnackBarConfig = {
+      data: {
+        msg: 'Submitting new Notebook...',
+        snackType: SnackType.Info,
+      },
+    };
+    this.popup.open(configInfo);
 
     const notebook = this.getSubmitNotebook();
     this.backend.createNotebook(notebook).subscribe(() => {
       this.popup.close();
-      this.popup.open(
-        'Notebook created successfully.',
-        SnackType.Success,
-        3000,
-      );
+      const configSuccess: SnackBarConfig = {
+        data: {
+          msg: 'Notebook created successfully.',
+          snackType: SnackType.Success,
+        },
+      };
+      this.popup.open(configSuccess);
       this.goToNotebooks();
     });
   }

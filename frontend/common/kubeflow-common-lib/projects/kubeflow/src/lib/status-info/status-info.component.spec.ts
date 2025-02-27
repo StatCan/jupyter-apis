@@ -23,6 +23,7 @@ describe('StatusInfoComponent', () => {
       phase: STATUS_TYPE.READY,
       state: 'Running',
       message: '',
+      key: '',
     };
 
     fixture.detectChanges();

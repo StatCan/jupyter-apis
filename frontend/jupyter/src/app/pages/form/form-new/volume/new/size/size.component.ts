@@ -27,7 +27,7 @@ export class VolumeSizeComponent implements OnInit {
   ngOnInit(): void {
     // This is used for the form, and does not contain Gi
     this.sizeNum.setValue(this.parseK8sGiSizeToInt(this.sizeCtrl.value));
-    
+
     // This is the FormGroup's control value, and we want Gi here
     this.sizeCtrl.setValue(`${this.sizeNum.value}Gi`);
     this.sizeNum.setValue(16);

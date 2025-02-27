@@ -1,0 +1,94 @@
+@KF_USER_ID=briangengda.su@statcan.gc.ca
+@KF_NAMESPACE=briangengdao-su
+@KF_NOTEBOOK_NAME=briangengdao-su-notebook
+@KF_POD_NAME=briangengdao-su-pod
+@KF_PVC_NAME=briangengdao-su-pvc
+@BASE_URL=http://localhost:5000/api
+
+GET {{BASE_URL}}/config
+
+###
+
+GET {{BASE_URL}}/gpus
+
+###
+
+GET {{BASE_URL}}/storageclasses/default
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/cost/allocation
+
+###
+
+GET {{BASE_URL}}/namespaces
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
+
+
+###
+
+POST {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
+content-type: application/json
+{
+    "namespace": "{{KF_NAMESPACE}}"
+}
+
+###
+
+DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+
+###
+
+PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+Content-Type: application/json
+{
+    "namespace": "{{KF_NAMESPACE}}",
+    "notebook": "{{KF_NOTEBOOK_NAME}}",
+}
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs
+
+###
+
+DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/poddefaults
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/pod
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/pod/{{KF_POD_NAME}}/logs
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/events
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/pods
+
+###
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/events

@@ -84,5 +84,5 @@ jobs:
       - name: Serve UI & run Cypress tests in Chrome and Firefox
         run: |
           cd frontend/jupyter
-          npm run serve & npx wait-on http://localhost:4200
+          npm run serve & npx wait-on --timeout 2m http://localhost:4200
           npm run ui-test-ci-all

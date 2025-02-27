@@ -39,7 +39,7 @@ export class ActionsService {
             const message = $localize`Delete request was sent.`;
             const config: SnackBarConfig = {
               data: {
-                msg: `${object}: ${message}`, 
+                msg: `${object}: ${message}`,
                 snackType: SnackType.Info,
               },
               duration: 5000,

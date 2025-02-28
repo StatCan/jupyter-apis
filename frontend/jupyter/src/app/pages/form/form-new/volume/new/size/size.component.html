@@ -2,7 +2,7 @@
   <mat-label i18n>Size in Gi</mat-label>
   <!--AAW specific, we want to control the size options users have
   https://github.com/StatCan/jupyter-apis/issues/7#issuecomment-687249223-->
-  <mat-select [formControl]="sizeNum">
+  <mat-select [formControl]="sizeNum" data-cy="size input">
     <mat-option *ngFor="let sizeOptions of sizes" [value]="sizeOptions">{{
       sizeOptions
     }}</mat-option>

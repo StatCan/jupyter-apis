@@ -1,8 +1,8 @@
 @KF_USER_ID=briangengda.su@statcan.gc.ca
 @KF_NAMESPACE=briangengdao-su
-@KF_NOTEBOOK_NAME=briangengdao-su-notebook
+@KF_NOTEBOOK_NAME=test-brian
 @KF_POD_NAME=briangengdao-su-pod
-@KF_PVC_NAME=briangengdao-su-pvc
+@KF_PVC_NAME=test-brian-volume
 @BASE_URL=http://localhost:5000/api
 
 GET {{BASE_URL}}/config

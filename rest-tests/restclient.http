@@ -8,12 +8,12 @@
 @KF_PVC_NAME_DELETE=REPLACE_WITH_YOUR_PVC_TO_DELETE
 @BASE_URL=http://localhost:5000/api
 
-### Gets the spawner_ui_config.yaml
+### Get the spawner_ui_config.yaml
 GET {{BASE_URL}}/config
 content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
-### Reads the GPU vendors from the spawner config
+### Read the GPU vendors from the spawner config
 
 GET {{BASE_URL}}/gpus
 content-type: application/json
@@ -25,7 +25,7 @@ GET {{BASE_URL}}/storageclasses
 content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
-### Gets the storage class with the is-default-class annotation
+### Get the storage class with the is-default-class annotation
 
 GET {{BASE_URL}}/storageclasses/default
 content-type: application/json

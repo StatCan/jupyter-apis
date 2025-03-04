@@ -78,9 +78,21 @@ For the kubecost data to be retrievable when running locally, the following will
 
 ### Testing backend Rest API
 
-To test the backend, install the [Thunder Client extension](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client). After being installed, it should appear in the vs code sidebar (it might require a restart first). 
-First thing is to make sure that the backend is running. Then, open Thunder Client from the vs code sidebar. You should be able to see multiple requests that can be made against the backend under the "Collections" tab, in the "Golang kubeflow" dropdown. From there, just select a request and hit "Send". 
-Some requests require certain parameters to have values. Those can be filled up under the "Env" tab.
+To test the backend, install the [REST Client extension](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) or search for REST Client directly from the Extensions tab in VS Code
+
+After being installed, open the `rest-test\restclient.http` file.
+
+Click on the Send Request link that appears above the request or press Ctrl+Alt+R to send the request.
+
+The response will appear in the Response window at the bottom of VS Code.
+
+After sending the request, the Response section will display the following details:
+
+- Status Code: The HTTP status code of the response (e.g., 200, 404, etc.).
+- Response Body: The body of the API response (e.g., JSON data, error messages).
+- Headers: The response headers from the API.
+
+Some requests require certain parameters to have values. Those can be done by updating the variables in the `rest-test\restclient.http` file.
 
 ### Running intergration tests
 

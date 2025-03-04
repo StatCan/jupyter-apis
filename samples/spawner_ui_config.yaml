@@ -55,9 +55,9 @@ spawnerFormDefaults:
     disabledMessage:
       en: "SAS is unavailable while non-employees have access to this profile."
       fr: "SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."
-    value: k8scc01covidacr.azurecr.io/sas:latest    # The list of available standard container Images
+    value: k8scc01covidacr.azurecr.io/sas:v1    # The list of available standard container Images
     options:
-    - k8scc01covidacr.azurecr.io/sas:latest
+    - k8scc01covidacr.azurecr.io/sas:v1
   hideRegistry: true
   hideTag: true
   allowCustomImage: true

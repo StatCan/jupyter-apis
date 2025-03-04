@@ -36,9 +36,9 @@
               "state.aaw.statcan.gc.ca/exists-non-sas-notebook-user":"false"
            }
         },
-        "value":"k8scc01covidacr.azurecr.io/sas:latest",
+        "value":"k8scc01covidacr.azurecr.io/sas:v1",
         "options":[
-           "k8scc01covidacr.azurecr.io/sas:latest"
+           "k8scc01covidacr.azurecr.io/sas:v1"
         ]
      },
      "allowCustomImage":true,

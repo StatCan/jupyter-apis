@@ -78,6 +78,7 @@
     "typescript": "~5.2.2"
   },
   "overrides": {
-    "http-proxy-middleware": "2.0.7"
+    "http-proxy-middleware": "2.0.7",
+    "webpack-dev-middleware": "6.1.2"
   }
 }

@@ -1,0 +1,147 @@
+### Replace these placeholders with actual values
+@KF_USER_ID=REPLACE_WITH_YOUR_USER_ID
+@KF_NAMESPACE=REPLACE_WITH_YOUR_NAMESPACE
+@KF_NOTEBOOK_NAME=REPLACE_WITH_YOUR_NOTEBOOK_NAME
+@KF_NOTEBOOK_NAME_PATCH=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_PATCH
+@KF_POD_NAME=REPLACE_WITH_YOUR_POD_NAME
+@KF_PVC_NAME=REPLACE_WITH_YOUR_PVC_NAME
+@KF_PVC_NAME_DELETE=REPLACE_WITH_YOUR_PVC_TO_DELETE
+@BASE_URL=http://localhost:5000/api
+
+### Get the spawner_ui_config.yaml
+GET {{BASE_URL}}/config
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Read the GPU vendors from the spawner config
+
+GET {{BASE_URL}}/gpus
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### List all storageclasses
+
+GET {{BASE_URL}}/storageclasses
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get the storage class with the is-default-class annotation
+
+GET {{BASE_URL}}/storageclasses/default
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get the kubecost Allocation API 
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/cost/allocation
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get the list of namespaces
+
+GET {{BASE_URL}}/namespaces
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get namespace metadata
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get the list of notebooks
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Create a notebook
+
+POST {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+{
+    "name": "{{KF_NOTEBOOK_NAME}}"
+}
+
+###  Get a notebook
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+content-type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Delete a notebook
+
+DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Update a notebook
+
+PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+{
+    "name": "{{KF_NAMESPACE}}",
+    "notebook": "{{KF_NOTEBOOK_NAME_PATCH}}"
+}
+
+### Get PodDefaults for a given namespace
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/poddefaults
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get a notebook
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get pods of a notebook
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/pod
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get logs of a pod of a notebook
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/pod/{{KF_POD_NAME}}/logs
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get events of a pod of a notebook
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/events
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get PVCs
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get a PVC
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get pods of a PVC
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/pods
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get events of a PVC
+
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/events
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Delete a PVC
+
+DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME_DELETE}}
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}

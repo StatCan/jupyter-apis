@@ -76,5 +76,8 @@
     "prettier": "2.3.2",
     "ts-node": "^10.4.0",
     "typescript": "~5.2.2"
+  },
+  "overrides": {
+    "http-proxy-middleware": "2.0.7"
   }
 }

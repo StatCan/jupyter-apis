@@ -54,7 +54,7 @@
     "@angular/cli": "^17.2.1",
     "@angular/compiler-cli": "^17.2.1",
     "@angular/language-service": "^17.2.1",
-    "@kubernetes/client-node": "^0.16.3",
+    "@kubernetes/client-node": "^1.0.0",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.9",
     "@types/lodash-es": "^4.17.6",
@@ -76,5 +76,11 @@
     "prettier": "2.3.2",
     "ts-node": "^10.4.0",
     "typescript": "~5.2.2"
+  },
+  "overrides": {
+    "http-proxy-middleware": "2.0.7",
+    "webpack-dev-middleware": "6.1.2",
+    "undici": "6.21.1",
+    "webpack": "5.94.0"
   }
 }

@@ -79,6 +79,8 @@
   },
   "overrides": {
     "http-proxy-middleware": "2.0.7",
-    "webpack-dev-middleware": "6.1.2"
+    "webpack-dev-middleware": "6.1.2",
+    "undici": "6.21.1",
+    "webpack": "5.94.0"
   }
 }

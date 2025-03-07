@@ -113,8 +113,8 @@ of disk space and the recommanded RAM is 12 Gb. First, create the miniKF cluster
 2. Create a new directory and run `vagrant init arrikto/minikf` and then
    `vagrant up` (takes about 20 minutes to boot).
 3. Navigate to `http://10.10.10.10`.
-4. Follow on-screen steps to start Kubeflow and Rok (takes about another 20 minutes).
-5. From here, you can use Kubeflow and Rok.
+4. Follow on-screen steps to start Kubeflow (takes about another 20 minutes).
+5. From here, you can use Kubeflow.
 
 Then configure `kubectl` to connect to your new cluster:
 

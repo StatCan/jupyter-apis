@@ -143,7 +143,13 @@ export class ActionsService {
 
             const object = `${namespace}/${name}`;
             const message = $localize`Delete request was sent.`;
-            this.snackBar.open(`${object}: ${message}`, SnackType.Info, 3000);
+            const config: SnackBarConfig = {
+              data: {
+                msg: `${object}: ${message}`,
+                snackType: SnackType.Info,
+              },
+            };
+            this.snackBar.open(config);
           },
           error: err => {
             const errorMsg = $localize`Error ${err}`;

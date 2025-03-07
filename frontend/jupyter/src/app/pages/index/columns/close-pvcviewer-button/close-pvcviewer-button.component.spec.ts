@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteButtonComponent } from './delete-button.component';
+import { ClosePVCViewerButtonComponent } from './close-pvcviewer-button.component';
 
 const mockElement = {
   age: 'Mon, 19 Sep 2022 16:39:10 GMT',
@@ -18,18 +18,18 @@ const mockElement = {
   viewer: 'uninitialized',
 };
 
-describe('DeleteButtonComponent', () => {
-  let component: DeleteButtonComponent;
-  let fixture: ComponentFixture<DeleteButtonComponent>;
+describe('ClosePVCViewerButtonComponent', () => {
+  let component: ClosePVCViewerButtonComponent;
+  let fixture: ComponentFixture<ClosePVCViewerButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DeleteButtonComponent],
+      declarations: [ClosePVCViewerButtonComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteButtonComponent);
+    fixture = TestBed.createComponent(ClosePVCViewerButtonComponent);
     component = fixture.componentInstance;
     component.element = mockElement;
     fixture.detectChanges();

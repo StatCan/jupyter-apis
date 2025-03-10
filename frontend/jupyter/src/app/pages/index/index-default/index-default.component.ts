@@ -14,7 +14,7 @@ import {
   PollerService,
   DashboardState,
   SnackBarConfig,
-  DialogConfig
+  DialogConfig,
 } from 'kubeflow';
 import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';

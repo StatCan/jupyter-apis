@@ -47,7 +47,14 @@ declare global {
        * Custom command to mock requests at '/api/storageclasses/default'
        * and returns parameter defaultStorageClass
        */
-      mockDefaultStorageClassRequest(): Chainable<void>;
+      mockDefaultStorageClassRequest(
+        defaultStorageClass: string,
+      ): Chainable<void>;
+
+      /**
+       * Custom command to mock requests at '/api/config'
+       */
+      mockConfigRequest(): Chainable<void>;
 
       /**
        * Custom command to mock request at '/api/namespaces/<namespace>/poddefaults'

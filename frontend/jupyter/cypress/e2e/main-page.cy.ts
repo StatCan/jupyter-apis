@@ -255,7 +255,7 @@ describe('Main tables', () => {
     });
   });
 
-  describe.only('Volumes table', () => {
+  describe('Volumes table', () => {
     beforeEach(() => {
       cy.wait(['@mockNamespacesRequest', '@mockPVCsRequest']);
     });
@@ -269,7 +269,7 @@ describe('Main tables', () => {
     });
 
     // We use function () in order to access aliases via this
-    it.only('renders every PVC name into the table', function () {
+    it('renders every PVC name into the table', function () {
       let i = 0;
       const pvcs = this.pvcsRequest.pvcs;
       // Table is sorted by Name in ascending order by default

@@ -41,7 +41,6 @@ declare global {
       /**
        * Custom command to mock requests at
        *  - '/api/storageclasses'
-       *  - '/api/rok/storageclasses'
        */
       mockStorageClassesRequests(): Chainable<void>;
 

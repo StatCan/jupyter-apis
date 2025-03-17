@@ -152,6 +152,7 @@ describe('NotebookPageComponent', () => {
       phase: STATUS_TYPE.TERMINATING,
       state: '',
       message: 'Terminating',
+      key: 'terminatingKey',
     };
 
     // check the initial state of the buttons
@@ -173,6 +174,7 @@ describe('NotebookPageComponent', () => {
       phase: STATUS_TYPE.STOPPED,
       state: '',
       message: 'No Pods are currently running for this Notebook Server.',
+      key: 'noPodsKey',
     };
 
     let flag = component.buttonsConfig

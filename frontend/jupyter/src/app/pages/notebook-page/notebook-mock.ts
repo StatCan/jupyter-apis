@@ -97,6 +97,7 @@ const statusProcessedObject = {
   phase: STATUS_TYPE.READY,
   state: '',
   message: 'Running',
+  key: 'runningKey',
 };
 
 export const mockNotebook: NotebookRawObject = {

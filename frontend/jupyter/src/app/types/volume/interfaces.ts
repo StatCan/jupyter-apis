@@ -1,6 +1,6 @@
 import { Params } from '@angular/router';
 import { V1PersistentVolumeClaim, V1Volume } from '@kubernetes/client-node';
-import { Status } from 'kubeflow';
+import { Status, STATUS_TYPE } from 'kubeflow';
 
 export interface PVCResponseObject {
   age: {
@@ -14,6 +14,10 @@ export interface PVCResponseObject {
   namespace: string;
   status: Status;
   notebooks: string[];
+  viewer: {
+    status: STATUS_TYPE;
+    url: string;
+  };
 
   extraFields?: { [key: string]: any };
   usedBy?: string | null;
@@ -35,6 +39,8 @@ export interface Volume {
 export interface PVCProcessedObject extends PVCResponseObject {
   deleteAction?: string;
   editAction?: string;
+  closePVCViewerAction?: string;
+  openPVCViewerAction?: string;
   ageValue?: string;
   ageTooltip?: string;
   link: {

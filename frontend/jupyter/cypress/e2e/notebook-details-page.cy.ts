@@ -8,7 +8,6 @@ describe('Notebook Details Page', () => {
         statusCode: 404,
       },
     ).as('mockGetNotebookPodRequest');
-    //cy.mockPoddefaultsRequest('kubeflow-user');
     cy.visit('/notebook/details/kubeflow-user/test-notebook');
     cy.wait([
       '@mockGetNotebookRequest',

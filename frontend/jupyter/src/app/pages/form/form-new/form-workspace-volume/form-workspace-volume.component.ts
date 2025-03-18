@@ -46,9 +46,10 @@ export class FormWorkspaceVolumeComponent implements OnDestroy {
   }
 
   addNewVolume() {
-    this.volGroup.addControl('newPvc', createNewPvcFormGroup(
-      '{notebook-name}-workspace'
-    ));
+    this.volGroup.addControl(
+      'newPvc',
+      createNewPvcFormGroup('{notebook-name}-workspace'),
+    );
     this.volGroup.get('mount').setValue('/home/jovyan');
     this.volGroup.enable();
     this.volGroup.get('newPvc.spec.storageClassName').disable();

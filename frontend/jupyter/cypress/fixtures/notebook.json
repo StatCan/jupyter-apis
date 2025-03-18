@@ -60,6 +60,11 @@
       "conditions":[],
       "readyReplicas":0,
       "containerState":{}
-   }
+    },
+    "processed_status": {
+      "phase": "stopped",
+      "state": "",
+      "message": "No Pods are currently running for this Notebook Server."
+    }
   }
 }

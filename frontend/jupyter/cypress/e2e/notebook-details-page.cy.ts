@@ -103,7 +103,7 @@ describe('Notebook Details Page', () => {
     cy.get('[data-cy-toolbar-button="START"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="STOP"]').should('not.exist');
     cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
-    cy.get('lib-status-icon > mat-icon').should('have.text', ' stop_circle\n');
+    cy.get('lib-status-icon > lib-icon').should('have.attr', 'icon', 'custom:stoppedResource');
     // start the notebook
     cy.intercept(
       'PATCH',
@@ -125,7 +125,7 @@ describe('Notebook Details Page', () => {
     cy.get('[data-cy-toolbar-button="CONNECT"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="STOP"]').should('exist').and('be.enabled');
     cy.get('[data-cy-toolbar-button="START"]').should('not.exist');
-    cy.get('lib-status-icon > mat-icon').should('have.text', ' check_circle\n');
+    cy.get('lib-status-icon[data-cy-notebook-status] > mat-icon').should('have.text', ' check_circle ');
     cy.get('lib-conditions-table[title="Conditions"]')
       .find('tbody > tr')
       .should('have.length', 4);
@@ -194,7 +194,7 @@ describe('Notebook Details Page', () => {
 
     cy.get('[data-cy-toolbar-button="START"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="STOP"]').should('not.exist');
-    cy.get('lib-status-icon > mat-icon').should('have.text', ' stop_circle\n');
+    cy.get('lib-status-icon > lib-icon').should('have.attr', 'icon', 'custom:stoppedResource');
     cy.get('lib-conditions-table[title="Conditions"]')
       .find('tbody > tr > td')
       .should('have.text', 'No rows to display');

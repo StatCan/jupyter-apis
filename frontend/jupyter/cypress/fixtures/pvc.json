@@ -31,5 +31,9 @@
   },
   "notebooks": [
     "test"
-  ]
+  ],
+  "viewer": { 
+    "status": "ready",
+    "url": ""
+  }
 }

@@ -38,7 +38,6 @@ describe('Main tables', () => {
     });
 
     // We use function () in order to be able to access aliases via this
-    // tslint:disable-next-line: space-before-function-paren
     it('renders every Notebook name into the table', function () {
       let i = 0;
       const notebooks = this.notebooksRequest.notebooks;
@@ -52,7 +51,6 @@ describe('Main tables', () => {
         });
     });
 
-    // tslint:disable-next-line: space-before-function-paren
     it('checks Status icon for all notebooks', function () {
       let i = 0;
       const notebooks = this.notebooksRequest.notebooks;
@@ -61,19 +59,19 @@ describe('Main tables', () => {
         .each(element => {
           if (notebooks[i].status.phase === 'ready') {
             cy.wrap(element)
-              .find('lib-status>mat-icon')
+              .find('lib-status-icon>mat-icon')
               .should('contain', 'check_circle');
           } else if (notebooks[i].status.phase === 'stopped') {
             cy.wrap(element)
-              .find('lib-status>lib-icon')
+              .find('lib-status-icon>lib-icon')
               .should('have.attr', 'icon', 'custom:stoppedResource');
           } else if (notebooks[i].status.phase === 'unavailable') {
             cy.wrap(element)
-              .find('lib-status>mat-icon')
+              .find('lib-status-icon>mat-icon')
               .should('contain', 'timelapse');
           } else if (notebooks[i].status.phase === 'warning') {
             cy.wrap(element)
-              .find('lib-status>mat-icon')
+              .find('lib-status-icon>mat-icon')
               .should('contain', 'warning');
           } else if (
             notebooks[i].status.phase === 'waiting' ||
@@ -292,11 +290,11 @@ describe('Main tables', () => {
         .each(element => {
           if (pvcs[i].status.phase === 'attached') {
             cy.wrap(element)
-              .find('lib-status>mat-icon')
+              .find('lib-status-icon>mat-icon')
               .should('contain', 'link');
           } else if (pvcs[i].status.phase === 'unattached') {
             cy.wrap(element)
-              .find('lib-status>mat-icon')
+              .find('lib-status-icon>mat-icon')
               .should('contain', 'link_off');
           }
           i++;

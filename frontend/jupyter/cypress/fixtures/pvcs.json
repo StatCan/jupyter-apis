@@ -13,7 +13,10 @@
         "phase": "ready",
         "state": ""
       },
-      "viewer": "ready"
+      "viewer": { 
+        "status": "ready",
+        "url": ""
+      }
     },
     {
       "age": "Thu, 29 Sep 2022 16:25:53 GMT",
@@ -28,7 +31,10 @@
         "phase": "ready",
         "state": ""
       },
-      "viewer": "uninitialized"
+      "viewer": { 
+        "status": "uninitialized",
+        "url": ""
+      }
     },
     {
       "age": "Thu, 14 Apr 2022 12:00:28 GMT",
@@ -43,7 +49,10 @@
         "phase": "ready",
         "state": ""
       },
-      "viewer": "waiting"
+      "viewer": { 
+        "status": "waiting",
+        "url": ""
+      }
     },
     {
       "age": "Tue, 04 Oct 2022 13:01:05 GMT",
@@ -58,7 +67,10 @@
         "phase": "unavailable",
         "state": "WaitForFirstConsumer"
       },
-      "viewer": "uninitialized"
+      "viewer": { 
+        "status": "uninitialized",
+        "url": ""
+      }
     },
     {
       "age": "Thu, 01 Sep 2022 08:36:21 GMT",
@@ -73,7 +85,10 @@
         "phase": "waiting",
         "state": ""
       },
-      "viewer": "uninitialized"
+      "viewer": { 
+        "status": "uninitialized",
+        "url": ""
+      }
     },
     {
       "age": "Thu, 14 Apr 2022 14:58:53 GMT",
@@ -88,7 +103,10 @@
         "phase": "warning",
         "state": ""
       },
-      "viewer": "ready"
+      "viewer": { 
+        "status": "ready",
+        "url": ""
+      }
     },
     {
       "name":"test-pro-b-volume",
@@ -110,6 +128,10 @@
         "test-pro-b"
       ],
       "labels":{
+      },
+      "viewer": { 
+        "status": "ready",
+        "url": ""
       }
     },
     {
@@ -130,7 +152,11 @@
       "class":"default",
       "notebooks":[
         "random-forest-waiting"
-      ]
+      ],
+      "viewer": { 
+        "status": "ready",
+        "url": ""
+      }
     }
   ],
   "status": "200",

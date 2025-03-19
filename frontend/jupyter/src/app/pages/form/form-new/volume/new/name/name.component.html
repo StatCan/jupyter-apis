@@ -14,6 +14,7 @@
     matInput
     [formControl]="metadataGroup.get('name')"
     [errorStateMatcher]="matcher"
+    data-cy="volume name input"
   />
   <mat-error>
     {{ showNameError() }}

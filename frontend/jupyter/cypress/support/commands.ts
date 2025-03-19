@@ -47,20 +47,7 @@ Cypress.Commands.add('mockNotebooksAllNamespacesRequest', settingsNamespace => {
 
 Cypress.Commands.add('mockStorageClassesRequests', () => {
   cy.intercept('GET', '/api/storageclasses', {
-    success: true,
-    status: 200,
-    user: null,
-    storageClasses: [
-      'azurefile-csi-premium',
-      'azurefile-premium',
-      'managed-premium',
-      'azurefile-csi',
-      'managed',
-      'managed-csi',
-      'default',
-      'managed-csi-premium',
-      'azurefile',
-    ],
+    storageClasses: ['standard']
   }).as('mockStorageClassesRequests');
 });
 

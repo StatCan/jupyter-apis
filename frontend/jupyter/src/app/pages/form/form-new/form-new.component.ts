@@ -142,7 +142,7 @@ export class FormNewComponent
 
     // Ensure CPU input is a string
     if (typeof notebook.cpu === 'number') {
-      notebook.cpu = notebook.cpu.toString();
+      notebook.cpu = notebook.cpuLimit = notebook.cpu.toString();
     }
 
     // Ensure GPU input is a string
@@ -150,25 +150,10 @@ export class FormNewComponent
       notebook.gpus.num = notebook.gpus.num.toString();
     }
 
-    // Remove cpuLimit from request if null
-    if (notebook.cpuLimit == null) {
-      delete notebook.cpuLimit;
-      // Ensure CPU Limit input is a string
-    } else if (typeof notebook.cpuLimit === 'number') {
-      notebook.cpuLimit = notebook.cpuLimit.toString();
-    }
-
-    // Remove memoryLimit from request if null
-    if (notebook.memoryLimit == null) {
-      delete notebook.memoryLimit;
-      // Add Gi to memoryLimit
-    } else if (notebook.memoryLimit) {
-      notebook.memoryLimit = notebook.memoryLimit.toString() + 'Gi';
-    }
-
     // Add Gi to all sizes
     if (notebook.memory) {
       notebook.memory = notebook.memory.toString() + 'Gi';
+      notebook.memoryLimit = notebook.memory.toString() + 'Gi';
     }
 
     for (const vol of notebook.datavols) {

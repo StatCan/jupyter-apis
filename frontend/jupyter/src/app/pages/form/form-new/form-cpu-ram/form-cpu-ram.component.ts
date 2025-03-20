@@ -92,13 +92,13 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
     // this.parentForm.get('cpu').valueChanges.subscribe(val => {
     //   // AAW: to trigger validation
     //   this.parentForm.get('cpuLimit').updateValueAndValidity();
- 
+
     // });
 
     // this.parentForm.get('memory').valueChanges.subscribe(val => {
     //   // AAw: to trigger validation
     //   this.parentForm.get('memoryLimit').updateValueAndValidity();
-      
+
     // });
   }
 

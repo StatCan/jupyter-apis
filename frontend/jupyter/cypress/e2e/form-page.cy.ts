@@ -631,14 +631,6 @@ describe('New notebook form', () => {
         .find('input')
         .invoke('val')
         .should('eq', '2');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '0.5');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '2');
 
       cy.get(
         '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',

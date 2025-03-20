@@ -69,37 +69,37 @@ export class FormCpuRamComponent implements OnInit, OnChanges {
         Validators.min(0.5),
         this.maxResourcesValidator('memory'),
       ]);
-    this.parentForm
-      .get('cpuLimit')
-      .setValidators([
-        Validators.required,
-        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
-        Validators.min(0.5),
-        this.maxResourcesValidator('cpuLimit'),
-        this.limitValidator('cpu'),
-      ]);
-    this.parentForm
-      .get('memoryLimit')
-      .setValidators([
-        Validators.required,
-        Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
-        Validators.min(1),
-        this.maxResourcesValidator('memoryLimit'),
-        this.limitValidator('memory'),
-      ]);
+    // this.parentForm
+    //   .get('cpuLimit')
+    //   .setValidators([
+    //     Validators.required,
+    //     Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+    //     Validators.min(0.5),
+    //     this.maxResourcesValidator('cpuLimit'),
+    //     this.limitValidator('cpu'),
+    //   ]);
+    // this.parentForm
+    //   .get('memoryLimit')
+    //   .setValidators([
+    //     Validators.required,
+    //     Validators.pattern(/^[0-9]+([.][0-9]+)?$/),
+    //     Validators.min(1),
+    //     this.maxResourcesValidator('memoryLimit'),
+    //     this.limitValidator('memory'),
+    //   ]);
     // end AAW validations
 
-    this.parentForm.get('cpu').valueChanges.subscribe(val => {
-      // AAW: to trigger validation
-      this.parentForm.get('cpuLimit').updateValueAndValidity();
+    // this.parentForm.get('cpu').valueChanges.subscribe(val => {
+    //   // AAW: to trigger validation
+    //   this.parentForm.get('cpuLimit').updateValueAndValidity();
  
-    });
+    // });
 
-    this.parentForm.get('memory').valueChanges.subscribe(val => {
-      // AAw: to trigger validation
-      this.parentForm.get('memoryLimit').updateValueAndValidity();
+    // this.parentForm.get('memory').valueChanges.subscribe(val => {
+    //   // AAw: to trigger validation
+    //   this.parentForm.get('memoryLimit').updateValueAndValidity();
       
-    });
+    // });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

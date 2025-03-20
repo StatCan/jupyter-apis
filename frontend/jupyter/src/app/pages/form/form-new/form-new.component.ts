@@ -152,8 +152,7 @@ export class FormNewComponent
 
     // Add Gi to all sizes
     if (notebook.memory) {
-      notebook.memory = notebook.memory.toString() + 'Gi';
-      notebook.memoryLimit = notebook.memory.toString() + 'Gi';
+      notebook.memory = notebook.memoryLimit = notebook.memory.toString() + 'Gi';
     }
 
     for (const vol of notebook.datavols) {

@@ -43,13 +43,13 @@ describe('Notebook Details Page', () => {
     ).should('have.text', ' 500m\n');
     cy.get(
       'lib-details-list-item[key="Maximum CPU"] > .list-entry-row > .list-entry-value > div',
-    ).should('have.text', ' 4\n');
+    ).should('have.text', ' 500m\n');
     cy.get(
       'lib-details-list-item[key="Minimum memory"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' 2Gi\n');
     cy.get(
       'lib-details-list-item[key="Maximum memory"] > .list-entry-row > .list-entry-value > div',
-    ).should('have.text', ' 4Gi\n');
+    ).should('have.text', ' 2Gi\n');
     cy.get(
       'lib-details-list-item[key="Image"] > .list-entry-row > .list-entry-value > div',
     ).should(

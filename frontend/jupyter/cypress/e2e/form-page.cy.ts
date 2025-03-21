@@ -169,7 +169,7 @@ describe('New notebook form', () => {
         .should('have.class', 'ng-valid');
     });
 
-    it('minimum cpu', () => {
+    it('requested cpu', () => {
       cy.get('[data-cy-advanced-options-button]').click();
       cy.get('[data-cy-form-input="cpu"]').find('input').clear();
       // minimum value
@@ -204,7 +204,7 @@ describe('New notebook form', () => {
         .should('have.class', 'ng-valid');
     });
 
-    it('minimum memory', () => {
+    it('requested memory', () => {
       cy.get('[data-cy-advanced-options-button]').click();
       cy.get('[data-cy-form-input="memory"]').find('input').clear();
       // minimum value
@@ -235,110 +235,6 @@ describe('New notebook form', () => {
       // valid value
       cy.get('[data-cy-form-input="memory"]').find('input').type('4');
       cy.get('[data-cy-form-input="memory"]')
-        .find('input')
-        .should('have.class', 'ng-valid');
-    });
-
-    it('maximum cpu', () => {
-      cy.get('[data-cy-advanced-options-button]').click();
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      // minimum value
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('0.1');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify at least 0.5 CPUs');
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      // maximum value
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('40.0');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't exceed 14 CPUs");
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      // not smaller than minimum cpu
-      cy.get('[data-cy-form-input="cpu"]').clear();
-      cy.get('[data-cy-form-input="cpu"]').find('input').type('5.0');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .type('4.0', { force: true });
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't be lower than requested CPUs");
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      cy.get('[data-cy-form-input="cpu"]').clear();
-      cy.get('[data-cy-form-input="cpu"]').find('input').type('0.5');
-      // empty value
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify number of CPUs');
-      // valid value
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .type('4', { force: true });
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-valid');
-    });
-
-    it('maximum memory', () => {
-      cy.get('[data-cy-advanced-options-button]').click();
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      // minimum value
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('0.1');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify at least 1Gi of memory');
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      // maximum value
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('90.0');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't exceed 48Gi of memory");
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      // not smaller than minimum memory
-      cy.get('[data-cy-form-input="memory"]').clear();
-      cy.get('[data-cy-form-input="memory"]').find('input').type('20.0');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .type('10.0', { force: true });
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't be lower than requested memory");
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      cy.get('[data-cy-form-input="memory"]').clear();
-      cy.get('[data-cy-form-input="memory"]').find('input').type('2.0');
-      // empty value
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify amount of memory (e.g. 2Gi)');
-      // valid value
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .type('4', { force: true });
-      cy.get('[data-cy-form-input="memoryLimit"]')
         .find('input')
         .should('have.class', 'ng-valid');
     });
@@ -735,14 +631,6 @@ describe('New notebook form', () => {
         .find('input')
         .invoke('val')
         .should('eq', '2');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '4');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '4');
 
       cy.get(
         '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',

@@ -16,7 +16,7 @@
     {{ linkText }}
   </a>
   <!--need to check if this change messes with the other things, else just restore old file-->
-  <p *ngIf="readOnly">*The cluster admin has disabled setting this section!</p>
+  <p *ngIf="readOnly" i18n>*The cluster admin has disabled setting this section!</p>
 
   <ng-content></ng-content>
 </div>

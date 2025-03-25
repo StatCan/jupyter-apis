@@ -134,7 +134,7 @@ export class BackendService {
       return error.message;
     }
 
-    return `Unexpected error encountered`;
+    return $localize `Unexpected error encountered`;
   }
 
   public getSnackErrorMessage(

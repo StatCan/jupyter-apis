@@ -17,7 +17,7 @@ export class LinkGroupsTableComponent {
     return this.prvLinkGroups;
   }
 
-  @Input() loadErrorMsg = 'Resources not available';
+  @Input() loadErrorMsg = $localize `Resources not available`;
   @Input() loadCompleted = false;
 
   linkGroupsEmpty() {

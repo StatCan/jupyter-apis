@@ -30,7 +30,7 @@ export class DetailsListItemComponent {
     if (!this.copyValue) {
       const configWarning: SnackBarConfig = {
         data: {
-          msg: 'No value to copy to clipboard',
+          msg: $localize `No value to copy to clipboard`,
           snackType: SnackType.Warning,
         },
         duration: 2000,
@@ -41,7 +41,7 @@ export class DetailsListItemComponent {
 
     const configInfo: SnackBarConfig = {
       data: {
-        msg: 'Content copied to clipboard',
+        msg: $localize `Content copied to clipboard`,
         snackType: SnackType.Info,
       },
       duration: 2000,

@@ -49,7 +49,7 @@ export class FormGpusComponent implements OnInit, OnChanges {
       this.gpuCtrl.get('num').setValue('none');
       this.gpuCtrl.get('num').disable();
       this.gpuCtrl.get('vendor').disable();
-      this.message = 'GPU not available for learning namespaces';
+      this.message = $localize `GPU not available for learning namespaces`;
     } else {
       // Vendor should not be empty if the user selects GPUs num
       this.gpuCtrl.get('num').enable();

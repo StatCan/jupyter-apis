@@ -8,6 +8,7 @@
     (click)="create.emit(true)"
     [disabled]="createDisabled"
     data-cy-submit-bar-create
+    i18n
   >
     CREATE
   </button>
@@ -20,7 +21,7 @@
   >
     <div class="waiting-button-wrapper">
       <mat-spinner diameter="16"></mat-spinner>
-      <div>CREATING</div>
+      <div i18n>CREATING</div>
     </div>
   </button>
 
@@ -28,14 +29,15 @@
     mat-raised-button
     (click)="cancel.emit(true)"
     data-cy-submit-bar-cancel
+    i18n
   >
     CANCEL
   </button>
 
   <div class="flex text-area" *ngIf="allowYAMLEditing">
-    <button class="btn-link" (click)="yaml.emit(true)" data-cy-submit-bar-edit>
+    <button class="btn-link" (click)="yaml.emit(true)" data-cy-submit-bar-edit i18n>
       Edit
     </button>
-    <span> and submit YAML</span>
+    <span i18n> and submit YAML</span>
   </div>
 </div>

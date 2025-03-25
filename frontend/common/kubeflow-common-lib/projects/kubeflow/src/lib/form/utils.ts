@@ -9,7 +9,7 @@ export function updateNonDirtyControl(control: AbstractControl, value: any) {
 export function updateControlNonNullValue(
   control: AbstractControl,
   value: any,
-  msg = 'Can not update control with value null',
+  msg = $localize `Can not update control with value null`,
 ) {
   if (value === null) {
     console.warn(msg);

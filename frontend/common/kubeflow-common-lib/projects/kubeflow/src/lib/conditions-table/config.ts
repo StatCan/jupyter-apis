@@ -5,7 +5,7 @@ import {
   TableConfig,
 } from '../resource-table/types';
 import { DateTimeValue } from '../resource-table/types/date-time';
-
+// AAW: Translation?
 export function generateConfig(): TableConfig {
   return {
     title: '',

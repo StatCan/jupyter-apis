@@ -39,16 +39,10 @@ describe('Notebook Details Page', () => {
       'lib-details-list-item[key="Type"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' JupyterLab\n');
     cy.get(
-      'lib-details-list-item[key="Minimum CPU"] > .list-entry-row > .list-entry-value > div',
+      'lib-details-list-item[key="Requested CPU"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' 500m\n');
     cy.get(
-      'lib-details-list-item[key="Maximum CPU"] > .list-entry-row > .list-entry-value > div',
-    ).should('have.text', ' 500m\n');
-    cy.get(
-      'lib-details-list-item[key="Minimum memory"] > .list-entry-row > .list-entry-value > div',
-    ).should('have.text', ' 2Gi\n');
-    cy.get(
-      'lib-details-list-item[key="Maximum memory"] > .list-entry-row > .list-entry-value > div',
+      'lib-details-list-item[key="Requested memory"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' 2Gi\n');
     cy.get(
       'lib-details-list-item[key="Image"] > .list-entry-row > .list-entry-value > div',

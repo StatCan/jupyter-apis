@@ -276,8 +276,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2013812030502603881" datatype="html">
-        <source>already exists</source>
-        <target>existe déjà</target>
+        <source> already exists</source>
+        <target> existe déjà</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
           <context context-type="linenumber">95</context>

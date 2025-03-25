@@ -91,7 +91,7 @@ export const MAX_NAME_LENGTH = 50;
 
 export function getNameError(nameCtrl: AbstractControl, resource: string) {
   if (nameCtrl.hasError('existingName')) {
-    return `${resource} "${nameCtrl.value}"` + $localize ` already exists`;
+    return `${resource} "${nameCtrl.value}"` + $localize` already exists`;
   } else if (nameCtrl.hasError('pattern')) {
     // TODO: "pattern", is generic error, this might break in the future
     return dns1035Validator.help;

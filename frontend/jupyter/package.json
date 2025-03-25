@@ -41,7 +41,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@kubernetes/client-node": "^0.16.3",
+    "@kubernetes/client-node": "^1.0.0",
     "date-fns": "^1.29.0",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21",
@@ -84,5 +84,14 @@
     "ts-node": "^10.4.0",
     "typescript": "~5.2.2",
     "wait-on": "^7.2.0"
+  },
+  "overrides": {
+    "http-proxy-middleware": "2.0.7",
+    "webpack-dev-middleware": "6.1.2",
+    "undici": "6.21.1",
+    "webpack": "5.94.0",
+    "@babel/runtime": "7.26.10",
+    "esbuild": "0.25.1",
+    "vite": "5.4"
   }
 }

@@ -35,7 +35,12 @@
   </button>
 
   <div class="flex text-area" *ngIf="allowYAMLEditing">
-    <button class="btn-link" (click)="yaml.emit(true)" data-cy-submit-bar-edit i18n>
+    <button
+      class="btn-link"
+      (click)="yaml.emit(true)"
+      data-cy-submit-bar-edit
+      i18n
+    >
       Edit
     </button>
     <span i18n> and submit YAML</span>

@@ -11,8 +11,7 @@ export class ContentListItemComponent {
   @Input() topDivider = false;
   @Input() bottomDivider = true;
   @Input() keyMinWidth = '250px';
-  // AAW is this text
-  @Input() loadErrorMsg = 'Resources not available';
+  @Input() loadErrorMsg = $localize`Resources not available`;
 
   constructor() {}
 }

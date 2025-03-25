@@ -15,7 +15,7 @@ export class VariablesGroupsTableComponent {
   get envGroups() {
     return this.prvEnvGroups;
   }
-  @Input() loadErrorMsg = $localize `Resources not available`;
+  @Input() loadErrorMsg = $localize`Resources not available`;
   @Input() loadCompleted = false;
 
   envGroupsEmpty(): boolean {

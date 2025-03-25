@@ -33,8 +33,7 @@ export const dns1035Validator: IValidator = {
 // aaw verify if i18n works
 export const volSizeValidator: IValidator = {
   regex: '^[0-9]+(E|Ei|P|Pi|T|Ti|G|Gi|M|Mi|K|Ki)?$',
-  help:
-    $localize `Invalid volume size: Should be an integer, 
+  help: $localize`Invalid volume size: Should be an integer, 
       or integer followed by a valid unit`,
 };
 
@@ -45,15 +44,13 @@ export const memoryValidator: IValidator = {
     '|' +
     '(E|Ei|P|Pi|T|Ti|G|Gi|M|Mi|K|Ki)' +
     ')?$',
-  help:
-    $localize `Invalid memory size: Should be an integer, 
+  help: $localize`Invalid memory size: Should be an integer, 
       or fixed-point integer followed by a valid unit`,
 };
 
 export const cpuValidator: IValidator = {
   regex: '^[0-9]*(m|[.][0-9]+)?$',
-  help:
-    $localize `Invalid cpu limit: Should be a fixed-point 
+  help: $localize`Invalid cpu limit: Should be a fixed-point 
     integer or an integer followed by 'm'`,
 };
 
@@ -95,7 +92,7 @@ export const MAX_NAME_LENGTH = 50;
 export function getNameError(nameCtrl: AbstractControl, resource: string) {
   if (nameCtrl.hasError('existingName')) {
     //AAW Verigy
-    return `${resource} "${nameCtrl.value}"` + $localize `already exists`;
+    return `${resource} "${nameCtrl.value}"` + $localize`already exists`;
   } else if (nameCtrl.hasError('pattern')) {
     // TODO: "pattern", is generic error, this might break in the future
     return dns1035Validator.help;

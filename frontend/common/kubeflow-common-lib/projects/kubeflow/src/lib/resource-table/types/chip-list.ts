@@ -16,7 +16,7 @@ export class ChipsListValue {
 
   private defaultValues: ChipsListConfig = {
     field: '',
-    noValueText: $localize `No items`,
+    noValueText: $localize`No items`,
     maxVisibleChips: 3,
   };
 

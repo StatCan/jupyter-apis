@@ -24,21 +24,13 @@
 <lib-details-list-item key="Type" i18n-key>
   {{ notebookType }}
 </lib-details-list-item>
-<!-- AAW only requested? -->
-<lib-details-list-item *ngIf="cpuRequests" key="Minimum CPU" i18n-key>
+
+<lib-details-list-item *ngIf="cpuRequests" key="Requested CPU" i18n-key>
   {{ cpuRequests }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="cpuLimits" key="Maximum CPU" i18n-key>
-  {{ cpuLimits }}
-</lib-details-list-item>
-
-<lib-details-list-item *ngIf="memoryRequests" key="Minimum memory" i18n-key>
+<lib-details-list-item *ngIf="memoryRequests" key="Requested memory" i18n-key>
   {{ memoryRequests }}
-</lib-details-list-item>
-
-<lib-details-list-item *ngIf="memoryLimits" key="Maximum memory" i18n-key>
-  {{ memoryLimits }}
 </lib-details-list-item>
 
 <lib-details-list-item key="Image" [copyValue]="dockerImage" i18n-key>

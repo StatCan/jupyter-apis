@@ -9,6 +9,13 @@
           <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2285521082893692780" datatype="html">
+        <source>Content copied to clipboard</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/details-list/details-list-item/details-list-item.component.ts</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="06092652abb50edaa9641cb9311c817c56394572" datatype="html">
         <source>Hide this section</source>
         <context-group purpose="location">
@@ -30,6 +37,10 @@
           <context context-type="linenumber">2,3</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/name-namespace-inputs/name-input/name-input.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/existing/pvc/pvc.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
@@ -49,11 +60,68 @@
           <context context-type="linenumber">15,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c10ec5657db099d128e840d3ef41e1c35acae77f" datatype="html">
-        <source> Cannot be less than meow <x id="INTERPOLATION" equiv-text="{{ min }}."/>. </source>
+      <trans-unit id="65239f77938d9301519b3b6791cd9df460bb627a" datatype="html">
+        <source> Cannot be less than <x id="INTERPOLATION" equiv-text="{{ min }}."/>. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/positive-number-input/positive-number-input.component.html</context>
           <context context-type="linenumber">10,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50b3b6edd16fce635e03e9ed3d1c99f99915f1bc" datatype="html">
+        <source>*The cluster admin has disabled setting this section!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/section/section.component.html</context>
+          <context context-type="linenumber">19,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="318ee0b38469a36c1876de84a7508188dc12860f" datatype="html">
+        <source> CREATE </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/submit-bar/submit-bar.component.html</context>
+          <context context-type="linenumber">14,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d84c07ff17b7eb42ff7f8d1febd77c74837821ac" datatype="html">
+        <source>CREATING</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/submit-bar/submit-bar.component.html</context>
+          <context context-type="linenumber">24,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5362cb002befcb9e93f0e98a15c929adf7899857" datatype="html">
+        <source> CANCEL </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/submit-bar/submit-bar.component.html</context>
+          <context context-type="linenumber">35,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c135f4618bd4d3741aa311d61a3c455739f8aa16" datatype="html">
+        <source> Edit </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/submit-bar/submit-bar.component.html</context>
+          <context context-type="linenumber">40,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bffa85a08883141c8aff5a7cb51d13bd29acb2c8" datatype="html">
+        <source> and submit YAML</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/submit-bar/submit-bar.component.html</context>
+          <context context-type="linenumber">41,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5555887031199320505" datatype="html">
+        <source>Can not update control with value null</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/utils.ts</context>
+          <context context-type="linenumber">12,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9014900906829838341" datatype="html">
+        <source>Name must consist of lowercase alphanumeric characters or &apos;-&apos;,
+      and must start and end with an alphanumeric character</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
+          <context context-type="linenumber">23,27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6259832288014753417" datatype="html">
@@ -64,8 +132,39 @@
           <context context-type="linenumber">30,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1598690088323441078" datatype="html">
-        <source>Name is too long woof</source>
+      <trans-unit id="6309394782533686443" datatype="html">
+        <source>Invalid volume size: Should be an integer, 
+      or integer followed by a valid unit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
+          <context context-type="linenumber">37,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3476980733635555302" datatype="html">
+        <source>Invalid memory size: Should be an integer, 
+      or fixed-point integer followed by a valid unit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
+          <context context-type="linenumber">49,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2157861234990328207" datatype="html">
+        <source>Invalid cpu limit: Should be a fixed-point 
+    integer or an integer followed by &apos;m&apos;</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
+          <context context-type="linenumber">56,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2013812030502603881" datatype="html">
+        <source>already exists</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="824282508845786476" datatype="html">
+        <source>Name is too long</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -289,6 +388,21 @@
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4553983244211420347" datatype="html">
+        <source>Unexpected error encountered</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/services/backend/backend.service.ts</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/services/backend/backend.service.ts</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/backend.service.ts</context>
+          <context context-type="linenumber">325</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3862207452684082108" datatype="html">
         <source>An error occurred: <x id="PH" equiv-text="error"/></source>
         <context-group purpose="location">
@@ -310,13 +424,6 @@
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4553983244211420347" datatype="html">
-        <source>Unexpected error encountered</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">projects/kubeflow/src/lib/services/backend/backend.service.ts</context>
-          <context context-type="linenumber">167</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="0c0be57aaf30414531e79157a45e0fc3fd6b637b" datatype="html">
         <source>DISMISS</source>
         <context-group purpose="location">
@@ -329,6 +436,21 @@
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/title-actions-toolbar/types.ts</context>
           <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8530057910296128489" datatype="html">
+        <source>Resources not available</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/variables-groups-table/variables-groups-table.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/volumes/volumes.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/volume-details-page/overview/link-groups-table/link-groups-table.component.ts</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac184ad5119488375c501e04e46b79dbb6079cc7" datatype="html">
@@ -382,7 +504,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-form/volume-form.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <note priority="1" from="description">option None</note>
       </trans-unit>
@@ -584,6 +706,13 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-gpus/form-gpus.component.html</context>
           <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8187372325935252121" datatype="html">
+        <source>GPU not available for learning namespaces</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-gpus/form-gpus.component.ts</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="355498740929071390" datatype="html">
@@ -1010,6 +1139,17 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fbc6d8bbd465eba779b7c1aa7017cc0b47125097" datatype="html">
+        <source>Notebooks</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/columns/used-by/used-by.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5611592591303869712" datatype="html">
         <source>Status</source>
         <context-group purpose="location">
@@ -1204,13 +1344,6 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fbc6d8bbd465eba779b7c1aa7017cc0b47125097" datatype="html">
-        <source>Notebooks</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="9a28e18873fa5c77a3013b634dd0c87a548e620b" datatype="html">
         <source>Volumes</source>
         <context-group purpose="location">
@@ -1388,6 +1521,34 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">502</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e2936e947eed8cb9987b1111220f29597a4397b" datatype="html">
+        <source>JupyterLab based server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/server-type/server-type.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d128f1d364722cc2a9d0b0c9a75aaf9487c89d21" datatype="html">
+        <source>Rstudio based server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/server-type/server-type.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63db349de954237fbd03a60b7fe4b4967ce53332" datatype="html">
+        <source>Ubuntu based server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/server-type/server-type.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="518cacd0acfb1cc3d14350870ab796d5506b61b5" datatype="html">
+        <source>SAS based server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/server-type/server-type.component.html</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4775550080689015987" datatype="html">
@@ -1573,6 +1734,13 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="de4329d6fe662f06d745e7c309d90a2fbb77b313" datatype="html">
+        <source>Notebook creator</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
         <source>Type</source>
         <context-group purpose="location">
@@ -1640,6 +1808,20 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2807800733729323332" datatype="html">
+        <source>Yes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3542042671420335679" datatype="html">
+        <source>No</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3697970706651766645" datatype="html">
         <source>A PersistentVolumeClaim (PVC) is a request for storage by a user and it is similar to a Pod. Pods consume node resources and PVCs consume PV resources. Pods can request specific levels of resources (CPU and Memory). Claims can request specific size and access modes (e.g., they can be mounted ReadWriteOnce, ReadOnlyMany or ReadWriteMany).</source>
         <context-group purpose="location">
@@ -1675,6 +1857,20 @@
           <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4485950189231110966" datatype="html">
+        <source>Notebook CR</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
+          <context context-type="linenumber">379</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
+        <source>Help</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/volumes/volumes.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e5fdea24582fa8d00eed24e05bbf93ca06d77e97" datatype="html">
         <source> Read more at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
           [href]=&quot;volGroup.url&quot;
@@ -1685,14 +1881,7 @@
         &gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/volumes/volumes.component.html</context>
-          <context context-type="linenumber">24,32</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8530057910296128489" datatype="html">
-        <source>Resources not available</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/overview/volumes/volumes.component.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">25,33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="14fe5cb60dc8d409463a6fdc7d66e227beaa1dbc" datatype="html">
@@ -1881,32 +2070,39 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="41ad809a050cf3e94c28f11c8fc472c8e0229b2d" datatype="html">
+        <source>Volume size in Gi</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/volume-form/volume-form.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5a237d4cea2a69c625c9c0a081adc9acc4664843" datatype="html">
         <source>Storage Class</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-form/volume-form.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca8a463644ae578e0be4299b2a7d050046edcb49" datatype="html">
         <source>Access Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-form/volume-form.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="577ff450cd8d905a75bf92dad2457515d3a49b3b" datatype="html">
         <source> CREATE </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-form/volume-form.component.html</context>
-          <context context-type="linenumber">69,71</context>
+          <context context-type="linenumber">70,72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ae582a9312e4bcbb32a62d84e47e6b1b73ffd06a" datatype="html">
         <source> CANCEL </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-form/volume-form.component.html</context>
-          <context context-type="linenumber">79,81</context>
+          <context context-type="linenumber">80,82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7621253216590078255" datatype="html">

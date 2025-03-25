@@ -126,10 +126,10 @@ export class OverviewComponent implements OnDestroy {
     }
     for (const volume of notebook.spec.template.spec.volumes) {
       if (volume.name === 'dshm') {
-        return $localize `Yes`;
+        return $localize`Yes`;
       }
     }
-    return $localize `No`;
+    return $localize`No`;
   }
 
   get cpuLimits(): string {
@@ -376,7 +376,7 @@ export class OverviewComponent implements OnDestroy {
       }
 
       const envGroup: EnvironmentVariablesGroup = {
-        name: $localize `Notebook CR`,
+        name: $localize`Notebook CR`,
         chipsList: [],
       };
       for (const envVar of cn.env) {

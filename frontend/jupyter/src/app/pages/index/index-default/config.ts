@@ -152,7 +152,7 @@ export const defaultConfig: TableConfig = {
         new ActionIconValue({
           name: 'delete',
           tooltipReady: $localize`Delete this notebook server`,
-          color: '',
+          color: 'warn',
           field: 'deleteAction',
           iconReady: 'material:delete',
         }),

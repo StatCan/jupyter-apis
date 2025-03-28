@@ -32,7 +32,7 @@ content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get the kubecost Allocation API 
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/cost/allocation
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/cost/allocation?window=1d
 content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 

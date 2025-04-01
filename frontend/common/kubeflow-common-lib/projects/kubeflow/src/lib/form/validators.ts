@@ -30,7 +30,7 @@ export const dns1035Validator: IValidator = {
   help: $localize`Name must consist of lowercase alphanumeric characters or '-',
     start with an alphabetic character, and end with an alphanumeric character.`,
 };
-// aaw verify if i18n works
+
 export const volSizeValidator: IValidator = {
   regex: '^[0-9]+(E|Ei|P|Pi|T|Ti|G|Gi|M|Mi|K|Ki)?$',
   help: $localize`Invalid volume size: Should be an integer, 

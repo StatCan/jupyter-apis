@@ -322,6 +322,6 @@ export class JWABackendService extends BackendService {
       return error.message;
     }
 
-    return `Unexpected error encountered`;
+    return $localize`Unexpected error encountered`;
   }
 }

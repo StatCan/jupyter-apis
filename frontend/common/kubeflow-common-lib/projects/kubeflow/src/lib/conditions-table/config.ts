@@ -13,7 +13,7 @@ export function generateConfig(): TableConfig {
     theme: TABLE_THEME.FLAT,
     columns: [
       {
-        matHeaderCellDef: 'Status',
+        matHeaderCellDef: $localize`Status`,
         matColumnDef: 'status',
         style: { width: '40px' },
         value: new StatusValue({
@@ -23,7 +23,7 @@ export function generateConfig(): TableConfig {
         sort: true,
       },
       {
-        matHeaderCellDef: 'Type',
+        matHeaderCellDef: $localize`Type`,
         matColumnDef: 'type',
         style: { width: '150px' },
         value: new PropertyValue({
@@ -32,7 +32,7 @@ export function generateConfig(): TableConfig {
         sort: true,
       },
       {
-        matHeaderCellDef: 'Last Transition Time',
+        matHeaderCellDef: $localize`Last Transition Time`,
         matColumnDef: 'lastTransitionTime',
         style: { width: '150px' },
         value: new DateTimeValue({
@@ -41,7 +41,7 @@ export function generateConfig(): TableConfig {
         sort: true,
       },
       {
-        matHeaderCellDef: 'Reason',
+        matHeaderCellDef: $localize`Reason`,
         matColumnDef: 'reason',
         style: { width: '150px' },
         value: new PropertyValue({
@@ -50,7 +50,7 @@ export function generateConfig(): TableConfig {
         sort: true,
       },
       {
-        matHeaderCellDef: 'Message',
+        matHeaderCellDef: $localize`Message`,
         matColumnDef: 'message',
         style: { width: '150px' },
         value: new PropertyValue({

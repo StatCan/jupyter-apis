@@ -169,9 +169,9 @@ export class FormNewComponent
   setTooltipText(form: FormGroup): string {
     let text: string;
     if (!form.get('name').valid) {
-      text = 'No value of the Notebook name was provided';
+      text = $localize`No value of the Notebook name was provided`;
     } else if (!form.controls.valid) {
-      text = 'The form contains invalid fields';
+      text = $localize`The form contains invalid fields`;
     }
     return text;
   }
@@ -179,7 +179,7 @@ export class FormNewComponent
   onSubmit() {
     const configInfo: SnackBarConfig = {
       data: {
-        msg: 'Submitting new Notebook...',
+        msg: $localize`Submitting new Notebook...`,
         snackType: SnackType.Info,
       },
     };
@@ -190,7 +190,7 @@ export class FormNewComponent
       this.popup.close();
       const configSuccess: SnackBarConfig = {
         data: {
-          msg: 'Notebook created successfully.',
+          msg: $localize`Notebook created successfully.`,
           snackType: SnackType.Success,
         },
       };

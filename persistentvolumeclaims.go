@@ -210,7 +210,8 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 		allevents, err := s.listers.events.Events(pvc.Namespace).List(labels.Everything())
 		if err != nil {
-			log.Printf("failed to load events for %s/%s: %v", pvc.Namespace, pvc.Name, err)
+			s.error(w, r, err)
+			return
 		}
 
 		status := GetPvcStatus(pvc, allevents)
@@ -350,7 +351,8 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 	fieldSelector := getEventsFieldSelector("PersistentVolumeClaim", pvc)
 	events, err := s.listEvents(namespace, fieldSelector)
 	if err != nil {
-		log.Printf("failed to load events for %s/%s: %v", namespace, pvc, err)
+		s.error(w, r, err)
+		return
 	}
 
 	resp := &pvceventsresponse{

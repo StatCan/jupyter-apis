@@ -316,7 +316,13 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, notebook := range notebooks {
-		resp.Notebooks = append(resp.Notebooks, s.getNotebookData(notebook))
+		nb, err := s.getNotebookData(notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		resp.Notebooks = append(resp.Notebooks, nb)
 	}
 
 	s.respond(w, r, resp)
@@ -344,7 +350,13 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	for _, notebook := range notebooks {
 		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
 			if val == "true" {
-				resp.Notebook = s.getNotebookData(notebook)
+				nb, err := s.getNotebookData(notebook)
+				if err != nil {
+					s.error(w, r, err)
+					return
+				}
+
+				resp.Notebook = nb
 				resp.APIResponseBase.Success = true
 				break
 			}
@@ -363,11 +375,12 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) notebookresponse {
+func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookresponse, error) {
 	// Load events
 	allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
 	if err != nil {
 		log.Printf("failed to load events for %s/%s: %v", notebook.Namespace, notebook.Name, err)
+		return notebookresponse{}, err
 	}
 
 	// Filter past events
@@ -410,7 +423,7 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) notebookresponse
 		Volumes:      volumes,
 		Labels:       notebook.Labels,
 		Metadata:     notebook.ObjectMeta,
-	}
+	}, nil
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
@@ -1141,7 +1154,8 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 	fieldSelector := getEventsFieldSelector("Notebook", notebook)
 	events, err := s.listEvents(namespace, fieldSelector)
 	if err != nil {
-		log.Printf("failed to load events for %s/%s: %v", namespace, notebook, err)
+		s.error(w, r, err)
+		return
 	}
 
 	resp := &notebookeventsresponse{

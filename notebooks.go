@@ -1138,10 +1138,8 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", notebook, namespace)
 
-	eventOpts := metav1.ListOptions{
-		FieldSelector: "involvedObject.kind=Notebook,involvedObject.name=" + notebook,
-	}
-	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
+	fieldSelector := getEventsFieldSelector("Notebook", notebook)
+	events, err := s.listEvents(namespace, fieldSelector)
 	if err != nil {
 		log.Printf("failed to load events for %s/%s: %v", namespace, notebook, err)
 	}

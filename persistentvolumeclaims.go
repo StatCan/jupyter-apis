@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -348,10 +347,8 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", pvc, namespace)
 
-	eventOpts := v1.ListOptions{
-		FieldSelector: "involvedObject.kind=PersistentVolumeClaim,involvedObject.name=" + pvc,
-	}
-	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
+	fieldSelector := getEventsFieldSelector("PersistentVolumeClaim", pvc)
+	events, err := s.listEvents(namespace, fieldSelector)
 	if err != nil {
 		log.Printf("failed to load events for %s/%s: %v", namespace, pvc, err)
 	}

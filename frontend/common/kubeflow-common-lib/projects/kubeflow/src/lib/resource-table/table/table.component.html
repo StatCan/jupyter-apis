@@ -32,6 +32,7 @@
     matTooltip="Clear filters"
     i18n-matTooltip
     aria-label="Clear"
+    i18n-aria-label
     (click)="clear(); blurInput(chipInput)"
   >
     <mat-icon>close</mat-icon>
@@ -41,6 +42,7 @@
     matSuffix
     mat-icon-button
     aria-label="Help"
+    i18n-aria-label
     (click)="$event.stopPropagation()"
     [libPopover]="helperTpl"
     [libPopoverPosition]="'below'"

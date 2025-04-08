@@ -246,25 +246,25 @@
           <context context-type="linenumber">53,59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2013812030502603881" datatype="html">
+      <trans-unit id="8184509327869062699" datatype="html">
         <source> already exists</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="824282508845786476" datatype="html">
         <source>Name is too long</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5302945586275093972" datatype="html">
         <source>Name cannot be empty</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f59f45b6bac7d535a009d92841e20b0284e233ec" datatype="html">
@@ -911,11 +911,32 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e56861133826e6cf920df6db9ba38eae12e4125f" datatype="html">
+        <source>Server Type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="49d885a0fbecc7b6f27730b61c9034b966b62c03" datatype="html">
+        <source>Use JupyterLab based server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="76224ae623ed6954bcad1076767499c209014950" datatype="html">
         <source> An interactive development environment for notebooks, code, and data. Ideal for prototyping and experimentation. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
           <context context-type="linenumber">17,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6b945c256be01143bac0ad2fec2f6d45d154c4d7" datatype="html">
+        <source>Use SAS Image</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2b90ec31b6f0aa2356466b2d9174360c3a0b95f4" datatype="html">

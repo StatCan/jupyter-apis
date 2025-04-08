@@ -44,6 +44,9 @@ const StoppedAnnotation string = "kubeflow-resource-stopped"
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
+// NotebookCreatorAnnotation is the annotation recording the username that created the notebook
+const NotebookCreatorAnnotation string = "notebooks.kubeflow.org/creator"
+
 // AutoMountLabel is the label name to automount blob-csi volumes
 const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
@@ -702,6 +705,12 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 	image = strings.TrimSpace(image)
 
+	// Gets the current user. Returns a default value if none is found.
+	user := r.URL.User.Username()
+	if user == "" {
+		user = "anonymous@kubeflow.org"
+	}
+
 	// Setup the notebook
 	notebook := kubeflowv1.Notebook{
 		ObjectMeta: metav1.ObjectMeta{
@@ -711,7 +720,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				AutoMountLabel: "true",
 			},
 			Annotations: map[string]string{
-				ServerTypeAnnotation: req.ServerType,
+				ServerTypeAnnotation:      req.ServerType,
+				NotebookCreatorAnnotation: user,
 			},
 		},
 		Spec: kubeflowv1.NotebookSpec{

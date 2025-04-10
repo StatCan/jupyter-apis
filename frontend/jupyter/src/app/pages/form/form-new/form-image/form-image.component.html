@@ -3,14 +3,14 @@
     <mat-button-toggle-group
       [formControl]="parentForm.get('serverType')"
       class="server-type-wrapper"
-      attr.aria-label="Server Type"
-      i18n-aria-label="Aria label for the Server Type"
+      aria-label="Server Type"
+      i18n-aria-label
       data-cy-form-input="serverType"
     >
       <mat-button-toggle
         value="jupyter"
-        attr.aria-label="Use JupyterLab based server"
-        i18n-aria-label="Aria label for JupyterLab type server"
+        aria-label="Use JupyterLab based server"
+        i18n-aria-label
       >
         <mat-icon class="server-type-icon" svgIcon="jupyter-icon"></mat-icon>
         <p class="server-type-title">JupyterLab</p>
@@ -22,7 +22,7 @@
 
       <mat-button-toggle
         value="group-three"
-        attr.aria-label="Use SAS Image"
+        aria-label="Use SAS Image"
         [disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"
         [matTooltip]="
           !shouldEnable(imagesGroupThree?.enabledCondition)

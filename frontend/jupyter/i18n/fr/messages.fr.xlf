@@ -275,12 +275,12 @@
           <context context-type="linenumber">53,59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2013812030502603881" datatype="html">
+      <trans-unit id="8184509327869062699" datatype="html">
         <source> already exists</source>
         <target> existe déjà</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="824282508845786476" datatype="html">
@@ -288,7 +288,7 @@
         <target>Le nom est trop long</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5302945586275093972" datatype="html">
@@ -296,7 +296,7 @@
         <target>Nom ne peut pas être vide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f59f45b6bac7d535a009d92841e20b0284e233ec" datatype="html">
@@ -1031,6 +1031,20 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.ts</context>
           <context context-type="linenumber">148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e56861133826e6cf920df6db9ba38eae12e4125f" datatype="html">
+        <source>Server Type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="49d885a0fbecc7b6f27730b61c9034b966b62c03" datatype="html">
+        <source>Use JupyterLab based server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="76224ae623ed6954bcad1076767499c209014950" datatype="html">

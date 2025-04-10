@@ -46,7 +46,7 @@ type pvcpodsresponse struct {
 
 type pvceventsresponse struct {
 	APIResponseBase
-	Events []corev1.Event `json:"events"`
+	Events []*corev1.Event `json:"events"`
 }
 
 // pvcPhase is the phase of a PVC
@@ -348,8 +348,7 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", pvc, namespace)
 
-	fieldSelector := getEventsFieldSelector("PersistentVolumeClaim", pvc)
-	events, err := s.listEvents(namespace, fieldSelector)
+	events, err := s.listEvents(namespace, "PersistentVolumeClaim", pvc)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -360,7 +359,7 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Events: events.Items,
+		Events: events,
 	}
 	s.respond(w, r, resp)
 }

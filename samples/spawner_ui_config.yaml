@@ -82,7 +82,7 @@ spawnerFormDefaults:
     readOnly: false
 
     # the default memory request for the container
-    value: "2.0Gi"
+    value: "2.0"
     # AAW: default value when a GPU is selected
     gpuDefault: '96.0'
     # a factor by which to multiply the memory request calculate the memory limit

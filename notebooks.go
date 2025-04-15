@@ -44,6 +44,9 @@ const StoppedAnnotation string = "kubeflow-resource-stopped"
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
+// NotebookCreatorAnnotation is the annotation recording the username that created the notebook
+const NotebookCreatorAnnotation string = "notebooks.kubeflow.org/creator"
+
 // AutoMountLabel is the label name to automount blob-csi volumes
 const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
@@ -147,7 +150,8 @@ type notebookapiresponse struct {
 
 type getnotebookresponse struct {
 	APIResponseBase
-	Notebook kubeflowv1.Notebook `json:"notebook"`
+	Notebook        kubeflowv1.Notebook `json:"notebook"`
+	ProcessedStatus status              `json:"processedStatus"`
 }
 
 type podresponse struct {
@@ -163,113 +167,11 @@ type podlogsresponse struct {
 
 type notebookeventsresponse struct {
 	APIResponseBase
-	Events []corev1.Event `json:"events"`
+	Events []*corev1.Event `json:"events"`
 }
 
 type updatenotebookrequest struct {
 	Stopped bool `json:"stopped"`
-}
-
-// notebookPhase is the phase of a notebook.
-type notebookPhase string
-
-// status represents the status of a notebook.
-type status struct {
-	Message string        `json:"message"`
-	Phase   notebookPhase `json:"phase"`
-	State   string        `json:"state"`
-	Key     string        `json:"key"`
-}
-
-const (
-	// NotebookPhaseReady represents the ready phase of a notebook.
-	NotebookPhaseReady notebookPhase = "ready"
-
-	// NotebookPhaseWaiting represents the waiting phase of a notebook.
-	NotebookPhaseWaiting notebookPhase = "waiting"
-
-	// NotebookPhaseWarning represents the warning phase of a notebook.
-	NotebookPhaseWarning notebookPhase = "warning"
-
-	// NotebookPhaseError represents the error phase of a notebook.
-	NotebookPhaseError notebookPhase = "error"
-
-	// NotebookPhaseUnitialized represents the uninitialized phase of a notebook.
-	NotebookPhaseUnitialized notebookPhase = "uninitialized"
-
-	// NotebookPhaseUnavailable represents the unavailable phase of a notebook.
-	NotebookPhaseUnavailable notebookPhase = "unavailable"
-
-	// NotebookPhaseTerminating represents the terminating phase of a notebook.
-	NotebookPhaseTerminating notebookPhase = "terminating"
-
-	// NotebookPhaseStopped represents the stopped phase of a notebook.
-	NotebookPhaseStopped notebookPhase = "stopped"
-)
-
-// Based on: https://github.com/kubeflow/kubeflow/blob/0e91a2b9cd0c3b6687692b1f1f09ac6070cc6c3e/components/crud-web-apps/jupyter/backend/apps/common/status.py#L9
-func processStatus(notebook *kubeflowv1.Notebook, events []*corev1.Event) status {
-	// Check if the notebook is bing deleting
-	if notebook.DeletionTimestamp != nil {
-		return status{
-			Message: "Deleting this Notebook Server.",
-			Phase:   NotebookPhaseTerminating,
-			Key:     "notebookDeleting",
-		}
-	}
-
-	// Check if the notebook is stopped
-	if _, ok := notebook.Annotations[StoppedAnnotation]; ok {
-		if notebook.Status.ReadyReplicas == 0 {
-			return status{
-				Message: "No pods are currently running for this Notebook Server.",
-				Phase:   NotebookPhaseStopped,
-				Key:     "noPodsRunning",
-			}
-		}
-
-		return status{
-			Message: "Notebook Server is stopping.",
-			Phase:   NotebookPhaseTerminating,
-			Key:     "notebookStopping",
-		}
-	}
-
-	// Check the status
-	state := notebook.Status.ContainerState
-
-	if notebook.Status.ReadyReplicas == 1 {
-		return status{
-			Message: "Running",
-			Phase:   NotebookPhaseReady,
-			Key:     "running",
-		}
-	}
-
-	if state.Waiting != nil {
-		return status{
-			Message: state.Waiting.Reason,
-			Phase:   NotebookPhaseWaiting,
-			Key:     "waitingStatus",
-		}
-	}
-
-	// Check for more detailed errors
-	for _, event := range events {
-		if event.Type == corev1.EventTypeWarning {
-			return status{
-				Message: event.Reason,
-				Phase:   NotebookPhaseWarning,
-				Key:     "errorEvent",
-			}
-		}
-	}
-
-	return status{
-		Message: "Scheduling the Pod",
-		Phase:   NotebookPhaseWaiting,
-		Key:     "schedulingPod",
-	}
 }
 
 func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
@@ -316,7 +218,13 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, notebook := range notebooks {
-		resp.Notebooks = append(resp.Notebooks, s.getNotebookData(notebook))
+		nb, err := s.getNotebookData(notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		resp.Notebooks = append(resp.Notebooks, nb)
 	}
 
 	s.respond(w, r, resp)
@@ -344,7 +252,13 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	for _, notebook := range notebooks {
 		if val, ok := notebook.Labels["notebook.statcan.gc.ca/default-notebook"]; ok {
 			if val == "true" {
-				resp.Notebook = s.getNotebookData(notebook)
+				nb, err := s.getNotebookData(notebook)
+				if err != nil {
+					s.error(w, r, err)
+					return
+				}
+
+				resp.Notebook = nb
 				resp.APIResponseBase.Success = true
 				break
 			}
@@ -363,28 +277,14 @@ func (s *server) GetDefaultNotebook(w http.ResponseWriter, r *http.Request) {
 	s.respond(w, r, resp)
 }
 
-func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) notebookresponse {
-	// Load events
-	allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
-	if err != nil {
-		log.Printf("failed to load events for %s/%s: %v", notebook.Namespace, notebook.Name, err)
-	}
-
-	// Filter past events
-	events := make([]*corev1.Event, 0)
-	for _, event := range allevents {
-		if event.InvolvedObject.Kind != "Notebook" || event.InvolvedObject.Name != notebook.Name || event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
-			continue
-		}
-
-		events = append(events, event)
-	}
-	sort.Sort(eventsByTimestamp(events))
-
+func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookresponse, error) {
 	imageparts := strings.SplitAfter(notebook.Spec.Template.Spec.Containers[0].Image, "/")
 
 	// Process current status + reason
-	status := processStatus(notebook, events)
+	status, err := s.processStatus(notebook)
+	if err != nil {
+		return notebookresponse{}, err
+	}
 
 	volumes := []string{}
 	for _, vol := range notebook.Spec.Template.Spec.Volumes {
@@ -410,7 +310,7 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) notebookresponse
 		Volumes:      volumes,
 		Labels:       notebook.Labels,
 		Metadata:     notebook.ObjectMeta,
-	}
+	}, nil
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
@@ -689,6 +589,12 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 	image = strings.TrimSpace(image)
 
+	// Gets the current user. Returns a default value if none is found.
+	user := r.URL.User.Username()
+	if user == "" {
+		user = "anonymous@kubeflow.org"
+	}
+
 	// Setup the notebook
 	notebook := kubeflowv1.Notebook{
 		ObjectMeta: metav1.ObjectMeta{
@@ -698,7 +604,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				AutoMountLabel: "true",
 			},
 			Annotations: map[string]string{
-				ServerTypeAnnotation: req.ServerType,
+				ServerTypeAnnotation:      req.ServerType,
+				NotebookCreatorAnnotation: user,
 			},
 		},
 		Spec: kubeflowv1.NotebookSpec{
@@ -1043,12 +950,19 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	processedStatus, err := s.processStatus(nb)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
 	resp := &getnotebookresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Notebook: *nb,
+		Notebook:        *nb,
+		ProcessedStatus: processedStatus,
 	}
 
 	s.respond(w, r, resp)
@@ -1138,12 +1052,10 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", notebook, namespace)
 
-	eventOpts := metav1.ListOptions{
-		FieldSelector: "involvedObject.kind=Notebook,involvedObject.name=" + notebook,
-	}
-	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
+	events, err := s.listEvents(namespace, "Notebook", notebook)
 	if err != nil {
-		log.Printf("failed to load events for %s/%s: %v", namespace, notebook, err)
+		s.error(w, r, err)
+		return
 	}
 
 	resp := &notebookeventsresponse{
@@ -1151,7 +1063,7 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Events: events.Items,
+		Events: events,
 	}
 	s.respond(w, r, resp)
 }

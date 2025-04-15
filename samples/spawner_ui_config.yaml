@@ -1,184 +1,272 @@
-# Configuration file for the Jupyter UI.
+# --------------------------------------------------------------
+# Configuration file for the Kubeflow Notebooks UI.
 #
-# Each Jupyter UI option is configured by two keys: 'value' and 'readOnly'
-# - The 'value' key contains the default value
-# - The 'readOnly' key determines if the option will be available to users
-#
-# If the 'readOnly' key is present and set to 'true', the respective option
-# will be disabled for users and only set by the admin. Also when a
-# Notebook is POSTED to the API if a necessary field is not present then
-# the value from the config will be used.
-#
-# If the 'readOnly' key is missing (defaults to 'false'), the respective option
-# will be available for users to edit.
-#
-# Note that some values can be templated. Such values are the names of the
-# Volumes as well as their StorageClass
+# About the `readOnly` configs:
+#  - when `readOnly` is set to "true", the respective option
+#    will be disabled for users and only set by the admin
+#  - when 'readOnly' is missing, it defaults to 'false'
+# --------------------------------------------------------------
+
 spawnerFormDefaults:
-  image:
-    # The container Image for the user's Jupyter Notebook
-    value: artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2
-    # The list of available standard container Images
-    options:
-      - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2
-      - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-pytorch:v2
-      - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-tensorflow:v2
+  ################################################################
+  # Container Images
+  ################################################################
+  # if users can input custom images, or only select from dropdowns
+  allowCustomImage: true
+
+  # if the registry of the container image is hidden from display
+  hideRegistry: true
+
+  # if the tag of the container image is hidden from display
+  hideTag: true
+
+  # configs for the ImagePullPolicy
+  imagePullPolicy:
     readOnly: false
+
+    # the default ImagePullPolicy
+    # (possible values: "Always", "IfNotPresent", "Never")
+    value: Always
+
+  ################################################################
+  # Jupyter-like Container Images
+  #
+  # NOTES:
+  #  - the `image` section is used for "Jupyter-like" apps whose
+  #    HTTP path is configured by the "NB_PREFIX" environment variable
+  ################################################################
+  image:
+    # the default container image
+    value: artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2
+
+    # the list of available container images in the dropdown
+    options:
+    - artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2
+
+  ################################################################
+  # SAS Container Images (Group 3)
+  #
+  # NOTES:
+  #  - the `imageGroupThree` section is used for "SAS-like" app
+  #  - in our current implementation with the Zone, the only difference
+  #    between this and jupyter images is SAS Studio is available only here
+  ################################################################
   imageGroupThree:
-    # The container Image for the user's Group Three Server (SAS)
-    # The annotation `notebooks.kubeflow.org/http-rewrite-uri: /`
-    # is applied to notebook in this group, configuring
-    # the Istio rewrite for containers that host their web UI at `/`
-    value: artifactory.cloud.statcan.ca/das-aaw-docker/sas:v2    # The list of available standard container Images
+    # the default container image
+    value: artifactory.cloud.statcan.ca/das-aaw-docker/sas:v2 
+
+    # the list of available container images in the dropdown
     options:
     - artifactory.cloud.statcan.ca/das-aaw-docker/sas:v2
-  hideRegistry: true
-  hideTag: true
-  allowCustomImage: true
-  imagePullPolicy:
-    value: Always
+
+  ################################################################
+  # CPU Resources
+  ################################################################
   cpu:
-    # CPU for user's Notebook
-    value: '0.5'
+    readOnly: false
+
+    # the default cpu request for the container
+    value: "0.5"
     # AAW: default value when a GPU is selected
     gpuDefault: '4.0'
-    # Factor by with to multiply request to calculate limit
-    # if no limit is set, to disable set "none"
+    # a factor by which to multiply the CPU request calculate the cpu limit
+    # (to disable cpu limits, set as "none")
     limitFactor: "1.0"
     # AAW: Limit Value for the maximum amount of cpu allocated
     limitValue: "4.0"
-    readOnly: false
+
+  ################################################################
+  # Memory Resources
+  ################################################################
   memory:
-    # Memory for user's Notebook
-    value: '2.0'
+    readOnly: false
+
+    # the default memory request for the container
+    value: "2.0"
     # AAW: default value when a GPU is selected
     gpuDefault: '96.0'
-    # Factor by with to multiply request to calculate limit
-    # if no limit is set, to disable set "none"
+    # a factor by which to multiply the memory request calculate the memory limit
+    # (to disable memory limits, set as "none")
     limitFactor: "1.0"
     # AAW: Limit Value for the maximum amount of memory allocated
     limitValue: "4.0"
+
+  ################################################################
+  # GPU/Device-Plugin Resources
+  ################################################################
+  gpus:
     readOnly: false
+
+    # configs for gpu/device-plugin limits of the container
+    # https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/#using-device-plugins
+    value:
+      # the `limitKey` of the default vendor
+      # (to have no default, set as "")
+      vendor: "nvidia.com/gpu"
+
+      # the list of available vendors in the dropdown
+      #  `limitsKey` - what will be set as the actual limit
+      #  `uiName` - what will be displayed in the dropdown UI
+      vendors:
+      - limitsKey: "nvidia.com/gpu"
+        uiName: "NVIDIA"
+
+      # the default value of the limit
+      # (possible values: "none", "1", "2", "4", "8")
+      num: "none"
+
+  ################################################################
+  # Workspace Volumes
+  ################################################################
   workspaceVolume:
-    # Workspace Volume to be attached to user's Notebook
-    # This must be updated in dev and prod to reflect new config.go
+    readOnly: false
+
+    # the default workspace volume to be created and mounted
+    # (to have no default, set `value: null`)
     value:
       mount: /home/jovyan
+
+      # pvc configs for creating new workspace volumes
+      # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.24/#persistentvolumeclaim-v1-core
       newPvc:
         metadata:
-          name: '{notebook-name}-workspace'
+          # "{notebook-name}" is replaced with the Notebook name
+          name: "{notebook-name}-workspace"
         spec:
+          #storageClassName: my-storage-class
           resources:
             requests:
               storage: 16Gi
           accessModes:
-            - ReadWriteOnce
-    readOnly: false
+          - ReadWriteOnce
+
+  ################################################################
+  # Data Volumes
+  ################################################################
   dataVolumes:
-    # List of additional Data Volumes to be attached to the user's Notebook
+    readOnly: false
+
+    # a list of additional data volumes to be created and/or mounted
     value: []
-    # Each Data Volume is declared with the following attributes:
-    # Type, Name, Size, MountPath and Access Mode
+    #value:
+    #  - mount: /home/jovyan/datavol-1
+    #    newPvc:
+    #      metadata:
+    #        name: "{notebook-name}-datavol-1"
+    #      spec:
+    #        resources:
+    #          requests:
+    #            storage: 5Gi
+    #        accessModes:
+    #          - ReadWriteOnce
     #
-    # For example, a list with 2 Data Volumes:
-    # value:
-    #   - value:
-    #       type:
-    #         value: New
-    #       name:
-    #         value: '{notebook-name}-vol-1'
-    #       size:
-    #         value: '10Gi'
-    #       class:
-    #         value: standard
-    #       mountPath:
-    #         value: /home/jovyan/vol-1
-    #       accessModes:
-    #         value: ReadWriteOnce
-    #       class:
-    #         value: {none}
-    #   - value:
-    #       type:
-    #         value: New
-    #       name:
-    #         value: '{notebook-name}-vol-2'
-    #       size:
-    #         value: '10Gi'
-    #       mountPath:
-    #         value: /home/jovyan/vol-2
-    #       accessModes:
-    #         value: ReadWriteMany
-    #       class:
-    #         value: {none}
-    readOnly: false
-  gpus:
-    # Number of GPUs to be assigned to the Notebook Container
-    value:
-      # values: "none", "1", "2", "4", "8"
-      num: "none"
-      # Determines what the UI will show and send to the backend
-      vendors:
-        - limitsKey: "nvidia.com/gpu"
-          uiName: "NVIDIA"
-      # Values: "" or a `limits-key` from the vendors list
-      vendor: "nvidia.com/gpu"
-    readOnly: false
-  shm:
-    value: false
-    readOnly: false
-  configurations:
-    # List of labels to be selected, these are the labels from PodDefaults
-    # value:
-    #   - add-gcp-secret
-    #   - default-editor
-    readOnly: false
+    #  - mount: /home/jovyan/datavol-1
+    #    existingSource:
+    #      persistentVolumeClaim:
+    #        claimName: "test-pvc"
+
+  ################################################################
+  # Affinity
+  ################################################################
   affinityConfig:
-    # The default `configKey` from the options list
-    # If readonly, the default value will be the only option
-    value: "none"
-    # The list of available affinity configs
-    options: []
-    # # (DESC) Pod gets an exclusive "n1-standard-2" Node
-    # # (TIP) set PreferNoSchedule taint on this node-pool
-    # # (TIP) enable cluster-autoscaler on this node-pool
-    # # (TIP) dont let users request more CPU/MEMORY than the size of this node
-    # - configKey: "exclusive__n1-standard-2"
-    #   displayName: "Exclusive: n1-standard-2"
-    #   affinity:
-    #     # (Require) Node having label: `node_pool=notebook-n1-standard-2`
-    #     nodeAffinity:
-    #       requiredDuringSchedulingIgnoredDuringExecution:
-    #         nodeSelectorTerms:
-    #           - matchExpressions:
-    #               - key: "node_pool"
-    #                 operator: "In"
-    #                 values:
-    #                   - "notebook-n1-standard-2"
-    #     # (Require) Node WITHOUT existing Pod having label: `notebook-name`
-    #     podAntiAffinity:
-    #       requiredDuringSchedulingIgnoredDuringExecution:
-    #         - labelSelector:
-    #             matchExpressions:
-    #               - key: "notebook-name"
-    #                 operator: "Exists"
-    #           namespaces: []
-    #           topologyKey: "kubernetes.io/hostname"
     readOnly: false
+
+    # the `configKey` of the default affinity config
+    # (to have no default, set as "")
+    # (if `readOnly`, the default `value` will be the only accessible option)
+    value: "none"
+
+    # the list of available affinity configs in the dropdown
+    options: []
+    #options:
+    #  - configKey: "dedicated_node_per_notebook"
+    #    displayName: "Dedicated Node Per Notebook"
+    #    affinity:
+    #      # Require a Node with label `lifecycle=kubeflow-notebook`
+    #      nodeAffinity:
+    #        requiredDuringSchedulingIgnoredDuringExecution:
+    #          nodeSelectorTerms:
+    #            - matchExpressions:
+    #                - key: "lifecycle"
+    #                  operator: "In"
+    #                  values:
+    #                    - "kubeflow-notebook"
+    #
+    #      # Require a Node WITHOUT an existing Pod having `notebook-name` label
+    #      podAntiAffinity:
+    #        requiredDuringSchedulingIgnoredDuringExecution:
+    #          - labelSelector:
+    #              matchExpressions:
+    #                - key: "notebook-name"
+    #                  operator: "Exists"
+    #            topologyKey: "kubernetes.io/hostname"
+    #            # WARNING: `namespaceSelector` is Beta in 1.22 and Stable in 1.24,
+    #            #          setting to {} is required for affinity to work across Namespaces
+    #            namespaceSelector: {}
+
+  ################################################################
+  # Tolerations
+  ################################################################
   tolerationGroup:
-    # The default `groupKey` from the options list
-    # If readonly, the default value will be the only option
-    value: "none"
-    # The list of available tolerationGroup configs
-    options: []
-    # - groupKey: "group_1"
-    #   displayName: "Group 1: description"
-    #   tolerations:
-    #     - key: "key1"
-    #       operator: "Equal"
-    #       value: "value1"
-    #       effect: "NoSchedule"
-    #     - key: "key2"
-    #       operator: "Equal"
-    #       value: "value2"
-    #       effect: "NoSchedule"
     readOnly: false
+
+    # the `groupKey` of the default toleration group
+    # (to have no default, set as "")
+    # (if `readOnly`, the default `value` will be the only accessible option)
+    value: "none"
+
+    # the list of available toleration groups in the dropdown
+    options: []
+    #options:
+    #  - groupKey: "group_1"
+    #    displayName: "4 CPU 8Gb Mem at ~$X.XXX USD per day"
+    #    tolerations:
+    #      - key: "dedicated"
+    #        operator: "Equal"
+    #        value: "kubeflow-c5.xlarge"
+    #        effect: "NoSchedule"
+    #
+    #  - groupKey: "group_2"
+    #    displayName: "8 CPU 16Gb Mem at ~$X.XXX USD per day"
+    #    tolerations:
+    #      - key: "dedicated"
+    #        operator: "Equal"
+    #        value: "kubeflow-c5.2xlarge"
+    #        effect: "NoSchedule"
+    #
+    #  - groupKey: "group_3"
+    #    displayName: "16 CPU 32Gb Mem at ~$X.XXX USD per day"
+    #    tolerations:
+    #      - key: "dedicated"
+    #        operator: "Equal"
+    #        value: "kubeflow-c5.4xlarge"
+    #        effect: "NoSchedule"
+    #
+    #  - groupKey: "group_4"
+    #    displayName: "32 CPU 256Gb Mem at ~$X.XXX USD per day"
+    #    tolerations:
+    #      - key: "dedicated"
+    #        operator: "Equal"
+    #        value: "kubeflow-r5.8xlarge"
+    #        effect: "NoSchedule"
+
+  ################################################################
+  # Shared Memory
+  ################################################################
+  shm:
+    readOnly: false
+
+    # the default state of the "Enable Shared Memory" toggle
+    value: false
+
+  ################################################################
+  # PodDefaults
+  ################################################################
+  configurations:
+    readOnly: false
+
+    # the list of PodDefault names that are selected by default
+    # (take care to ensure these PodDefaults exist in Profile Namespaces)
+    value: []
+    #value:
+    #  - my-pod-default

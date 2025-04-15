@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 type pvcresponse struct {
@@ -27,6 +29,12 @@ type pvcresponse struct {
 	Class     string                              `json:"class"`
 	Notebooks []string                            `json:"notebooks"`
 	Labels    map[string]string                   `json:"labels"`
+	Viewer    pvcviewerresponse                   `json:"viewer"`
+}
+
+type pvcviewerresponse struct {
+	Status notebookPhase `json:"status"`
+	Url    string        `json:"url"`
 }
 
 type pvcsresponse struct {
@@ -47,7 +55,7 @@ type pvcpodsresponse struct {
 
 type pvceventsresponse struct {
 	APIResponseBase
-	Events []corev1.Event `json:"events"`
+	Events []*corev1.Event `json:"events"`
 }
 
 // pvcPhase is the phase of a PVC
@@ -158,8 +166,8 @@ func GetNotebookPvcs(nb *kf_v1.Notebook) []string {
 	return pvcs
 }
 
+// Return a list of Notebooks that are using the given PVC.
 func GetNotebooksUsingPvc(pvc string, notebooks []*kf_v1.Notebook) []string {
-	//Return a list of Notebooks that are using the given PVC.
 	mountedNotebooks := make([]string, 0)
 
 	for _, nb := range notebooks {
@@ -195,6 +203,17 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 	sort.Sort(notebooksByName(notebooks))
 
+	//Mix-in the viewer status to the response
+	viewers, err := s.dynamic.Resource(schema.GroupVersionResource{
+		Group:    "kubeflow.org",
+		Version:  "v1alpha1",
+		Resource: "pvcviewers",
+	}).Namespace(namespace).List(context.TODO(), v1.ListOptions{})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
 	resp := pvcsresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
@@ -211,11 +230,34 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 		allevents, err := s.listers.events.Events(pvc.Namespace).List(labels.Everything())
 		if err != nil {
-			log.Printf("failed to load events for %s/%s: %v", pvc.Namespace, pvc.Name, err)
+			s.error(w, r, err)
+			return
 		}
 
 		status := GetPvcStatus(pvc, allevents)
 		notebooksList := GetNotebooksUsingPvc(pvc.Name, notebooks)
+
+		var viewerStatusValue notebookPhase
+		viewerUrl := ""
+		for _, v := range viewers.Items {
+			if v.GetName() == pvc.Name {
+				data, err := json.Marshal(v.Object["status"])
+				if err != nil {
+					s.error(w, r, err)
+					return
+				}
+				pvcviewer := &pvcviewer{}
+				err = json.Unmarshal(data, pvcviewer)
+				if err != nil {
+					s.error(w, r, err)
+					return
+				}
+
+				viewerStatusValue = viewerStatus(*pvcviewer)
+				viewerUrl = pvcviewer.Status["url"]
+			}
+		}
+
 		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, pvcresponse{
 			Name:      pvc.Name,
 			Namespace: pvc.Namespace,
@@ -226,28 +268,96 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			Class:     *pvc.Spec.StorageClassName,
 			Notebooks: notebooksList,
 			Labels:    pvc.Labels,
+			Viewer: pvcviewerresponse{
+				Status: viewerStatusValue,
+				Url:    viewerUrl,
+			},
 		})
 	}
 
 	s.respond(w, r, &resp)
 }
 
-// TODO: Delete pvc
+// Return a list of Pods that are using the given PVC
+func (s *server) GetPodsUsingPVC(pvc string, namespace string) ([]*corev1.Pod, error) {
+	pods, err := s.listers.pods.Pods(namespace).List(labels.Everything())
+	if err != nil {
+		return []*corev1.Pod{}, err
+	}
+	mountedPods := make([]*corev1.Pod, 0)
+
+	for _, pod := range pods {
+		pvcs := getPodPvcs(*pod)
+		if slices.Contains(pvcs, pvc) {
+			mountedPods = append(mountedPods, pod)
+		}
+	}
+
+	return mountedPods, err
+}
+
+// Delete a PVC only if it is not used from any Pod
 func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
 	pvc := vars["pvc"]
 
-	log.Printf("deleting pvc %q for %q", pvc, namespace)
+	pods, err := s.GetPodsUsingPVC(pvc, namespace)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// Filter non viewer pods from viewer pods
+	viewerPods := make([]*corev1.Pod, 0)
+	nonViewerPods := make([]*corev1.Pod, 0)
+	for _, p := range pods {
+		if isViewerPod(*p) {
+			viewerPods = append(viewerPods, p)
+		} else {
+			nonViewerPods = append(nonViewerPods, p)
+		}
+	}
+
+	// If any non viewer pod is using the PVC, raise an exception
+	if len(nonViewerPods) > 0 {
+		podNames := make([]string, 0)
+		for _, p := range nonViewerPods {
+			podNames = append(podNames, p.Name)
+		}
+		err = fmt.Errorf("cannot delete PVC '%s' because it is being used by pods: %s", pvc, podNames)
+		s.error(w, r, err)
+		return
+	}
+
+	// For each associated viewer pod delete its parent
+	for _, viewerPod := range viewerPods {
+		viewer := getOwningViewer(*viewerPod)
+		if viewer == "" {
+			log.Printf("Viewer pod %s/%s is missing the label value %s required to identify its parent",
+				namespace,
+				viewerPod.Name,
+				POD_PARENT_VIEWER_LABEL_KEY)
+		}
+		err := s.deleteViewer(viewer, namespace)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	log.Printf("Deleting PVC %s/%s...", namespace, pvc)
 
 	propagation := v1.DeletePropagationForeground
-	err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(namespace).Delete(r.Context(), pvc, v1.DeleteOptions{
+	err = s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(namespace).Delete(r.Context(), pvc, v1.DeleteOptions{
 		PropagationPolicy: &propagation,
 	})
 	if err != nil {
 		s.error(w, r, err)
 		return
 	}
+
+	log.Printf("Successfully deleted PVC %s/%s", namespace, pvc)
 
 	s.respond(w, r, &APIResponseBase{
 		Success: true,
@@ -348,12 +458,10 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", pvc, namespace)
 
-	eventOpts := v1.ListOptions{
-		FieldSelector: "involvedObject.kind=PersistentVolumeClaim,involvedObject.name=" + pvc,
-	}
-	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
+	events, err := s.listEvents(namespace, "PersistentVolumeClaim", pvc)
 	if err != nil {
-		log.Printf("failed to load events for %s/%s: %v", namespace, pvc, err)
+		s.error(w, r, err)
+		return
 	}
 
 	resp := &pvceventsresponse{
@@ -361,7 +469,7 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Events: events.Items,
+		Events: events,
 	}
 	s.respond(w, r, resp)
 }

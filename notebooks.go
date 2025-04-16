@@ -148,10 +148,18 @@ type notebookapiresponse struct {
 	Notebook notebookresponse `json:"notebook"`
 }
 
+type NotebookWithStatus struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec            kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
+	Status          kubeflowv1.NotebookStatus `json:"status,omitempty"`
+	ProcessedStatus status                    `json:"processed_status"`
+}
+
 type getnotebookresponse struct {
 	APIResponseBase
-	Notebook        kubeflowv1.Notebook `json:"notebook"`
-	ProcessedStatus status              `json:"processedStatus"`
+	Notebook NotebookWithStatus `json:"notebook"`
 }
 
 type podresponse struct {
@@ -961,8 +969,13 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Notebook:        *nb,
-		ProcessedStatus: processedStatus,
+		Notebook: NotebookWithStatus{
+			TypeMeta:        nb.TypeMeta,
+			ObjectMeta:      nb.ObjectMeta,
+			Spec:            nb.Spec,
+			Status:          nb.Status,
+			ProcessedStatus: processedStatus,
+		},
 	}
 
 	s.respond(w, r, resp)

@@ -330,21 +330,22 @@ func (s *server) DeletePvc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: Uncomment when pvcviewer-controller is implemented
 	// For each associated viewer pod delete its parent
-	for _, viewerPod := range viewerPods {
-		viewer := getOwningViewer(*viewerPod)
-		if viewer == "" {
-			log.Printf("Viewer pod %s/%s is missing the label value %s required to identify its parent",
-				namespace,
-				viewerPod.Name,
-				POD_PARENT_VIEWER_LABEL_KEY)
-		}
-		err := s.deleteViewer(viewer, namespace)
-		if err != nil {
-			s.error(w, r, err)
-			return
-		}
-	}
+	// for _, viewerPod := range viewerPods {
+	// 	viewer := getOwningViewer(*viewerPod)
+	// 	if viewer == "" {
+	// 		log.Printf("Viewer pod %s/%s is missing the label value %s required to identify its parent",
+	// 			namespace,
+	// 			viewerPod.Name,
+	// 			POD_PARENT_VIEWER_LABEL_KEY)
+	// 	}
+	// 	err := s.deleteViewer(viewer, namespace)
+	// 	if err != nil {
+	// 		s.error(w, r, err)
+	// 		return
+	// 	}
+	// }
 
 	log.Printf("Deleting PVC %s/%s...", namespace, pvc)
 

@@ -384,8 +384,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
-      pvc.closePVCViewerAction = this.parseClosePVCViewerActionStatus(pvc);
-      pvc.openPVCViewerAction = this.parseOpenPVCViewerActionStatus(pvc);
+      // TODO: Uncomment when pvcviewer-controller is implemented
+      // pvc.closePVCViewerAction = this.parseClosePVCViewerActionStatus(pvc);
+      // pvc.openPVCViewerAction = this.parseOpenPVCViewerActionStatus(pvc);
       pvc.ageValue = pvc.age.uptime;
       pvc.ageTooltip = pvc.age.timestamp;
       pvc.link = {

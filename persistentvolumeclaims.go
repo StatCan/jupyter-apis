@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,7 +14,6 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 type pvcresponse struct {
@@ -203,16 +200,17 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 	sort.Sort(notebooksByName(notebooks))
 
-	//Mix-in the viewer status to the response
-	viewers, err := s.dynamic.Resource(schema.GroupVersionResource{
-		Group:    "kubeflow.org",
-		Version:  "v1alpha1",
-		Resource: "pvcviewers",
-	}).Namespace(namespace).List(context.TODO(), v1.ListOptions{})
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
+	// TODO: Uncomment when pvcviewer-controller is implemented
+	// //Mix-in the viewer status to the response
+	// viewers, err := s.dynamic.Resource(schema.GroupVersionResource{
+	// 	Group:    "kubeflow.org",
+	// 	Version:  "v1alpha1",
+	// 	Resource: "pvcviewers",
+	// }).Namespace(namespace).List(context.TODO(), v1.ListOptions{})
+	// if err != nil {
+	// 	s.error(w, r, err)
+	// 	return
+	// }
 
 	resp := pvcsresponse{
 		APIResponseBase: APIResponseBase{
@@ -237,26 +235,27 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 		status := GetPvcStatus(pvc, allevents)
 		notebooksList := GetNotebooksUsingPvc(pvc.Name, notebooks)
 
-		var viewerStatusValue notebookPhase
-		viewerUrl := ""
-		for _, v := range viewers.Items {
-			if v.GetName() == pvc.Name {
-				data, err := json.Marshal(v.Object["status"])
-				if err != nil {
-					s.error(w, r, err)
-					return
-				}
-				pvcviewer := &pvcviewer{}
-				err = json.Unmarshal(data, pvcviewer)
-				if err != nil {
-					s.error(w, r, err)
-					return
-				}
-
-				viewerStatusValue = viewerStatus(*pvcviewer)
-				viewerUrl = pvcviewer.Status["url"]
-			}
-		}
+		// TODO: Uncomment when pvcviewer-controller is implemented
+		// var viewerStatusValue notebookPhase
+		// viewerUrl := ""
+		// for _, v := range viewers.Items {
+		// 	if v.GetName() == pvc.Name {
+		// 		data, err := json.Marshal(v.Object["status"])
+		// 		if err != nil {
+		// 			s.error(w, r, err)
+		// 			return
+		// 		}
+		// 		pvcviewer := &pvcviewer{}
+		// 		err = json.Unmarshal(data, pvcviewer)
+		// 		if err != nil {
+		// 			s.error(w, r, err)
+		// 			return
+		// 		}
+		//
+		// 		viewerStatusValue = viewerStatus(*pvcviewer)
+		// 		viewerUrl = pvcviewer.Status["url"]
+		// 	}
+		// }
 
 		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, pvcresponse{
 			Name:      pvc.Name,
@@ -268,10 +267,11 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			Class:     *pvc.Spec.StorageClassName,
 			Notebooks: notebooksList,
 			Labels:    pvc.Labels,
-			Viewer: pvcviewerresponse{
-				Status: viewerStatusValue,
-				Url:    viewerUrl,
-			},
+			// TODO: Uncomment when pvcviewer-controller is implemented
+			// Viewer: pvcviewerresponse{
+			// 	Status: viewerStatusValue,
+			// 	Url:    viewerUrl,
+			// },
 		})
 	}
 

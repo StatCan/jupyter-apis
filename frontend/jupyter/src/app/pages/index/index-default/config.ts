@@ -194,8 +194,9 @@ export const defaultVolumeConfig: TableConfig = {
   dynamicNamespaceColumn: true,
   newButtonText: tableConfig.newButtonText,
   columns: tableConfig.columns.concat(
-    customOpenPVCViewerCol,
-    customClosePVCViewerCol,
+    // TODO: Uncomment when pvcviewer-controller is implemented
+    // customOpenPVCViewerCol,
+    // customClosePVCViewerCol,
     customDeleteCol,
   ),
 };

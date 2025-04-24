@@ -269,21 +269,20 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   getStatusMessage(notebook: NotebookProcessedObject) {
     switch (notebook.status.key) {
       case 'notebookDeleting':
-        return $localize`Deleting this notebook server`;
+        return $localize`Deleting this Notebook Server.`;
       case 'noPodsRunning':
-        return $localize`No Pods are currently running for this Notebook Server`;
+        return $localize`No Pods are currently running for this Notebook Server.`;
       case 'notebookStopping':
-        return $localize`Notebook Server is stopping`;
+        return $localize`Notebook Server is stopping.`;
       case 'running':
         return $localize`Running`;
       case 'waitingStatus':
-        return $localize`Current status is waiting. Check 'kubectl describe pod' for more information`;
-      case 'errorEvent':
-        return $localize`An error has occured. Check 'kubectl describe pod' for more information`;
-      case 'schedulingPod':
-        return $localize`Scheduling the Pod`;
+        return $localize`Waiting for StatefulSet to create the underlying Pod.`;
+      case 'noInformation':
+        return $localize`Couldn't find any information for the status of this notebook.`;
       default:
-        return '';
+        // if no matching key, just return the original message
+        return notebook.status.message;
     }
   }
 

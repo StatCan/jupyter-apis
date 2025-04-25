@@ -8,6 +8,7 @@ import (
 	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/labels"
 )
 
 // notebookPhase is the phase of a notebook.
@@ -251,25 +252,24 @@ func getStatusFromConditions(notebook *kubeflowv1.Notebook) (notebookPhase, stri
 }
 
 func (s *server) getNotebookEvents(notebook *kubeflowv1.Notebook) ([]*corev1.Event, error) {
-	notebookEvents, err := s.listEvents(notebook.Namespace, "Notebook", notebook.Name)
+	// Load events
+	allevents, err := s.listers.events.Events(notebook.Namespace).List(labels.Everything())
 	if err != nil {
 		return []*corev1.Event{}, err
 	}
 
-	// User can delete and then create a nb server with the same name
-	// Make sure previous events are not taken into account
-	output := make([]*corev1.Event, 0)
-	for _, e := range notebookEvents {
-		if e.CreationTimestamp.Before(&notebook.CreationTimestamp) {
+	// Filter past events
+	events := make([]*corev1.Event, 0)
+	for _, event := range allevents {
+		if event.InvolvedObject.Kind != "Notebook" || event.InvolvedObject.Name != notebook.Name || event.CreationTimestamp.Before(&notebook.CreationTimestamp) {
 			continue
 		}
 
-		output = append(output, e)
+		events = append(events, event)
 	}
+	sort.Sort(eventsByTimestamp(events))
 
-	sort.Sort(eventsByTimestamp(output))
-
-	return output, nil
+	return events, nil
 }
 
 func getStatusFromEvents(notebookEvents []*corev1.Event) (notebookPhase, string, statusKey) {

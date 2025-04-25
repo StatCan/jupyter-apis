@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -52,7 +53,7 @@ type pvcpodsresponse struct {
 
 type pvceventsresponse struct {
 	APIResponseBase
-	Events []*corev1.Event `json:"events"`
+	Events []corev1.Event `json:"events"`
 }
 
 // pvcPhase is the phase of a PVC
@@ -459,10 +460,12 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("getting events in %q in %q", pvc, namespace)
 
-	events, err := s.listEvents(namespace, "PersistentVolumeClaim", pvc)
+	eventOpts := v1.ListOptions{
+		FieldSelector: "involvedObject.kind=PersistentVolumeClaim,involvedObject.name=" + pvc,
+	}
+	events, err := s.clientsets.kubernetes.CoreV1().Events(namespace).List(context.TODO(), eventOpts)
 	if err != nil {
-		s.error(w, r, err)
-		return
+		log.Printf("failed to load events for %s/%s: %v", namespace, pvc, err)
 	}
 
 	resp := &pvceventsresponse{
@@ -470,7 +473,7 @@ func (s *server) GetPvcEvents(w http.ResponseWriter, r *http.Request) {
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Events: events,
+		Events: events.Items,
 	}
 	s.respond(w, r, resp)
 }

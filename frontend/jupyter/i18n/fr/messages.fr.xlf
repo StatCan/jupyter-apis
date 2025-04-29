@@ -520,7 +520,27 @@
         <target>Effacer les filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/table/table.component.html</context>
-          <context context-type="linenumber">32,35</context>
+          <context context-type="linenumber">32,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46" datatype="html">
+        <source>Clear</source>
+        <target>Effacer</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/table/table.component.html</context>
+          <context context-type="linenumber">34,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
+        <source>Help</source>
+        <target>Aide</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/table/table.component.html</context>
+          <context context-type="linenumber">44,47</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/volumes/volumes.component.html</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0024916140cebfb5d427fab9756ce8f098ae385d" datatype="html">
@@ -528,7 +548,7 @@
         <target>Aucune ligne à afficher</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/table/table.component.html</context>
-          <context context-type="linenumber">338,344</context>
+          <context context-type="linenumber">340,346</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3294686077659093992" datatype="html">
@@ -964,10 +984,6 @@
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
-      </trans-unit>
-      <trans-unit id="1de14a83d2c9285be51e66363da570d994435f1a" datatype="html">
-        <source> Please provide an Image to use </source>
-        <target> Veuillez fournir une image à utiliser </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
           <context context-type="linenumber">44</context>
@@ -978,7 +994,7 @@
         <target> Image personnalisée </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">54,56</context>
+          <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f0e016d5caf4e42f1b6f60dc9fe80e2b98f5287" datatype="html">
@@ -986,7 +1002,7 @@
         <target>Image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="23b8e06185a822c1aa001bd6c7519a1407dbef5a" datatype="html">
@@ -994,7 +1010,7 @@
         <target> L'image sélectionnée sera évaluée par rapport à notre liste autorisée. Pour plus de détails sur l'utilisation de vos propres images personnalisées, suivez la documentation sur https://github.com/StatCan/aaw-contrib-containers. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">65,69</context>
+          <context context-type="linenumber">66,70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
@@ -1002,7 +1018,7 @@
         <target>Fournir une image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8679122523698617738" datatype="html">
@@ -1492,7 +1508,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4027647877328291519" datatype="html">
@@ -1504,7 +1520,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1548129644093494406" datatype="html">
@@ -1564,7 +1580,7 @@
         <target>RAM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">218</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="57403663622654391" datatype="html">
@@ -1572,7 +1588,7 @@
         <target>Stockage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">223</context>
+          <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3448462145758383019" datatype="html">
@@ -1580,7 +1596,7 @@
         <target>Total</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8323c418749a9b093dcab7197fbb8a8a7029e9b6" datatype="html">
@@ -1715,25 +1731,25 @@
           <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1362170335168476479" datatype="html">
-        <source>Deleting this notebook server</source>
-        <target>Serveur bloc-notes en supression</target>
+      <trans-unit id="5387813344448714728" datatype="html">
+        <source>Deleting this Notebook Server.</source>
+        <target>Serveur bloc-notes en supression.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7500957585306157816" datatype="html">
-        <source>No Pods are currently running for this Notebook Server</source>
-        <target>Aucun pod n'est actuellement en cours d'exécution pour ce serveur bloc-notes</target>
+      <trans-unit id="5423034101668291795" datatype="html">
+        <source>No Pods are currently running for this Notebook Server.</source>
+        <target>Aucun pod n'est actuellement en cours d'exécution pour ce serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4569295236548083121" datatype="html">
-        <source>Notebook Server is stopping</source>
-        <target>Serveur bloc-notes en arrêt</target>
+      <trans-unit id="3507421077462148171" datatype="html">
+        <source>Notebook Server is stopping.</source>
+        <target>Serveur bloc-notes en arrêt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">276</context>
@@ -1747,28 +1763,40 @@
           <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8884375010723671318" datatype="html">
-        <source>Current status is waiting. Check &apos;kubectl describe pod&apos; for more information</source>
-        <target>Status actuel est 'en attente'. Vérifier 'kubectl describe pod' pour plus d'information</target>
+      <trans-unit id="7231778731753154138" datatype="html">
+        <source>Waiting for StatefulSet to create the underlying Pod.</source>
+        <target>En attente du StatefulSet pour créer le Pod sous-jacent.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">280</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1439873287084859925" datatype="html">
-        <source>An error has occured. Check &apos;kubectl describe pod&apos; for more information</source>
-        <target>Une erreur est advenue. Vérifier 'kubectl describe pod' pour plus d'information</target>
+      <trans-unit id="3719875081264412862" datatype="html">
+        <source>Couldn&apos;t find any information for the status of this notebook server.</source>
+        <target>Aucune information n'a été trouvée sur l'état de ce serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8075462789754501967" datatype="html">
-        <source>Scheduling the Pod</source>
-        <target>Planification du pod</target>
+      <trans-unit id="9134364280759538026" datatype="html">
+        <source>An error has occured. Click on the notebook server name for more information.</source>
+        <target>Une erreur s'est produite. Cliquez sur le nom du serveur bloc-notes pour plus d'informations.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">284</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">286</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1938866431693606922" datatype="html">
+        <source>Scheduling the Pod.</source>
+        <target>Planification du Pod.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
+          <context context-type="linenumber">288</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6425333040033977991" datatype="html">
@@ -1776,7 +1804,7 @@
         <target>Attaché</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">376</context>
+          <context context-type="linenumber">381</context>
         </context-group>
       </trans-unit>
       <trans-unit id="810251571194206100" datatype="html">
@@ -1784,7 +1812,7 @@
         <target>Libre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">380</context>
+          <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5156704408648015254" datatype="html">
@@ -1792,7 +1820,7 @@
         <target>Le volume a été soumit avec succès</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">502</context>
+          <context context-type="linenumber">508</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e2936e947eed8cb9987b1111220f29597a4397b" datatype="html">
@@ -2137,14 +2165,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.ts</context>
           <context context-type="linenumber">379</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
-        <source>Help</source>
-        <target>Aide</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/overview/volumes/volumes.component.html</context>
-          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e5fdea24582fa8d00eed24e05bbf93ca06d77e97" datatype="html">

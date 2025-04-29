@@ -280,6 +280,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         return $localize`Waiting for StatefulSet to create the underlying Pod.`;
       case 'noInformation':
         return $localize`Couldn't find any information for the status of this notebook.`;
+      case 'errorCondition':
+        return $localize`An error has occured. Click on the notebook name for more information.`;
+      case 'errorEvent':
+        return $localize`An error has occured. Click on the notebook name for more information.`;
+      case 'schedulingPod':
+        return $localize`Scheduling the Pod.`;
       default:
         // if no matching key, just return the original message
         return notebook.status.message;

@@ -66,6 +66,12 @@ const (
 	running statusKey = "running"
 
 	noInformation statusKey = "noInformation"
+
+	errorCondition statusKey = "errorCondition"
+
+	errorEvent statusKey = "errorEvent"
+
+	schedulingPod statusKey = "schedulingPod"
 )
 
 var statusMessages = map[statusKey]string{
@@ -75,6 +81,9 @@ var statusMessages = map[statusKey]string{
 	notebookDeleting: "Deleting this Notebook Server.",
 	running:          "Running",
 	noInformation:    "Couldn't find any information for the status of this notebook.",
+	errorCondition:   "An error has occured. Click on the notebook name for more information.",
+	errorEvent:       "An error has occured. Click on the notebook name for more information.",
+	schedulingPod:    "Scheduling the Pod.",
 }
 
 func createStatus(phase notebookPhase, message string, state string, key statusKey) status {
@@ -216,8 +225,8 @@ func getStatusFromContainerState(notebook *kubeflowv1.Notebook) (notebookPhase, 
 	// If the Notebook is initializing, the status will be waiting
 	if containerState.Waiting.Reason == "PodInitializing" {
 		statusPhase := NotebookPhaseWaiting
-		statusMessage := containerState.Waiting.Reason
-		return statusPhase, statusMessage, ""
+		statusMessage := statusMessages[schedulingPod]
+		return statusPhase, statusMessage, schedulingPod
 	} else {
 		// In any other case, the status will be warning with a "reason:
 		// message" showing on hover
@@ -240,11 +249,10 @@ func getStatusFromContainerState(notebook *kubeflowv1.Notebook) (notebookPhase, 
 
 func getStatusFromConditions(notebook *kubeflowv1.Notebook) (notebookPhase, string, statusKey) {
 	for _, condition := range notebook.Status.Conditions {
-		// The status will be warning with a "reason: message" showing on hover
 		if condition.Reason != "" {
 			statusPhase := NotebookPhaseWarning
-			statusMessage := condition.Reason + ": " + condition.Message
-			return statusPhase, statusMessage, ""
+			statusMessage := statusMessages[errorCondition]
+			return statusPhase, statusMessage, errorCondition
 		}
 	}
 
@@ -275,7 +283,7 @@ func (s *server) getNotebookEvents(notebook *kubeflowv1.Notebook) ([]*corev1.Eve
 func getStatusFromEvents(notebookEvents []*corev1.Event) (notebookPhase, string, statusKey) {
 	for _, e := range notebookEvents {
 		if e.Type == corev1.EventTypeWarning {
-			return NotebookPhaseWarning, e.Message, ""
+			return NotebookPhaseWarning, statusMessages[errorEvent], errorEvent
 		}
 	}
 

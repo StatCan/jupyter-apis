@@ -21,6 +21,7 @@ import (
 	"gopkg.in/yaml.v2"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	v1listers "k8s.io/client-go/listers/core/v1"
 	storagev1listers "k8s.io/client-go/listers/storage/v1"
@@ -58,6 +59,9 @@ type server struct {
 	listers    listers
 
 	kubecostURL *url.URL
+
+	//dynamic interface for interacting with CRDs
+	dynamic dynamic.Interface
 }
 
 func main() {
@@ -118,6 +122,12 @@ func main() {
 
 	// Generate the Kubeflow clientset
 	s.clientsets.kubeflow, err = kubeflow.NewForConfig(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Generate the Kubernetes Dynamic client for interactic with CRDS
+	s.dynamic, err = dynamic.NewForConfig(config)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -342,6 +352,28 @@ func main() {
 			},
 		},
 	}, s.GetPodDefaults)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/viewers/{viewer}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    "kubeflow.org",
+				Verb:     "delete",
+				Resource: "pvcviewers",
+				Version:  "v1alpha1",
+			},
+		},
+	}, s.DeletePvcViewer)).Methods("DELETE")
+
+	router.HandleFunc("/api/namespaces/{namespace}/viewers", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    "kubeflow.org",
+				Verb:     "create",
+				Resource: "pvcviewers",
+				Version:  "v1alpha1",
+			},
+		},
+	}, s.PostPvcViewer)).Headers("Content-Type", "application/json").Methods("POST")
 
 	// Setup the server, with:
 	//  Add combined logging handler

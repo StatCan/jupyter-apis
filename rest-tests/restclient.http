@@ -6,56 +6,44 @@
 @KF_POD_NAME=REPLACE_WITH_YOUR_POD_NAME
 @KF_PVC_NAME=REPLACE_WITH_YOUR_PVC_NAME
 @KF_PVC_NAME_DELETE=REPLACE_WITH_YOUR_PVC_TO_DELETE
+@KF_PVC_VIEWER_NAME_DELETE=REPLACE_WITH_VALUE
+@KF_PVC_VIEWER_NAME_CREATE=REPLACE_WITH_VALUE
 @BASE_URL=http://localhost:5000/api
 
 ### Get the spawner_ui_config.yaml
 GET {{BASE_URL}}/config
-content-type: application/json
-kubeflow-userid: {{KF_USER_ID}}
 
 ### Read the GPU vendors from the spawner config
-
 GET {{BASE_URL}}/gpus
-content-type: application/json
-kubeflow-userid: {{KF_USER_ID}}
 
 ### List all storageclasses
-
 GET {{BASE_URL}}/storageclasses
-content-type: application/json
-kubeflow-userid: {{KF_USER_ID}}
 
 ### Get the storage class with the is-default-class annotation
-
 GET {{BASE_URL}}/storageclasses/default
-content-type: application/json
-kubeflow-userid: {{KF_USER_ID}}
 
 ### Get the kubecost Allocation API 
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/cost/allocation
-content-type: application/json
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/cost/allocation?window=1d
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get the list of namespaces
-
 GET {{BASE_URL}}/namespaces
-content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get namespace metadata
-
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}
-content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get the list of notebooks
-
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
-content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
-### Create a notebook
+### Create a new default notebook
+POST {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/createdefault
+Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}} 
 
+### Create a notebook
 POST {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
 Content-Type: application/json
 kubeflow-userid: {{KF_USER_ID}}
@@ -66,82 +54,68 @@ kubeflow-userid: {{KF_USER_ID}}
 
 ###  Get a notebook
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
-content-type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
-### Delete a notebook
-
-DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
-Content-Type: application/json
+###  Get the default notebook
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/defaultnotebook
 kubeflow-userid: {{KF_USER_ID}}
 
-### Update a notebook
-
-PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
-Content-Type: application/json
-kubeflow-userid: {{KF_USER_ID}}
-
-{
-    "name": "{{KF_NAMESPACE}}",
-    "notebook": "{{KF_NOTEBOOK_NAME_PATCH}}"
-}
-
-### Get PodDefaults for a given namespace
-
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/poddefaults
-Content-Type: application/json
-kubeflow-userid: {{KF_USER_ID}}
-
-### Get a notebook
-
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}
-Content-Type: application/json
-kubeflow-userid: {{KF_USER_ID}}
-
-### Get pods of a notebook
-
+### Get pod of a notebook
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/pod
-Content-Type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get logs of a pod of a notebook
-
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/pod/{{KF_POD_NAME}}/logs
-Content-Type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get events of a pod of a notebook
-
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/events
-Content-Type: application/json
+kubeflow-userid: {{KF_USER_ID}}
+
+### Update a notebook
+PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME_PATCH}}
+kubeflow-userid: {{KF_USER_ID}}
+
+{
+    "stopped": true
+}
+
+### Delete a notebook
+DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME_PATCH}}
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Get PVCs
-
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs
-Content-Type: application/json
-kubeflow-userid: {{KF_USER_ID}}
-
-### Get a PVC
-
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}
-Content-Type: application/json
-kubeflow-userid: {{KF_USER_ID}}
-
-### Get pods of a PVC
-
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/pods
-Content-Type: application/json
-kubeflow-userid: {{KF_USER_ID}}
-
-### Get events of a PVC
-
-GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/events
-Content-Type: application/json
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Delete a PVC
-
 DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME_DELETE}}
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get a PVC
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get pods for a PVC
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/pods
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get events of a PVC
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/pvcs/{{KF_PVC_NAME}}/events
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get PodDefaults for a given namespace
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/poddefaults
+kubeflow-userid: {{KF_USER_ID}}
+
+### Delete a PVC Viewer
+DELETE {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/viewers/{{KF_PVC_VIEWER_NAME_DELETE}}
+kubeflow-userid: {{KF_USER_ID}}
+
+### Post a new PVC Viewer
+POST {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/viewers
 Content-Type: application/json
 kubeflow-userid: {{KF_USER_ID}}
+{
+    "name": "{{KF_PVC_VIEWER_NAME_CREATE}}"
+}

@@ -7,26 +7,33 @@ import { STATUS_TYPE } from '../resource-table/status/types';
   styleUrls: ['./status-icon.component.scss'],
 })
 export class StatusIconComponent {
-  @Input() status: STATUS_TYPE;
-  @Input() stateChanging: boolean;
+  @Input() phase: STATUS_TYPE;
+
+  STATUS_TYPE = STATUS_TYPE;
 
   get statusIcon(): string {
-    if (this.status === STATUS_TYPE.WARNING) {
-      return 'warning';
-    }
-    if (
-      this.status === STATUS_TYPE.WAITING ||
-      this.status === STATUS_TYPE.TERMINATING
-    ) {
-      return 'timelapse';
-    } else if (this.status === STATUS_TYPE.READY) {
-      return 'check_circle';
-    } else if (this.status === STATUS_TYPE.STOPPED) {
-      return 'stop_circle';
-    } else {
-      return STATUS_TYPE.UNINITIALIZED;
+    switch (this.phase) {
+      case STATUS_TYPE.READY: {
+        return 'check_circle';
+      }
+      case STATUS_TYPE.WARNING: {
+        return 'warning';
+      }
+      case STATUS_TYPE.UNAVAILABLE: {
+        return 'timelapse';
+      }
+      case STATUS_TYPE.ERROR: {
+        return 'error';
+      }
+      case STATUS_TYPE.MOUNTED: {
+        return 'link';
+      }
+      case STATUS_TYPE.UNMOUNTED: {
+        return 'link_off';
+      }
+      default: {
+        return 'warning';
+      }
     }
   }
-
-  constructor() {}
 }

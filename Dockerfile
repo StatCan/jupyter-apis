@@ -17,7 +17,6 @@ RUN npm ci
 
 RUN cp -R /src/dist/kubeflow/ ./node_modules/kubeflow/
 RUN npm run build -- --output-path=./dist/default --configuration=production
-RUN npm run build -- --output-path=./dist/rok --configuration=rok-prod
 # Build both locales:
 RUN ./node_modules/.bin/ng build --configuration production --localize
 

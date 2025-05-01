@@ -276,6 +276,14 @@ export class JWABackendService extends BackendService {
       .pipe(catchError(error => this.handleError(error, false)));
   }
 
+  public deleteViewer(namespace: string, pvc: string) {
+    const url = `api/namespaces/${namespace}/viewers/${pvc}`;
+
+    return this.http
+      .delete<VWABackendResponse>(url)
+      .pipe(catchError(error => this.handleError(error, false)));
+  }
+
   // ---------------------------Error Handling---------------------------------
 
   public handleErrorExtended(
@@ -314,6 +322,6 @@ export class JWABackendService extends BackendService {
       return error.message;
     }
 
-    return `Unexpected error encountered`;
+    return $localize`Unexpected error encountered`;
   }
 }

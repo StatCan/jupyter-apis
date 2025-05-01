@@ -36,8 +36,8 @@
               ],
               "resources":{
                 "limits":{
-                  "cpu":"4",
-                  "memory":"4Gi"
+                  "cpu":"500m",
+                  "memory":"2Gi"
                 },
                 "requests":{
                   "cpu":"500m",
@@ -60,6 +60,11 @@
       "conditions":[],
       "readyReplicas":0,
       "containerState":{}
-   }
+    },
+    "processed_status": {
+      "phase": "stopped",
+      "state": "",
+      "message": "No Pods are currently running for this Notebook Server."
+    }
   }
 }

@@ -12,7 +12,6 @@ import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MatFormFieldModule,
 } from '@angular/material/form-field';
-import { RokUrlModule } from './rok-url/rok-url.module';
 import { EditorModule } from 'kubeflow';
 
 @NgModule({
@@ -27,7 +26,6 @@ import { EditorModule } from 'kubeflow';
     MatSelectModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    RokUrlModule,
     EditorModule,
   ],
   exports: [NewVolumeComponent],

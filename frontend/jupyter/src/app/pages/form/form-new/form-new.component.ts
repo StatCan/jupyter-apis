@@ -8,7 +8,12 @@ import {
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
-import { NamespaceService, SnackBarService, SnackType } from 'kubeflow';
+import {
+  NamespaceService,
+  SnackBarConfig,
+  SnackBarService,
+  SnackType,
+} from 'kubeflow';
 import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -116,7 +121,7 @@ export class FormNewComponent
 
     // Use the custom image instead
     if (notebook.customImageCheck) {
-      notebook.image = notebook.customImage;
+      notebook.image = notebook.customImage?.trim();
       // Set serverType for custom image
       if (notebook.image.match(/\/rstudio:/)) {
         notebook.serverType = 'group-one';
@@ -137,7 +142,7 @@ export class FormNewComponent
 
     // Ensure CPU input is a string
     if (typeof notebook.cpu === 'number') {
-      notebook.cpu = notebook.cpu.toString();
+      notebook.cpu = notebook.cpuLimit = notebook.cpu.toString();
     }
 
     // Ensure GPU input is a string
@@ -145,25 +150,10 @@ export class FormNewComponent
       notebook.gpus.num = notebook.gpus.num.toString();
     }
 
-    // Remove cpuLimit from request if null
-    if (notebook.cpuLimit == null) {
-      delete notebook.cpuLimit;
-      // Ensure CPU Limit input is a string
-    } else if (typeof notebook.cpuLimit === 'number') {
-      notebook.cpuLimit = notebook.cpuLimit.toString();
-    }
-
-    // Remove memoryLimit from request if null
-    if (notebook.memoryLimit == null) {
-      delete notebook.memoryLimit;
-      // Add Gi to memoryLimit
-    } else if (notebook.memoryLimit) {
-      notebook.memoryLimit = notebook.memoryLimit.toString() + 'Gi';
-    }
-
     // Add Gi to all sizes
     if (notebook.memory) {
-      notebook.memory = notebook.memory.toString() + 'Gi';
+      notebook.memory = notebook.memoryLimit =
+        notebook.memory.toString() + 'Gi';
     }
 
     for (const vol of notebook.datavols) {
@@ -179,24 +169,32 @@ export class FormNewComponent
   setTooltipText(form: FormGroup): string {
     let text: string;
     if (!form.get('name').valid) {
-      text = 'No value of the Notebook name was provided';
+      text = $localize`No value of the Notebook name was provided`;
     } else if (!form.controls.valid) {
-      text = 'The form contains invalid fields';
+      text = $localize`The form contains invalid fields`;
     }
     return text;
   }
 
   onSubmit() {
-    this.popup.open('Submitting new Notebook...', SnackType.Info, 3000);
+    const configInfo: SnackBarConfig = {
+      data: {
+        msg: $localize`Submitting new Notebook...`,
+        snackType: SnackType.Info,
+      },
+    };
+    this.popup.open(configInfo);
 
     const notebook = this.getSubmitNotebook();
     this.backend.createNotebook(notebook).subscribe(() => {
       this.popup.close();
-      this.popup.open(
-        'Notebook created successfully.',
-        SnackType.Success,
-        3000,
-      );
+      const configSuccess: SnackBarConfig = {
+        data: {
+          msg: $localize`Notebook created successfully.`,
+          snackType: SnackType.Success,
+        },
+      };
+      this.popup.open(configSuccess);
       this.goToNotebooks();
     });
   }

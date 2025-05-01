@@ -11,6 +11,10 @@
   {{ sharedMemory }}
 </lib-details-list-item>
 
+<lib-details-list-item *ngIf="notebookCreator" key="Notebook creator" i18n-key>
+  {{ notebookCreator }}
+</lib-details-list-item>
+
 <lib-content-list-item class="configurations" key="Configurations" i18n-key>
   <app-configurations [configurations]="configurations">
     {{ podDefaultsMessage }}
@@ -21,20 +25,12 @@
   {{ notebookType }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="cpuRequests" key="Minimum CPU" i18n-key>
+<lib-details-list-item *ngIf="cpuRequests" key="Requested CPU" i18n-key>
   {{ cpuRequests }}
 </lib-details-list-item>
 
-<lib-details-list-item *ngIf="cpuLimits" key="Maximum CPU" i18n-key>
-  {{ cpuLimits }}
-</lib-details-list-item>
-
-<lib-details-list-item *ngIf="memoryRequests" key="Minimum memory" i18n-key>
+<lib-details-list-item *ngIf="memoryRequests" key="Requested memory" i18n-key>
   {{ memoryRequests }}
-</lib-details-list-item>
-
-<lib-details-list-item *ngIf="memoryLimits" key="Maximum memory" i18n-key>
-  {{ memoryLimits }}
 </lib-details-list-item>
 
 <lib-details-list-item key="Image" [copyValue]="dockerImage" i18n-key>

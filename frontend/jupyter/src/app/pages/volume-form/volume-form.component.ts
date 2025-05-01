@@ -12,7 +12,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./volume-form.component.scss'],
 })
 export class VolumeFormComponent implements OnInit, OnDestroy {
-  public TYPE_ROK_SNAPSHOT = 'rok_snapshot';
   public TYPE_EMPTY = 'empty';
 
   public subs = new Subscription();

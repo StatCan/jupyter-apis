@@ -4,19 +4,21 @@ import {
   ActionListValue,
   ActionIconValue,
   ActionButtonValue,
-  MenuValue,
   ComponentValue,
   TableConfig,
   DateTimeValue,
   LinkValue,
   LinkType,
   TableColumn,
+  MemoryValue,
+  quantityToScalar,
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
-import { quantityToScalar } from '@kubernetes/client-node/dist/util';
 import { DefaultComponent } from './default-icon/default-icon.component';
 import { tableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
+import { OpenPVCViewerButtonComponent } from '../columns/open-pvcviewer-button/open-pvcviewer-button.component';
+import { ClosePVCViewerButtonComponent } from '../columns/close-pvcviewer-button/close-pvcviewer-button.component';
 
 // --- Config for the Resource Table ---
 export const defaultConfig: TableConfig = {
@@ -121,9 +123,10 @@ export const defaultConfig: TableConfig = {
       matColumnDef: 'memory',
       style: { width: '8%' },
       textAlignment: 'right',
-      value: new PropertyValue({ field: 'memory' }),
+      value: new MemoryValue({
+        field: 'memory',
+      }),
       sort: true,
-      sortingPreprocessorFn: quantityToScalar,
     },
 
     {
@@ -149,13 +152,31 @@ export const defaultConfig: TableConfig = {
         new ActionIconValue({
           name: 'delete',
           tooltipReady: $localize`Delete this notebook server`,
-          color: '',
+          color: 'warn',
           field: 'deleteAction',
           iconReady: 'material:delete',
         }),
       ]),
     },
   ],
+};
+
+const customOpenPVCViewerCol: TableColumn = {
+  matHeaderCellDef: '',
+  matColumnDef: 'customOpenPVCViewer',
+  style: { width: '40px' },
+  value: new ComponentValue({
+    component: OpenPVCViewerButtonComponent,
+  }),
+};
+
+const customClosePVCViewerCol: TableColumn = {
+  matHeaderCellDef: '',
+  matColumnDef: 'customClosePVCViewer',
+  style: { width: '40px' },
+  value: new ComponentValue({
+    component: ClosePVCViewerButtonComponent,
+  }),
 };
 
 const customDeleteCol: TableColumn = {
@@ -172,7 +193,12 @@ export const defaultVolumeConfig: TableConfig = {
   title: tableConfig.title,
   dynamicNamespaceColumn: true,
   newButtonText: tableConfig.newButtonText,
-  columns: tableConfig.columns.concat(customDeleteCol),
+  columns: tableConfig.columns.concat(
+    // TODO: Uncomment when pvcviewer-controller is implemented
+    // customOpenPVCViewerCol,
+    // customClosePVCViewerCol,
+    customDeleteCol,
+  ),
 };
 
 // --- Config for the Cost Table ---

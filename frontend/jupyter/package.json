@@ -7,9 +7,7 @@
     "build": "npm run copyLibAssets && ng build --base-href /jupyter/ --deploy-url static/ --configuration production",
     "build:fr": "npm run copyLibAssets && ng build --base-href /jupyter/ --deploy-url static/ --configuration production,fr",
     "build:watch": "npm run copyLibAssets && ng build --watch --deploy-url static/ --outputPath ../backend/apps/default/static/ --outputHashing all",
-    "build:watch:rok": "npm run copyLibAssets && ng build --watch --deploy-url static/ --outputPath ../backend/apps/rok/static/ --outputHashing all --configuration=rok",
     "serve": "npm run copyLibAssets && ng serve --proxy-config=src/proxy.conf.json",
-    "serve:rok": "npm run copyLibAssets && ng serve --configuration=rok --proxy-config=src/proxy.conf.rok.json",
     "copyLibAssets": "cp -r ./node_modules/kubeflow/assets/* ./src/assets/",
     "format:check": "prettier --check 'src/**/*.{js,ts,html,scss,css}' || node scripts/check-format-error.js",
     "format:write": "prettier --write 'src/**/*.{js,ts,html,scss,css}'",
@@ -43,7 +41,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@kubernetes/client-node": "^0.16.3",
+    "@kubernetes/client-node": "^1.0.0",
     "date-fns": "^1.29.0",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21",
@@ -86,5 +84,14 @@
     "ts-node": "^10.4.0",
     "typescript": "~5.2.2",
     "wait-on": "^7.2.0"
+  },
+  "overrides": {
+    "http-proxy-middleware": "2.0.7",
+    "webpack-dev-middleware": "6.1.2",
+    "undici": "6.21.1",
+    "webpack": "5.94.0",
+    "@babel/runtime": "7.26.10",
+    "esbuild": "0.25.1",
+    "vite": "5.4"
   }
 }

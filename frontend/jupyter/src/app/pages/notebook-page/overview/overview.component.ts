@@ -126,10 +126,10 @@ export class OverviewComponent implements OnDestroy {
     }
     for (const volume of notebook.spec.template.spec.volumes) {
       if (volume.name === 'dshm') {
-        return 'Yes';
+        return $localize`Yes`;
       }
     }
-    return 'No';
+    return $localize`No`;
   }
 
   get cpuLimits(): string {
@@ -149,6 +149,17 @@ export class OverviewComponent implements OnDestroy {
       }
       return cn.resources.limits?.cpu;
     }
+  }
+
+  get notebookCreator(): string {
+    return this.getNotebookCreator(this.notebook);
+  }
+
+  getNotebookCreator(notebook: NotebookRawObject): string {
+    if (!notebook?.metadata?.annotations) {
+      return null;
+    }
+    return notebook.metadata.annotations['notebooks.kubeflow.org/creator'];
   }
 
   get cpuRequests(): string {
@@ -365,7 +376,7 @@ export class OverviewComponent implements OnDestroy {
       }
 
       const envGroup: EnvironmentVariablesGroup = {
-        name: 'Notebook CR',
+        name: $localize`Notebook CR`,
         chipsList: [],
       };
       for (const envVar of cn.env) {

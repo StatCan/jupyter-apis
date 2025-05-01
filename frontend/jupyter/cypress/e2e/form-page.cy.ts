@@ -2,6 +2,7 @@ describe('New notebook form', () => {
   beforeEach(() => {
     cy.mockDashboardRequest();
     cy.mockConfigRequest();
+    cy.mockDefaultStorageClassRequest('standard');
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
       cy.mockPoddefaultsRequest(settings.namespace);
@@ -21,6 +22,53 @@ describe('New notebook form', () => {
 
   it('should have a "New notebook" title', () => {
     cy.get('[data-cy-toolbar-title]').contains('New notebook').should('exist');
+  });
+
+
+  it('should update panel header name according to the name input field', () => {
+    cy.get('[data-cy-advanced-options-button]').click();
+
+    cy.get('[data-cy="workspace volume"]').click();
+
+    cy.get('[data-cy="volume name input"]').clear().type('test');
+
+    cy.get('[data-cy="volume name header"]').contains('test');
+  });
+
+  it('should update name input field according to the ConfigMap', () => {
+    cy.get('[data-cy-advanced-options-button]').click();
+
+    cy.get('[data-cy="workspace volume"]').click();
+
+    cy.get('[data-cy="volume name input"]').should($nameInput => {
+      const nameValue = $nameInput.val();
+      // '{notebook-name}-workspace' is the name value of the config fixture
+      expect(nameValue).equal('-workspace');
+    });
+  });
+  //TODO: uncomment this test once the size dropdown default is fixed.
+  // it('should update size input field according to the ConfigMap', () => {
+  //   cy.get('[data-cy-advanced-options-button]').click();
+
+  //   cy.get('[data-cy="workspace volume"]').click();
+
+  //   cy.get('[data-cy="size input"]').should($sizeInput => {
+  //     const sizeValue = $sizeInput.val();
+  //     // '16Gi' is the storage value of the config fixture
+  //     expect(sizeValue).equal('16');
+  //   });
+  // });
+
+  it('should update access mode input field according to the ConfigMap', () => {
+    cy.get('[data-cy-advanced-options-button]').click();
+    
+    cy.get('[data-cy="workspace volume"]').click();
+
+    // 'ReadWriteMany' is the accessModes value of the config fixture
+    cy.get('[data-cy="ReadWriteOnce"]').should(
+      'have.class',
+      'mat-mdc-radio-checked',
+    );
   });
 
   describe('validate inputs', () => {
@@ -121,7 +169,7 @@ describe('New notebook form', () => {
         .should('have.class', 'ng-valid');
     });
 
-    it('minimum cpu', () => {
+    it('requested cpu', () => {
       cy.get('[data-cy-advanced-options-button]').click();
       cy.get('[data-cy-form-input="cpu"]').find('input').clear();
       // minimum value
@@ -156,7 +204,7 @@ describe('New notebook form', () => {
         .should('have.class', 'ng-valid');
     });
 
-    it('minimum memory', () => {
+    it('requested memory', () => {
       cy.get('[data-cy-advanced-options-button]').click();
       cy.get('[data-cy-form-input="memory"]').find('input').clear();
       // minimum value
@@ -187,110 +235,6 @@ describe('New notebook form', () => {
       // valid value
       cy.get('[data-cy-form-input="memory"]').find('input').type('4');
       cy.get('[data-cy-form-input="memory"]')
-        .find('input')
-        .should('have.class', 'ng-valid');
-    });
-
-    it('maximum cpu', () => {
-      cy.get('[data-cy-advanced-options-button]').click();
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      // minimum value
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('0.1');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify at least 0.5 CPUs');
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      // maximum value
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').type('40.0');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't exceed 14 CPUs");
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      // not smaller than minimum cpu
-      cy.get('[data-cy-form-input="cpu"]').clear();
-      cy.get('[data-cy-form-input="cpu"]').find('input').type('5.0');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .type('4.0', { force: true });
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't be lower than requested CPUs");
-      cy.get('[data-cy-form-input="cpuLimit"]').find('input').clear();
-      cy.get('[data-cy-form-input="cpu"]').clear();
-      cy.get('[data-cy-form-input="cpu"]').find('input').type('0.5');
-      // empty value
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify number of CPUs');
-      // valid value
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .type('4', { force: true });
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .should('have.class', 'ng-valid');
-    });
-
-    it('maximum memory', () => {
-      cy.get('[data-cy-advanced-options-button]').click();
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      // minimum value
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('0.1');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify at least 1Gi of memory');
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      // maximum value
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').type('90.0');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't exceed 48Gi of memory");
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      // not smaller than minimum memory
-      cy.get('[data-cy-form-input="memory"]').clear();
-      cy.get('[data-cy-form-input="memory"]').find('input').type('20.0');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .type('10.0', { force: true });
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', "Can't be lower than requested memory");
-      cy.get('[data-cy-form-input="memoryLimit"]').find('input').clear();
-      cy.get('[data-cy-form-input="memory"]').clear();
-      cy.get('[data-cy-form-input="memory"]').find('input').type('2.0');
-      // empty value
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .should('have.class', 'ng-invalid');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('mat-error')
-        .should('have.text', 'Specify amount of memory (e.g. 2Gi)');
-      // valid value
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .type('4', { force: true });
-      cy.get('[data-cy-form-input="memoryLimit"]')
         .find('input')
         .should('have.class', 'ng-valid');
     });
@@ -423,7 +367,7 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .invoke('val')
-        .should('eq', 'test-notebook-volume');
+        .should('eq', 'test-notebook-workspace');
       // assert volume name doesn't auto update when dirty
       cy.get('[data-cy-form-input="workspaceVolume"]')
         .find('[data-cy-form-input="volume-name"]')
@@ -436,7 +380,7 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .invoke('val')
-        .should('eq', 'test-notebook-volume-dirty');
+        .should('eq', 'test-notebook-workspace-dirty');
     });
 
     it('data volume', () => {
@@ -659,8 +603,7 @@ describe('New notebook form', () => {
   });
 
   describe('notebook creation', () => {
-    it('should create a jupyter notebook', () => {
-      // cancel notebook creation
+    it('should cancel notebook creation', () => {
       cy.get('[data-cy-form-button="cancel"]').click();
       cy.url().should('eq', 'http://localhost:4200/');
     });
@@ -688,14 +631,6 @@ describe('New notebook form', () => {
         .find('input')
         .invoke('val')
         .should('eq', '2');
-      cy.get('[data-cy-form-input="cpuLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '4');
-      cy.get('[data-cy-form-input="memoryLimit"]')
-        .find('input')
-        .invoke('val')
-        .should('eq', '4');
 
       cy.get(
         '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',
@@ -704,7 +639,7 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .invoke('val')
-        .should('eq', 'test-notebook-jupyter-volume');
+        .should('eq', 'test-notebook-jupyter-workspace');
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should(
         'not.exist',
       );

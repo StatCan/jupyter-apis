@@ -1,5 +1,10 @@
 <mat-form-field class="wide" appearance="outline">
   <mat-label i18n>Name</mat-label>
-  <input matInput placeholder="Name" [formControl]="nameControl" />
+  <input
+    matInput
+    placeholder="Name"
+    [formControl]="nameControl"
+    i18n-placeholder
+  />
   <mat-error>{{ nameError() }}</mat-error>
 </mat-form-field>

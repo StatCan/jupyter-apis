@@ -57,9 +57,23 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     if (event.checked) {
       this.parentForm.get('image').disable();
       this.parentForm.get('imageGroupThree').disable();
+
+      this.parentForm.get('betaImageCheck').disable();
+      this.parentForm.get('betaImageCheck').setValue(false);
     } else {
       this.parentForm.get('image').enable();
       this.parentForm.get('imageGroupThree').enable();
+
+      this.parentForm.get('betaImageCheck').enable();
+    }
+  }
+
+  onSelectBeta(event: MatCheckboxChange): void {
+    if (event.checked) {
+      this.parentForm.get('customImageCheck').disable();
+      this.parentForm.get('customImageCheck').setValue(false);
+    } else {
+      this.parentForm.get('customImageCheck').enable();
     }
   }
 

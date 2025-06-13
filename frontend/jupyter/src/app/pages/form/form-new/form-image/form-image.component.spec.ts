@@ -41,6 +41,7 @@ describe('FormImageComponent', () => {
     component.parentForm = new FormGroup({
       customImage: new FormControl(),
       customImageCheck: new FormControl(),
+      betaImageCheck: new FormControl(),
       image: new FormControl(),
       imageGroupThree: new FormControl(),
       serverType: new FormControl(),

@@ -53,6 +53,7 @@ export interface NotebookFormObject {
   imagePullPolicy: string;
   customImage?: string;
   customImageCheck: boolean;
+  betaImageCheck: boolean;
   serverType: string;
   cpu: number | string;
   cpuLimit: number | string;

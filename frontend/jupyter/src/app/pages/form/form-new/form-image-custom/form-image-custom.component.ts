@@ -53,11 +53,11 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     );
   }
 
-  toggleImageInput(flag: boolean): void{
-    if(flag){
+  toggleImageInput(flag: boolean): void {
+    if (flag) {
       this.parentForm.get('image').enable();
       this.parentForm.get('imageGroupThree').enable();
-    }else{
+    } else {
       this.parentForm.get('image').disable();
       this.parentForm.get('imageGroupThree').disable();
     }

@@ -53,15 +53,23 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSelect(event: MatCheckboxChange): void {
-    if (event.checked) {
+  toggleImageInput(flag: boolean): void{
+    if(flag){
+      this.parentForm.get('image').enable();
+      this.parentForm.get('imageGroupThree').enable();
+    }else{
       this.parentForm.get('image').disable();
       this.parentForm.get('imageGroupThree').disable();
+    }
+  }
+
+  onSelect(event: MatCheckboxChange): void {
+    if (event.checked) {
+      this.toggleImageInput(false);
 
       this.parentForm.get('betaImageCheck').setValue(false);
     } else {
-      this.parentForm.get('image').enable();
-      this.parentForm.get('imageGroupThree').enable();
+      this.toggleImageInput(true);
     }
   }
 
@@ -70,8 +78,7 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
       this.parentForm.get('customImageCheck').setValue(false);
 
       //to replicate behavior of customImageCheck being unchecked
-      this.parentForm.get('image').enable();
-      this.parentForm.get('imageGroupThree').enable();
+      this.toggleImageInput(true);
     }
   }
 

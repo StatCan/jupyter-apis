@@ -67,14 +67,18 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     if (event.checked) {
       this.toggleImageInput(false);
 
-      this.parentForm.get('betaImageCheck').setValue(false);
+      // uncheck the beta box if checking the custom image box
+      if (this.parentForm.get('betaImageCheck').value === true) {
+        this.parentForm.get('betaImageCheck').setValue(false);
+      }
     } else {
       this.toggleImageInput(true);
     }
   }
 
   onSelectBeta(event: MatCheckboxChange): void {
-    if (event.checked) {
+    // uncheck the custom image box if checking the beta box
+    if (event.checked && this.parentForm.get('customImageCheck').value === true) {
       this.parentForm.get('customImageCheck').setValue(false);
 
       //to replicate behavior of customImageCheck being unchecked

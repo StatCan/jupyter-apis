@@ -78,7 +78,10 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
 
   onSelectBeta(event: MatCheckboxChange): void {
     // uncheck the custom image box if checking the beta box
-    if (event.checked && this.parentForm.get('customImageCheck').value === true) {
+    if (
+      event.checked &&
+      this.parentForm.get('customImageCheck').value === true
+    ) {
       this.parentForm.get('customImageCheck').setValue(false);
 
       //to replicate behavior of customImageCheck being unchecked

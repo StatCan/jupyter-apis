@@ -138,9 +138,22 @@ describe('New notebook form', () => {
 
     it('custom image', () => {
       cy.get('[data-cy-advanced-options-button]').click();
+      // only one of beta or custom checkbox can be enabled
       cy.get('[data-cy-form-input="customImageCheck"]')
         .find('input')
         .check({ force: true });
+      cy.get('[data-cy-form-input="betaImageCheck"]')
+        .should('not.have.class', 'mat-mdc-checkbox-checked');
+      cy.get('[data-cy-form-input="betaImageCheck"]')
+        .find('input')
+        .check({ force: true });
+      cy.get('[data-cy-form-input="customImageCheck"]')
+        .should('not.have.class', 'mat-mdc-checkbox-checked');
+      cy.get('[data-cy-form-input="customImageCheck"]')
+        .find('input')
+        .check({ force: true });
+      cy.get('[data-cy-form-input="betaImageCheck"]')
+        .should('not.have.class', 'mat-mdc-checkbox-checked');
       // invalid pattern
       cy.get('[data-cy-form-input="customImage"]')
         .find('input')

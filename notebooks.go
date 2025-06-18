@@ -98,6 +98,7 @@ type newnotebookrequest struct {
 	Image              string            `json:"image"`
 	CustomImage        string            `json:"customImage"`
 	CustomImageCheck   bool              `json:"customImageCheck"`
+	BetaImageCheck     bool              `json:"betaImageCheck"`
 	CPU                resource.Quantity `json:"cpu"`
 	CPULimit           resource.Quantity `json:"cpuLimit"`
 	Memory             resource.Quantity `json:"memory"`
@@ -503,6 +504,7 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 		Image:            s.Config.SpawnerFormDefaults.Image.Value,
 		CustomImage:      "",
 		CustomImageCheck: false,
+		BetaImageCheck:   false,
 		CPU:              cpuvalue,
 		CPULimit:         cpulimitvalue,
 		Memory:           memoryvalue,
@@ -596,6 +598,12 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		image = s.Config.SpawnerFormDefaults.Image.Value
 	}
 	image = strings.TrimSpace(image)
+
+	// sets the beta tag if requested
+	if req.BetaImageCheck {
+		tempImageSplit := strings.Split(image, ":")
+		image = tempImageSplit[0] + ":beta"
+	}
 
 	// Gets the current user. Returns a default value if none is found.
 	user := r.URL.User.Username()

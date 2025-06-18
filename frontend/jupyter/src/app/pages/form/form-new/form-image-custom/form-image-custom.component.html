@@ -1,5 +1,5 @@
 <lib-form-section title="Custom Notebook" i18n-title>
-  <div class="flex-column">
+  <div class="column">
     <mat-form-field
       class="wide"
       appearance="outline"
@@ -44,7 +44,7 @@
       <mat-error i18n>Please provide an Image to use</mat-error>
     </mat-form-field>
 
-    <div class="flex-column">
+    <div class="checkbox-grid">
       <mat-checkbox
         *ngIf="allowCustomImage"
         [formControl]="parentForm.get('customImageCheck')"
@@ -56,49 +56,47 @@
         Custom Image
       </mat-checkbox>
 
-      <mat-form-field
-        class="wide"
-        appearance="outline"
-        *ngIf="parentForm?.value.customImageCheck"
-        data-cy-form-input="customImage"
-      >
-        <mat-label i18n>Custom Image</mat-label>
-        <mat-hint i18n>
-          The selected image will be evaluated against our allow-list. For more
-          details on using your own custom images, follow the documentation at
-          https://github.com/StatCan/aaw-contrib-containers.
-        </mat-hint>
-        <input
-          matInput
-          placeholder="Provide a custom Image"
-          i18n-placeholder
-          [formControl]="parentForm.get('customImage')"
-          #cstmimg
-        />
-        <mat-error>{{ urlValidation() }}</mat-error>
-      </mat-form-field>
-
-      <!--AAW Removed. Deemed unecessary
-            <div class="row">
-              <mat-form-field class="column" appearance="outline">
-                <mat-label i18n>Image pull policy</mat-label>
-                <mat-select [formControl]="parentForm.get('imagePullPolicy')">
-                  <mat-option value="Always" i18n="ImagePullPolicy: Always">
-                    Always
-                  </mat-option>
-                  <mat-option
-                    value="IfNotPresent"
-                    i18n="ImagePullPolicy: IfNotPresent"
-                  >
-                    IfNotPresent
-                  </mat-option>
-                  <mat-option value="Never" i18n="ImagePullPolicy: Never">
-                    Never
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            -->
+      <span>
+        <mat-checkbox
+          *ngIf="allowCustomImage"
+          [formControl]="parentForm.get('betaImageCheck')"
+          (change)="onSelectBeta($event)"
+          i18n
+          data-cy-form-input="betaImageCheck"
+          color="primary"
+        >
+          Beta Image
+        </mat-checkbox>
+        <mat-icon
+          class="icon checkbox-icon"
+          matTooltip="A beta notebook server contains upcoming changes to our notebook server images. The full list of changes available in the beta image will be available on the Zone's home page."
+          i18n-matTooltip
+          matTooltipPosition="above"
+        >
+          help
+        </mat-icon>
+      </span>
     </div>
+
+    <mat-form-field
+      class="wide"
+      appearance="outline"
+      *ngIf="parentForm?.value.customImageCheck"
+      data-cy-form-input="customImage"
+    >
+      <mat-label i18n>Custom Image</mat-label>
+      <mat-hint i18n>
+        The selected image will be evaluated against our allow-list. For more
+        details on using your own custom images, follow the documentation at
+        https://github.com/StatCan/aaw-contrib-containers.
+      </mat-hint>
+      <input
+        matInput
+        placeholder="Provide a custom Image"
+        i18n-placeholder
+        [formControl]="parentForm.get('customImage')"
+      />
+      <mat-error>{{ urlValidation() }}</mat-error>
+    </mat-form-field>
   </div>
 </lib-form-section>

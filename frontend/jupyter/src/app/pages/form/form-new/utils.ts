@@ -14,6 +14,7 @@ export function getFormDefaults(): FormGroup {
     imagePullPolicy: ['Always', [Validators.required]],
     customImage: ['', []],
     customImageCheck: [false, []],
+    betaImageCheck: [false, []],
     serverType: ['jupyter', [Validators.required]],
     cpu: [1, [Validators.required]],
     cpuLimit: ['', []],

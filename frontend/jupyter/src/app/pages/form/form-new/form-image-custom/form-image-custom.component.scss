@@ -1,0 +1,10 @@
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.checkbox-icon {
+  position: relative;
+  top: 8px;
+  padding-left: 2px;
+}

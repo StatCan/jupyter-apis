@@ -880,46 +880,70 @@
           <context context-type="linenumber">55,57</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c75bd8065b8ad0759dc1b16279cfe9814c360c06" datatype="html">
+        <source> Beta Image </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">67,69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="da2180bee47629a0beb082afb98e3acc2aac556f" datatype="html">
+        <source>A beta notebook server contains upcoming changes to our notebook server images. The list of latest changes available in the beta image is displayed on the Zone&apos;s home page.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e0f61598fddb511c4940056901acec926f3bfaa0" datatype="html">
+        <source> Click <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/releases/latest&quot;
+            target=&quot;_blank&quot;
+          &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see the latest beta release notes </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">78,85</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2f0e016d5caf4e42f1b6f60dc9fe80e2b98f5287" datatype="html">
         <source>Custom Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="23b8e06185a822c1aa001bd6c7519a1407dbef5a" datatype="html">
+      <trans-unit id="82aa1fcc9cc538557bdf7c807ace97aa6047aef0" datatype="html">
         <source> The selected image will be evaluated against our allow-list. For more details on using your own custom images, follow the documentation at https://github.com/StatCan/aaw-contrib-containers. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">66,70</context>
+          <context context-type="linenumber">96,100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
         <source>Provide a custom Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8679122523698617738" datatype="html">
         <source>Custom image is required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6343667331017090565" datatype="html">
         <source><x id="PH" equiv-text="urlBeginning"/> is not allowed in URLs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7769611021004782223" datatype="html">
         <source>This workspace type is disabled for profile &quot;<x id="PH" equiv-text="this.nsMetadata.metadata.name"/>&quot;.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.ts</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">169</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.ts</context>

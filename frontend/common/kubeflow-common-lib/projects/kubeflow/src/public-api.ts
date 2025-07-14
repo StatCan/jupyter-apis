@@ -112,3 +112,5 @@ export * from './lib/resource-table/action/action.component';
 
 export * from './lib/status-info/status-info.component';
 export * from './lib/status-info/status-info.module';
+
+export * from './lib/tokens';

@@ -12,6 +12,7 @@ import {
   ConfirmDialogModule,
   FormModule,
   ImmediateErrorStateMatcher,
+  KF_NAMESPACE,
 } from 'kubeflow';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -30,6 +31,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
 import { IndexDefaultModule } from './pages/index/index-default/index-default.module';
+import { environment } from '../environments/environment';
 
 /**
  * MAT_SNACK_BAR_DEFAULT_OPTIONS values can be found
@@ -62,6 +64,7 @@ const JwaSnackBarConfig: MatSnackBarConfig = {
     KubecostService,
     { provide: ErrorStateMatcher, useClass: ImmediateErrorStateMatcher },
     { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: JwaSnackBarConfig },
+    { provide: KF_NAMESPACE, useValue: environment.namespace },
   ],
   bootstrap: [AppComponent],
 })

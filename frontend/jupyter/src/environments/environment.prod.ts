@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: '/jupyter',
+  namespace: 'kubeflow-user', // fallback namespace in production
   resource: 'notebooks',
   ui: 'default',
   jupyterlabLogo: 'assets/logos/jupyterlab-logo.svg',

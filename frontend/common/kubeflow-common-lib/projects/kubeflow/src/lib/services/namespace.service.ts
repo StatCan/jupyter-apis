@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import {
   ReplaySubject,
   Subscription,
@@ -9,6 +9,7 @@ import {
   merge,
 } from 'rxjs';
 import { DashboardState } from '../enums/dashboard';
+import { KF_NAMESPACE } from '../tokens';
 
 declare global {
   interface Window {
@@ -34,7 +35,9 @@ export class NamespaceService {
   selectedNamespace2$ = new ReplaySubject<string | string[]>(1);
   dashboardConnected$ = this.dashboardConnectedSource.asObservable();
 
-  constructor() {
+  constructor(
+    @Optional() @Inject(KF_NAMESPACE) private defaultNamespace?: string,
+  ) {
     fromEvent(window, 'load').subscribe(_ => {
       if (
         window.centraldashboard &&
@@ -59,7 +62,7 @@ export class NamespaceService {
       this.dashboardConnectedSource.next(DashboardState.Disconnected);
 
       if (this.currNamespace === undefined) {
-        this.updateSelectedNamespace('kubeflow-user');
+        this.updateSelectedNamespace(this.defaultNamespace || 'kubeflow-user');
       }
     });
   }

@@ -35,7 +35,9 @@ export class NamespaceService {
   selectedNamespace2$ = new ReplaySubject<string | string[]>(1);
   dashboardConnected$ = this.dashboardConnectedSource.asObservable();
 
-  constructor(@Optional() @Inject(KF_NAMESPACE) private defaultNamespace?: string) {
+  constructor(
+    @Optional() @Inject(KF_NAMESPACE) private defaultNamespace?: string,
+  ) {
     fromEvent(window, 'load').subscribe(_ => {
       if (
         window.centraldashboard &&

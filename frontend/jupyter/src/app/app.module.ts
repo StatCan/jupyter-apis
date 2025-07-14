@@ -31,7 +31,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
 import { IndexDefaultModule } from './pages/index/index-default/index-default.module';
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
 
 /**
  * MAT_SNACK_BAR_DEFAULT_OPTIONS values can be found
@@ -41,7 +41,6 @@ import { environment } from '../environments/environment'
 const JwaSnackBarConfig: MatSnackBarConfig = {
   duration: 3000,
 };
-
 
 @NgModule({
   declarations: [AppComponent, VolumeFormComponent, PageNotFoundComponent],

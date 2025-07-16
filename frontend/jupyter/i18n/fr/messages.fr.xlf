@@ -1013,17 +1013,17 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e0f61598fddb511c4940056901acec926f3bfaa0" datatype="html">
+      <trans-unit id="6357a1630e834180c963cb5e012f1c179c76850e" datatype="html">
         <source> Click <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
-            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/releases/latest&quot;
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
             target=&quot;_blank&quot;
             &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-          &gt;"/> to see the latest beta release notes </source>
+          &gt;"/> to see the changes in beta </source>
         <target> Cliquez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
-            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/releases/latest&quot;
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
             target=&quot;_blank&quot;
             &gt;"/>ici<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-          &gt;"/> pour voir les dernières notes de version bêta </target>
+          &gt;"/> pour voir les changements dans la version bêta </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
           <context context-type="linenumber">78,86</context>

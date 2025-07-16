@@ -59,6 +59,8 @@ The front-end is configured to proxy requests to the local API server. It
 requires an environment variable (`KF_USER_ID`) to specify the current user –
 this is passed to the API server as an HTTP header.
 
+Furthermore, configure the environment variable (`namespace`) in `./frontend/jupyter/src/environments/environment.ts` to specify the current user.
+
 The following can be pasted in a script and executed. This uses the latest node lts/hydrogen version(v18.19.0) with npm v8(10.2.3).
 **NOTE**: `user` is when using vagrant. Use the email adress if it is the dev cluser (please never connect to prod directly)
 

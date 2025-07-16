@@ -972,6 +972,12 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Changing Notebook Condition Message to Something User Friendly
+	status := &nb.Status
+	for i := range status.Conditions {
+		status.Conditions[i].Message = getUserFriendlyMessage(&status.Conditions[i])
+	}
+
 	resp := &getnotebookresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
@@ -1089,4 +1095,17 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 		Events: events.Items,
 	}
 	s.respond(w, r, resp)
+}
+
+// getUserFriendlyMessage returns a user‑friendly message for a NotebookCondition.
+// If no mapping is found, it falls back to condition.Message.
+func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
+	switch condition.Type {
+	case "PodScheduled":
+		switch condition.Reason {
+		case "Unschedulable":
+			return "Please Wait 30 Seconds before trying again (Unable to schedule notebook)"
+		}
+	}
+	return condition.Message // fallback to original
 }

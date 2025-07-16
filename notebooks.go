@@ -1104,7 +1104,7 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 	case "PodScheduled":
 		switch condition.Reason {
 		case "Unschedulable":
-			return "Please Wait 30 Seconds before trying again (Unable to schedule notebook)"
+			return "Please wait 30 seconds before trying again (unable to schedule notebook)."
 		}
 	}
 	return condition.Message // fallback to original

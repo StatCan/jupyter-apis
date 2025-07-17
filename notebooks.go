@@ -1100,12 +1100,9 @@ func (s *server) GetNotebookEvents(w http.ResponseWriter, r *http.Request) {
 // getUserFriendlyMessage returns a user‑friendly message for a NotebookCondition.
 // If no mapping is found, it falls back to condition.Message.
 func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
-	switch condition.Type {
-	case "PodScheduled":
-		switch condition.Reason {
-		case "Unschedulable":
-			return "Please wait 30 seconds before trying again (unable to schedule notebook)."
-		}
+	// NOTE: Use switch case statements if this function grows to account for other condition types and condition reason
+	if condition.Type == "PodScheduled" && condition.Reason == "Unschedulable" {
+		return "Please wait 30 seconds before trying again (unable to schedule notebook)."
 	}
 	return condition.Message // fallback to original
 }

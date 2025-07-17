@@ -38,14 +38,6 @@ export class JWABackendService extends BackendService {
     );
   }
 
-  public getNSMetadata(namespace: string): Observable<V1Namespace> {
-    const url = `api/namespaces/${namespace}`;
-    return this.http.get<JWABackendResponse>(url).pipe(
-      catchError(error => this.handleError(error)),
-      map(data => data.namespace),
-    );
-  }
-
   private getNotebooksAllNamespaces(
     namespaces: string[],
   ): Observable<NotebookResponseObject[]> {

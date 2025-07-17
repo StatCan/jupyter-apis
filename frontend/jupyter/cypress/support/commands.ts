@@ -14,18 +14,6 @@ Cypress.Commands.add('mockDashboardRequest', () => {
   );
 });
 
-Cypress.Commands.add('mockNamespacesRequest', () => {
-  cy.intercept('GET', '/api/namespaces', {
-    fixture: 'namespaces',
-  }).as('mockNamespacesRequest');
-});
-
-Cypress.Commands.add('mockNamespaceMetadataRequest', namespace => {
-  cy.intercept('GET', `/api/namespaces/${namespace}`, {
-    fixture: 'namespaceMetadata',
-  }).as('mockNamespaceMetadataRequest');
-});
-
 Cypress.Commands.add('mockNotebooksRequest', namespace => {
   cy.intercept('GET', `/api/namespaces/${namespace}/notebooks`, {
     fixture: 'notebooks',

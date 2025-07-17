@@ -35,8 +35,6 @@ export class FormNewComponent
 
   readonlySpecs: boolean;
 
-  nsMetadata: V1Namespace;
-
   existingNotebooks: Set<string> = new Set<string>();
   mountedVolumes: Set<string> = new Set<string>();
 
@@ -76,10 +74,6 @@ export class FormNewComponent
           this.currNamespace = namespace;
           this.formCtrl.controls.namespace.setValue(this.currNamespace);
         }
-
-        this.backend.getNSMetadata(namespace).subscribe(nsMetadata => {
-          this.nsMetadata = nsMetadata;
-        });
 
         this.backend.getNotebooks(namespace).subscribe(notebooks => {
           this.existingNotebooks.clear();

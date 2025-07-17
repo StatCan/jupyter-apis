@@ -23,15 +23,6 @@
       <mat-button-toggle
         value="group-three"
         aria-label="Use SAS Image"
-        [disabled]="!shouldEnable(imagesGroupThree?.enabledCondition)"
-        [matTooltip]="
-          !shouldEnable(imagesGroupThree?.enabledCondition)
-            ? getDisabledMessage('group-three')
-            : ''
-        "
-        [class.toolbar-icon-disabled]="
-          !shouldEnable(imagesGroupThree?.enabledCondition)
-        "
         i18n-aria-label
       >
         <mat-icon class="server-type-icon" svgIcon="group-three"></mat-icon>

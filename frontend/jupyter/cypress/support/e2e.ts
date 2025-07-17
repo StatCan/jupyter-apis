@@ -16,17 +16,6 @@ declare global {
       selectAllNamespaces(): Chainable;
 
       /**
-       * Custom command to mock request at '/api/namespaces'
-       */
-      mockNamespacesRequest(): Chainable<void>;
-
-      /**
-       * Custom command to mock request at '/api/namespaces/<namespace>'
-       * to return metadata information for the given namespace
-       */
-      mockNamespaceMetadataRequest(namespace: string): Chainable<void>;
-
-      /**
        * Custom command to mock request at '/api/namespaces/<namespace>/notebooks'
        * and returns array with mock notebooks []
        */

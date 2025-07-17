@@ -10,8 +10,6 @@ export interface Config {
   };
 
   imageGroupThree?: {
-    disabledMessage?: Map<string, string>;
-    enabledCondition?: { labels: Map<string, string> };
     value: string;
     options: string[];
   };

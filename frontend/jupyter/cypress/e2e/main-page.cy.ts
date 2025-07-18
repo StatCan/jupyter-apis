@@ -256,7 +256,7 @@ describe('Main tables', () => {
 
   describe('Volumes table', () => {
     beforeEach(() => {
-      cy.wait(['@mockNamespacesRequest', '@mockPVCsRequest']);
+      cy.wait(['@mockPVCsRequest']);
     });
 
     it('should have the Volumes table', () => {

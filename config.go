@@ -117,14 +117,8 @@ type Image struct {
 }
 
 type ImageGroup struct {
-	DisabledMessage  map[string]string `yaml:"disabledMessage" json:"disabledMessage,omitempty"`
-	EnabledCondition *EnabledCondition `yaml:"enabledCondition" json:"enabledCondition,omitempty"`
-	Value            string            `yaml:"value" json:"value"`
-	Options          []string          `yaml:"options" json:"options"`
-}
-
-type EnabledCondition struct {
-	Labels map[string]string `yaml:"labels" json:"labels,omitempty"`
+	Value   string   `yaml:"value" json:"value"`
+	Options []string `yaml:"options" json:"options"`
 }
 
 type Shm struct {

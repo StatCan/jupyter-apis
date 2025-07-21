@@ -26,7 +26,6 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
   @Input() allowCustomImage: boolean;
   @Input() hideRegistry: boolean;
   @Input() hideTag: boolean;
-  @Input() nsMetadata: V1Namespace;
 
   subs = new Subscription();
 
@@ -133,39 +132,5 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
     }
 
     return displayName;
-  }
-
-  shouldEnable(enabledCondition: { labels: Map<string, string> }): boolean {
-    if (enabledCondition == null || this.nsMetadata == null) {
-      return true;
-    }
-
-    const conditionLabels = Object.entries(enabledCondition.labels);
-    const namespaceLabelMetadata = (this.nsMetadata.metadata || {}).labels;
-    for (const [key, val] of conditionLabels) {
-      if (namespaceLabelMetadata[key] !== val) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  getDisabledMessage(serverType: string): string {
-    // Get the current browser language, if the error message isn't given in that language (in the config),
-    // return the default disabled message
-    const currentLanguage = this.localeId;
-
-    const msg = {
-      'group-three': this.imagesGroupThree.disabledMessage,
-    };
-
-    const disabledMsg = msg[serverType] || {};
-    const message = disabledMsg[currentLanguage];
-
-    if (typeof message == 'string') {
-      return message;
-    }
-
-    return $localize`This workspace type is disabled for profile "${this.nsMetadata.metadata.name}".`;
   }
 }

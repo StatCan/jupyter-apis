@@ -6,7 +6,6 @@ describe('New notebook form', () => {
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
       cy.mockPoddefaultsRequest(settings.namespace);
-      cy.mockNamespaceMetadataRequest(settings.namespace);
       cy.mockPVCsRequest(settings.namespace);
     });
 
@@ -16,7 +15,6 @@ describe('New notebook form', () => {
       '@mockConfigRequest',
       '@mockNotebooksRequest',
       '@mockPoddefaultsRequest',
-      '@mockNamespaceMetadataRequest',
     ]);
   });
 
@@ -688,39 +686,6 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-button="submit"]').click();
       cy.wait('@mockSubmitNotebook');
       cy.url().should('eq', 'http://localhost:4200/');
-      // mock non-sas namespace
-      cy.intercept('GET', '/api/namespaces/kubeflow-user', {
-        success: true,
-        status: 200,
-        user: null,
-        namespace: {
-          metadata: {
-            name: 'kubeflow-user',
-            creationTimestamp: null,
-            labels: {
-              'app.kubernetes.io/part-of': 'kubeflow-profile',
-              'istio-injection': 'enabled',
-              'katib-metricscollector-injection': 'enabled',
-              'kubernetes.io/metadata.name': 'kubeflow-user',
-              'pipelines.kubeflow.org/enabled': 'false',
-              'serving.kubeflow.org/inferenceservice': 'enabled',
-              'state.aaw.statcan.gc.ca/exists-internal-blob-storage': 'false',
-              'state.aaw.statcan.gc.ca/exists-non-cloud-main-user': 'false',
-              'state.aaw.statcan.gc.ca/exists-non-sas-notebook-user': 'true',
-              'state.aaw.statcan.gc.ca/has-sas-notebook-feature': 'false',
-              'state.aaw.statcan.gc.ca/non-employee-users': 'false',
-            },
-          },
-          spec: {},
-          status: {},
-        },
-      }).as('mockNamespaceMetadataRequest');
-      cy.get('[data-cy-toolbar-button="New Notebook"]').click();
-      cy.wait('@mockNamespaceMetadataRequest');
-      // assert that the sas image is disabled
-      cy.get(
-        '[data-cy-form-input="serverType"] > mat-button-toggle[value="group-three"] > button',
-      ).should('be.disabled');
     });
 
     it('should create a custom image notebook', () => {

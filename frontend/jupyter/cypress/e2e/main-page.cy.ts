@@ -1,6 +1,5 @@
 describe('Main tables', () => {
   beforeEach(() => {
-    cy.mockNamespacesRequest();
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
       cy.mockPVCsRequest(settings.namespace);
@@ -13,7 +12,7 @@ describe('Main tables', () => {
 
   describe('Notebooks table', () => {
     beforeEach(() => {
-      cy.wait(['@mockNamespacesRequest', '@mockNotebooksRequest']);
+      cy.wait(['@mockNotebooksRequest']);
     });
 
     it('should have a "Notebooks" title', () => {
@@ -257,7 +256,7 @@ describe('Main tables', () => {
 
   describe('Volumes table', () => {
     beforeEach(() => {
-      cy.wait(['@mockNamespacesRequest', '@mockPVCsRequest']);
+      cy.wait(['@mockPVCsRequest']);
     });
 
     it('should have the Volumes table', () => {

@@ -15,15 +15,6 @@
         "hideVersion":false
      },
      "imageGroupThree":{
-        "disabledMessage":{
-           "en":"SAS is unavailable while non-employees have access to this profile.",
-           "fr":"SAS n'est pas disponible lorsque des non-employés ont accès à ce profil."
-        },
-        "enabledCondition":{
-           "labels":{
-              "state.aaw.statcan.gc.ca/exists-non-sas-notebook-user":"false"
-           }
-        },
         "value":"k8scc01covidacr.azurecr.io/sas:latest",
         "options":[
            "k8scc01covidacr.azurecr.io/sas:latest"

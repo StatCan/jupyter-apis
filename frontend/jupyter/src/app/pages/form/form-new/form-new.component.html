@@ -27,7 +27,6 @@
         [allowCustomImage]="config?.allowCustomImage"
         [hideRegistry]="config?.hideRegistry"
         [hideTag]="config?.hideTag"
-        [nsMetadata]="nsMetadata"
       ></app-form-image>
 
       <lib-advanced-options>
@@ -38,7 +37,6 @@
           [allowCustomImage]="config?.allowCustomImage"
           [hideRegistry]="config?.hideRegistry"
           [hideTag]="config?.hideTag"
-          [nsMetadata]="nsMetadata"
         ></app-form-image-custom>
 
         <app-form-cpu-ram
@@ -48,7 +46,6 @@
           [cpuLimitFactor]="config?.cpu?.limitFactor"
           [memoryLimitFactor]="config?.memory?.limitFactor"
           [readonlySpecs]="readonlySpecs"
-          [nsMetadata]="nsMetadata"
         ></app-form-cpu-ram>
 
         <app-form-workspace-volume

@@ -591,6 +591,12 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	valid, err := validateNotebook(req)
+	if valid == false {
+		s.error(w, r, err)
+		return
+	}
+
 	image := req.Image
 	if req.CustomImageCheck {
 		image = req.CustomImage
@@ -1105,4 +1111,65 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 		return "Please wait 30 seconds before trying again (unable to schedule notebook)."
 	}
 	return condition.Message // fallback to original
+}
+
+func validateNotebook(request newnotebookrequest) (bool, error) {
+	var validationErrors []string
+
+	log.Printf("Validating notebook request: %+v", request)
+
+	// Required string fields
+	if request.Name == "" {
+		validationErrors = append(validationErrors, "Name is required")
+	}
+	if request.Namespace == "" {
+		validationErrors = append(validationErrors, "Namespace is required")
+	}
+	if request.Image == "" && !request.CustomImageCheck {
+		validationErrors = append(validationErrors, "Either Image must be provided or CustomImageCheck must be true")
+	}
+	if request.CustomImageCheck && request.CustomImage == "" {
+		validationErrors = append(validationErrors, "CustomImage is required when CustomImageCheck is true")
+	}
+
+	// Kubernetes naming validation for notebook name
+	if request.Name != "" {
+		matched, _ := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`, request.Name)
+		if !matched {
+			validationErrors = append(validationErrors, "Name must consist of lowercase alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character")
+		}
+	}
+
+	// Resource constraints
+	if request.CPU.IsZero() {
+		validationErrors = append(validationErrors, "CPU must be non-zero")
+	}
+	if request.Memory.IsZero() {
+		validationErrors = append(validationErrors, "Memory must be non-zero")
+	}
+	if !request.CPULimit.IsZero() && request.CPU.Cmp(request.CPULimit) > 0 {
+		validationErrors = append(validationErrors, "CPU limit must be greater than or equal to requested CPU")
+	}
+	if !request.MemoryLimit.IsZero() && request.Memory.Cmp(request.MemoryLimit) > 0 {
+		validationErrors = append(validationErrors, "Memory limit must be greater than or equal to requested memory")
+	}
+
+	// Enum checks
+	validImagePullPolicies := map[string]bool{"Always": true, "IfNotPresent": true, "Never": true}
+	if request.ImagePullPolicy != "" && !validImagePullPolicies[request.ImagePullPolicy] {
+		validationErrors = append(validationErrors, "Invalid ImagePullPolicy: "+request.ImagePullPolicy)
+	}
+
+	// Fix ServerType validation to match actual system values
+	validServerTypes := map[string]bool{"jupyter": true, "group-one": true, "group-two": true, "group-three": true}
+	if request.ServerType != "" && !validServerTypes[request.ServerType] {
+		validationErrors = append(validationErrors, "Invalid ServerType: "+request.ServerType)
+	}
+
+	// Return all validation errors
+	if len(validationErrors) > 0 {
+		return false, errors.New("validation failed:\n - " + strings.Join(validationErrors, "\n - "))
+	}
+
+	return true, nil
 }

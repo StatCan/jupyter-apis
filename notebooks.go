@@ -1113,6 +1113,7 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 	return condition.Message // fallback to original
 }
 
+// validateNotebook function verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
 func validateNotebook(request newnotebookrequest) (bool, error) {
 	var validationErrors []string
 

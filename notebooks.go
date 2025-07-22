@@ -592,7 +592,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	valid, err := validateNotebook(req)
-	if valid == false {
+	if !valid {
 		s.error(w, r, err)
 		return
 	}
@@ -1135,8 +1135,11 @@ func validateNotebook(request newnotebookrequest) (bool, error) {
 
 	// Kubernetes naming validation for notebook name
 	if request.Name != "" {
-		matched, _ := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`, request.Name)
-		if !matched {
+		matched, err := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`, request.Name)
+		if err != nil {
+			log.Printf("Error validating notebook name with regex: %v", err)
+			validationErrors = append(validationErrors, "An error occurred while validating the notebook name")
+		} else if !matched {
 			validationErrors = append(validationErrors, "Name must consist of lowercase alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character")
 		}
 	}

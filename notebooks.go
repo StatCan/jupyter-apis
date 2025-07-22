@@ -1117,7 +1117,7 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 func validateNotebook(request newnotebookrequest) (bool, error) {
 	var validationErrors []string
 
-	log.Printf("Validating notebook request: %+v", request)
+	log.Printf("Validating notebook request: %s in namespace %s", request.Name, request.Namespace)
 
 	// Required string fields
 	if request.Name == "" {

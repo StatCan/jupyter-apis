@@ -592,7 +592,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	valid, err := validateNotebook(req)
-	if valid == false {
+	if !valid {
 		s.error(w, r, err)
 		return
 	}

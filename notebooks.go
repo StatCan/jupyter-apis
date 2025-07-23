@@ -1173,7 +1173,7 @@ func validateNotebook(request newnotebookrequest) (bool, error) {
 
 	// Return all validation errors
 	if len(validationErrors) > 0 {
-		return false, errors.New("validation failed:\n - " + strings.Join(validationErrors, "\n - "))
+		return false, fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
 	}
 
 	return true, nil

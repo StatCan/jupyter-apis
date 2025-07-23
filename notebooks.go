@@ -591,8 +591,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	valid, err := validateNotebook(req)
-	if !valid {
+	err = validateNotebook(req)
+	if err != nil {
 		s.error(w, r, err)
 		return
 	}
@@ -1114,7 +1114,7 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 }
 
 // validateNotebook function verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
-func validateNotebook(request newnotebookrequest) (bool, error) {
+func validateNotebook(request newnotebookrequest) error {
 	var validationErrors []string
 
 	log.Printf("Validating notebook request: %s in namespace %s", request.Name, request.Namespace)
@@ -1122,6 +1122,16 @@ func validateNotebook(request newnotebookrequest) (bool, error) {
 	// Required string fields
 	if request.Name == "" {
 		validationErrors = append(validationErrors, "Name is required")
+	} else {
+		// Kubernetes naming validation for notebook name
+		// NOTE: regular expression ensures the input consists of lowercase alphanumeric characters or '-', start/end with an alphabetic character
+		matched, err := regexp.MatchString(`^[a-z]([-a-z0-9]*[a-z0-9])?$`, request.Name)
+		if err != nil {
+			log.Printf("Error validating notebook name with regex: %v", err)
+			validationErrors = append(validationErrors, "An error occurred while validating the notebook name")
+		} else if !matched {
+			validationErrors = append(validationErrors, "Name must consist of lowercase alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character")
+		}
 	}
 	if request.Namespace == "" {
 		validationErrors = append(validationErrors, "Namespace is required")
@@ -1133,18 +1143,6 @@ func validateNotebook(request newnotebookrequest) (bool, error) {
 		validationErrors = append(validationErrors, "CustomImage is required when CustomImageCheck is true")
 	}
 
-	// Kubernetes naming validation for notebook name
-	if request.Name != "" {
-		// NOTE: regular expression ensures the input consists of lowercase alphanumeric characters or '-', start/end with an alphabetic character
-		matched, err := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`, request.Name)
-		if err != nil {
-			log.Printf("Error validating notebook name with regex: %v", err)
-			validationErrors = append(validationErrors, "An error occurred while validating the notebook name")
-		} else if !matched {
-			validationErrors = append(validationErrors, "Name must consist of lowercase alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character")
-		}
-	}
-
 	// Resource constraints
 	if request.CPU.IsZero() {
 		validationErrors = append(validationErrors, "CPU must be non-zero")
@@ -1152,29 +1150,28 @@ func validateNotebook(request newnotebookrequest) (bool, error) {
 	if request.Memory.IsZero() {
 		validationErrors = append(validationErrors, "Memory must be non-zero")
 	}
-	if !request.CPULimit.IsZero() && request.CPU.Cmp(request.CPULimit) > 0 {
-		validationErrors = append(validationErrors, "CPU limit must be greater than or equal to requested CPU")
+	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
+		validationErrors = append(validationErrors, "CPU limit must be set and CPU limit must be greater than or equal to requested CPU")
 	}
-	if !request.MemoryLimit.IsZero() && request.Memory.Cmp(request.MemoryLimit) > 0 {
-		validationErrors = append(validationErrors, "Memory limit must be greater than or equal to requested memory")
+	if request.MemoryLimit.IsZero() || request.Memory.Cmp(request.MemoryLimit) > 0 {
+		validationErrors = append(validationErrors, "Memory limit must be set and Memory limit must be greater than or equal to requested memory")
 	}
 
 	// Enum checks
-	validImagePullPolicies := map[string]bool{"Always": true, "IfNotPresent": true, "Never": true}
-	if request.ImagePullPolicy != "" && !validImagePullPolicies[request.ImagePullPolicy] {
+	if request.ImagePullPolicy != "Always" { // the value is always "Always"
 		validationErrors = append(validationErrors, "Invalid ImagePullPolicy: "+request.ImagePullPolicy)
 	}
 
 	// Fix ServerType validation to match actual system values
-	validServerTypes := map[string]bool{"jupyter": true, "group-one": true, "group-two": true, "group-three": true}
+	validServerTypes := map[string]bool{"jupyter": true, "group-two": true}
 	if request.ServerType != "" && !validServerTypes[request.ServerType] {
 		validationErrors = append(validationErrors, "Invalid ServerType: "+request.ServerType)
 	}
 
 	// Return all validation errors
 	if len(validationErrors) > 0 {
-		return false, fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
+		return fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
 	}
 
-	return true, nil
+	return nil
 }

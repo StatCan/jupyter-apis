@@ -1176,13 +1176,15 @@ func validateNotebook(request newnotebookrequest) error {
 		validationErrors = append(validationErrors, err.Error())
 	}
 
-	for _, vol := range request.DataVolumes {
-		// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-		validSizes = map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-		err = validateNotebookVolume(vol, validSizes)
+	if request.DataVolumes != nil {
+		for _, vol := range request.DataVolumes {
+			// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
+			validSizes = map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
+			err = validateNotebookVolume(vol, validSizes)
 
-		if err != nil {
-			validationErrors = append(validationErrors, err.Error())
+			if err != nil {
+				validationErrors = append(validationErrors, err.Error())
+			}
 		}
 	}
 
@@ -1215,8 +1217,7 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 
 	if hasExisting && hasNew {
 		return fmt.Errorf("only one existing volume or new volume should be provided")
-	}
-	if !hasExisting && !hasNew {
+	} else if !hasExisting && !hasNew {
 		return fmt.Errorf("either existing volume or new volume must be provided")
 	}
 

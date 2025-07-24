@@ -1163,7 +1163,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Fix ServerType validation to match actual system values
-	validServerTypes := map[string]bool{"jupyter": true, "group-two": true}
+	validServerTypes := map[string]bool{"jupyter": true, "group-three": true}
 	if request.ServerType != "" && !validServerTypes[request.ServerType] {
 		validationErrors = append(validationErrors, "invalid ServerType: "+request.ServerType)
 	}

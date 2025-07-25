@@ -880,32 +880,43 @@
           <context context-type="linenumber">67,69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="b05e261c62d5ab673759d8c2390782be7719ae9f" datatype="html">
-        <source>A beta notebook server contains upcoming changes to our notebook server images. The full list of changes available in the beta image will be available on the Zone&apos;s home page.</source>
+      <trans-unit id="da2180bee47629a0beb082afb98e3acc2aac556f" datatype="html">
+        <source>A beta notebook server contains upcoming changes to our notebook server images. The list of latest changes available in the beta image is displayed on the Zone&apos;s home page.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
           <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6357a1630e834180c963cb5e012f1c179c76850e" datatype="html">
+        <source> Click <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
+            target=&quot;_blank&quot;
+            &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
+          &gt;"/> to see the changes in beta </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">78,86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f0e016d5caf4e42f1b6f60dc9fe80e2b98f5287" datatype="html">
         <source>Custom Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82aa1fcc9cc538557bdf7c807ace97aa6047aef0" datatype="html">
         <source> The selected image will be evaluated against our allow-list. For more details on using your own custom images, follow the documentation at https://github.com/StatCan/aaw-contrib-containers. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">88,92</context>
+          <context context-type="linenumber">97,101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
         <source>Provide a custom Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8679122523698617738" datatype="html">

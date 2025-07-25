@@ -1005,12 +1005,28 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6357a1630e834180c963cb5e012f1c179c76850e" datatype="html">
+        <source> Click <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
+            target=&quot;_blank&quot;
+            &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
+          &gt;"/> to see the changes in beta </source>
+        <target> Cliquez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
+            target=&quot;_blank&quot;
+            &gt;"/>ici<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
+          &gt;"/> pour voir les changements dans la version bêta </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">78,86</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2f0e016d5caf4e42f1b6f60dc9fe80e2b98f5287" datatype="html">
         <source>Custom Image</source>
         <target>Image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82aa1fcc9cc538557bdf7c807ace97aa6047aef0" datatype="html">
@@ -1018,7 +1034,7 @@
         <target> L'image sélectionnée sera évaluée par rapport à notre liste autorisée. Pour plus de détails sur l'utilisation de vos propres images personnalisées, suivez la documentation sur https://github.com/StatCan/aaw-contrib-containers. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">88,92</context>
+          <context context-type="linenumber">97,101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
@@ -1026,7 +1042,7 @@
         <target>Fournir une image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8679122523698617738" datatype="html">

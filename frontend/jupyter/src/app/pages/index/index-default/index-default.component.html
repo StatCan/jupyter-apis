@@ -1,8 +1,4 @@
 <div class="lib-content-wrapper">
-  <lib-namespace-select
-    *ngIf="(ns.dashboardConnected$ | async) === dashboardDisconnectedState"
-    namespacesUrl="/api/namespaces"
-  ></lib-namespace-select>
   <div *ngIf="!notebookInfoLoaded">
     <lib-loading-spinner class="center-flex"></lib-loading-spinner>
   </div>

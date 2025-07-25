@@ -1198,6 +1198,12 @@ func validateNotebook(request newnotebookrequest) error {
 
 // validateNotebook function verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
 func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
+
+	// Allow for Notebooks creation with no Workspace Volumes
+	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.NewPvc.NewPvcSpec.AccessModes == nil {
+		return nil
+	}
+
 	// Validate Mount
 	if req.Mount == "" {
 		return fmt.Errorf("mount path is required")

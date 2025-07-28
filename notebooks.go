@@ -1144,11 +1144,11 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Resource constraints
-	if request.CPU.IsZero() {
-		validationErrors = append(validationErrors, "cpu must be non-zero")
+	if request.CPU.IsZero() || request.CPU.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "cpu must be positive")
 	}
-	if request.Memory.IsZero() {
-		validationErrors = append(validationErrors, "memory must be non-zero")
+	if request.Memory.IsZero() || request.Memory.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "memory must be positive")
 	}
 	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
 		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")

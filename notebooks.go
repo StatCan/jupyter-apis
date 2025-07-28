@@ -1123,7 +1123,7 @@ func validateNotebook(request newnotebookrequest) error {
 	if request.Name == "" {
 		validationErrors = append(validationErrors, "name is required")
 	} else {
-		// Kubernetes naming validation for notebook name
+		// K8s naming validation for notebook name
 		// NOTE: regular expression ensures the input consists of lowercase alphanumeric characters or '-', start/end with an alphabetic character
 		matched, err := regexp.MatchString(`^[a-z]([-a-z0-9]*[a-z0-9])?$`, request.Name)
 		if err != nil {

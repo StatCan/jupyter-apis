@@ -591,6 +591,12 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = validateNotebook(req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
 	image := req.Image
 	if req.CustomImageCheck {
 		image = req.CustomImage
@@ -1105,4 +1111,172 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 		return "Please wait 30 seconds before trying again (unable to schedule notebook)."
 	}
 	return condition.Message // fallback to original
+}
+
+// validateNotebook function verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
+func validateNotebook(request newnotebookrequest) error {
+	var validationErrors []string
+
+	log.Printf("validating notebook request: %s in namespace %s", request.Name, request.Namespace)
+
+	// Required string fields
+	if request.Name == "" {
+		validationErrors = append(validationErrors, "name is required")
+	} else {
+		// K8s naming validation for notebook name
+		// NOTE: regular expression ensures the input consists of lowercase alphanumeric characters or '-', start/end with an alphabetic character
+		matched, err := regexp.MatchString(`^[a-z]([-a-z0-9]*[a-z0-9])?$`, request.Name)
+		if err != nil {
+			log.Printf("error validating notebook name with regex: %v", err)
+			validationErrors = append(validationErrors, "an error occurred while validating the notebook name")
+		} else if !matched {
+			validationErrors = append(validationErrors, "name must consist of lowercase alphanumeric characters or '-', start with an alphabetic character, and end with an alphanumeric character")
+		}
+	}
+	if request.Namespace == "" {
+		validationErrors = append(validationErrors, "namespace is required")
+	}
+	if request.Image == "" && !request.CustomImageCheck {
+		validationErrors = append(validationErrors, "either Image must be provided or CustomImageCheck must be true")
+	}
+	if request.CustomImageCheck && request.CustomImage == "" {
+		validationErrors = append(validationErrors, "customImage is required when CustomImageCheck is true")
+	}
+
+	// Resource constraints
+	if request.CPU.IsZero() || request.CPU.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "cpu must be positive")
+	}
+	if request.Memory.IsZero() || request.Memory.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "memory must be positive")
+	}
+	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
+		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
+	}
+	if request.MemoryLimit.IsZero() || request.Memory.Cmp(request.MemoryLimit) > 0 {
+		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
+	}
+
+	// Enum checks
+	if request.ImagePullPolicy != "Always" { // the value is always "Always"
+		validationErrors = append(validationErrors, "invalid ImagePullPolicy: "+request.ImagePullPolicy)
+	}
+
+	// Fix ServerType validation to match actual system values
+	validServerTypes := map[string]bool{"jupyter": true, "group-two": true}
+	if request.ServerType != "" && !validServerTypes[request.ServerType] {
+		validationErrors = append(validationErrors, "invalid ServerType: "+request.ServerType)
+	}
+
+	// Workspace and data volumes
+	// Workspace volumes can only be of 4Gi, 8Gi, ..., 32Gi
+	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
+	err := validateNotebookVolume(request.Workspace, validSizes)
+	if err != nil {
+		validationErrors = append(validationErrors, err.Error())
+	}
+
+	if request.DataVolumes != nil {
+		for _, vol := range request.DataVolumes {
+			// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
+			validSizes = map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
+			err = validateNotebookVolume(vol, validSizes)
+
+			if err != nil {
+				validationErrors = append(validationErrors, err.Error())
+			}
+		}
+	}
+
+	// Return all validation errors
+	if len(validationErrors) > 0 {
+		return fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
+	}
+
+	return nil
+}
+
+// validateNotebook function verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
+func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
+
+	// Allow for Notebooks creation with no Workspace Volumes
+	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.NewPvc.NewPvcSpec.AccessModes == nil {
+		return nil
+	}
+
+	// Validate Mount
+	if req.Mount == "" {
+		return fmt.Errorf("mount path is required")
+	} else {
+		matched, err := regexp.MatchString(`^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$`, req.Mount)
+		if err != nil {
+			log.Printf("error validating volume mount path with regex: %v", err)
+			return fmt.Errorf("an error occurred while validating the volume mount path")
+		} else if !matched {
+			return fmt.Errorf("mount path must be /home/jovyan, /opt/openmpp, or any of their subdirectories")
+		}
+	}
+
+	// Either ExistingSource or NewPvc must be provided, but not both
+	hasExisting := req.ExistingSource.PersistentVolumeClaim.ClaimName != nil
+	hasNew := req.NewPvc.NewPvcMetadata.Name != nil
+
+	if hasExisting && hasNew {
+		return fmt.Errorf("only one existing volume or new volume should be provided")
+	} else if !hasExisting && !hasNew {
+		return fmt.Errorf("either existing volume or new volume must be provided")
+	}
+
+	// If using ExistingSource, validate claim name
+	if hasExisting {
+		if *req.ExistingSource.PersistentVolumeClaim.ClaimName == "" {
+			return fmt.Errorf("existing volume name cannot be empty")
+		} else {
+
+			matched, err := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`, *req.ExistingSource.PersistentVolumeClaim.ClaimName)
+			if err != nil {
+				log.Printf("error validating existing volume name with regex: %v", err)
+				return fmt.Errorf("an error occurred while validating exist volume name")
+			} else if !matched {
+				return fmt.Errorf("volume name must be one or more lowercase alphanumeric labels, optionally separated by dots, where each label starts and ends with a lowercase letter or digit and may contain hyphens in between")
+			}
+
+		}
+
+	}
+
+	// If using NewPvc, validate metadata and spec
+	if hasNew {
+		if *req.NewPvc.NewPvcMetadata.Name == "" {
+			return fmt.Errorf("new volume name cannot be empty")
+		} else {
+			matched, err := regexp.MatchString(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$`, *req.NewPvc.NewPvcMetadata.Name)
+			if err != nil {
+				log.Printf("error validating new volume name with regex: %v", err)
+				return fmt.Errorf("an error occurred while validating new volume name")
+			} else if !matched {
+				return fmt.Errorf("volume name must be one or more lowercase alphanumeric labels, optionally separated by dots, where each label starts and ends with a lowercase letter or digit and may contain hyphens in between")
+			}
+		}
+
+		// AccessModes must not be empty
+		if len(req.NewPvc.NewPvcSpec.AccessModes) == 0 {
+			return fmt.Errorf("volume accessModes must have at least one value")
+		} else if len(req.NewPvc.NewPvcSpec.AccessModes) == 1 && req.NewPvc.NewPvcSpec.AccessModes[0] != "ReadWriteOnce" {
+			return fmt.Errorf("volume accessModes must be ReadWriteOnce")
+		}
+
+		// Storage request size
+		storage := req.NewPvc.NewPvcSpec.Resources.Requests.Storage
+		bytes, ok := storage.AsInt64()
+		if !ok {
+			return fmt.Errorf("invalid storage format")
+		}
+
+		if !validsizes[bytes/(1<<30)] { // convert bytes to Gibibytes
+			return fmt.Errorf("storage request is invalid, got: %dGi", bytes/(1<<30))
+		}
+	}
+
+	return nil
 }

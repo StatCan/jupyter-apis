@@ -997,12 +997,30 @@
           <context context-type="linenumber">67,69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="da2180bee47629a0beb082afb98e3acc2aac556f" datatype="html">
-        <source>A beta notebook server contains upcoming changes to our notebook server images. The list of latest changes available in the beta image is displayed on the Zone&apos;s home page.</source>
-        <target>Un serveur bloc-notes bêta contient les modifications à venir pour nos images de serveur bloc-notes. La liste des dernières modifications disponibles dans l'image bêta est affichée sur la page d'accueil de la Zone.</target>
+      <trans-unit id="0ec6ce687e2832bbafee7526982e584aa3f79e6e" datatype="html">
+        <source>A beta notebook server contains upcoming changes to our notebook server images</source>
+        <target>Un serveur bloc-notes bêta contient les modifications à venir pour nos images de serveur bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
           <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6357a1630e834180c963cb5e012f1c179c76850e" datatype="html">
+        <source> Click <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
+            target=&quot;_blank&quot;
+            rel=&quot;noopener noreferrer&quot;
+            &gt;"/>here<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
+          &gt;"/> to see the changes in beta </source>
+        <target> Cliquez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a
+            href=&quot;https://github.com/StatCan/zone-kubeflow-containers/compare/master...beta&quot;
+            target=&quot;_blank&quot;
+            rel=&quot;noopener noreferrer&quot;
+            &gt;"/>ici<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
+          &gt;"/> pour voir les changements dans la version bêta </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
+          <context context-type="linenumber">78,87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f0e016d5caf4e42f1b6f60dc9fe80e2b98f5287" datatype="html">
@@ -1010,7 +1028,7 @@
         <target>Image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82aa1fcc9cc538557bdf7c807ace97aa6047aef0" datatype="html">
@@ -1018,7 +1036,7 @@
         <target> L'image sélectionnée sera évaluée par rapport à notre liste autorisée. Pour plus de détails sur l'utilisation de vos propres images personnalisées, suivez la documentation sur https://github.com/StatCan/aaw-contrib-containers. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">88,92</context>
+          <context context-type="linenumber">98,102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc3f1b44922842d10b99e579bd596fec83019a08" datatype="html">
@@ -1026,7 +1044,7 @@
         <target>Fournir une image personnalisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image-custom/form-image-custom.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8679122523698617738" datatype="html">

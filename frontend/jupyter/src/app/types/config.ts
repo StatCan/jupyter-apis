@@ -9,7 +9,7 @@ export interface Config {
     options: string[];
   };
 
-  imageGroupThree?: {
+  imageSas?: {
     value: string;
     options: string[];
   };

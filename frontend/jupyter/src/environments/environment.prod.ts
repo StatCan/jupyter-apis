@@ -13,6 +13,6 @@ export const environment = {
   groupThreeLogo: 'assets/logos/sas-logo.svg',
   groupThreeIcon: 'assets/logos/sas-icon.svg',
 
-  //AAW: from upstream volumes crud-web-app
+  //Zone: from upstream volumes crud-web-app
   viewerUrl: '',
 };

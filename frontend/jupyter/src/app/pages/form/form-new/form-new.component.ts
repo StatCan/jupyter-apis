@@ -127,12 +127,12 @@ export class FormNewComponent
         notebook.serverType = 'jupyter';
       }
     } else if (notebook.serverType === 'sas') {
-      // Set notebook image from imageGroupThree
-      notebook.image = notebook.imageGroupThree;
+      // Set notebook image from imageSas
+      notebook.image = notebook.imageSas;
     }
 
     // Remove unnecessary images from the request sent to the backend
-    delete notebook.imageGroupThree;
+    delete notebook.imageSas;
 
     // Ensure CPU input is a string
     if (typeof notebook.cpu === 'number') {

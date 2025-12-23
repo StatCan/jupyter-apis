@@ -26,7 +26,7 @@ export class ServerTypeComponent implements TableColumnComponent {
     );
     iconRegistry.addSvgIcon(
       'sas-icon',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeIcon),
+      sanitizer.bypassSecurityTrustResourceUrl(environment.sasIcon),
     );
   }
 

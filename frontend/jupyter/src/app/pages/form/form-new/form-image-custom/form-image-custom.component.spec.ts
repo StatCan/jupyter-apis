@@ -46,7 +46,7 @@ describe('FormImageCustomComponent', () => {
       customImageCheck: new FormControl(),
       betaImageCheck: new FormControl(),
       image: new FormControl(),
-      imageGroupThree: new FormControl(),
+      imageSas: new FormControl(),
     });
 
     fixture.detectChanges();
@@ -58,18 +58,18 @@ describe('FormImageCustomComponent', () => {
 
   it('should toggle image controls when custom image is checked', () => {
     const image = component.parentForm.get('image');
-    const imageGroupThree = component.parentForm.get('imageGroupThree');
+    const imageSas = component.parentForm.get('imageSas');
 
     let event = { checked: true } as MatCheckboxChange;
     component.onSelect(event);
 
     expect(image.disabled).toBe(true);
-    expect(imageGroupThree.disabled).toBe(true);
+    expect(imageSas.disabled).toBe(true);
 
     event = { checked: false } as MatCheckboxChange;
     component.onSelect(event);
 
     expect(image.enabled).toBe(true);
-    expect(imageGroupThree.enabled).toBe(true);
+    expect(imageSas.enabled).toBe(true);
   });
 });

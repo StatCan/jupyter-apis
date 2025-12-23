@@ -47,11 +47,11 @@ spawnerFormDefaults:
   # SAS Container Images (Group 3)
   #
   # NOTES:
-  #  - the `imageGroupThree` section is used for "SAS-like" app
+  #  - the `imageSas` section is used for "SAS-like" app
   #  - in our current implementation with the Zone, the only difference
   #    between this and jupyter images is SAS Studio is available only here
   ################################################################
-  imageGroupThree:
+  imageSas:
     # the default container image
     value: artifactory.cloud.statcan.ca/das-aaw-docker/sas:v2
 

@@ -14,7 +14,7 @@
         "hideRegistry":false,
         "hideVersion":false
      },
-     "imageGroupThree":{
+     "imageSas":{
         "value":"k8scc01covidacr.azurecr.io/sas:latest",
         "options":[
            "k8scc01covidacr.azurecr.io/sas:latest"

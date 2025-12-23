@@ -48,7 +48,7 @@ export interface NotebookFormObject {
   name: string;
   namespace: string;
   image: string;
-  imageGroupThree: string;
+  imageSas: string;
   allowCustomImage: boolean;
   imagePullPolicy: string;
   customImage?: string;

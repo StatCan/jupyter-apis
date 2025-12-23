@@ -22,7 +22,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class FormImageCustomComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() images: string[];
-  @Input() imagesGroupThree: Config['imageGroupThree'];
+  @Input() imagesSas: Config['imageSas'];
   @Input() allowCustomImage: boolean;
   @Input() hideRegistry: boolean;
   @Input() hideTag: boolean;
@@ -55,10 +55,10 @@ export class FormImageCustomComponent implements OnInit, OnDestroy {
   toggleImageInput(flag: boolean): void {
     if (flag) {
       this.parentForm.get('image').enable();
-      this.parentForm.get('imageGroupThree').enable();
+      this.parentForm.get('imageSas').enable();
     } else {
       this.parentForm.get('image').disable();
-      this.parentForm.get('imageGroupThree').disable();
+      this.parentForm.get('imageSas').disable();
     }
   }
 

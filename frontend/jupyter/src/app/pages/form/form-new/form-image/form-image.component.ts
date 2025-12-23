@@ -27,7 +27,7 @@ import { Config } from 'src/app/types';
 export class FormImageComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() images: string[];
-  @Input() imagesGroupThree: Config['imageGroupThree'];
+  @Input() imagesSas: Config['imageSas'];
   @Input() allowCustomImage: boolean;
   @Input() hideRegistry: boolean;
   @Input() hideTag: boolean;
@@ -52,8 +52,8 @@ export class FormImageComponent implements OnInit, OnDestroy {
       sanitizer.bypassSecurityTrustResourceUrl(environment.groupTwoIcon),
     );
     iconRegistry.addSvgIcon(
-      'sas',
-      sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeIcon),
+      'sas-icon',
+      sanitizer.bypassSecurityTrustResourceUrl(environment.sasIcon),
     );
   }
 
@@ -66,7 +66,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
             .get('customImage')
             .setValidators([this.urlValidator(), Validators.required]);
           this.parentForm.get('image').setValidators([]);
-          this.parentForm.get('imageGroupThree').setValidators([]);
+          this.parentForm.get('imageSas').setValidators([]);
         }
         this.parentForm.get('serverType').valueChanges.subscribe(selection => {
           if (selection === 'jupyter') {
@@ -74,27 +74,25 @@ export class FormImageComponent implements OnInit, OnDestroy {
               .get('customImage')
               .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators(Validators.required);
-            this.parentForm.get('imageGroupThree').setValidators([]);
+            this.parentForm.get('imageSas').setValidators([]);
           } else if (selection === 'group-one') {
             this.parentForm
               .get('customImage')
               .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
-            this.parentForm.get('imageGroupThree').setValidators([]);
+            this.parentForm.get('imageSas').setValidators([]);
           } else if (selection === 'group-two') {
             this.parentForm
               .get('customImage')
               .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
-            this.parentForm.get('imageGroupThree').setValidators([]);
+            this.parentForm.get('imageSas').setValidators([]);
           } else if (selection === 'sas') {
             this.parentForm.get('image').setValidators([]);
-            this.parentForm
-              .get('imageGroupThree')
-              .setValidators(Validators.required);
+            this.parentForm.get('imageSas').setValidators(Validators.required);
           }
           this.parentForm.get('image').updateValueAndValidity();
-          this.parentForm.get('imageGroupThree').updateValueAndValidity();
+          this.parentForm.get('imageSas').updateValueAndValidity();
         });
         this.parentForm.get('customImage').updateValueAndValidity();
         this.parentForm.get('serverType').updateValueAndValidity();

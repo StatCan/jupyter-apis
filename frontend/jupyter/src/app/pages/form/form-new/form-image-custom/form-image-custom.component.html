@@ -30,11 +30,11 @@
       <mat-label i18n>Image</mat-label>
       <mat-select
         placeholder="OCI Image"
-        [formControl]="parentForm.get('imageGroupThree')"
+        [formControl]="parentForm.get('imageSas')"
         i18n-placeholder
       >
         <mat-option
-          *ngFor="let img of imagesGroupThree.options"
+          *ngFor="let img of imagesSas.options"
           [value]="img"
           [matTooltip]="img"
         >

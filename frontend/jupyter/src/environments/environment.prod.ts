@@ -10,8 +10,8 @@ export const environment = {
   groupOneIcon: 'assets/logos/group-one-icon.svg',
   groupTwoLogo: 'assets/logos/group-two-logo.svg',
   groupTwoIcon: 'assets/logos/group-two-icon.svg',
-  groupThreeLogo: 'assets/logos/sas-logo.svg',
-  groupThreeIcon: 'assets/logos/sas-icon.svg',
+  sasLogo: 'assets/logos/sas-logo.svg',
+  sasIcon: 'assets/logos/sas-icon.svg',
 
   //Zone: from upstream volumes crud-web-app
   viewerUrl: '',

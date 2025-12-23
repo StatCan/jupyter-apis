@@ -122,11 +122,11 @@ export class FormNewComponent
       } else if (notebook.image.match(/\/remote-desktop:/)) {
         notebook.serverType = 'group-two';
       } else if (notebook.image.match(/\/sas:/)) {
-        notebook.serverType = 'group-three';
+        notebook.serverType = 'sas';
       } else {
         notebook.serverType = 'jupyter';
       }
-    } else if (notebook.serverType === 'group-three') {
+    } else if (notebook.serverType === 'sas') {
       // Set notebook image from imageGroupThree
       notebook.image = notebook.imageGroupThree;
     }

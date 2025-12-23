@@ -52,7 +52,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
       sanitizer.bypassSecurityTrustResourceUrl(environment.groupTwoIcon),
     );
     iconRegistry.addSvgIcon(
-      'group-three',
+      'sas',
       sanitizer.bypassSecurityTrustResourceUrl(environment.groupThreeIcon),
     );
   }
@@ -87,7 +87,7 @@ export class FormImageComponent implements OnInit, OnDestroy {
               .setValidators([this.urlValidator(), Validators.required]); //AAW
             this.parentForm.get('image').setValidators([]);
             this.parentForm.get('imageGroupThree').setValidators([]);
-          } else if (selection === 'group-three') {
+          } else if (selection === 'sas') {
             this.parentForm.get('image').setValidators([]);
             this.parentForm
               .get('imageGroupThree')

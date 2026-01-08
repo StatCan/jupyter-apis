@@ -1,0 +1,14 @@
+<button mat-icon-button [matMenuTriggerFor]="settings" aria-label="Notebook settings menu icon button">
+  <mat-icon>settings</mat-icon>
+</button>
+<mat-menu #settings="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let item of action.getItems(data)"
+    [disabled]="isPhaseDisabled(item)"
+    (click)="emitClickedEvent(item.name)"
+  >
+    <mat-icon *ngIf="item.matIcon">{{ item.matIcon }}</mat-icon>
+    <span>{{ item.text }}</span>
+  </button>
+</mat-menu>

@@ -21,6 +21,7 @@ import {
   ActionButtonValue,
   ActionIconValue,
   MenuValue,
+  MenuIconValue,
   StatusValue,
   PropertyValue,
   TABLE_THEME,
@@ -569,6 +570,10 @@ export class TableComponent
 
   public isActionIconValue(obj) {
     return obj instanceof ActionIconValue;
+  }
+
+  public isMenuIconValue(obj) {
+    return obj instanceof MenuIconValue;
   }
 
   public isMenuValue(obj) {

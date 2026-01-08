@@ -5,6 +5,7 @@ export * from './action-icon-value';
 export * from './chip-list';
 export * from './component-value';
 export * from './date-time';
+export * from './menu-icon-value';
 export * from './menu-value';
 export * from './property-value';
 export * from './status';

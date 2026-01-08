@@ -21,13 +21,7 @@ export class MenuIconValue {
   };
 
   constructor(config: MenuIconConfig) {
-    const {
-      name,
-      tooltip,
-      color,
-      field,
-      matIcon,
-    } = {
+    const { name, tooltip, color, field, matIcon } = {
       ...this.defaultValues,
       ...config,
     };

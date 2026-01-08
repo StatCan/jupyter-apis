@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { MenuIconComponent } from "./menu-icon.component";
+import { MenuIconComponent } from './menu-icon.component';
 import { MenuIconValue } from '../types';
 import { ResourceTableModule } from '../resource-table.module';
 

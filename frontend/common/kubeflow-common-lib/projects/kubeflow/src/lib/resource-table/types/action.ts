@@ -3,7 +3,9 @@ import { ActionButtonValue } from './action-button';
 import { MenuIconValue } from './menu-icon-value';
 
 export class ActionListValue {
-  constructor(public actions: (ActionIconValue | ActionButtonValue | MenuIconValue)[]) {}
+  constructor(
+    public actions: (ActionIconValue | ActionButtonValue | MenuIconValue)[],
+  ) {}
 }
 
 export interface ActionConfig {

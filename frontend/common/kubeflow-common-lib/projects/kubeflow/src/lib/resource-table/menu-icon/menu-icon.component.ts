@@ -11,7 +11,6 @@ import { STATUS_TYPE } from '../status/types';
   styleUrls: ['./menu-icon.component.scss'],
 })
 export class MenuIconComponent {
-
   @Input()
   action: MenuIconValue;
 
@@ -30,7 +29,7 @@ export class MenuIconComponent {
   }
 
   // Returns if given input has a defined icon
-  public hasIcon(item: any){
+  public hasIcon(item: any) {
     return item?.icon;
   }
 

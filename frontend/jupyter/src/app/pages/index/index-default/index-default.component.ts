@@ -198,7 +198,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         this.startStopClicked(a.data);
         break;
       case 'nb_details':
-        if (a.data.status.phase !== STATUS_TYPE.TERMINATING){
+        if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
           window.location.href = a.data.link.url;
           break;
         }
@@ -307,18 +307,20 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       text: notebook.name,
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
-    notebook.settings = [{
-      name: "nb_details",
-      status: notebook.status.phase,
-      text: "View details",
-      matIcon: "info"
-    },
-    {
-      name: "deleteAction",
-      status: this.processDeletionActionStatus(notebook),
-      text: "Delete",
-      matIcon: "delete",
-    }]
+    notebook.settings = [
+      {
+        name: 'nb_details',
+        status: notebook.status.phase,
+        text: 'View details',
+        matIcon: 'info',
+      },
+      {
+        name: 'deleteAction',
+        status: this.processDeletionActionStatus(notebook),
+        text: 'Delete',
+        matIcon: 'delete',
+      },
+    ];
   }
 
   processIncomingData(notebooks: NotebookResponseObject[]) {

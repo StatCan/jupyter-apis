@@ -11,6 +11,7 @@
     *ngFor="let item of action.getItems(data)"
     [disabled]="isPhaseDisabled(item)"
     (click)="emitClickedEvent(item.name)"
+    [attr.data-cy-menu-icon-action]="item.name"
   >
     <mat-icon *ngIf="item.matIcon">{{ item.matIcon }}</mat-icon>
     <span>{{ item.text }}</span>

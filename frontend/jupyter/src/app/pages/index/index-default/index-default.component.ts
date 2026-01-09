@@ -311,13 +311,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       {
         name: 'nb_details',
         status: notebook.status.phase,
-        text: 'View details',
+        text: $localize`View details`,
         matIcon: 'info',
       },
       {
         name: 'deleteAction',
         status: this.processDeletionActionStatus(notebook),
-        text: 'Delete',
+        text: $localize`Delete`,
         matIcon: 'delete',
       },
     ];

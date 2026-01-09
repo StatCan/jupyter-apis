@@ -7,6 +7,7 @@ import { TemplateValue } from './template';
 import { ChipsListValue } from './chip-list';
 import { ComponentValue } from './component-value';
 import { MenuValue } from './menu-value';
+import { MenuIconValue } from './menu-icon-value';
 import { LinkValue } from './link-value';
 import { MemoryValue } from './memory-value';
 
@@ -22,6 +23,7 @@ export interface TableColumn {
     | ActionIconValue
     | DateTimeValue
     | MenuValue
+    | MenuIconValue
     | ChipsListValue
     | ComponentValue
     | TemplateValue

@@ -251,6 +251,16 @@ export class JWABackendService extends BackendService {
     );
   }
 
+   public updateKeepAlive(namespace: string, name: string, timehours: number): Observable<string> {
+    const url = `api/namespaces/${namespace}/notebooks/${name}/keepalive/{timehours}`;
+  
+
+    return this.http.patch<JWABackendResponse>(url, { stopped: false }).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => 'started'),
+    );
+  }
+
   // DELETE
   public deleteNotebook(namespace: string, name: string) {
     const url = `api/namespaces/${namespace}/notebooks/${name}`;

@@ -30,6 +30,7 @@ const JWABackendServiceStub: Partial<JWABackendService> = {
 };
 const ActionsServiceStub: Partial<ActionsService> = {
   connectToNotebook: () => {},
+  updateKeepAlive: () => of (),
   deleteNotebook: () => of(),
   startNotebook: () => of(),
   stopNotebook: () => of(),

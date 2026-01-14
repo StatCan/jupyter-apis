@@ -192,15 +192,34 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
         },
       }),
     );
-    if (isEqual(buttons, this.buttonsConfig)) {
-      return;
-    }
+    buttons.push(
+      new ToolbarButton({
+        text: $localize`MEOW`,
+        icon: 'star',
+        disabled: true,
+        tooltip: $localize`Modify`,
+        fn: () => {
+          this.keepAlive();
+        },
+      }),
+    );
+    // if (isEqual(buttons, this.buttonsConfig)) {
+    //   return;
+    // }
     this.buttonsConfig = buttons;
   }
 
   private deleteNotebook() {
     this.actions
       .deleteNotebook(this.namespace, this.notebookName)
+      .subscribe(_ => {
+        this.router.navigate(['']);
+      });
+  }
+
+    private keepAlive() {
+    this.actions
+      .updateKeepAlive(this.namespace, this.notebookName, 12)
       .subscribe(_ => {
         this.router.navigate(['']);
       });

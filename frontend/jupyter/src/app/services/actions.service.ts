@@ -64,6 +64,23 @@ export class ActionsService {
     });
   }
 
+    updateKeepAlive(namespace: string, name: string, timehours: number): Observable<string> {
+    return new Observable(subscriber => {
+      this.backend.updateKeepAlive(namespace, name, timehours).subscribe(response => {
+        const config: SnackBarConfig = {
+          data: {
+            msg: $localize`Starting Notebook server '${name}'...`,
+            snackType: SnackType.Info,
+          },
+        };
+        this.snackBar.open(config);
+
+        subscriber.next(response);
+        subscriber.complete();
+      });
+    });
+  }
+  
   connectToNotebook(namespace: string, name: string): void {
     // Open new tab to work on the Notebook
     window.open(`/notebook/${namespace}/${name}/`);

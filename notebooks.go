@@ -958,6 +958,67 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespaceName := vars["namespace"]
+	notebookName := vars["notebook"]
+	keepAliveTime := vars["keepalive"]
+
+	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
+	log.Printf("With value %q", keepAliveTime)
+
+	// Todo: validate that the keepalive value is valid.
+	
+	// Read the incoming notebook
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+
+	var req updatenotebookrequest
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// Read existing notebook
+	notebook, err := s.listers.notebooks.Notebooks(namespaceName).Get(notebookName)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	update := false
+	updatedNotebook := notebook.DeepCopy()
+
+	// Compare start/stopped state
+	if _, ok := notebook.Annotations[StoppedAnnotation]; ok != req.Stopped {
+		update = true
+
+		// Todo test
+		LastActivity, err := time.Parse(time.RFC3339, time.Now)
+		LastActivity.Add(time.Duration(keepAliveTime))
+
+		updatedNotebook.lastActivity = LastActivity
+	}
+
+	if update {
+		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, metav1.UpdateOptions{})
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
+}
+
 func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]

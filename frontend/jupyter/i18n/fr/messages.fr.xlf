@@ -443,6 +443,14 @@
           <context context-type="linenumber">4,7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ec0a269cbd4bcaa2d58f97963e283304be42dfdd" datatype="html">
+        <source>Notebook settings menu icon button</source>
+        <target>icône du menu des paramètres du bloc-notes</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/resource-table/menu-icon/menu-icon.component.html</context>
+          <context context-type="linenumber">4,9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="125401261339317585" datatype="html">
         <source>Page 1 of 1</source>
         <target>Page 1 de 1</target>

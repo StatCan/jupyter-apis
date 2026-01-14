@@ -199,7 +199,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         break;
       case 'nb_details':
         if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
-          window.location.href = a.data.link.url;
+          this.router.navigate([a.data.link.url]);
           break;
         }
       case 'name:link':

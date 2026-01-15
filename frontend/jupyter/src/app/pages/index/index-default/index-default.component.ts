@@ -35,6 +35,7 @@ import {
   PVCResponseObject,
   PVCProcessedObject,
   AllocationCostObject,
+  PVCUsageDataObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
@@ -182,6 +183,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     this.volPollSub = this.poller.exponential(request).subscribe(pvcs => {
       this.processedVolumeData = this.parseIncomingData(pvcs);
+
+      let usageData = this.parseUsageData(pvcs);
+      if (usageData){
+        this.backend.updatePVCUsage(ns, usageData).subscribe();
+      }
     });
   }
 
@@ -398,9 +404,33 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         text: pvc.name,
         url: `/volume/details/${pvc.namespace}/${pvc.name}`,
       };
+
+      if(pvc.usage){
+        let roundedVal = Math.ceil(parseFloat(pvc.usage));
+        pvc.usageRounded = roundedVal.toString()+"%";
+      }
+      if(pvc.usedBytes){
+        pvc.usedBytesFormatted = pvc.usedBytes;
+      }
     }
 
     return pvcsCopy;
+  }
+
+  public parseUsageData(pvcs: PVCResponseObject[]): PVCUsageDataObject[] {
+    const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
+    let result: PVCUsageDataObject[] = [];
+    for (const pvc of pvcsCopy) {
+      if (pvc.usage){
+        let val = {
+          name: pvc.name,
+          usage: pvc.usage,
+          usedBytes: pvc.usedBytes,
+        }
+        result.push(val)
+      }
+    }
+    return result;
   }
 
   public parseDeletionActionStatus(pvc: PVCProcessedObject) {

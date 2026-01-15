@@ -261,7 +261,7 @@ export class JWABackendService extends BackendService {
 
   public updateNamespacedPVCUsage(namespace: string, usageData: PVCUsageDataObject[]): Observable<string> {
     const url = `api/namespaces/${namespace}/pvcs/usage`;
-    console.log("yes", usageData, namespace)
+    
     return this.http.patch<VWABackendResponse>(url, {data: usageData}).pipe(
       catchError(error => this.handleError(error)),
       map(_ => 'updated'),

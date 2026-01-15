@@ -40,6 +40,7 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
+import prettyBytes from 'pretty-bytes';
 
 @Component({
   selector: 'app-index-default',
@@ -410,7 +411,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         pvc.usageRounded = roundedVal.toString()+"%";
       }
       if(pvc.usedBytes){
-        pvc.usedBytesFormatted = pvc.usedBytes;
+        // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
+        // for example binary 1ki = 1024 bytes, while decimal 1Kb = 1000 bytes
+        pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {binary: true});
       }
     }
 

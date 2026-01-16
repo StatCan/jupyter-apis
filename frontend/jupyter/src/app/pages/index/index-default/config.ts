@@ -65,7 +65,7 @@ export const defaultConfig: TableConfig = {
           return 'rstudio';
         } else if (element.serverType === 'group-two') {
           return 'ubuntu';
-        } else if (element.serverType === 'group-three') {
+        } else if (element.serverType === 'sas') {
           return 'sas';
         } else {
           return 'jupyterlab';

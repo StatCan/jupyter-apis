@@ -675,7 +675,7 @@ describe('New notebook form', () => {
         .type('test-notebook-sas');
       // select sas notebook
       cy.get(
-        '[data-cy-form-input="serverType"] > mat-button-toggle[value="group-three"]',
+        '[data-cy-form-input="serverType"] > mat-button-toggle[value="sas"]',
       ).click();
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');

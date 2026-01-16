@@ -9,7 +9,7 @@ import {
 import { Condition } from './condition';
 import { Params } from '@angular/router';
 
-export type ServerType = 'jupyter' | 'group-one' | 'group-two' | 'group-three';
+export type ServerType = 'jupyter' | 'group-one' | 'group-two' | 'sas';
 
 export interface NotebookResponseObject {
   name: string;
@@ -54,7 +54,7 @@ export interface NotebookFormObject {
   name: string;
   namespace: string;
   image: string;
-  imageGroupThree: string;
+  imageSas: string;
   allowCustomImage: boolean;
   imagePullPolicy: string;
   customImage?: string;

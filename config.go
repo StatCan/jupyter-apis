@@ -8,7 +8,7 @@ import (
 
 type SpawnerFormDefaults struct {
 	Image            Image           `yaml:"image" json:"image"`
-	ImageGroupThree  ImageGroup      `yaml:"imageGroupThree" json:"imageGroupThree"`
+	ImageSas  		 ImageGroup      `yaml:"imageSas" json:"imageSas"`
 	AllowCustomImage bool            `yaml:"allowCustomImage" json:"allowCustomImage"`
 	ImagePullPolicy  ImagePullPolicy `yaml:"imagePullPolicy" json:"imagePullPolicy"`
 	CPU              CPU             `yaml:"cpu" json:"cpu"`

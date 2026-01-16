@@ -251,7 +251,10 @@ export class JWABackendService extends BackendService {
     );
   }
 
-  public updatePVCUsage(ns: string | string[], usageData: PVCUsageDataObject[]): Observable<string> {
+  public updatePVCUsage(
+    ns: string | string[],
+    usageData: PVCUsageDataObject[],
+  ): Observable<string> {
     if (!Array.isArray(ns)) {
       return this.updateNamespacedPVCUsage(ns, usageData);
     }
@@ -259,10 +262,13 @@ export class JWABackendService extends BackendService {
     return null;
   }
 
-  public updateNamespacedPVCUsage(namespace: string, usageData: PVCUsageDataObject[]): Observable<string> {
+  public updateNamespacedPVCUsage(
+    namespace: string,
+    usageData: PVCUsageDataObject[],
+  ): Observable<string> {
     const url = `api/namespaces/${namespace}/pvcs/usage`;
-    
-    return this.http.patch<VWABackendResponse>(url, {data: usageData}).pipe(
+
+    return this.http.patch<VWABackendResponse>(url, { data: usageData }).pipe(
       catchError(error => this.handleError(error)),
       map(_ => 'updated'),
     );

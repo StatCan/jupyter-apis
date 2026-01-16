@@ -54,9 +54,11 @@ export const tableConfig: TableConfig = {
       matHeaderCellDef: $localize`Use %`,
       matColumnDef: 'usage',
       style: { width: '8%' },
-      value: new PropertyValue({ field: 'usageRounded',
-        popoverField: 'usedBytesFormatted', 
-        truncate: true }),
+      value: new PropertyValue({
+        field: 'usageRounded',
+        popoverField: 'usedBytesFormatted',
+        truncate: true,
+      }),
       sort: true,
     },
     {

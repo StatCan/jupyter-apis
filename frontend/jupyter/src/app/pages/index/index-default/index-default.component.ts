@@ -186,7 +186,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       this.processedVolumeData = this.parseIncomingData(pvcs);
 
       let usageData = this.parseUsageData(pvcs);
-      if (usageData){
+      if (usageData) {
         this.backend.updatePVCUsage(ns, usageData).subscribe();
       }
     });
@@ -406,14 +406,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         url: `/volume/details/${pvc.namespace}/${pvc.name}`,
       };
 
-      if(pvc.usage){
+      if (pvc.usage) {
         let roundedVal = Math.ceil(parseFloat(pvc.usage));
-        pvc.usageRounded = roundedVal.toString()+"%";
+        pvc.usageRounded = roundedVal.toString() + '%';
       }
-      if(pvc.usedBytes){
+      if (pvc.usedBytes) {
         // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
         // for example binary 1ki = 1024 bytes, while decimal 1Kb = 1000 bytes
-        pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {binary: true});
+        pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {
+          binary: true,
+        });
       }
     }
 
@@ -424,13 +426,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
     let result: PVCUsageDataObject[] = [];
     for (const pvc of pvcsCopy) {
-      if (pvc.usage){
+      if (pvc.usage) {
         let val = {
           name: pvc.name,
           usage: pvc.usage,
           usedBytes: pvc.usedBytes,
-        }
-        result.push(val)
+        };
+        result.push(val);
       }
     }
     return result;

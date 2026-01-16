@@ -3,6 +3,7 @@ describe('Main tables', () => {
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
       cy.mockPVCsRequest(settings.namespace);
+      cy.mockPVCsUsageRequest(settings.namespace);
       cy.mockKubecostRequest(settings.namespace);
     });
     cy.fixture('notebooks').as('notebooksRequest');

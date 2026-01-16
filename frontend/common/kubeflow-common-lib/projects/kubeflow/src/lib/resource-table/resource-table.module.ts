@@ -39,6 +39,7 @@ import { HelpPopoverModule } from '../help-popover/help-popover.module';
 import { RouterModule } from '@angular/router';
 import { getCustomPaginatorIntl } from './paginator/custom-paginator-intl';
 import { StatusIconModule } from '../status-icon/status-icon.module';
+import { MenuIconComponent } from './menu-icon/menu-icon.component';
 
 @NgModule({
   imports: [
@@ -82,6 +83,7 @@ import { StatusIconModule } from '../status-icon/status-icon.module';
     TableChipsListComponent,
     TableComponent,
     ComponentValueComponent,
+    MenuIconComponent,
   ],
   exports: [ResourceTableComponent, TableComponent, ActionComponent],
   providers: [

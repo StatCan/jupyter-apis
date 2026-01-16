@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BackendService, SnackBarService, SnackType } from 'kubeflow';
+import { BackendService, SnackBarService } from 'kubeflow';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
@@ -14,8 +14,8 @@ import {
   VWABackendResponse,
   PVCPostObject,
   GetPVCResponseObject,
+  PVCUsageDataObject,
 } from '../types';
-import { V1Namespace } from '@kubernetes/client-node';
 import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
 import { EventObject } from '../types/event';
 @Injectable({
@@ -248,6 +248,29 @@ export class JWABackendService extends BackendService {
     return this.http.patch<JWABackendResponse>(url, { stopped: true }).pipe(
       catchError(error => this.handleError(error, false)),
       map(_ => 'stopped'),
+    );
+  }
+
+  public updatePVCUsage(
+    ns: string | string[],
+    usageData: PVCUsageDataObject[],
+  ): Observable<string> {
+    if (!Array.isArray(ns)) {
+      return this.updateNamespacedPVCUsage(ns, usageData);
+    }
+    //ZONE: our namespace is never a string[]
+    return null;
+  }
+
+  public updateNamespacedPVCUsage(
+    namespace: string,
+    usageData: PVCUsageDataObject[],
+  ): Observable<string> {
+    const url = `api/namespaces/${namespace}/pvcs/usage`;
+
+    return this.http.patch<VWABackendResponse>(url, { data: usageData }).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => 'updated'),
     );
   }
 

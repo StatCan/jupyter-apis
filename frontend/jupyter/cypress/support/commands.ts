@@ -66,6 +66,12 @@ Cypress.Commands.add('mockPVCsRequest', namespace => {
   }).as('mockPVCsRequest');
 });
 
+Cypress.Commands.add('mockPVCsUsageRequest', namespace => {
+  cy.intercept('PATCH', `/api/namespaces/${namespace}/pvcs/usage`, {
+    statusCode: 200,
+  }).as('mockPVCsUsageRequest');
+});
+
 Cypress.Commands.add('mockKubecostRequest', namespace => {
   cy.intercept(
     'GET',

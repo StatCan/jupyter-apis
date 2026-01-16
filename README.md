@@ -76,7 +76,9 @@ npm link kubeflow
 KF_USER_ID=user npm start
 ```
 
-For the kubecost data to be retrievable when running locally, the following will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
+For the kubecost data to be retrievable when running locally, the following command will need to be executed `kubectl port-forward -n kubecost-system deployment/kubecost-cost-analyzer 9090`
+
+For the "Use %" column in the "Volumes" table to be populated when running locally, the following command will need to be executed `kubectl port-forward -n prometheus-system svc/kube-prometheus-stack-prometheus 9091:9090`. This does a port-forward to the prometheus instance to be able to query the data.
 
 ### Testing backend Rest API
 

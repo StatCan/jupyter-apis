@@ -195,7 +195,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // Event handling functions
   reactToAction(a: ActionEvent) {
     switch (a.action) {
-      case 'delete':
+      case 'deleteAction':
         this.deleteNotebookClicked(a.data);
         break;
       case 'connect':
@@ -204,6 +204,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       case 'start-stop':
         this.startStopClicked(a.data);
         break;
+      case 'nb_details':
+        if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
+          this.router.navigate([a.data.link.url]);
+          break;
+        }
       case 'name:link':
         if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
@@ -309,6 +314,20 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       text: notebook.name,
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
+    notebook.settings = [
+      {
+        name: 'nb_details',
+        status: notebook.status.phase,
+        text: $localize`View details`,
+        matIcon: 'info',
+      },
+      {
+        name: 'deleteAction',
+        status: this.processDeletionActionStatus(notebook),
+        text: $localize`Delete`,
+        matIcon: 'delete',
+      },
+    ];
   }
 
   processIncomingData(notebooks: NotebookResponseObject[]) {

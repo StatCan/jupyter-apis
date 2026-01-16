@@ -167,14 +167,18 @@ describe('Main tables', () => {
         .contains('a-test-01')
         .parent()
         .parent()
-        .find('[data-cy-resource-table-action-icon="delete"] > button')
-        .should('have.text', ' delete\n');
+        .find('[data-cy-resource-table-action-icon="settings"] > button')
+        .should('have.text', 'settings');
       cy.get('[data-cy-table-id="notebooks-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('a-test-01')
         .parent()
         .parent()
-        .find('[data-cy-resource-table-action-icon="delete"]')
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="deleteAction"]')
         .click();
       cy.get('.mat-mdc-dialog-title')
         .should('be.visible')
@@ -189,7 +193,11 @@ describe('Main tables', () => {
         .contains('a-test-01')
         .parent()
         .parent()
-        .find('[data-cy-resource-table-action-icon="delete"]')
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="deleteAction"]')
         .click();
       cy.intercept(
         'DELETE',
@@ -248,6 +256,25 @@ describe('Main tables', () => {
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('a-dog-breed-katib')
         .click();
+      cy.url().should(
+        'eq',
+        'http://localhost:4200/notebook/details/kubeflow-user/a-dog-breed-katib',
+      );
+    });
+
+    it('should open the notebook details page from settings menu', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-dog-breed-katib')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="nb_details"]')
+        .click();
+
       cy.url().should(
         'eq',
         'http://localhost:4200/notebook/details/kubeflow-user/a-dog-breed-katib',

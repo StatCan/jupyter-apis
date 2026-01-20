@@ -11,6 +11,7 @@ import {
   LinkType,
   TableColumn,
   MemoryValue,
+  MenuIconValue,
   quantityToScalar,
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
@@ -149,12 +150,12 @@ export const defaultConfig: TableConfig = {
           iconInit: 'material:stop',
           iconReady: 'material:play_arrow',
         }),
-        new ActionIconValue({
-          name: 'delete',
-          tooltipReady: $localize`Delete this notebook server`,
-          color: 'warn',
-          field: 'deleteAction',
-          iconReady: 'material:delete',
+        new MenuIconValue({
+          name: 'settings',
+          tooltip: $localize`Open settings for this notebook server`,
+          color: '',
+          field: 'settings',
+          matIcon: 'settings',
         }),
       ]),
     },

@@ -23,18 +23,18 @@
     <mat-form-field
       class="wide"
       appearance="outline"
-      *ngIf="parentForm?.value.serverType === 'group-three'"
+      *ngIf="parentForm?.value.serverType === 'sas'"
       data-cy-form-input="serverImage"
     >
       <!-- If readonly, then make it an input element instead of select -->
       <mat-label i18n>Image</mat-label>
       <mat-select
         placeholder="OCI Image"
-        [formControl]="parentForm.get('imageGroupThree')"
+        [formControl]="parentForm.get('imageSas')"
         i18n-placeholder
       >
         <mat-option
-          *ngFor="let img of imagesGroupThree.options"
+          *ngFor="let img of imagesSas.options"
           [value]="img"
           [matTooltip]="img"
         >

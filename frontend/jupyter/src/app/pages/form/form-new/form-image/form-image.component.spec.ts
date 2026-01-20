@@ -43,7 +43,7 @@ describe('FormImageComponent', () => {
       customImageCheck: new FormControl(),
       betaImageCheck: new FormControl(),
       image: new FormControl(),
-      imageGroupThree: new FormControl(),
+      imageSas: new FormControl(),
       serverType: new FormControl(),
       imagePullPolicy: new FormControl(),
     });

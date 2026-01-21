@@ -23,7 +23,7 @@
   <div class="toolbar-buttons">
     <ng-container *ngFor="let button of buttons">
       <!--raised button-->
-      <ng-container *ngIf="button.raised">
+      <ng-container *ngIf="!button.stroked">
         <div [matTooltip]="button.tooltip">
           <button
             mat-button

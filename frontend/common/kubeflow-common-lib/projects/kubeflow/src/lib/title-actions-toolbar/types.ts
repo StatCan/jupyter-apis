@@ -3,7 +3,6 @@ export interface ToolbarButtonConfig {
   text: string;
   disabled?: boolean;
   color?: string;
-  raised?: boolean;
   stroked?: boolean;
   tooltip?: string;
   fn: () => any;
@@ -14,7 +13,6 @@ export class ToolbarButton {
   text: string;
   disabled: boolean;
   color: string;
-  raised: boolean;
   stroked: boolean;
   tooltip: string;
   fn: () => any;
@@ -24,13 +22,13 @@ export class ToolbarButton {
     text: '',
     disabled: false,
     color: 'primary',
-    raised: true,
+    stroked: false,
     tooltip: '',
     fn: () => {},
   };
 
   constructor(config: ToolbarButtonConfig) {
-    const { icon, text, disabled, color, stroked, raised, tooltip, fn } = {
+    const { icon, text, disabled, color, stroked, tooltip, fn } = {
       ...this.defaults,
       ...config,
     };
@@ -39,14 +37,9 @@ export class ToolbarButton {
     this.text = text;
     this.disabled = disabled;
     this.color = color;
-    this.raised = raised;
     this.tooltip = tooltip;
     this.fn = fn;
-
-    if (stroked) {
-      this.raised = false;
-      this.stroked = true;
-    }
+    this.stroked = stroked;
   }
 
   public namespaceChanged(ns: string | string[], resourceName: string) {

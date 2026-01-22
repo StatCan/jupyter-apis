@@ -1483,7 +1483,7 @@
       </trans-unit>
       <trans-unit id="2130027189509146725" datatype="html">
         <source>Use %</source>
-        <target>% d'utilization</target>
+        <target>% d'utilisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
           <context context-type="linenumber">54</context>

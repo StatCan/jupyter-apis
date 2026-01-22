@@ -550,7 +550,7 @@
         <source>Select a namespace in which to create a new <x id="PH" equiv-text="resourceName"/>.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/title-actions-toolbar/types.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac184ad5119488375c501e04e46b79dbb6079cc7" datatype="html">
@@ -966,14 +966,14 @@
         <source>Use SAS Image</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2b90ec31b6f0aa2356466b2d9174360c3a0b95f4" datatype="html">
         <source>A SAS image.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-image/form-image.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f6a53f97f76c47911a5b3128a4a34cc2995b3878" datatype="html">
@@ -1787,7 +1787,7 @@
         <source>DELETE</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">188</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-details-page/volume-details-page.component.ts</context>
@@ -1806,7 +1806,21 @@
         <source>Delete this notebook</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">191</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6778732292519419252" datatype="html">
+        <source>SETTINGS</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
+          <context context-type="linenumber">200</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="878642400393511887" datatype="html">
+        <source>Settings for this notebook</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8f4cd1bcd0815dd9d40c71310c17460d8d594d99" datatype="html">

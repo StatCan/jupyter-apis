@@ -22,4 +22,8 @@ export class TitleActionsToolbarComponent {
   emitBack() {
     this.back.emit('backButton');
   }
+
+  isMenu(button: ToolbarButton): boolean{
+    return button.menu?.length > 0;
+  }
 }

@@ -6,6 +6,7 @@ export interface ToolbarButtonConfig {
   stroked?: boolean;
   tooltip?: string;
   fn: () => any;
+  menu?: ToolbarButton[];
 }
 
 export class ToolbarButton {
@@ -16,6 +17,7 @@ export class ToolbarButton {
   stroked: boolean;
   tooltip: string;
   fn: () => any;
+  menu: ToolbarButton[];
 
   private defaults: ToolbarButtonConfig = {
     icon: '',
@@ -25,10 +27,11 @@ export class ToolbarButton {
     stroked: false,
     tooltip: '',
     fn: () => {},
+    menu: [],
   };
 
   constructor(config: ToolbarButtonConfig) {
-    const { icon, text, disabled, color, stroked, tooltip, fn } = {
+    const { icon, text, disabled, color, stroked, tooltip, fn, menu } = {
       ...this.defaults,
       ...config,
     };
@@ -40,6 +43,7 @@ export class ToolbarButton {
     this.tooltip = tooltip;
     this.fn = fn;
     this.stroked = stroked;
+    this.menu = menu;
   }
 
   public namespaceChanged(ns: string | string[], resourceName: string) {

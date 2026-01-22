@@ -181,7 +181,9 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
         }),
       );
     }
-    buttons.push(
+
+    let menuButtons: ToolbarButton[] = []
+    menuButtons.push(
       new ToolbarButton({
         text: $localize`DELETE`,
         icon: 'delete',
@@ -192,6 +194,17 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
         },
       }),
     );
+
+    buttons.push(
+      new ToolbarButton({
+        text: $localize`SETTINGS`,
+        icon: 'settings',
+        tooltip: $localize`Settings for this notebook`,
+        fn: null,
+        menu: menuButtons,
+      }),
+    );
+
     if (isEqual(buttons, this.buttonsConfig)) {
       return;
     }

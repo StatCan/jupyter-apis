@@ -202,6 +202,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.router.navigate([a.data.link.url]);
           break;
         }
+      case 'keep_alive':
+        this.keepAliveClicked(a.data);
       case 'name:link':
         if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
@@ -244,6 +246,15 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     } else {
       this.stopNotebook(notebook);
     }
+  }
+
+  public keepAliveClicked(notebook: NotebookProcessedObject) {
+    //Check the notebook status
+    this.actions
+      .updateKeepAlive(notebook.namespace, notebook.name, "12")
+      .subscribe(_ => {
+        this.router.navigate(['']);
+      });
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {
@@ -320,6 +331,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         text: $localize`Delete`,
         matIcon: 'delete',
       },
+      {
+        name: 'keep_alive',
+        status: notebook.status.phase,
+        text: "KEPP ALIVE",
+        matIcon: 'heart',
+      }
     ];
   }
 

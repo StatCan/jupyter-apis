@@ -33,6 +33,7 @@ const ActionsServiceStub: Partial<ActionsService> = {
   deleteNotebook: () => of(),
   startNotebook: () => of(),
   stopNotebook: () => of(),
+  updateKeepAlive: () => of (),
 };
 const NamespaceServiceStub: Partial<NamespaceService> = {
   updateSelectedNamespace: () => {},

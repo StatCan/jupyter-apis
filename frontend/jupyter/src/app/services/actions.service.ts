@@ -169,6 +169,23 @@ export class ActionsService {
     });
   }
 
+  updateKeepAlive(namespace: string, name: string, timehours: string): Observable<string> {
+    return new Observable(subscriber => {
+      this.backend.updateKeepAlive(namespace, name, timehours).subscribe(response => {
+        const config: SnackBarConfig = {
+          data: {
+            msg: $localize`Adding value to  '${name}'...`,
+            snackType: SnackType.Info,
+          },
+        };
+        this.snackBar.open(config);
+
+        subscriber.next(response);
+        subscriber.complete();
+      });
+    });
+  }
+
   private getDeleteDialogConfig(name: string): DialogConfig {
     return {
       title: $localize`Are you sure you want to delete this volume? ${name}`,

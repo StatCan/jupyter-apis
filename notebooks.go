@@ -936,8 +936,8 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 			if updatedNotebook.Annotations == nil {
 				updatedNotebook.Annotations = map[string]string{}
 			}
-
-			updatedNotebook.Annotations[StoppedAnnotation] = time.Now().Format(time.RFC3339)
+			log.Printf("Meow")
+			// updatedNotebook.Annotations[StoppedAnnotation] = time.Now().Format(time.RFC3339)
 		} else {
 			// Remove the stopped annotation
 			delete(updatedNotebook.Annotations, StoppedAnnotation)
@@ -999,10 +999,19 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 		update = true
 
 		// Todo test
-		LastActivity, err := time.Parse(time.RFC3339, time.Now)
-		LastActivity.Add(time.Duration(keepAliveTime))
+		log.Printf("MeowTwo")
+		// LastActivity, err := time.Parse(time.RFC3339, time.Now)
+		// LastActivity.Add(time.Duration(keepAliveTime))
+		// LastActivity: notebook.Annotations[LastActivityAnnotation] = time.Now
+		currentTime := time.Now()
+		if updatedNotebook.Annotations == nil {
+				updatedNotebook.Annotations = map[string]string{}
+				updatedNotebook.Annotations[LastActivityAnnotation] = currentTime.Format(time.RFC3339)
+		} else {
+			updatedNotebook.Annotations[LastActivityAnnotation] = currentTime.Format(time.RFC3339)
+		}
+		
 
-		updatedNotebook.lastActivity = LastActivity
 	}
 
 	if update {

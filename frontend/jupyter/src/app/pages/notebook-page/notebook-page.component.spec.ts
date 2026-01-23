@@ -158,13 +158,23 @@ describe('NotebookPageComponent', () => {
     // check the initial state of the buttons
     for (const button of component.buttonsConfig) {
       expect(button.disabled).toBeFalse();
+      for (const menuButton of button.menu) {
+        expect(menuButton.disabled).toBeFalse();
+      }
     }
 
     const updateButtons = 'updateButtons';
     component[updateButtons]();
     // check the buttons state after updateButton() is called
     for (const button of component.buttonsConfig) {
-      expect(button.disabled).toBeTrue();
+      if (button.text === 'SETTINGS') {
+        expect(button.disabled).toBeFalse();
+      } else {
+        expect(button.disabled).toBeTrue();
+      }
+      for (const menuButton of button.menu) {
+        expect(menuButton.disabled).toBeTrue();
+      }
     }
   });
 

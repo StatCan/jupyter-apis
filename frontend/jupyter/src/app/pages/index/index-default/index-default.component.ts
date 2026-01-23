@@ -35,10 +35,12 @@ import {
   PVCResponseObject,
   PVCProcessedObject,
   AllocationCostObject,
+  PVCUsageDataObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
+import prettyBytes from 'pretty-bytes';
 
 @Component({
   selector: 'app-index-default',
@@ -182,6 +184,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     this.volPollSub = this.poller.exponential(request).subscribe(pvcs => {
       this.processedVolumeData = this.parseIncomingData(pvcs);
+
+      let usageData = this.parseUsageData(pvcs);
+      if (usageData) {
+        this.backend.updatePVCUsage(ns, usageData).subscribe();
+      }
     });
   }
 
@@ -417,9 +424,37 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         text: pvc.name,
         url: `/volume/details/${pvc.namespace}/${pvc.name}`,
       };
+
+      if (pvc.usage) {
+        let roundedVal = Math.ceil(parseFloat(pvc.usage));
+        pvc.usageRounded = roundedVal.toString() + '%';
+      }
+      if (pvc.usedBytes) {
+        // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
+        // for example binary 1ki = 1024 bytes, while decimal 1Kb = 1000 bytes
+        pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {
+          binary: true,
+        });
+      }
     }
 
     return pvcsCopy;
+  }
+
+  public parseUsageData(pvcs: PVCResponseObject[]): PVCUsageDataObject[] {
+    const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
+    let result: PVCUsageDataObject[] = [];
+    for (const pvc of pvcsCopy) {
+      if (pvc.usage) {
+        let val = {
+          name: pvc.name,
+          usage: pvc.usage,
+          usedBytes: pvc.usedBytes,
+        };
+        result.push(val);
+      }
+    }
+    return result;
   }
 
   public parseDeletionActionStatus(pvc: PVCProcessedObject) {

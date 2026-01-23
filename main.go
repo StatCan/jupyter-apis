@@ -36,6 +36,7 @@ var userIDHeader string
 var staticDirectory string
 var listenAddr string
 var kubecostURL string
+var prometheusURL string
 
 type listers struct {
 	namespaces             v1listers.NamespaceLister
@@ -58,7 +59,8 @@ type server struct {
 	clientsets clientsets
 	listers    listers
 
-	kubecostURL *url.URL
+	kubecostURL   *url.URL
+	prometheusURL *url.URL
 
 	//dynamic interface for interacting with CRDs
 	dynamic dynamic.Interface
@@ -83,6 +85,7 @@ func main() {
 	flag.StringVar(&staticDirectory, "static-dir", "static/", "path to the static assets")
 	flag.StringVar(&listenAddr, "listen-addr", lookupEnvironment("LISTEN_ADDRESS", "127.0.0.1:5000"), "server listen address")
 	flag.StringVar(&kubecostURL, "kubecost-url", lookupEnvironment("KUBECOST_URL", "http://127.0.0.1:9090"), "Url to connect to Kubecost API")
+	flag.StringVar(&prometheusURL, "prometheus-url", lookupEnvironment("PROMETHEUS_URL", "http://127.0.0.1:9091"), "Url to connect to Prometheus API")
 
 	// Parse flags
 	flag.Parse()
@@ -103,6 +106,12 @@ func main() {
 
 	// Parse kubecostURL
 	s.kubecostURL, err = url.Parse(kubecostURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Parse prometheusURL
+	s.prometheusURL, err = url.Parse(prometheusURL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -286,6 +295,17 @@ func main() {
 			},
 		},
 	}, s.GetPersistentVolumeClaims)).Methods("GET")
+
+	router.HandleFunc("/api/namespaces/{namespace}/pvcs/usage", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "update",
+				Resource: "persistentvolumeclaims",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.UpdatePersistentVolumeClaimsUsage)).Methods("PATCH")
 
 	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{

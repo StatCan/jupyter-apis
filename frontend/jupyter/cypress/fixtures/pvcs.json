@@ -8,6 +8,8 @@
       "name": "a-pvc-phase-ready-viewer-ready",
       "namespace": "kubeflow-user",
       "notebooks": [],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "status": {
         "message": "Bound",
         "phase": "ready",
@@ -26,6 +28,8 @@
       "name": "a-pvc-phase-ready-viewer-uninitialized",
       "namespace": "kubeflow-user",
       "notebooks": [],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "status": {
         "message": "Bound",
         "phase": "ready",
@@ -44,6 +48,8 @@
       "name": "a-pvc-phase-ready-viewer-waiting",
       "namespace": "kubeflow-user",
       "notebooks": [],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "status": {
         "message": "Bound",
         "phase": "ready",
@@ -62,6 +68,8 @@
       "name": "a-pvc-phase-unvailable-viewer-unavailable",
       "namespace": "kubeflow-user",
       "notebooks": [],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "status": {
         "message": "Pending: This volume will be bound when its first consumer is created. E.g., when you first browse its contents, or attach it to a notebook server",
         "phase": "unavailable",
@@ -80,6 +88,8 @@
       "name": "a-pvc-phase-waiting-viewer-uninitialized",
       "namespace": "kubeflow-user",
       "notebooks": ["test-notebook-1"],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "status": {
         "message": "Bound",
         "phase": "waiting",
@@ -98,6 +108,8 @@
       "name": "a-pvc-phase-warning-viewer-ready",
       "namespace": "kubeflow-user",
       "notebooks": [],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "status": {
         "message": "Bound",
         "phase": "warning",
@@ -120,6 +132,8 @@
       },
       "age":"2023-09-28T16:30:08Z",
       "capacity":"16Gi",
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "modes":[
         "ReadWriteOnce"
       ],
@@ -153,6 +167,8 @@
       "notebooks":[
         "random-forest-waiting"
       ],
+      "usage": "5.567",
+      "usedBytes": "743628800",
       "viewer": { 
         "status": "ready",
         "url": ""

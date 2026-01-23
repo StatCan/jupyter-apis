@@ -1,6 +1,7 @@
 describe('Notebook Details Page', () => {
   beforeEach(() => {
     cy.mockGetNotebookRequest('kubeflow-user', 'test-notebook');
+    cy.mockPoddefaultsRequest('kubeflow-user');
     cy.intercept(
       'GET',
       `/api/namespaces/kubeflow-user/notebooks/test-notebook/pod`,
@@ -95,7 +96,10 @@ describe('Notebook Details Page', () => {
     cy.get('[data-cy-toolbar-button="CONNECT"]').should('be.disabled');
     cy.get('[data-cy-toolbar-button="START"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="STOP"]').should('not.exist');
-    cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
+    cy.get('[data-cy-toolbar-button="SETTINGS"]').should('be.enabled');
+    cy.get('[data-cy-toolbar-button="SETTINGS"]').click();
+    cy.get('[data-cy-toolbar-button-menu="DELETE"]').should('be.enabled');
+    cy.get('body').click()  // Closes the menu
     cy.get('lib-status-icon > lib-icon').should('have.attr', 'icon', 'custom:stoppedResource');
     // start the notebook
     cy.intercept(
@@ -194,8 +198,10 @@ describe('Notebook Details Page', () => {
   });
 
   it('should delete notebook from details page', () => {
-    cy.get('[data-cy-toolbar-button="DELETE"]').should('be.enabled');
-    cy.get('[data-cy-toolbar-button="DELETE"]').click();
+    cy.get('[data-cy-toolbar-button="SETTINGS"]').should('be.enabled');
+    cy.get('[data-cy-toolbar-button="SETTINGS"]').click();
+    cy.get('[data-cy-toolbar-button-menu="DELETE"]').should('be.enabled');
+    cy.get('[data-cy-toolbar-button-menu="DELETE"]').click();
 
     cy.get('.mat-mdc-dialog-title')
       .should('be.visible')
@@ -205,7 +211,8 @@ describe('Notebook Details Page', () => {
       );
     cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
     cy.get('mat-dialog-container').should('not.exist');
-    cy.get('[data-cy-toolbar-button="DELETE"]').click();
+    cy.get('[data-cy-toolbar-button="SETTINGS"]').click();
+    cy.get('[data-cy-toolbar-button-menu="DELETE"]').click();
 
     cy.intercept(
       'DELETE',

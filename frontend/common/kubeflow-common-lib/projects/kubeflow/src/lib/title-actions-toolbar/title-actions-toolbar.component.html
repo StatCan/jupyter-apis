@@ -61,7 +61,7 @@
                   mat-menu-item
                   [disabled]="b.disabled"
                   (click)="b.fn()"
-                  [attr.data-cy-menu-icon-action]="b.text"
+                  [attr.data-cy-toolbar-button-menu]="b.text"
                 >
                   <mat-icon *ngIf="b.icon" class="button-icon">
                     {{ b.icon }}
@@ -111,7 +111,7 @@
                   mat-menu-item
                   [disabled]="b.disabled"
                   (click)="b.fn()"
-                  [attr.data-cy-menu-icon-action]="b.text"
+                  [attr.data-cy-toolbar-button-menu]="b.text"
                 >
                   <mat-icon *ngIf="b.icon" class="button-icon">
                     {{ b.icon }}

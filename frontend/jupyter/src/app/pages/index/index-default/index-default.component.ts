@@ -334,8 +334,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       {
         name: 'keep_alive',
         status: notebook.status.phase,
-        text: "KEPP ALIVE",
-        matIcon: 'heart',
+        text: $localize`Delay auto-shutdown`,
+        matIcon: 'timelapse',
       }
     ];
   }

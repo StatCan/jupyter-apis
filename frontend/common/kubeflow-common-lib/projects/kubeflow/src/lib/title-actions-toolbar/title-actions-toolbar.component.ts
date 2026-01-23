@@ -23,7 +23,7 @@ export class TitleActionsToolbarComponent {
     this.back.emit('backButton');
   }
 
-  isMenu(button: ToolbarButton): boolean{
+  isMenu(button: ToolbarButton): boolean {
     return button.menu?.length > 0;
   }
 }

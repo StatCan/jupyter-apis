@@ -183,7 +183,7 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
     }
 
     // Makes a list of actions for the settings button
-    let menuButtons: ToolbarButton[] = []
+    let menuButtons: ToolbarButton[] = [];
     menuButtons.push(
       new ToolbarButton({
         text: $localize`DELETE`,

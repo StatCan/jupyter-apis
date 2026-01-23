@@ -963,8 +963,7 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	namespaceName := vars["namespace"]
 	notebookName := vars["notebook"]
 	keepAliveTime := vars["keepalive"]
-	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
-	log.Print(keepAliveTime)
+	log.Printf("updating notebook %q for %q with additional time", notebookName, namespaceName, keepAliveTime)
 	// Todo: validate that the keepalive value is valid.
 
 	// Read the incoming notebook
@@ -990,27 +989,18 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	}
 
 	updatedNotebook := notebook.DeepCopy()
-	log.Printf("MeowTwo")
-	// LastActivity, err := time.Parse(time.RFC3339, time.Now)
-	// LastActivity.Add(time.Duration(keepAliveTime))
-	// LastActivity: notebook.Annotations[LastActivityAnnotation] = time.Now
-	currentTime := time.Now()
 	// num, err := strconv.Atoi(keepalive)
 	// if err != nil {
 	// 	fmt.Println("Error while parsing:", err)
 	// 	return
 	// }
-	updatedTime := currentTime.Add(time.Duration(12) * time.Hour)
-	log.Printf("New time should be %q", updatedTime) // This works
-	log.Printf("StoppedAnnotation %q", notebook.Annotations[StoppedAnnotation])
+	updatedTime := time.Now().Add(time.Duration(12) * time.Hour)
 	if updatedNotebook.Annotations == nil {
-		log.Print("Int the looooooooop")
 		updatedNotebook.Annotations = map[string]string{}
 	}
-	log.Print("trying to update the annotation")
+
 	updatedNotebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
 
-	log.Printf("DOG: %q", updatedNotebook.Annotations[LastActivityAnnotation])
 	if true {
 		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, metav1.UpdateOptions{})
 		if err != nil {

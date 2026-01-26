@@ -43,9 +43,9 @@ export function getFormDefaults(): FormGroup {
     affinityConfig: ['', []],
     tolerationGroup: ['', []],
     datavols: fb.array([]),
-    shm: [true, []],
+    shm: [false, []],
     configurations: [[], []],
-    language: ['', [Validators.required]],
+    language: ['en', [Validators.required]],
   });
 }
 

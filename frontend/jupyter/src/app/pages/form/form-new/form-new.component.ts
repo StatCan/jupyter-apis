@@ -4,6 +4,8 @@ import {
   OnDestroy,
   ChangeDetectorRef,
   AfterContentChecked,
+  Inject,
+  LOCALE_ID,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
@@ -17,7 +19,6 @@ import {
 import { Router } from '@angular/router';
 import { getFormDefaults, initFormControls } from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { V1Namespace } from '@kubernetes/client-node';
 
 @Component({
   selector: 'app-form-new',
@@ -37,13 +38,14 @@ export class FormNewComponent
 
   existingNotebooks: Set<string> = new Set<string>();
   mountedVolumes: Set<string> = new Set<string>();
-
+  
   constructor(
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
     public cdr: ChangeDetectorRef,
+    @Inject(LOCALE_ID) public localeId: string
   ) {}
 
   ngOnInit(): void {
@@ -56,9 +58,9 @@ export class FormNewComponent
         // Don't fire on empty config
         return;
       }
-
+      
       this.config = config;
-      this.initFormControls(this.formCtrl, config);
+      this.initFormControls(this.formCtrl, config, this.localeId);
     });
 
     // Keep track of the selected namespace
@@ -104,8 +106,8 @@ export class FormNewComponent
     this.cdr.detectChanges();
   }
 
-  initFormControls(formCtrl: FormGroup, config: Config) {
-    initFormControls(formCtrl, config);
+  initFormControls(formCtrl: FormGroup, config: Config, locale: string) {
+    initFormControls(formCtrl, config, locale);
   }
 
   // Form Actions

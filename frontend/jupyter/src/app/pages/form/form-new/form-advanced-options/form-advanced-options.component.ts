@@ -6,16 +6,12 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './form-advanced-options.component.html',
   styleUrls: ['./form-advanced-options.component.scss'],
 })
-export class FormAdvancedOptionsComponent implements OnInit {
+export class FormAdvancedOptionsComponent {
   @Input() parentForm: FormGroup;
   languageList = [
     { id: 'en', label: 'English' },
     { id: 'fr', label: 'Français' },
   ];
 
-  constructor(@Inject(LOCALE_ID) public localeId: string) {}
-
-  ngOnInit() {
-    this.parentForm.get('language').setValue(this.localeId);
-  }
+  constructor() {}
 }

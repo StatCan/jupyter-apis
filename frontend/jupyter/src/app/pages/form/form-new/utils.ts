@@ -119,7 +119,7 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   );
 }
 
-export function initFormControls(formCtrl: FormGroup, config: Config) {
+export function initFormControls(formCtrl: FormGroup, config: Config, locale: string) {
   initCpuFormControls(formCtrl, config);
 
   initMemoryFormControls(formCtrl, config);
@@ -168,6 +168,9 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
   if (config.configurations.readOnly) {
     formCtrl.controls.configurations.disable();
   }
+
+  // language
+  formCtrl.controls.language.setValue(locale);
 }
 
 export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {

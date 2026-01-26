@@ -38,14 +38,14 @@ export class FormNewComponent
 
   existingNotebooks: Set<string> = new Set<string>();
   mountedVolumes: Set<string> = new Set<string>();
-  
+
   constructor(
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
     public router: Router,
     public popup: SnackBarService,
     public cdr: ChangeDetectorRef,
-    @Inject(LOCALE_ID) public localeId: string
+    @Inject(LOCALE_ID) public localeId: string,
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +58,7 @@ export class FormNewComponent
         // Don't fire on empty config
         return;
       }
-      
+
       this.config = config;
       this.initFormControls(this.formCtrl, config, this.localeId);
     });

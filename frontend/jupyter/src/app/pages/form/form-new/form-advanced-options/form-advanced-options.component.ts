@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, LOCALE_ID, Inject } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({

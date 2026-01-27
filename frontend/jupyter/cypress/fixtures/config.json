@@ -78,10 +78,6 @@
         },
         "readOnly":false
      },
-     "shm":{
-        "value":false,
-        "readOnly":false
-     },
      "configurations":{
         "value":null,
         "readOnly":false

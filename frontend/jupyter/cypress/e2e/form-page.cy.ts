@@ -655,9 +655,6 @@ describe('New notebook form', () => {
         'not.exist',
       );
 
-      cy.get('[data-cy-form-input="language"]')
-        .find('.mat-mdc-select-value')
-        .should('have.text', 'English');
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {

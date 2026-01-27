@@ -251,15 +251,6 @@ spawnerFormDefaults:
     #        effect: "NoSchedule"
 
   ################################################################
-  # Shared Memory
-  ################################################################
-  shm:
-    readOnly: false
-
-    # the default state of the "Enable Shared Memory" toggle
-    value: false
-
-  ################################################################
   # PodDefaults
   ################################################################
   configurations:

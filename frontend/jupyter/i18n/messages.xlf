@@ -987,42 +987,42 @@
         <source> LAUNCH </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.html</context>
-          <context context-type="linenumber">97,99</context>
+          <context context-type="linenumber">98,100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="35d035552a3b9e0fb0d9be51e18575b2ed727678" datatype="html">
         <source> CANCEL </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.html</context>
-          <context context-type="linenumber">109,111</context>
+          <context context-type="linenumber">110,112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8202886371422310629" datatype="html">
         <source>No value of the Notebook name was provided</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.ts</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494510534204827562" datatype="html">
         <source>The form contains invalid fields</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.ts</context>
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1391938145784232569" datatype="html">
         <source>Submitting new Notebook...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.ts</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8290591753803236451" datatype="html">
         <source>Notebook created successfully.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.ts</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5f02a6412cf09bf5dd273aeb77215ce0ef343716" datatype="html">
@@ -1794,7 +1794,7 @@
         <source>DELETE</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">189</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/volume-details-page/volume-details-page.component.ts</context>
@@ -1813,21 +1813,21 @@
         <source>Delete this notebook</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6778732292519419252" datatype="html">
         <source>SETTINGS</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="878642400393511887" datatype="html">
         <source>Settings for this notebook</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8f4cd1bcd0815dd9d40c71310c17460d8d594d99" datatype="html">

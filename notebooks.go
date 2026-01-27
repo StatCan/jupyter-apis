@@ -29,12 +29,6 @@ import (
 // DefaultServiceAccountName String.
 const DefaultServiceAccountName string = "default-editor"
 
-// SharedMemoryVolumeName String.
-const SharedMemoryVolumeName string = "dshm"
-
-// SharedMemoryVolumePath String.
-const SharedMemoryVolumePath string = "/dev/shm"
-
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
@@ -93,28 +87,27 @@ type gpurequest struct {
 }
 
 type newnotebookrequest struct {
-	Name               string            `json:"name"`
-	Namespace          string            `json:"namespace"`
-	Image              string            `json:"image"`
-	CustomImage        string            `json:"customImage"`
-	CustomImageCheck   bool              `json:"customImageCheck"`
-	BetaImageCheck     bool              `json:"betaImageCheck"`
-	CPU                resource.Quantity `json:"cpu"`
-	CPULimit           resource.Quantity `json:"cpuLimit"`
-	Memory             resource.Quantity `json:"memory"`
-	MemoryLimit        resource.Quantity `json:"memoryLimit"`
-	GPUs               gpurequest        `json:"gpus"`
-	NoWorkspace        bool              `json:"noWorkspace"`
-	Workspace          volrequest        `json:"workspace"`
-	DataVolumes        []volrequest      `json:"datavols"`
-	EnableSharedMemory bool              `json:"shm"`
-	Configurations     []string          `json:"configurations"`
-	Language           string            `json:"language"`
-	ImagePullPolicy    string            `json:"imagePullPolicy"`
-	ServerType         string            `json:"serverType"`
-	AffinityConfig     string            `json:"affinityConfig"`
-	TolerationGroup    string            `json:"tolerationGroup"`
-	DefaultNotebook    bool              `json:"defaultNotebook"`
+	Name             string            `json:"name"`
+	Namespace        string            `json:"namespace"`
+	Image            string            `json:"image"`
+	CustomImage      string            `json:"customImage"`
+	CustomImageCheck bool              `json:"customImageCheck"`
+	BetaImageCheck   bool              `json:"betaImageCheck"`
+	CPU              resource.Quantity `json:"cpu"`
+	CPULimit         resource.Quantity `json:"cpuLimit"`
+	Memory           resource.Quantity `json:"memory"`
+	MemoryLimit      resource.Quantity `json:"memoryLimit"`
+	GPUs             gpurequest        `json:"gpus"`
+	NoWorkspace      bool              `json:"noWorkspace"`
+	Workspace        volrequest        `json:"workspace"`
+	DataVolumes      []volrequest      `json:"datavols"`
+	Configurations   []string          `json:"configurations"`
+	Language         string            `json:"language"`
+	ImagePullPolicy  string            `json:"imagePullPolicy"`
+	ServerType       string            `json:"serverType"`
+	AffinityConfig   string            `json:"affinityConfig"`
+	TolerationGroup  string            `json:"tolerationGroup"`
+	DefaultNotebook  bool              `json:"defaultNotebook"`
 }
 
 type gpuresponse struct {
@@ -513,17 +506,16 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 			Quantity: s.Config.SpawnerFormDefaults.GPUs.Value.Num,
 			Vendor:   s.Config.SpawnerFormDefaults.GPUs.Value.Vendor,
 		},
-		NoWorkspace:        true,
-		Workspace:          workspaceVol,
-		DataVolumes:        datavols,
-		EnableSharedMemory: s.Config.SpawnerFormDefaults.Shm.Value,
-		Configurations:     s.Config.SpawnerFormDefaults.Configurations.Value,
-		Language:           "en",
-		ImagePullPolicy:    s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
-		ServerType:         "jupyter",
-		AffinityConfig:     s.Config.SpawnerFormDefaults.AffinityConfig.Value,
-		TolerationGroup:    s.Config.SpawnerFormDefaults.TolerationGroup.Value,
-		DefaultNotebook:    true,
+		NoWorkspace:     true,
+		Workspace:       workspaceVol,
+		DataVolumes:     datavols,
+		Configurations:  s.Config.SpawnerFormDefaults.Configurations.Value,
+		Language:        "en",
+		ImagePullPolicy: s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
+		ServerType:      "jupyter",
+		AffinityConfig:  s.Config.SpawnerFormDefaults.AffinityConfig.Value,
+		TolerationGroup: s.Config.SpawnerFormDefaults.TolerationGroup.Value,
+		DefaultNotebook: true,
 	}
 
 	return notebook, nil
@@ -773,23 +765,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
-	}
-
-	// Add shared memory, if enabled
-	if (s.Config.SpawnerFormDefaults.Shm.ReadOnly && s.Config.SpawnerFormDefaults.Shm.Value) || (!s.Config.SpawnerFormDefaults.Shm.ReadOnly && req.EnableSharedMemory) {
-		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-			Name: SharedMemoryVolumeName,
-			VolumeSource: corev1.VolumeSource{
-				EmptyDir: &corev1.EmptyDirVolumeSource{
-					Medium: corev1.StorageMediumMemory,
-				},
-			},
-		})
-
-		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-			Name:      SharedMemoryVolumeName,
-			MountPath: SharedMemoryVolumePath,
-		})
 	}
 
 	// Add GPU

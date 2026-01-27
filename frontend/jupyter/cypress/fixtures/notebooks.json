@@ -20,7 +20,6 @@
         "state": ""
       },
       "volumes": [
-        "dshm",
         "dog-breed-nwmrc-tutorial-dog-breed-datavol-1-xrrmt-lf276",
         "dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv"
       ]
@@ -44,7 +43,7 @@
         "phase": "ready",
         "state": ""
       },
-      "volumes": ["dshm", "b-rstudio-workspace-svdl2"]
+      "volumes": ["b-rstudio-workspace-svdl2"]
     },
     {
       "age": "2022-09-19T16:39:10Z",
@@ -67,8 +66,7 @@
       },
       "volumes": [
         "a0-new-image-workspace-d8pc2",
-        "a0-new-image-datavol-1-wlmfg",
-        "dshm"
+        "a0-new-image-datavol-1-wlmfg"
       ]
     },
     {
@@ -90,7 +88,7 @@
         "phase": "terminating",
         "state": ""
       },
-      "volumes": ["dshm", "b-rstudio-workspace-svdl2"]
+      "volumes": ["b-rstudio-workspace-svdl2"]
     },
     {
       "age": "2022-04-15T09:41:07Z",
@@ -111,7 +109,7 @@
         "phase": "unavailable",
         "state": ""
       },
-      "volumes": ["dshm", "coronahack-l9dwt-1759876298-ax7mi-pvc-dfhvr-zqxmt"]
+      "volumes": ["coronahack-l9dwt-1759876298-ax7mi-pvc-dfhvr-zqxmt"]
     },
     {
       "age": "2022-04-14T08:25:10Z",
@@ -133,7 +131,6 @@
         "state": ""
       },
       "volumes": [
-        "dshm",
         "titanic-ml-47xh5-data-m57vq-2md82",
         "titanic-ml-47xh5-tutorial-titanic-workspace-mxstz-52fbp"
       ]

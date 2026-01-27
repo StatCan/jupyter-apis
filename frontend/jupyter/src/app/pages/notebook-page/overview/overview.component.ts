@@ -116,22 +116,6 @@ export class OverviewComponent implements OnDestroy {
     return true;
   }
 
-  get sharedMemory(): string {
-    return this.getSharedMemory(this.notebook);
-  }
-
-  getSharedMemory(notebook: NotebookRawObject): string {
-    if (!notebook?.spec?.template?.spec?.volumes) {
-      return 'null';
-    }
-    for (const volume of notebook.spec.template.spec.volumes) {
-      if (volume.name === 'dshm') {
-        return $localize`Yes`;
-      }
-    }
-    return $localize`No`;
-  }
-
   get cpuLimits(): string {
     return this.getCpuLimits(this.notebook);
   }

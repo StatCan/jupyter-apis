@@ -42,19 +42,12 @@ const innerSpecObject: V1PodSpec = {
         },
       },
       volumeMounts: [
-        { mountPath: '/dev/shm', name: 'dshm' },
         { mountPath: '/home/jovyan', name: 'asa232rstudio-workspace' },
       ],
     },
   ],
   serviceAccountName: 'default-editor',
   volumes: [
-    {
-      emptyDir: {
-        medium: 'Memory',
-      },
-      name: 'dshm',
-    },
     {
       name: 'asa232rstudio-workspace',
       persistentVolumeClaim: {

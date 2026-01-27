@@ -43,7 +43,6 @@ export function getFormDefaults(): FormGroup {
     affinityConfig: ['', []],
     tolerationGroup: ['', []],
     datavols: fb.array([]),
-    shm: [false, []],
     configurations: [[], []],
     language: ['en', [Validators.required]],
   });
@@ -161,11 +160,6 @@ export function initFormControls(
 
   // GPUs
   updateGPUControl(formCtrl.get('gpus') as FormGroup, config.gpus);
-
-  formCtrl.controls.shm.setValue(config.shm.value);
-  if (config.shm.readOnly) {
-    formCtrl.controls.shm.disable();
-  }
 
   // PodDefaults / Configurations. Set the pre selected labels
   formCtrl.controls.configurations.setValue(config.configurations.value);

@@ -272,7 +272,7 @@ func main() {
 				Version:  kubeflowv1.SchemeGroupVersion.Version,
 			},
 		},
-	}, s.UpdateNotebook)).Methods("PATCH")
+	}, s.StartStopNotebook)).Methods("PATCH")
 
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{

@@ -179,7 +179,7 @@ type notebookeventsresponse struct {
 	Events []corev1.Event `json:"events"`
 }
 
-type updatenotebookrequest struct {
+type startstopnotebookrequest struct {
 	Stopped bool `json:"stopped"`
 }
 
@@ -895,7 +895,7 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
+func (s *server) StartStopNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespaceName := vars["namespace"]
 	notebookName := vars["notebook"]
@@ -910,7 +910,7 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var req updatenotebookrequest
+	var req startstopnotebookrequest
 	err = json.Unmarshal(body, &req)
 	if err != nil {
 		s.error(w, r, err)

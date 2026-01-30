@@ -1191,6 +1191,42 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 	return condition.Message // fallback to original
 }
 
+// validates resource specs for notebooks
+func validateNotebookResources(cpu resource.Quantity, cpuLimit resource.Quantity, memory resource.Quantity, memoryLimit resource.Quantity) []string {
+	var validationErrors []string
+
+	if cpu.IsZero() || cpu.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "cpu must be positive")
+	}
+	if memory.IsZero() || memory.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "memory must be positive")
+	}
+	if cpuLimit.IsZero() || cpu.Cmp(cpuLimit) > 0 {
+		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
+	}
+	if memoryLimit.IsZero() || memory.Cmp(memoryLimit) > 0 {
+		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
+	}
+
+	return validationErrors
+}
+
+func validateNotebookDataVolumes(dataVolumes []volrequest) []string {
+	var validationErrors []string
+
+	for _, vol := range dataVolumes {
+		// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
+		validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
+		err := validateNotebookVolume(vol, validSizes)
+
+		if err != nil {
+			validationErrors = append(validationErrors, err.Error())
+		}
+	}
+
+	return validationErrors
+}
+
 // verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
 func validateNotebook(request newnotebookrequest) error {
 	var validationErrors []string
@@ -1222,18 +1258,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Resource constraints
-	if request.CPU.IsZero() || request.CPU.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "cpu must be positive")
-	}
-	if request.Memory.IsZero() || request.Memory.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "memory must be positive")
-	}
-	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
-		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
-	}
-	if request.MemoryLimit.IsZero() || request.Memory.Cmp(request.MemoryLimit) > 0 {
-		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
-	}
+	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
 	// Enum checks
 	if request.ImagePullPolicy != "Always" { // the value is always "Always"
@@ -1255,15 +1280,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	if request.DataVolumes != nil {
-		for _, vol := range request.DataVolumes {
-			// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-			validSizes = map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-			err = validateNotebookVolume(vol, validSizes)
-
-			if err != nil {
-				validationErrors = append(validationErrors, err.Error())
-			}
-		}
+		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
 	}
 
 	// Return all validation errors
@@ -1279,30 +1296,11 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 	var validationErrors []string
 
 	// Resource constraints
-	if request.CPU.IsZero() || request.CPU.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "cpu must be positive")
-	}
-	if request.Memory.IsZero() || request.Memory.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "memory must be positive")
-	}
-	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
-		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
-	}
-	if request.MemoryLimit.IsZero() || request.Memory.Cmp(request.MemoryLimit) > 0 {
-		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
-	}
+	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
 	// Data volumes
 	if request.DataVolumes != nil {
-		for _, vol := range request.DataVolumes {
-			// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-			validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-			err := validateNotebookVolume(vol, validSizes)
-
-			if err != nil {
-				validationErrors = append(validationErrors, err.Error())
-			}
-		}
+		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
 	}
 
 	// Return all validation errors

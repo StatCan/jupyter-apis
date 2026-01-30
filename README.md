@@ -167,6 +167,12 @@ Any push to an open PR that has the auto-deploy label on it allows developers to
 
 ## Whats Different?
 
+### Frontend
+
+We've made various changes to the Upstream frontend to align more with our business needs. A summary of these differences can be seen [here](./DELTA_FRONTEND.md).
+
+### Backend
+
 Routes are defined in this repository [here](./main.go).
 
 [Upstream](https://github.com/kubeflow/kubeflow/tree/v1.9.2/components/crud-web-apps/jupyter/backend/apps/common/routes), the endpoints are structures via request type (e.g. `GET`, `PUT`, `DELETE`).

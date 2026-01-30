@@ -11,7 +11,6 @@ import {
 } from 'kubeflow';
 import { of } from 'rxjs';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { FormAdvancedOptionsModule } from './form-advanced-options/form-advanced-options.module';
 import { FormAffinityTolerationsModule } from './form-affinity-tolerations/form-affinity-tolerations.module';
 import { FormConfigurationsModule } from './form-configurations/form-configurations.module';
 import { FormCpuRamModule } from './form-cpu-ram/form-cpu-ram.module';
@@ -59,7 +58,6 @@ describe('FormNewComponent', () => {
         FormGpusModule,
         FormConfigurationsModule,
         FormAffinityTolerationsModule,
-        FormAdvancedOptionsModule,
         FormImageModule,
         FormNameModule,
         HttpClientModule,

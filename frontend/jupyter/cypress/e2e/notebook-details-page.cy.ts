@@ -31,9 +31,6 @@ describe('Notebook Details Page', () => {
       .should('have.attr', 'href')
       .and('eq', '/volume/details/kubeflow-user/test-notebook-volume');
     cy.get(
-      'lib-details-list-item[key="Shared memory enabled"] > .list-entry-row > .list-entry-value > div',
-    ).should('have.text', ' No\n');
-    cy.get(
       'lib-content-list-item[key="Configurations"] > .list-entry-row > .container > app-configurations',
     ).should('have.text', ' No configurations available for this notebook. ');
     cy.get(

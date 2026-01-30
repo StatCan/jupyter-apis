@@ -3,6 +3,7 @@
 @KF_NAMESPACE=REPLACE_WITH_YOUR_NAMESPACE
 @KF_NOTEBOOK_NAME=REPLACE_WITH_YOUR_NOTEBOOK_NAME
 @KF_NOTEBOOK_NAME_PATCH=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_PATCH
+@KF_NOTEBOOK_NAME_UPDATE=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_UPDATE
 @KF_POD_NAME=REPLACE_WITH_YOUR_POD_NAME
 @KF_PVC_NAME=REPLACE_WITH_YOUR_PVC_NAME
 @KF_PVC_NAME_DELETE=REPLACE_WITH_YOUR_PVC_TO_DELETE
@@ -72,12 +73,50 @@ kubeflow-userid: {{KF_USER_ID}}
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME}}/events
 kubeflow-userid: {{KF_USER_ID}}
 
-### Update a notebook
+### Start/Stop a notebook
 PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME_PATCH}}
 kubeflow-userid: {{KF_USER_ID}}
 
 {
     "stopped": true
+}
+
+### Updates a notebook
+POST {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME_UPDATE}}
+kubeflow-userid: {{KF_USER_ID}}
+
+{
+    "cpu":"0.5",
+    "cpuLimit":"0.5",
+    "memory":"1Gi",
+    "memoryLimit":"1Gi",
+    "datavols":[
+        {
+            "mount":"/home/jovyan",
+            "newPvc":{
+                "metadata":{
+                    "name":"my-new-volume"
+                },
+                "spec":{
+                    "accessModes":["ReadWriteOnce"],
+                    "resources":{
+                        "requests":{
+                            "storage":"4Gi"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "mount":"/home/jovyan/newPath",
+            "existingSource":{
+                "persistentVolumeClaim":{
+                    "readOnly":false,
+                    "claimName":"test-workspace"
+                }
+            }
+        }
+    ]
 }
 
 ### Delete a notebook

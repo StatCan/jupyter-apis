@@ -272,7 +272,18 @@ func main() {
 				Version:  kubeflowv1.SchemeGroupVersion.Version,
 			},
 		},
-	}, s.UpdateNotebook)).Methods("PATCH")
+	}, s.StartStopNotebook)).Methods("PATCH")
+
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
+				Verb:     "update",
+				Resource: "notebooks",
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.UpdateNotebook)).Methods("POST")
 
 	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{

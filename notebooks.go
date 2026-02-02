@@ -110,6 +110,14 @@ type newnotebookrequest struct {
 	DefaultNotebook  bool              `json:"defaultNotebook"`
 }
 
+type updatenotebookrequest struct {
+	CPU         resource.Quantity `json:"cpu"`
+	CPULimit    resource.Quantity `json:"cpuLimit"`
+	Memory      resource.Quantity `json:"memory"`
+	MemoryLimit resource.Quantity `json:"memoryLimit"`
+	DataVolumes []volrequest      `json:"datavols"`
+}
+
 type gpuresponse struct {
 	Count   resource.Quantity `json:"count"`
 	Message string            `json:"message"`
@@ -172,7 +180,7 @@ type notebookeventsresponse struct {
 	Events []corev1.Event `json:"events"`
 }
 
-type updatenotebookrequest struct {
+type startstopnotebookrequest struct {
 	Stopped bool `json:"stopped"`
 }
 
@@ -870,12 +878,12 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
+func (s *server) StartStopNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespaceName := vars["namespace"]
 	notebookName := vars["notebook"]
 
-	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
+	log.Printf("patching notebook %q for %q", notebookName, namespaceName)
 
 	// Read the incoming notebook
 	body, err := io.ReadAll(r.Body)
@@ -885,7 +893,7 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var req updatenotebookrequest
+	var req startstopnotebookrequest
 	err = json.Unmarshal(body, &req)
 	if err != nil {
 		s.error(w, r, err)
@@ -925,6 +933,76 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 			s.error(w, r, err)
 			return
 		}
+	}
+
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
+}
+
+func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespaceName := vars["namespace"]
+	notebookName := vars["notebook"]
+
+	// Read the incoming notebook
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+
+	var req updatenotebookrequest
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("validating updating notebook request: %s in namespace %s", notebookName, namespaceName)
+
+	err = validateUpdateNotebook(req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
+
+	// Get existing notebook
+	notebook, err := s.listers.notebooks.Notebooks(namespaceName).Get(notebookName)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// update resources
+	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
+	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
+	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
+
+	// updating volumes
+
+	//resets the list of volumes for the notebook
+	notebook.Spec.Template.Spec.Volumes = nil
+	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = nil
+
+	// for updating notebooks, all volumes are considered data volumes
+	for _, volreq := range req.DataVolumes {
+		err = s.handleVolume(r.Context(), volreq, notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
+	if err != nil {
+		s.error(w, r, err)
+		return
 	}
 
 	s.respond(w, r, &APIResponseBase{
@@ -1088,7 +1166,43 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 	return condition.Message // fallback to original
 }
 
-// validateNotebook function verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
+// validates resource specs for notebooks
+func validateNotebookResources(cpu resource.Quantity, cpuLimit resource.Quantity, memory resource.Quantity, memoryLimit resource.Quantity) []string {
+	var validationErrors []string
+
+	if cpu.IsZero() || cpu.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "cpu must be positive")
+	}
+	if memory.IsZero() || memory.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "memory must be positive")
+	}
+	if cpuLimit.IsZero() || cpu.Cmp(cpuLimit) > 0 {
+		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
+	}
+	if memoryLimit.IsZero() || memory.Cmp(memoryLimit) > 0 {
+		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
+	}
+
+	return validationErrors
+}
+
+func validateNotebookDataVolumes(dataVolumes []volrequest) []string {
+	var validationErrors []string
+
+	for _, vol := range dataVolumes {
+		// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
+		validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
+		err := validateNotebookVolume(vol, validSizes)
+
+		if err != nil {
+			validationErrors = append(validationErrors, err.Error())
+		}
+	}
+
+	return validationErrors
+}
+
+// verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
 func validateNotebook(request newnotebookrequest) error {
 	var validationErrors []string
 
@@ -1119,18 +1233,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Resource constraints
-	if request.CPU.IsZero() || request.CPU.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "cpu must be positive")
-	}
-	if request.Memory.IsZero() || request.Memory.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "memory must be positive")
-	}
-	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
-		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
-	}
-	if request.MemoryLimit.IsZero() || request.Memory.Cmp(request.MemoryLimit) > 0 {
-		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
-	}
+	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
 	// Enum checks
 	if request.ImagePullPolicy != "Always" { // the value is always "Always"
@@ -1152,15 +1255,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	if request.DataVolumes != nil {
-		for _, vol := range request.DataVolumes {
-			// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-			validSizes = map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-			err = validateNotebookVolume(vol, validSizes)
-
-			if err != nil {
-				validationErrors = append(validationErrors, err.Error())
-			}
-		}
+		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
 	}
 
 	// Return all validation errors
@@ -1171,7 +1266,27 @@ func validateNotebook(request newnotebookrequest) error {
 	return nil
 }
 
-// validateNotebook function verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
+// verifies valid and correct input for the updatenotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
+func validateUpdateNotebook(request updatenotebookrequest) error {
+	var validationErrors []string
+
+	// Resource constraints
+	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
+
+	// Data volumes
+	if request.DataVolumes != nil {
+		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
+	}
+
+	// Return all validation errors
+	if len(validationErrors) > 0 {
+		return fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
+	}
+
+	return nil
+}
+
+// verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
 func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 
 	// Allow for Notebooks creation with no Workspace Volumes

@@ -263,6 +263,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       });
     
      ref.afterClosed().subscribe(res => {
+      const config: SnackBarConfig = {
+        data: {
+          msg: `Volume was submitted successfully.`+  res,
+          snackType: SnackType.Success,
+        },
+        duration: 2000,
+      };
+      this.snackBar.open(config);
      if (res === DELAY_DIALOG_RESP.ACCEPT) {
     //     const config: SnackBarConfig = {
     //       data: {
@@ -287,11 +295,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   private getDelayDialogConfig(name: string): DelayDialogConfig {
     return {
-      title: $localize`Increase shut-down delay for ${name}`,
-      message: $localize`Warning: Somethingwillhappen.`,
-      accept: $localize`SAVE`,
+      title: `Increase shut-down delay for ${name}`,
+      message: `Warning: Somethingwillhappen.`,
+      accept: `SAVE`,
       confirmColor: 'warn',
-      cancel: $localize`CANCEL`,
+      cancel: `CANCEL`,
       error: '',
       width: '600px',
       hours: '',

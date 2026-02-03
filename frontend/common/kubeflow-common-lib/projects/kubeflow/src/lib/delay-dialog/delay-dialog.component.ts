@@ -16,4 +16,7 @@ export class DelayDialogComponent {
   onCancelClicked(): void {
     this.delaydialogRef.close(DELAY_DIALOG_RESP.CANCEL);
   }
+  onOkClicked(): void {
+    this.delaydialogRef.close(this.data.hours);
+  }
 }

@@ -1,19 +1,21 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
   <p>{{ data.message }}</p>
-    <input type="number" id="delayhours" name="delayhours" min="0" max="48" />
+    <input type="number" id="delayhours" name="delayhours" min="0" max="48" value="{data.hours}" />
   <p class="error">{{ data.error }}</p>
 </div>
 <div mat-dialog-actions>
   <button
     mat-button
-    (click)="onCancelClicked()">
-    {{ data.cancel.toUpperCase() }}
+    (click)="onCancelClicked()"
+    [mat-dialog-close]="DELAY_DIALOG_RESP.CANCEL">
+    No idea
   </button>
 
   <button
     mat-button  
-  >
-    {{ data.accept.toUpperCase() }}
+    (click)="onOkClicked()"
+    [mat-dialog-close]="data.hours">
+    REally
   </button>
 </div>

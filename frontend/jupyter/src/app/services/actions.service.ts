@@ -169,6 +169,7 @@ export class ActionsService {
     });
   }
 
+  // This only updates the time, it is NOT the dialog
   updateKeepAlive(namespace: string, name: string, timehours: string): Observable<string> {
     return new Observable(subscriber => {
       this.backend.updateKeepAlive(namespace, name, timehours).subscribe(response => {

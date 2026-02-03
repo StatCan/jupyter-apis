@@ -20,6 +20,9 @@ export * from './lib/confirm-dialog/confirm-dialog.module';
 export * from './lib/confirm-dialog/dialog/dialog.component';
 export * from './lib/confirm-dialog/confirm-dialog.service';
 
+export * from './lib/delay-dialog/delay-dialog.module';
+export * from './lib/delay-dialog/delay-dialog.component';
+
 export * from './lib/popover/popover.component';
 export * from './lib/popover/popover.directive';
 export * from './lib/popover/popover.module';

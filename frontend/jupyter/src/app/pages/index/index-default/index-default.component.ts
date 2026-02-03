@@ -39,7 +39,7 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-
+import { DelayDialogComponent } from '../../../../../../common/kubeflow-common-lib/projects/kubeflow/src/lib/delay-dialog/delay-dialog.component';
 @Component({
   selector: 'app-index-default',
   templateUrl: './index-default.component.html',
@@ -248,13 +248,35 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Triggers the dialog and calls the code if it is positive. 
   public keepAliveClicked(notebook: NotebookProcessedObject) {
-    //Check the notebook status
+    //Open the dialog 
+    const ref = this.dialog.open(DelayDialogComponent, {
+      width: '600px',
+      panelClass: 'form--dialog-padding',
+    });
+
+    // ref.afterClosed().subscribe(res => {
+    //   if (res === DIALOG_RESP.ACCEPT) {
+    //     const config: SnackBarConfig = {
+    //       data: {
+    //         msg: $localize`Volume was submitted successfully.`,
+    //         snackType: SnackType.Success,
+    //       },
+    //       duration: 2000,
+    //     };
+    //     this.snackBar.open(config);
+    //     this.poll(this.currNamespace);
+    //   }
+    // });
+
+    //This affects the data
     this.actions
       .updateKeepAlive(notebook.namespace, notebook.name, "12")
       .subscribe(_ => {
         this.router.navigate(['']);
       });
+      //meow
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {

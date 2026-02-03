@@ -9,12 +9,15 @@ import {
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
+  DELAY_DIALOG_RESP,
   SnackType,
   ToolbarButton,
   PollerService,
   DashboardState,
   SnackBarConfig,
   DialogConfig,
+  DelayDialogConfig,
+  DelayDialogComponent,
 } from 'kubeflow';
 import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -39,7 +42,6 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-
 @Component({
   selector: 'app-index-default',
   templateUrl: './index-default.component.html',
@@ -248,13 +250,60 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Triggers the dialog and calls the code if it is positive. 
   public keepAliveClicked(notebook: NotebookProcessedObject) {
-    //Check the notebook status
-    this.actions
-      .updateKeepAlive(notebook.namespace, notebook.name, "12")
-      .subscribe(_ => {
-        this.router.navigate(['']);
+    //Open the dialog 
+    // Doesn't actually open anything
+
+    const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
+    const ref = this.dialog.open(DelayDialogComponent, 
+      {
+        data: { delayDialogConfig },
+        width: '600px',
       });
+    
+     ref.afterClosed().subscribe(res => {
+      const config: SnackBarConfig = {
+        data: {
+          msg: `Volume was submitted successfully.`+  res,
+          snackType: SnackType.Success,
+        },
+        duration: 2000,
+      };
+      this.snackBar.open(config);
+     if (res === DELAY_DIALOG_RESP.ACCEPT) {
+    //     const config: SnackBarConfig = {
+    //       data: {
+    //         msg: $localize`Volume was submitted successfully.`,
+    //         snackType: SnackType.Success,
+    //       },
+    //       duration: 2000,
+    //     };
+    //     this.snackBar.open(config);
+    //     this.poll(this.currNamespace);
+      }
+     });
+
+    // //This affects the data
+    // this.actions
+    //   .updateKeepAlive(notebook.namespace, notebook.name, "12")
+    //   .subscribe(_ => {
+    //     this.router.navigate(['']);
+    //   });
+      //meow
+  }
+
+  private getDelayDialogConfig(name: string): DelayDialogConfig {
+    return {
+      title: `Increase shut-down delay for ${name}`,
+      message: `Warning: Somethingwillhappen.`,
+      accept: `SAVE`,
+      confirmColor: 'warn',
+      cancel: `CANCEL`,
+      error: '',
+      width: '600px',
+      hours: '',
+    };
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {

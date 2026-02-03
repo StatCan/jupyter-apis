@@ -9,6 +9,7 @@ import {
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
+  DELAY_DIALOG_RESP,
   SnackType,
   ToolbarButton,
   PollerService,
@@ -251,13 +252,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // Triggers the dialog and calls the code if it is positive. 
   public keepAliveClicked(notebook: NotebookProcessedObject) {
     //Open the dialog 
+    // Doesn't actually open anything
     const ref = this.dialog.open(DelayDialogComponent, {
       width: '600px',
-      panelClass: 'form--dialog-padding',
     });
 
-    // ref.afterClosed().subscribe(res => {
-    //   if (res === DIALOG_RESP.ACCEPT) {
+     ref.afterClosed().subscribe(res => {
+     if (res === DELAY_DIALOG_RESP.ACCEPT) {
     //     const config: SnackBarConfig = {
     //       data: {
     //         msg: $localize`Volume was submitted successfully.`,
@@ -267,8 +268,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     //     };
     //     this.snackBar.open(config);
     //     this.poll(this.currNamespace);
-    //   }
-    // });
+      }
+     });
 
     //This affects the data
     this.actions

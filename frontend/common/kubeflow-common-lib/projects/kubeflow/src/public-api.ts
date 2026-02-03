@@ -54,6 +54,7 @@ export * from './lib/resource-table/table/utils';
 export * from './lib/snack-bar/types';
 export * from './lib/services/backend/types';
 export * from './lib/confirm-dialog/types';
+export * from './lib/delay-dialog/types';
 export * from './lib/polling/exponential-backoff';
 export * from './lib/form/validators';
 export * from './lib/form/utils';

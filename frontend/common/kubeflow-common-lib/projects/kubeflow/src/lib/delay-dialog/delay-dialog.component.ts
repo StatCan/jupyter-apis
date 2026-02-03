@@ -1,18 +1,19 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { DelayDialogConfig, DELAY_DIALOG_RESP } from './types';
 
 @Component({
   selector: 'delay-dialog',
   templateUrl: 'delay-dialog.component.html',
 })
 export class DelayDialogComponent {
-
+  public DELAY_DIALOG_RESP = DELAY_DIALOG_RESP;
   constructor(
+    
     public delaydialogRef: MatDialogRef<DelayDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: DelayDialogConfig) { }
 
   onCancelClicked(): void {
-    this.delaydialogRef.close();
+    this.delaydialogRef.close(DELAY_DIALOG_RESP.CANCEL);
   }
 }

@@ -2,7 +2,6 @@ export interface DelayDialogConfig {
   title: string;
   message: string;
   accept: string;
-  applying: string;
   error?: string;
   confirmColor: string;
   cancel: string;

@@ -16,6 +16,8 @@ import {
   DashboardState,
   SnackBarConfig,
   DialogConfig,
+  DelayDialogConfig,
+  DelayDialogComponent,
 } from 'kubeflow';
 import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -40,7 +42,6 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-import { DelayDialogComponent } from '../../../../../../common/kubeflow-common-lib/projects/kubeflow/src/lib/delay-dialog/delay-dialog.component';
 @Component({
   selector: 'app-index-default',
   templateUrl: './index-default.component.html',
@@ -253,10 +254,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   public keepAliveClicked(notebook: NotebookProcessedObject) {
     //Open the dialog 
     // Doesn't actually open anything
-    const ref = this.dialog.open(DelayDialogComponent, {
-      width: '600px',
-    });
 
+    const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
+    const ref = this.dialog.open(DelayDialogComponent, 
+      {
+        data: { delayDialogConfig },
+        width: '600px',
+      });
+    
      ref.afterClosed().subscribe(res => {
      if (res === DELAY_DIALOG_RESP.ACCEPT) {
     //     const config: SnackBarConfig = {
@@ -271,13 +276,26 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       }
      });
 
-    //This affects the data
-    this.actions
-      .updateKeepAlive(notebook.namespace, notebook.name, "12")
-      .subscribe(_ => {
-        this.router.navigate(['']);
-      });
+    // //This affects the data
+    // this.actions
+    //   .updateKeepAlive(notebook.namespace, notebook.name, "12")
+    //   .subscribe(_ => {
+    //     this.router.navigate(['']);
+    //   });
       //meow
+  }
+
+  private getDelayDialogConfig(name: string): DelayDialogConfig {
+    return {
+      title: $localize`Increase shut-down delay for ${name}`,
+      message: $localize`Warning: Somethingwillhappen.`,
+      accept: $localize`SAVE`,
+      confirmColor: 'warn',
+      cancel: $localize`CANCEL`,
+      error: '',
+      width: '600px',
+      hours: '',
+    };
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {

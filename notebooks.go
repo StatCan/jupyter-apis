@@ -150,13 +150,22 @@ type notebookapiresponse struct {
 	Notebook notebookresponse `json:"notebook"`
 }
 
+// For outputting string formatted resources specs
+type notebookresources struct {
+	Cpu         string `json:"cpu"`
+	CpuLimit    string `json:"cpuLimit"`
+	Memory      string `json:"memory"`
+	MemoryLimit string `json:"memoryLimit"`
+}
+
 type NotebookWithStatus struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec            kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
-	Status          kubeflowv1.NotebookStatus `json:"status,omitempty"`
-	ProcessedStatus status                    `json:"processed_status"`
+	Spec               kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
+	Status             kubeflowv1.NotebookStatus `json:"status,omitempty"`
+	ProcessedStatus    status                    `json:"processed_status"`
+	FormattedResources notebookresources         `json:"formatted_resources,omitempty"`
 }
 
 type getnotebookresponse struct {
@@ -1011,6 +1020,22 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func formatCpuCores(cpu resource.Quantity) string {
+	// MiliValue() returns the value in 1/1000 of a core
+	cores := float64(cpu.MilliValue()) / 1000.0
+
+	return strconv.FormatFloat(cores, 'f', -1, 64)
+}
+
+func formatMemoryToGibibytes(memory resource.Quantity) string {
+	// Convert bytes to Gi (1 Gi = 1024 Mi, 1 Mi = 1024 Ki)
+	// 1 Gi = 1024 * 1024 * 1024 bytes
+	// resouce.Millivalue is 1/1000 bytes (400m = 0.4 bytes)
+	gibibytes := float64(memory.MilliValue()) / (1024 * 1024 * 1024 * 1000)
+
+	return strconv.FormatFloat(gibibytes, 'f', -1, 64)
+}
+
 func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
@@ -1037,6 +1062,9 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 		status.Conditions[i].Message = getUserFriendlyMessage(&status.Conditions[i])
 	}
 
+	// Assumes that there will only be one container in the notebook specs, as per the notebook creation
+	nb_resouces := nb.Spec.Template.Spec.Containers[0].Resources
+
 	resp := &getnotebookresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
@@ -1048,6 +1076,12 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 			Spec:            nb.Spec,
 			Status:          nb.Status,
 			ProcessedStatus: processedStatus,
+			FormattedResources: notebookresources{
+				Cpu:         formatCpuCores(*nb_resouces.Requests.Cpu()),
+				CpuLimit:    formatCpuCores(*nb_resouces.Limits.Cpu()),
+				Memory:      formatMemoryToGibibytes(*nb_resouces.Requests.Memory()),
+				MemoryLimit: formatMemoryToGibibytes(*nb_resouces.Limits.Memory()),
+			},
 		},
 	}
 

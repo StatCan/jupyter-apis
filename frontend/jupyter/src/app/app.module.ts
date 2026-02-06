@@ -32,6 +32,7 @@ import {
 } from '@angular/material/snack-bar';
 import { IndexDefaultModule } from './pages/index/index-default/index-default.module';
 import { environment } from '../environments/environment';
+import { FormEditModule } from './pages/form/form-edit/form-edit.module';
 
 /**
  * MAT_SNACK_BAR_DEFAULT_OPTIONS values can be found
@@ -52,6 +53,7 @@ const JwaSnackBarConfig: MatSnackBarConfig = {
     KubeflowModule,
     NotebookPageModule,
     FormNewModule,
+    FormEditModule,
     ResourceTableModule,
     NamespaceSelectModule,
     ConfirmDialogModule,

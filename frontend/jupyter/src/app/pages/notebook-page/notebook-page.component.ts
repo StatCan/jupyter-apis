@@ -194,6 +194,15 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
           this.deleteNotebook();
         },
       }),
+      new ToolbarButton({
+        text: $localize`EDIT`,
+        icon: 'edit',
+        disabled: this.status.phase === STATUS_TYPE.TERMINATING ? true : false,
+        tooltip: $localize`Edit this notebook`,
+        fn: () => {
+          this.editNotebook();
+        },
+      }),
     );
 
     buttons.push(
@@ -218,6 +227,10 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
       .subscribe(_ => {
         this.router.navigate(['']);
       });
+  }
+
+  private editNotebook() {
+    this.router.navigate([`/notebook/details/${this.namespace}/${this.notebookName}`]);
   }
 
   private connectToNotebook() {

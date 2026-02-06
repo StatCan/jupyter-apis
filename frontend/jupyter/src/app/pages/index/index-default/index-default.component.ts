@@ -209,6 +209,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.router.navigate([a.data.link.url]);
           break;
         }
+      case 'nb_edit':
+        if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
+          this.router.navigate([`/notebook/edit/${a.data.namespace}/${a.data.name}`]);
+          break;
+        }
       case 'name:link':
         if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
@@ -320,6 +325,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         status: notebook.status.phase,
         text: $localize`View details`,
         matIcon: 'info',
+      },
+      {
+        name: 'nb_edit',
+        status: notebook.status.phase,
+        text: $localize`Edit`,
+        matIcon: 'edit',
       },
       {
         name: 'deleteAction',

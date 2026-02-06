@@ -42,6 +42,10 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
     url: string;
     queryParams?: Params | null;
   };
+  link_edit: {
+    url: string;
+    queryParams?: Params | null;
+  };
   settings?: {
     name: string;
     matIcon?: string;
@@ -88,4 +92,10 @@ export interface NotebookRawObject {
     readyReplicas: number;
   };
   processed_status: Status;
+  formatted_resources: {
+    cpu: string,
+    cpuLimit: string,
+    memory: string,
+    memoryLimit: string,
+  }
 }

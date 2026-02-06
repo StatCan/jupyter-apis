@@ -103,11 +103,11 @@ function duplicateMountPathValidator(): ValidatorFn {
 
       if (formArray) {
         const hasWorkspaceVol =
-          formArray.parent.get('workspace').value.newPvc ||
-          formArray.parent.get('workspace').value.existingSource
+          formArray.parent.get('workspace')?.value.newPvc ||
+          formArray.parent.get('workspace')?.value.existingSource
             ? true
             : false;
-
+            
         if (hasWorkspaceVol && control.value === '/home/jovyan') {
           return { duplicate: true };
         }
@@ -127,7 +127,6 @@ export function createNewPvcVolumeFormGroup(
   name = '{notebook-name}-volume',
 ): FormGroup {
   return new FormGroup({
-    name: new FormControl('', []),
     mount: new FormControl('', [
       Validators.required,
       Validators.pattern(
@@ -142,7 +141,6 @@ export function createNewPvcVolumeFormGroup(
 // For volume
 export function createExistingVolumeFormGroup(): FormGroup {
   return new FormGroup({
-    name: new FormControl('', []),
     mount: new FormControl('', [
       Validators.required,
       Validators.pattern(

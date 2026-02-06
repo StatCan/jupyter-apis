@@ -216,6 +216,15 @@ export class JWABackendService extends BackendService {
     );
   }
 
+  public editNotebook(notebook: NotebookFormObject): Observable<string> {
+    const url = `api/namespaces/${notebook.namespace}/notebooks/${notebook.name}`;
+
+    return this.http.post<JWABackendResponse>(url, notebook).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => 'posted'),
+    );
+  }
+
   public createViewer(namespace: string, viewer: string) {
     const url = `api/namespaces/${namespace}/viewers`;
 

@@ -77,6 +77,16 @@ export interface NotebookFormObject {
   configurations: PodDefault[];
 }
 
+export interface NotebookEditFormObject {
+  name: string;
+  namespace: string;
+	cpu: number | string;
+	cpuLimit: number | string;
+	memory: number | string;
+  memoryLimit: number | string;
+	datavols: any[];
+}
+
 export interface NotebookRawObject {
   apiVersion: string;
   kind: string;

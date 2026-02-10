@@ -42,6 +42,22 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
+import {
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  FormGroup,
+  AbstractControl,
+  Validators,
+  ValidatorFn,
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+} from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 @Component({
   selector: 'app-index-default',
   templateUrl: './index-default.component.html',
@@ -258,7 +274,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
     const ref = this.dialog.open(DelayDialogComponent, 
       {
-        data: { delayDialogConfig },
+        data: delayDialogConfig,
         width: '600px',
       });
     

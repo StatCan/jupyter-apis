@@ -1,7 +1,9 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
   <p>{{ data.message }}</p>
-    <input type="number" id="delayhours" name="delayhours" min="0" max="48" value="{data.hours}" />
+    <mat-form-field appearance="outline" class="wide">
+      <input matInput type="number" id="delayhours" name="delayhours" min="0" max="48" value="{data.hours}" />
+    </mat-form-field>
   <p class="error">{{ data.error }}</p>
 </div>
 <div mat-dialog-actions>

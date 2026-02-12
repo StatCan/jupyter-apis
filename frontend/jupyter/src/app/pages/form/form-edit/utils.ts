@@ -10,6 +10,9 @@ export function getEditFormDefaults(): FormGroup {
     cpuLimit: ['', []],
     memory: [0, [Validators.required]],
     memoryLimit: ['', []],
+    workspace: fb.group({
+      mount: ['/home/jovyan', [Validators.required]],
+    }),
     datavols: fb.array([]),
   });
 }
@@ -66,6 +69,16 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   );
 }
 
+export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
+  const workspace = config.workspaceVolume.value;
+  if (!workspace || (!workspace.existingSource && !workspace.newPvc)) {
+    form.get('workspace').disable();
+    return;
+  }
+  
+  form.setControl('workspace', createFormGroupFromVolume(workspace, true));
+}
+
 export function initDataVolumeControl(form: FormGroup, config: Config) {
   const datavols = config.dataVolumes.value;
 
@@ -73,7 +86,7 @@ export function initDataVolumeControl(form: FormGroup, config: Config) {
   form.setControl('datavols', datavolsArray);
 
   for (const vol of datavols) {
-    let volControl = createFormGroupFromVolume(vol);
+    let volControl = createFormGroupFromVolume(vol, false);
 
     // Marks the mount path as dirty to prevent the value being overriden by the default mount path
     volControl.get("mount").markAsDirty();
@@ -102,7 +115,8 @@ export function initEditFormControls(
 
   initMemoryFormControls(formCtrl, config);
 
-  // Data volumes
+  initWorkspaceVolumeControl(formCtrl, config);
+
   initDataVolumeControl(formCtrl, config);
 }
 
@@ -125,19 +139,30 @@ export function setConfigForNotebook(notebook: NotebookRawObject, config: Config
     config.memory.limitValue = notebook.formatted_resources.memoryLimit
 
     // Set the volumes config from the notebook
+    config.workspaceVolume.value = {mount: "/home/jovyan"};
     config.dataVolumes.value = [];
     if (cn.volumeMounts) {
       for (const volMount of cn.volumeMounts){
-        config.dataVolumes.value.push({
-          mount: volMount.mountPath,
-          existingSource:{
+        if(!config.workspaceVolume.value.existingSource && volMount.mountPath === "/home/jovyan"){
+          config.workspaceVolume.value.existingSource = {
             name: volMount.name,
             persistentVolumeClaim:{
               readOnly: false,
               claimName: volMount.name,
-            }
-          },
-        });
+            },
+          };
+        } else {
+          config.dataVolumes.value.push({
+            mount: volMount.mountPath,
+            existingSource:{
+              name: volMount.name,
+              persistentVolumeClaim:{
+                readOnly: false,
+                claimName: volMount.name,
+              }
+            },
+          });
+        }
       }
     }
   }

@@ -178,7 +178,7 @@ export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
     return;
   }
 
-  form.setControl('workspace', createFormGroupFromVolume(workspace));
+  form.setControl('workspace', createFormGroupFromVolume(workspace, true));
 }
 
 export function initDataVolumeControl(form: FormGroup, config: Config) {
@@ -188,7 +188,7 @@ export function initDataVolumeControl(form: FormGroup, config: Config) {
   form.setControl('datavols', datavolsArray);
 
   for (const vol of datavols) {
-    datavolsArray.push(createFormGroupFromVolume(vol));
+    datavolsArray.push(createFormGroupFromVolume(vol, false));
   }
 }
 

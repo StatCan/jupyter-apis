@@ -249,17 +249,21 @@ export function createNewPvcFormGroupFromVolume(
   });
 }
 
-export function createFormGroupFromVolume(volume: Volume): FormGroup {
-  // if new form workspace volume
+export function createFormGroupFromVolume(volume: Volume, isWorkspace: boolean): FormGroup {
+  let validators = [Validators.required];
+  if(!isWorkspace){
+    validators = mountValidators
+  }
+
   if (volume.newPvc) {
     return new FormGroup({
-      mount: new FormControl(volume.mount, [Validators.required]),
+      mount: new FormControl(volume.mount, validators),
       newPvc: createNewPvcFormGroupFromVolume(volume.newPvc),
     });
   }
   
   return new FormGroup({
-    mount: new FormControl(volume.mount, mountValidators),
+    mount: new FormControl(volume.mount, validators),
     existingSource: createExistingSourceFormGroupFromVolume(
       volume.existingSource,
     ),

@@ -85,7 +85,6 @@ export class FormEditComponent
         this.notebookName = params.notebookName;
         this.namespace = params.namespace;
 
-        // this.poll(this.namespace, this.notebookName);
         this.notebooksub = this.backend.getNotebook(params.namespace, params.notebookName)
           .subscribe(nb => {
             // Return if notebook has no containers

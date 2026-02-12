@@ -115,6 +115,7 @@ type updatenotebookrequest struct {
 	CPULimit    resource.Quantity `json:"cpuLimit"`
 	Memory      resource.Quantity `json:"memory"`
 	MemoryLimit resource.Quantity `json:"memoryLimit"`
+	Workspace   volrequest        `json:"workspace"`
 	DataVolumes []volrequest      `json:"datavols"`
 }
 
@@ -999,6 +1000,15 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	notebook.Spec.Template.Spec.Volumes = nil
 	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = nil
 
+	// workspace volume
+	if req.Workspace.Mount != "" && (req.Workspace.NewPvc.NewPvcMetadata.Name != nil || req.Workspace.ExistingSource.PersistentVolumeClaim.ClaimName != nil) {
+		err = s.handleVolume(r.Context(), req.Workspace, notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
 	// for updating notebooks, all volumes are considered data volumes
 	for _, volreq := range req.DataVolumes {
 		err = s.handleVolume(r.Context(), volreq, notebook)
@@ -1307,6 +1317,13 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 	// Resource constraints
 	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
+	// Workspace Volume
+	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
+	err := validateNotebookVolume(request.Workspace, validSizes)
+	if err != nil {
+		validationErrors = append(validationErrors, err.Error())
+	}
+
 	// Data volumes
 	if request.DataVolumes != nil {
 		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
@@ -1324,7 +1341,7 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 
 	// Allow for Notebooks creation with no Workspace Volumes
-	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.NewPvc.NewPvcSpec.AccessModes == nil {
+	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.ExistingSource.PersistentVolumeClaim.ClaimName == nil {
 		return nil
 	}
 

@@ -1,6 +1,6 @@
 <div class="lib-content-wrapper">
   <lib-title-actions-toolbar
-    title="Edit notebook"
+    title="Editing notebook {{notebookName}}"
     [backButton]="true"
     (back)="onCancel()"
     i18n-title
@@ -18,9 +18,6 @@
         (ngSubmit)="onSubmit()"
         [formGroup]="formCtrl"
       >
-        <lib-form-section title="" i18n-title>
-          <span class="mat-headline-4">{{notebookName}}</span>
-        </lib-form-section>
 
         <lib-form-section title="Image" i18n-title>
           <div class="container">
@@ -34,7 +31,7 @@
               class="server-type-icon icon-inline" 
               svgIcon="sas-icon">
             </mat-icon>
-            <span class="text-inline">{{notebookImage}}</span>
+            <span class="text-inline" data-cy-image-name>{{notebookImage}}</span>
           </div>
         </lib-form-section>
 
@@ -47,9 +44,17 @@
           [readonlySpecs]="false"
         ></app-form-cpu-ram>
 
-        <app-form-data-volumes
-          [volsArray]="formCtrl.get('datavols')"
+        <app-form-workspace-volume
           [readonly]="false"
+          [volGroup]="formCtrl.get('workspace')"
+          [externalName]="notebookName"
+          [mountedVolumes]="mountedVolumes"
+        >
+        </app-form-workspace-volume>
+
+        <app-form-data-volumes
+          [readonly]="false"
+          [volsArray]="formCtrl.get('datavols')"
           [externalName]="notebookName"
           [mountedVolumes]="mountedVolumes"
         ></app-form-data-volumes>

@@ -7,6 +7,7 @@ import {
   LoadingSpinnerModule,
 } from 'kubeflow';
 import { FormCpuRamModule } from '../form-new/form-cpu-ram/form-cpu-ram.module';
+import { FormWorkspaceVolumeModule } from '../form-new/form-workspace-volume/form-workspace-volume.module';
 import { FormDataVolumesModule } from '../form-new/form-data-volumes/form-data-volumes.module';
 import { FormEditComponent } from './form-edit.component';
 
@@ -18,6 +19,7 @@ import { FormEditComponent } from './form-edit.component';
     MatIconModule,
     TitleActionsToolbarModule,
     LoadingSpinnerModule,
+    FormWorkspaceVolumeModule,
     FormCpuRamModule,
     FormDataVolumesModule,
   ],

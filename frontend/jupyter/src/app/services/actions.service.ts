@@ -175,7 +175,7 @@ export class ActionsService {
       this.backend.updateKeepAlive(namespace, name, timehours).subscribe(response => {
         const config: SnackBarConfig = {
           data: {
-            msg: $localize`Adding value to  '${name}'...`,
+            msg: $localize`Adding auto-shutdown delay of ${timehours} hours to '${name}'...`,
             snackType: SnackType.Info,
           },
         };

@@ -989,12 +989,12 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	}
 
 	updatedNotebook := notebook.DeepCopy()
-	// num, err := strconv.Atoi(keepalive)
-	// if err != nil {
-	// 	fmt.Println("Error while parsing:", err)
-	// 	return
-	// }
-	updatedTime := time.Now().Add(time.Duration(12) * time.Hour)
+	numKeepAliveTime, err := strconv.Atoi(keepAliveTime)
+	if err != nil {
+		fmt.Println("Error while parsing:", err)
+		return
+	}
+	updatedTime := time.Now().Add(time.Duration(numKeepAliveTime) * time.Hour)
 	if updatedNotebook.Annotations == nil {
 		updatedNotebook.Annotations = map[string]string{}
 	}

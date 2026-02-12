@@ -14,9 +14,12 @@ export class DelayDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: DelayDialogConfig) { }
 
   onCancelClicked(): void {
-    this.delaydialogRef.close(DELAY_DIALOG_RESP.CANCEL);
+    this.delaydialogRef.close({ status: DELAY_DIALOG_RESP.CANCEL, hours: 0 });
   }
   onOkClicked(): void {
-    this.delaydialogRef.close(this.data.hours);
+    this.delaydialogRef.close({ status: DELAY_DIALOG_RESP.ACCEPT, hours: this.data.hours});
+  }
+  onNoClick(): void {
+    this.onCancelClicked();
   }
 }

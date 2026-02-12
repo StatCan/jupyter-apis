@@ -2,22 +2,22 @@
 <div mat-dialog-content>
   <p>{{ data.message }}</p>
     <mat-form-field appearance="outline" class="wide">
-      <input matInput type="number" id="delayhours" name="delayhours" min="0" max="48" value="{data.hours}" />
+      <mat-label>Hours to delay</mat-label>
+      <input matInput type="number" id="delayhours" name="delayhours" min="0" max="48"  [(ngModel)]="data.hours"/>
     </mat-form-field>
   <p class="error">{{ data.error }}</p>
 </div>
 <div mat-dialog-actions>
   <button
     mat-button
-    (click)="onCancelClicked()"
-    [mat-dialog-close]="DELAY_DIALOG_RESP.CANCEL">
-    No idea
+    (click)="onCancelClicked()">
+    {{ data.cancel }}
   </button>
 
   <button
     mat-button  
     (click)="onOkClicked()"
-    [mat-dialog-close]="data.hours">
-    REally
+    [mat-dialog-close]="data">
+    {{ data.accept }}
   </button>
 </div>

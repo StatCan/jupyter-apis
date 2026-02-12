@@ -279,46 +279,44 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       });
     
      ref.afterClosed().subscribe(res => {
+      //If not clicked a button theres an issue
       const config: SnackBarConfig = {
         data: {
-          msg: `Volume was submitted successfully.`+  res,
+          msg: `V`,
           snackType: SnackType.Success,
         },
         duration: 2000,
       };
-      this.snackBar.open(config);
-     if (res === DELAY_DIALOG_RESP.ACCEPT) {
-    //     const config: SnackBarConfig = {
-    //       data: {
-    //         msg: $localize`Volume was submitted successfully.`,
-    //         snackType: SnackType.Success,
-    //       },
-    //       duration: 2000,
-    //     };
-    //     this.snackBar.open(config);
-    //     this.poll(this.currNamespace);
+
+      if (res === undefined || res.status=== DELAY_DIALOG_RESP.CANCEL){
+        // If we want to add any messages
+      } else {
+        if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
+          config.data.msg = "Status accepted " + res.hours;
+          this.actions
+            .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
+            .subscribe(_ => {
+              this.router.navigate(['']);
+            });
+        }
       }
+      this.snackBar.open(config);
      });
 
-    // //This affects the data
-    // this.actions
-    //   .updateKeepAlive(notebook.namespace, notebook.name, "12")
-    //   .subscribe(_ => {
-    //     this.router.navigate(['']);
-    //   });
-      //meow
+
   }
 
+  // This is the code for the delay popup
   private getDelayDialogConfig(name: string): DelayDialogConfig {
     return {
-      title: `Increase shut-down delay for ${name}`,
-      message: `Warning: Somethingwillhappen.`,
-      accept: `SAVE`,
+      title: `Delay auto-shutdown for ${name}`,
+      message: `This will keep the notebook for the number of hours specified`,
+      accept: `Submit`,
       confirmColor: 'warn',
-      cancel: `CANCEL`,
+      cancel: `Cancel`,
       error: '',
       width: '600px',
-      hours: '',
+      hours: '0',
     };
   }
 

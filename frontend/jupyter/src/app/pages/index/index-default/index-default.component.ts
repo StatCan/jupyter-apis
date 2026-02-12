@@ -312,7 +312,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       title: `Delay auto-shutdown for ${name}`,
       message: `This will keep the notebook for the number of hours specified`,
       accept: `Submit`,
-      confirmColor: 'warn',
+      confirmColor: 'primary',
       cancel: `Cancel`,
       error: '',
       width: '600px',

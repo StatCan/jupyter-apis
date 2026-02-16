@@ -22,6 +22,12 @@
               "persistentVolumeClaim":{
                 "claimName":"test-notebook-volume"
               }
+            },
+            {
+              "name":"test-notebook-data",
+              "persistentVolumeClaim":{
+                "claimName":"test-notebook-data"
+              }
             }
           ],
           "containers":[
@@ -48,6 +54,10 @@
                 {
                   "name":"test-notebook-volume",
                   "mountPath":"/home/jovyan"
+                },
+                {
+                  "name":"test-notebook-data",
+                  "mountPath":"/home/jovyan/test-notebook-data"
                 }
               ],
               "imagePullPolicy":"Always"
@@ -65,6 +75,12 @@
       "phase": "stopped",
       "state": "",
       "message": "No Pods are currently running for this Notebook Server."
+    },
+    "formatted_resources": {
+      "cpu": "0.5",
+      "cpuLimit": "0.5",
+      "memory": "2",
+      "memoryLimit": "2"
     }
   }
 }

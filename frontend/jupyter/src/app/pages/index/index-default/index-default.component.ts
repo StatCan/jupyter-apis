@@ -310,7 +310,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   private getDelayDialogConfig(name: string): DelayDialogConfig {
     return {
       title: `Delay auto-shutdown for ${name}`,
-      message: `This will keep the notebook for the number of hours specified`,
+      message: `This will keep the notebook alive for the number of hours specified`,
       accept: `Submit`,
       confirmColor: 'primary',
       cancel: `Cancel`,

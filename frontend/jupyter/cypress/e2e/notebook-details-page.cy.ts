@@ -27,7 +27,7 @@ describe('Notebook Details Page', () => {
     cy.get('lib-content-list-item[key="Volumes"]')
       .find('app-volumes')
       .get('.vol-group-container > lib-urls > a')
-      .should('have.text', ' test-notebook-volume\n')
+      .should('have.text', ' test-notebook-volume\n test-notebook-data\n')
       .should('have.attr', 'href')
       .and('eq', '/volume/details/kubeflow-user/test-notebook-volume');
     cy.get(

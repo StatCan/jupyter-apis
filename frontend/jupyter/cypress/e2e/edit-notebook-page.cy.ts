@@ -5,7 +5,6 @@ describe('Edit notebook form', () => {
     cy.mockGetNotebookRequest('kubeflow-user', 'test-notebook');
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
-      // cy.mockPoddefaultsRequest(settings.namespace);
       cy.mockPVCsRequest(settings.namespace);
     });
 
@@ -166,7 +165,6 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-error')
         .should('have.text', ' Already mounted ');
-      // existing volume mount path
       // existing volume delete
       cy.get('[data-cy-form-button="workspaceVolume-new"]').should('not.exist');
       cy.get('[data-cy-form-button="workspaceVolume-existing"]').should(
@@ -230,7 +228,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .clear();
-      // volume name in use
+      // new volume name in use
       cy.get('[data-cy-form-input="workspaceVolume"]')
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
@@ -452,7 +450,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .should('have.value', 'test-notebook-datavol-3');
-        // empty name value
+        // new volume empty name value
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
@@ -465,7 +463,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('mat-error')
         .should('have.text', ' Name is required ');
-      // volume name invalid pattern
+      // new volume name invalid pattern
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
@@ -485,7 +483,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .clear();
-      // volume name in use
+      // new volume name in use
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
@@ -498,7 +496,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('mat-error')
         .should('have.text', ' Already mounted ');
-      // mount path empty value
+      // new volume mount path empty value
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .eq(2)
@@ -514,7 +512,7 @@ describe('Edit notebook form', () => {
         .eq(2)
         .find('mat-error')
         .should('have.text', ' Mount path is required ');
-      // mount path invalid pattern
+      // new volume mount path invalid pattern
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .eq(2)
@@ -538,7 +536,7 @@ describe('Edit notebook form', () => {
           'have.text',
           ' The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie ',
         );
-      // mount path duplicate value
+      // new volume mount path duplicate value
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .eq(2)
@@ -559,8 +557,7 @@ describe('Edit notebook form', () => {
         .eq(2)
         .find('mat-error')
         .should('have.text', ' This mount path is already in use ');
-      // delete new volumes
-      // deletes the first data volume in the list, then deletes the last remaining data volume
+      // delete data volumes
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('mat-icon[mattooltip="Delete volume"]')
         .eq(2)
@@ -623,6 +620,13 @@ describe('Edit notebook form', () => {
     });
 
     it('should add a new data volume', () => {
+      // testing with a notebook that has no volume
+      cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook`, {
+        fixture: 'notebook_no_volume',
+      }).as('mockGetNotebookRequestNoVol');
+      cy.visit('/notebook/edit/kubeflow-user/test-notebook');
+      cy.wait('@mockGetNotebookRequestNoVol');
+      
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
 
       // submit the notebook

@@ -160,31 +160,6 @@
       "labels":{
         "data.statcan.gc.ca/inject-blob-volumes":"true"
       }
-    },
-    {
-      "age": "2026-02-05T19:36:43Z",
-      "cpu": "0.111",
-      "gpus": {
-        "count": "0",
-        "message": ""
-      },
-      "image": "artifactory.cloud.statcan.ca/das-aaw-docker/jupyterlab-cpu:v2",
-      "lastActivity": "",
-      "memory": "5830418104320m",
-      "name": "test-no-volume",
-      "serverType": "jupyter",
-      "namespace": "kubeflow-user",
-      "shortImage": "jupyterlab-cpu:v2",
-      "status": {
-        "message": "No Pods are currently running for this Notebook Server.",
-        "phase": "stopped",
-        "state": "",
-        "key": "noPodsRunning"
-      },
-      "volumes": [],
-      "labels": {
-        "data.statcan.gc.ca/inject-blob-volumes": "true"
-      }
     }
   ],
   "status": 200,

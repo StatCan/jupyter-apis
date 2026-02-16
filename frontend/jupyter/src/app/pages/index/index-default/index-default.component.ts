@@ -439,6 +439,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       if (pvc.usage) {
         let roundedVal = Math.ceil(parseFloat(pvc.usage));
         pvc.usageRounded = roundedVal.toString() + '%';
+      } else {
+        // need to be set to empty string for the table filter
+        pvc.usageRounded = "";
       }
       if (pvc.usedBytes) {
         // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
@@ -446,6 +449,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {
           binary: true,
         });
+      } else {
+        // need to be set to empty string for the table filter
+        pvc.usedBytesFormatted = "";
       }
     }
 

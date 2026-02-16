@@ -166,6 +166,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-error')
         .should('have.text', ' Already mounted ');
+      // existing volume mount path
       // existing volume delete
       cy.get('[data-cy-form-button="workspaceVolume-new"]').should('not.exist');
       cy.get('[data-cy-form-button="workspaceVolume-existing"]').should(
@@ -355,6 +356,83 @@ describe('Edit notebook form', () => {
         .eq(1)  
         .find('mat-panel-description')
         .should('contain.text', ' a-pvc-phase-warning-viewer-ready ');
+      // existing volume mount path empty value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('mat-error')
+        .should('have.text', ' Mount path is required ');
+      // existing volume mount path invalid pattern
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .type('abc/');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('mat-error')
+        .should(
+          'have.text',
+          ' The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie ',
+        );
+      // existing volume mount path duplicate value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .type('/home/jovyan');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('mat-error')
+        .should('have.text', ' This mount path is already in use ');
+      // existing volume mount path valid value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .type('/home/jovyan/a-pvc-phase-warning-viewer-ready');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-valid');
       // new volume
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
@@ -501,7 +579,7 @@ describe('Edit notebook form', () => {
     });
   });
 
-  describe.only('edit notebook use cases', () => {
+  describe('edit notebook use cases', () => {
     it('should cancel notebook edit', () => {
       cy.get('[data-cy-form-button="cancel"]').click();
       cy.url().should('eq', 'http://localhost:4200/');
@@ -546,6 +624,23 @@ describe('Edit notebook form', () => {
 
     it('should add a new data volume', () => {
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
+
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
+        success: true,
+        status: 200,
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should update a data volume mount path', () => {
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .find('input')
+        .type('/my_new_dir');
 
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');

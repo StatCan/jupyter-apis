@@ -1,6 +1,6 @@
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Config, NotebookRawObject } from 'src/app/types';
-import { createFormGroupFromVolume } from 'src/app/shared/utils/volumes';
+import { calculateLimits, initCpuFormControls, initDataVolumeControl, initMemoryFormControls, initWorkspaceVolumeControl } from '../form-new/utils';
 
 export function getEditFormDefaults(): FormGroup {
   const fb = new FormBuilder();
@@ -15,96 +15,6 @@ export function getEditFormDefaults(): FormGroup {
     }),
     datavols: fb.array([]),
   });
-}
-
-export function calculateLimits(
-  requests: number | string,
-  factor: number | string,
-): string | null {
-  const limit = configSizeToNumber(requests) * configSizeToNumber(factor);
-
-  if (isNaN(limit)) {
-    return null;
-  }
-
-  return limit.toFixed(1);
-}
-
-export function initCpuFormControls(formCtrl: FormGroup, config: Config) {
-  const cpu = Number(config.cpu.value);
-  
-  if (!isNaN(cpu)) {
-    formCtrl.controls.cpu.setValue(cpu);
-  }
-
-  if (config.cpu.readOnly) {
-    formCtrl.controls.cpu.disable();
-    formCtrl.controls.cpuLimit.disable();
-  }
-
-  const cpuLimit = Number(config.cpu.limitValue);
-  formCtrl.controls.cpuLimit.setValue(
-    //AAW
-    //calculateLimits(cpu, config.cpu.limitFactor),
-    cpuLimit,
-  );
-}
-
-export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
-  const memory = configSizeToNumber(config.memory.value);
-  if (!isNaN(memory)) {
-    formCtrl.controls.memory.setValue(memory);
-  }
-
-  if (config.memory.readOnly) {
-    formCtrl.controls.memory.disable();
-    formCtrl.controls.memoryLimit.disable();
-  }
-
-  const memoryLimit = configSizeToNumber(config.memory.limitValue);
-  formCtrl.controls.memoryLimit.setValue(
-    //AAW
-    //calculateLimits(memory, config.memory.limitFactor),
-    memoryLimit,
-  );
-}
-
-export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
-  const workspace = config.workspaceVolume.value;
-  if (!workspace || (!workspace.existingSource && !workspace.newPvc)) {
-    form.get('workspace').disable();
-    return;
-  }
-  
-  form.setControl('workspace', createFormGroupFromVolume(workspace, true));
-}
-
-export function initDataVolumeControl(form: FormGroup, config: Config) {
-  const datavols = config.dataVolumes.value;
-
-  const datavolsArray = new FormArray([]);
-  form.setControl('datavols', datavolsArray);
-
-  for (const vol of datavols) {
-    let volControl = createFormGroupFromVolume(vol, false);
-
-    // Marks the mount path as dirty to prevent the value being overriden by the default mount path
-    volControl.get("mount").markAsDirty();
-
-    datavolsArray.push(volControl);
-  }
-}
-
-export function configSizeToNumber(size: string | number): number {
-  if (size == null) {
-    return NaN;
-  }
-
-  if (typeof size === 'number') {
-    return size;
-  }
-
-  return Number(size.replace('Gi', ''));
 }
 
 export function initEditFormControls(

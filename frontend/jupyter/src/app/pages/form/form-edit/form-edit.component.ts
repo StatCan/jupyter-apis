@@ -104,6 +104,7 @@ export class FormEditComponent
 
               // Initialize form controls with notebook values
               setConfigForNotebook(nb, this.config);
+              break;
             }
             
             initEditFormControls(this.formCtrl, this.config);

@@ -557,6 +557,18 @@ describe('Edit notebook form', () => {
         .eq(2)
         .find('mat-error')
         .should('have.text', ' This mount path is already in use ');
+      // new volume size
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('app-volume-size')
+        .find('mat-select')
+        .click();
+      cy.get('mat-option')
+        .contains('4')
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .find('mat-panel-description')
+        .eq(2)
+        .should('contain.text', 'dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv, 4Gi');
       // delete data volumes
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('mat-icon[mattooltip="Delete volume"]')

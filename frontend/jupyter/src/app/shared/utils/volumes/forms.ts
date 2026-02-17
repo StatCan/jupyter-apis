@@ -96,25 +96,31 @@ export function createNewPvcFormGroup(
 
 function duplicateMountPathValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
+    console.log("conval", control.value);
     if (control.value) {
       const formArray = control.parent
         ? (control.parent.parent as FormArray)
         : null;
-
+      console.log("conarr", formArray);
       if (formArray) {
         const hasWorkspaceVol =
           formArray.parent.get('workspace').value.newPvc ||
           formArray.parent.get('workspace').value.existingSource
             ? true
             : false;
-
-        if (hasWorkspaceVol && control.value === '/home/jovyan') {
+        
+        // removes trailing slash from mount path if present
+        const trimValue = String(control.value).replace(/\/+$/, '');
+        console.log("trim", trimValue);
+        if (hasWorkspaceVol && trimValue === '/home/jovyan') {
           return { duplicate: true };
         }
 
-        const mounts = formArray.value.map(e => e.mount);
-        const indexOf = mounts.indexOf(control.value);
-        return indexOf >= 0 && indexOf < mounts.lastIndexOf(control.value)
+        // get the list of mount paths with any trailing slash removed
+        const mounts = formArray.value.map(e => String(e.mount).replace(/\/+$/, ''));
+
+        const indexOf = mounts.indexOf(trimValue);
+        return indexOf >= 0 && indexOf < mounts.lastIndexOf(trimValue)
           ? { duplicate: true }
           : null;
       }
@@ -131,7 +137,7 @@ export function createNewPvcVolumeFormGroup(
     mount: new FormControl('', [
       Validators.required,
       Validators.pattern(
-        /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
+        /^\/home\/jovyan(\/.*)?$/,
       ),
       duplicateMountPathValidator(),
     ]),
@@ -146,7 +152,7 @@ export function createExistingVolumeFormGroup(): FormGroup {
     mount: new FormControl('', [
       Validators.required,
       Validators.pattern(
-        /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
+        /^\/home\/jovyan(\/.*)?$/,
       ),
       duplicateMountPathValidator(),
     ]),

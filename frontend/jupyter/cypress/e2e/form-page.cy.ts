@@ -465,7 +465,7 @@ describe('New notebook form', () => {
         .find('mat-error')
         .should(
           'have.text',
-          ' The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie ',
+          ' The accepted locations are /home/jovyan or any of its subdirectories ',
         );
       // mount path empty value
       cy.get('[data-cy-form-input="dataVolumes"]')

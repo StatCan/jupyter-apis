@@ -230,7 +230,9 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
   }
 
   private editNotebook() {
-    this.router.navigate([`/notebook/edit/${this.namespace}/${this.notebookName}`]);
+    this.router.navigate([
+      `/notebook/edit/${this.namespace}/${this.notebookName}`,
+    ]);
   }
 
   private connectToNotebook() {

@@ -1,6 +1,6 @@
 <div class="lib-content-wrapper">
   <lib-title-actions-toolbar
-    title="Editing notebook {{notebookName}}"
+    title="Editing notebook {{ notebookName }}"
     [backButton]="true"
     (back)="onCancel()"
     i18n-title
@@ -18,20 +18,23 @@
         (ngSubmit)="onSubmit()"
         [formGroup]="formCtrl"
       >
-
         <lib-form-section title="Image" i18n-title>
           <div class="container">
-            <mat-icon 
-              *ngIf="notebookImageType === 'jupyter'" 
-              class="server-type-icon icon-inline" 
-              svgIcon="jupyter-icon">
+            <mat-icon
+              *ngIf="notebookImageType === 'jupyter'"
+              class="server-type-icon icon-inline"
+              svgIcon="jupyter-icon"
+            >
             </mat-icon>
-            <mat-icon 
-              *ngIf="notebookImageType === 'sas'" 
-              class="server-type-icon icon-inline" 
-              svgIcon="sas-icon">
+            <mat-icon
+              *ngIf="notebookImageType === 'sas'"
+              class="server-type-icon icon-inline"
+              svgIcon="sas-icon"
+            >
             </mat-icon>
-            <span class="text-inline" data-cy-image-name>{{notebookImage}}</span>
+            <span class="text-inline" data-cy-image-name>{{
+              notebookImage
+            }}</span>
           </div>
         </lib-form-section>
 

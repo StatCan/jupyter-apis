@@ -93,12 +93,12 @@ const statusProcessedObject = {
   key: 'runningKey',
 };
 
-const formattedResourcesObject =   {
-  cpu: "0.5",
-  cpuLimit: "0.5",
-  memory: "2",
-  memoryLimit: "2"
-}
+const formattedResourcesObject = {
+  cpu: '0.5',
+  cpuLimit: '0.5',
+  memory: '2',
+  memoryLimit: '2',
+};
 
 export const mockNotebook: NotebookRawObject = {
   apiVersion: 'kubeflow.org/v1beta1',
@@ -107,5 +107,5 @@ export const mockNotebook: NotebookRawObject = {
   spec: specObject,
   status: statusObject,
   processed_status: statusProcessedObject,
-  formatted_resources: formattedResourcesObject
+  formatted_resources: formattedResourcesObject,
 };

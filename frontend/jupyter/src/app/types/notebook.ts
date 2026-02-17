@@ -80,11 +80,11 @@ export interface NotebookFormObject {
 export interface NotebookEditFormObject {
   name: string;
   namespace: string;
-	cpu: number | string;
-	cpuLimit: number | string;
-	memory: number | string;
+  cpu: number | string;
+  cpuLimit: number | string;
+  memory: number | string;
   memoryLimit: number | string;
-	datavols: any[];
+  datavols: any[];
 }
 
 export interface NotebookRawObject {
@@ -103,9 +103,9 @@ export interface NotebookRawObject {
   };
   processed_status: Status;
   formatted_resources: {
-    cpu: string,
-    cpuLimit: string,
-    memory: string,
-    memoryLimit: string,
-  }
+    cpu: string;
+    cpuLimit: string;
+    memory: string;
+    memoryLimit: string;
+  };
 }

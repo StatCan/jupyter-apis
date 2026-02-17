@@ -211,7 +211,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
       case 'nb_edit':
         if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
-          this.router.navigate([`/notebook/edit/${a.data.namespace}/${a.data.name}`]);
+          this.router.navigate([
+            `/notebook/edit/${a.data.namespace}/${a.data.name}`,
+          ]);
           break;
         }
       case 'name:link':
@@ -441,7 +443,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         pvc.usageRounded = roundedVal.toString() + '%';
       } else {
         // need to be set to empty string for the table filter
-        pvc.usageRounded = "";
+        pvc.usageRounded = '';
       }
       if (pvc.usedBytes) {
         // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
@@ -451,7 +453,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         });
       } else {
         // need to be set to empty string for the table filter
-        pvc.usedBytesFormatted = "";
+        pvc.usedBytesFormatted = '';
       }
     }
 

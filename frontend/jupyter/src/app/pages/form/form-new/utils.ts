@@ -191,7 +191,7 @@ export function initDataVolumeControl(form: FormGroup, config: Config) {
     let volControl = createFormGroupFromVolume(vol, false);
 
     // Marks the mount path as dirty to prevent the value being overriden by the default mount path
-    volControl.get("mount").markAsDirty();
+    volControl.get('mount').markAsDirty();
 
     datavolsArray.push(volControl);
   }

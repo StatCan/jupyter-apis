@@ -15,7 +15,11 @@ import {
   SnackType,
 } from 'kubeflow';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getEditFormDefaults, initEditFormControls, setConfigForNotebook } from './utils';
+import {
+  getEditFormDefaults,
+  initEditFormControls,
+  setConfigForNotebook,
+} from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
 
 import { environment } from '@app/environment';
@@ -85,7 +89,8 @@ export class FormEditComponent
         this.notebookName = params.notebookName;
         this.namespace = params.namespace;
 
-        this.notebooksub = this.backend.getNotebook(params.namespace, params.notebookName)
+        this.notebooksub = this.backend
+          .getNotebook(params.namespace, params.notebookName)
           .subscribe(nb => {
             // Return if notebook has no containers
             if (!nb?.spec?.template?.spec?.containers) {
@@ -100,21 +105,22 @@ export class FormEditComponent
               }
 
               this.notebookImage = cn.image;
-              this.notebookImageType = nb.metadata.annotations['notebooks.kubeflow.org/server-type'];
+              this.notebookImageType =
+                nb.metadata.annotations['notebooks.kubeflow.org/server-type'];
 
               // Initialize form controls with notebook values
               setConfigForNotebook(nb, this.config);
               break;
             }
-            
+
             initEditFormControls(this.formCtrl, this.config);
 
             // Get mounted volumes from namespace
             this.backend.getNotebooks(params.namespace).subscribe(notebooks => {
               this.mountedVolumes.clear();
-              notebooks.map(nb =>{
+              notebooks.map(nb => {
                 //Only look for volumes from other notebooks
-                if(nb.name !== params.notebookName){
+                if (nb.name !== params.notebookName) {
                   return nb.volumes.map(v => {
                     this.mountedVolumes.add(v);
                   });
@@ -123,8 +129,7 @@ export class FormEditComponent
             });
 
             this.notebookInfoLoaded = true;
-          }
-        );
+          });
       });
     });
 

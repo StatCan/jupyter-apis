@@ -109,14 +109,14 @@ function duplicateMountPathValidator(): ValidatorFn {
       const formArray = control.parent
         ? (control.parent.parent as FormArray)
         : null;
-        
+
       if (formArray) {
         const hasWorkspaceVol =
           formArray.parent?.get('workspace')?.value.newPvc ||
           formArray.parent?.get('workspace')?.value.existingSource
             ? true
             : false;
-            
+
         if (hasWorkspaceVol && control.value === '/home/jovyan') {
           return { duplicate: true };
         }
@@ -249,10 +249,13 @@ export function createNewPvcFormGroupFromVolume(
   });
 }
 
-export function createFormGroupFromVolume(volume: Volume, isWorkspace: boolean): FormGroup {
+export function createFormGroupFromVolume(
+  volume: Volume,
+  isWorkspace: boolean,
+): FormGroup {
   let validators = [Validators.required];
-  if(!isWorkspace){
-    validators = mountValidators
+  if (!isWorkspace) {
+    validators = mountValidators;
   }
 
   if (volume.newPvc) {
@@ -261,7 +264,7 @@ export function createFormGroupFromVolume(volume: Volume, isWorkspace: boolean):
       newPvc: createNewPvcFormGroupFromVolume(volume.newPvc),
     });
   }
-  
+
   return new FormGroup({
     mount: new FormControl(volume.mount, validators),
     existingSource: createExistingSourceFormGroupFromVolume(

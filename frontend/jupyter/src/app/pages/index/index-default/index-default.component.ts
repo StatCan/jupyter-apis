@@ -268,9 +268,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   // Triggers the dialog and calls the code if it is positive. 
   public keepAliveClicked(notebook: NotebookProcessedObject) {
-    //Open the dialog 
-    // Doesn't actually open anything
-
     const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
     const ref = this.dialog.open(DelayDialogComponent,
       {
@@ -279,10 +276,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       });
 
     ref.afterClosed().subscribe(res => {
-      //If not clicked a button theres an issue
       const config: SnackBarConfig = {
         data: {
-          msg: `V`,
+          msg: ``,
           snackType: SnackType.Success,
         },
         duration: 2000,
@@ -292,15 +288,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         // If we want to add any messages
       } else {
         if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
-          config.data.msg = "Status accepted " + res.hours;
+          config.data.msg = $localize`Status accepted ` + res.hours;
           this.actions
             .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
             .subscribe(_ => {
               this.router.navigate(['']);
             });
+          this.snackBar.open(config);
         }
       }
-      this.snackBar.open(config);
+      
     });
 
 
@@ -309,11 +306,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // This is the code for the delay popup
   private getDelayDialogConfig(name: string): DelayDialogConfig {
     return {
-      title: `Delay auto-shutdown for ${name}`,
-      message: `This will keep the notebook alive for the number of hours specified`,
-      accept: `Submit`,
+      title: $localize`Delay auto-shutdown for ${name}`,
+      message: $localize`This will keep the notebook alive for the number of hours specified`,
+      accept: $localize`Submit`,
       confirmColor: 'primary',
-      cancel: `Cancel`,
+      cancel: $localize`Cancel`,
       error: '',
       width: '600px',
       hours: '0',
@@ -403,7 +400,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       {
         name: 'keep_alive',
         status: autoShutdownAvailable,
-        text: `Delay auto-shutdown`,
+        text: $localize`Delay auto-shutdown`,
         matIcon: 'av_timer',
       }
     ];

@@ -9,12 +9,15 @@ import {
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
+  DELAY_DIALOG_RESP,
   SnackType,
   ToolbarButton,
   PollerService,
   DashboardState,
   SnackBarConfig,
   DialogConfig,
+  DelayDialogConfig,
+  DelayDialogComponent,
 } from 'kubeflow';
 import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -39,7 +42,22 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-
+import {
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  FormGroup,
+  AbstractControl,
+  Validators,
+  ValidatorFn,
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+} from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 @Component({
   selector: 'app-index-default',
   templateUrl: './index-default.component.html',
@@ -102,7 +120,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public poller: PollerService,
     public actions: ActionsService,
     public dialog: MatDialog,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.kubecostPoller = new ExponentialBackoff({
@@ -248,13 +266,55 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Triggers the dialog and calls the code if it is positive. 
   public keepAliveClicked(notebook: NotebookProcessedObject) {
-    //Check the notebook status
-    this.actions
-      .updateKeepAlive(notebook.namespace, notebook.name, "12")
-      .subscribe(_ => {
-        this.router.navigate(['']);
+    const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
+    const ref = this.dialog.open(DelayDialogComponent,
+      {
+        data: delayDialogConfig,
+        width: '600px',
       });
+
+    ref.afterClosed().subscribe(res => {
+      const config: SnackBarConfig = {
+        data: {
+          msg: ``,
+          snackType: SnackType.Success,
+        },
+        duration: 2000,
+      };
+
+      if (res === undefined || res.status === DELAY_DIALOG_RESP.CANCEL) {
+        // If we want to add any messages
+      } else {
+        if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
+          config.data.msg = $localize`Updating last activity to add ` + res.hours + ` hours`;
+          this.actions
+            .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
+            .subscribe(_ => {
+              this.router.navigate(['']);
+            });
+          this.snackBar.open(config);
+        }
+      }
+      
+    });
+
+
+  }
+
+  // This is the code for the delay popup
+  private getDelayDialogConfig(name: string): DelayDialogConfig {
+    return {
+      title: $localize`Delay auto-shutdown for ${name}`,
+      message: $localize`This will keep the notebook alive for the number of hours specified`,
+      accept: $localize`Submit`,
+      confirmColor: 'primary',
+      cancel: $localize`Cancel`,
+      error: '',
+      width: '600px',
+      hours: '0',
+    };
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {
@@ -318,6 +378,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       text: notebook.name,
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
+
+    // Status for auto-shutdown
+    // Only a notebook that is active aka has a "last_activity"
+    // If notebook not ready then it needs to be disabled
+    let autoShutdownAvailable = notebook.status.phase != STATUS_TYPE.READY ? STATUS_TYPE.UNAVAILABLE : STATUS_TYPE.READY;
+
     notebook.settings = [
       {
         name: 'nb_details',
@@ -333,9 +399,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       },
       {
         name: 'keep_alive',
-        status: notebook.status.phase,
-        text: "KEPP ALIVE",
-        matIcon: 'heart',
+        status: autoShutdownAvailable,
+        text: $localize`Delay auto-shutdown`,
+        matIcon: 'av_timer',
       }
     ];
   }

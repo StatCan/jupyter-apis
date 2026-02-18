@@ -21,7 +21,7 @@ RUN npm run build -- --output-path=./dist/default --configuration=production
 RUN ./node_modules/.bin/ng build --configuration production --localize
 
 # Stage 1: Build with the golang image
-FROM golang:1.21-alpine AS backend
+FROM golang:1.26-alpine AS backend
 RUN apk add git
 WORKDIR /go/src/github.com/StatCan/jupyter-apis
 COPY go.mod .

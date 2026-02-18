@@ -120,7 +120,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public poller: PollerService,
     public actions: ActionsService,
     public dialog: MatDialog,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.kubecostPoller = new ExponentialBackoff({
@@ -272,13 +272,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     // Doesn't actually open anything
 
     const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
-    const ref = this.dialog.open(DelayDialogComponent, 
+    const ref = this.dialog.open(DelayDialogComponent,
       {
         data: delayDialogConfig,
         width: '600px',
       });
-    
-     ref.afterClosed().subscribe(res => {
+
+    ref.afterClosed().subscribe(res => {
       //If not clicked a button theres an issue
       const config: SnackBarConfig = {
         data: {
@@ -288,7 +288,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         duration: 2000,
       };
 
-      if (res === undefined || res.status=== DELAY_DIALOG_RESP.CANCEL){
+      if (res === undefined || res.status === DELAY_DIALOG_RESP.CANCEL) {
         // If we want to add any messages
       } else {
         if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
@@ -301,7 +301,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
       }
       this.snackBar.open(config);
-     });
+    });
 
 
   }
@@ -381,6 +381,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       text: notebook.name,
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
+
+    // Status for auto-shutdown
+    // Only a notebook that is active aka has a "last_activity"
+    // If notebook not ready then it needs to be disabled
+    let autoShutdownAvailable = notebook.status.phase != STATUS_TYPE.READY ? STATUS_TYPE.UNAVAILABLE : STATUS_TYPE.READY;
+
     notebook.settings = [
       {
         name: 'nb_details',
@@ -396,9 +402,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       },
       {
         name: 'keep_alive',
-        status: notebook.status.phase,
-        text: "KEPP ALIVE",
-        matIcon: 'heart',
+        status: autoShutdownAvailable,
+        text: `Delay auto-shutdown`,
+        matIcon: 'av_timer',
       }
     ];
   }

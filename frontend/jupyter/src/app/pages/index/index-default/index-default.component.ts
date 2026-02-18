@@ -288,7 +288,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         // If we want to add any messages
       } else {
         if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
-          config.data.msg = $localize`Status accepted ` + res.hours;
+          config.data.msg = $localize`Updating last activity to add ` + res.hours + ` hours`;
           this.actions
             .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
             .subscribe(_ => {

@@ -96,28 +96,27 @@ export function createNewPvcFormGroup(
 
 function duplicateMountPathValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    console.log("conval", control.value);
     if (control.value) {
       const formArray = control.parent
         ? (control.parent.parent as FormArray)
         : null;
-      console.log("conarr", formArray);
       if (formArray) {
         const hasWorkspaceVol =
           formArray.parent.get('workspace').value.newPvc ||
           formArray.parent.get('workspace').value.existingSource
             ? true
             : false;
-        
+
         // removes trailing slash from mount path if present
         const trimValue = String(control.value).replace(/\/+$/, '');
-        console.log("trim", trimValue);
         if (hasWorkspaceVol && trimValue === '/home/jovyan') {
           return { duplicate: true };
         }
 
         // get the list of mount paths with any trailing slash removed
-        const mounts = formArray.value.map(e => String(e.mount).replace(/\/+$/, ''));
+        const mounts = formArray.value.map(e =>
+          String(e.mount).replace(/\/+$/, ''),
+        );
 
         const indexOf = mounts.indexOf(trimValue);
         return indexOf >= 0 && indexOf < mounts.lastIndexOf(trimValue)
@@ -136,9 +135,7 @@ export function createNewPvcVolumeFormGroup(
     name: new FormControl('', []),
     mount: new FormControl('', [
       Validators.required,
-      Validators.pattern(
-        /^\/home\/jovyan(\/.*)?$/,
-      ),
+      Validators.pattern(/^\/home\/jovyan(\/.*)?$/),
       duplicateMountPathValidator(),
     ]),
     newPvc: createNewPvcFormGroup(name),
@@ -151,9 +148,7 @@ export function createExistingVolumeFormGroup(): FormGroup {
     name: new FormControl('', []),
     mount: new FormControl('', [
       Validators.required,
-      Validators.pattern(
-        /^\/home\/jovyan(\/.*)?$/,
-      ),
+      Validators.pattern(/^\/home\/jovyan(\/.*)?$/),
       duplicateMountPathValidator(),
     ]),
     existingSource: createExistingSourceFormGroup(),

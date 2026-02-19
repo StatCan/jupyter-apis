@@ -100,7 +100,7 @@ function duplicateMountPathValidator(): ValidatorFn {
       const formArray = control.parent
         ? (control.parent.parent as FormArray)
         : null;
-        
+
       if (formArray) {
         const hasWorkspaceVol =
           formArray.parent.get('workspace').value.newPvc ||

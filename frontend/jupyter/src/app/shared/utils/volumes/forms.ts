@@ -13,9 +13,7 @@ import { EXISTING_SOURCE, Volume } from 'src/app/types';
 // Helper values
 const mountValidators: ValidatorFn[] = [
   Validators.required,
-  Validators.pattern(
-    /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
-  ),
+  Validators.pattern(/^\/home\/jovyan(\/.*)?$/),
   duplicateMountPathValidator(),
 ];
 
@@ -117,13 +115,19 @@ function duplicateMountPathValidator(): ValidatorFn {
             ? true
             : false;
 
-        if (hasWorkspaceVol && control.value === '/home/jovyan') {
+        // removes trailing slash from mount path if present
+        const trimValue = String(control.value).replace(/\/+$/, '');
+        if (hasWorkspaceVol && trimValue === '/home/jovyan') {
           return { duplicate: true };
         }
 
-        const mounts = formArray.value.map(e => e.mount);
-        const indexOf = mounts.indexOf(control.value);
-        return indexOf >= 0 && indexOf < mounts.lastIndexOf(control.value)
+        // get the list of mount paths with any trailing slash removed
+        const mounts = formArray.value.map(e =>
+          String(e.mount).replace(/\/+$/, ''),
+        );
+
+        const indexOf = mounts.indexOf(trimValue);
+        return indexOf >= 0 && indexOf < mounts.lastIndexOf(trimValue)
           ? { duplicate: true }
           : null;
       }

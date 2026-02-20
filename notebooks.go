@@ -1349,12 +1349,12 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 	if req.Mount == "" {
 		return fmt.Errorf("mount path is required")
 	} else {
-		matched, err := regexp.MatchString(`^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$`, req.Mount)
+		matched, err := regexp.MatchString(`^\/home\/jovyan(\/.*)?$`, req.Mount)
 		if err != nil {
 			log.Printf("error validating volume mount path with regex: %v", err)
 			return fmt.Errorf("an error occurred while validating the volume mount path")
 		} else if !matched {
-			return fmt.Errorf("mount path must be /home/jovyan, /opt/openmpp, or any of their subdirectories")
+			return fmt.Errorf("mount path must be /home/jovyan or any of its subdirectories")
 		}
 	}
 

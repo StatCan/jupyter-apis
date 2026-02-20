@@ -1131,7 +1131,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1381043506689898239" datatype="html">
-        <source>The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie</source>
+        <source>The accepted locations are /home/jovyan or any of its subdirectories</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/mount/mount.component.ts</context>
           <context context-type="linenumber">84</context>

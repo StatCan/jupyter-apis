@@ -52,7 +52,7 @@ export class FormEditComponent
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
     public router: Router,
-    public popup: SnackBarService,
+    public snackbar: SnackBarService,
     public cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     public iconRegistry: MatIconRegistry,
@@ -197,21 +197,21 @@ export class FormEditComponent
         snackType: SnackType.Info,
       },
     };
-    this.popup.open(configInfo);
+    this.snackbar.open(configInfo);
 
     // Format form data
     const notebook = this.getSubmitNotebook();
 
     // Submit to backend
     this.backend.editNotebook(notebook).subscribe(() => {
-      this.popup.close();
+      this.snackbar.close();
       const configSuccess: SnackBarConfig = {
         data: {
           msg: $localize`Notebook edited successfully.`,
           snackType: SnackType.Success,
         },
       };
-      this.popup.open(configSuccess);
+      this.snackbar.open(configSuccess);
       this.goToNotebooks();
     });
   }

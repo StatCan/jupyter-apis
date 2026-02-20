@@ -787,7 +787,7 @@
       </trans-unit>
       <trans-unit id="01817bd08ce56cd2966da83498f862a5c3984cc8" datatype="html">
         <source>Requested CPUs</source>
-        <target>CPU demandés</target>
+        <target>CPU demandé(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
           <context context-type="linenumber">15</context>
@@ -795,7 +795,7 @@
       </trans-unit>
       <trans-unit id="329af8132d78efd4ab83314aadb6e0ae02c71398" datatype="html">
         <source>Requested Memory Gi</source>
-        <target>Mémoire demandées, en Gi</target>
+        <target>Mémoire demandée, en Gi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1199,7 +1199,7 @@
       </trans-unit>
       <trans-unit id="ae905719946782d29b51de5128df22463ad168e0" datatype="html">
         <source>Volume that will be mounted in your home directory.</source>
-        <target>Le volume qui sera monté dans votre directoire maison</target>
+        <target>Le volume qui sera monté dans votre répertoire maison</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>
           <context context-type="linenumber">4</context>

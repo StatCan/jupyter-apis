@@ -38,7 +38,6 @@ export interface GetPVCResponseObject {
 }
 
 export interface Volume {
-  name: string;
   mount: string;
   newPvc?: V1PersistentVolumeClaim;
   existingSource?: V1Volume;

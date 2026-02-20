@@ -43,7 +43,7 @@ export class FormNewComponent
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
     public router: Router,
-    public popup: SnackBarService,
+    public snackbar: SnackBarService,
     public cdr: ChangeDetectorRef,
     @Inject(LOCALE_ID) public localeId: string,
   ) {}
@@ -179,18 +179,18 @@ export class FormNewComponent
         snackType: SnackType.Info,
       },
     };
-    this.popup.open(configInfo);
+    this.snackbar.open(configInfo);
 
     const notebook = this.getSubmitNotebook();
     this.backend.createNotebook(notebook).subscribe(() => {
-      this.popup.close();
+      this.snackbar.close();
       const configSuccess: SnackBarConfig = {
         data: {
           msg: $localize`Notebook created successfully.`,
           snackType: SnackType.Success,
         },
       };
-      this.popup.open(configSuccess);
+      this.snackbar.open(configSuccess);
       this.goToNotebooks();
     });
   }

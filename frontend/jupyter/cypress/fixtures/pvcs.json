@@ -121,6 +121,60 @@
       }
     },
     {
+      "name": "test-notebook-data",
+      "namespace": "kubeflow-user",
+      "status": {
+        "message": "Pending: This volume will be bound when its first consumer is created. E.g., when you first browse its contents, or attach it to a notebook server",
+        "phase": "unavailable",
+        "state": "WaitForFirstConsumer",
+        "key": "pvcPendingUnavailable",
+        "eventMessage": "waiting for first consumer to be created before binding"
+      },
+      "age": "2026-02-06T14:57:17Z",
+      "capacity": "0",
+      "modes": [
+        "ReadWriteOnce"
+      ],
+      "class": "default",
+      "notebooks": [
+        "test-notebook"
+      ],
+      "labels": null,
+      "viewer": {
+        "status": "",
+        "url": ""
+      },
+      "usage": "",
+      "usedBytes": ""
+    },
+    {
+      "name": "test-notebook-volume",
+      "namespace": "kubeflow-user",
+      "status": {
+        "message": "Pending: This volume will be bound when its first consumer is created. E.g., when you first browse its contents, or attach it to a notebook server",
+        "phase": "unavailable",
+        "state": "WaitForFirstConsumer",
+        "key": "pvcPendingUnavailable",
+        "eventMessage": "waiting for first consumer to be created before binding"
+      },
+      "age": "2026-02-06T14:57:17Z",
+      "capacity": "0",
+      "modes": [
+        "ReadWriteOnce"
+      ],
+      "class": "default",
+      "notebooks": [
+        "test-notebook"
+      ],
+      "labels": null,
+      "viewer": {
+        "status": "",
+        "url": ""
+      },
+      "usage": "",
+      "usedBytes": ""
+    },
+    {
       "name":"test-pro-b-volume",
       "namespace":"kubeflow-user",
       "status":{

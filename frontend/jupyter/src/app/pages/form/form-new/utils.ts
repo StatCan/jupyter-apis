@@ -173,12 +173,12 @@ export function initFormControls(
 
 export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
   const workspace = config.workspaceVolume.value;
-  if (!workspace) {
+  if (!workspace || (!workspace.existingSource && !workspace.newPvc)) {
     form.get('workspace').disable();
     return;
   }
 
-  form.setControl('workspace', createFormGroupFromVolume(workspace));
+  form.setControl('workspace', createFormGroupFromVolume(workspace, true));
 }
 
 export function initDataVolumeControl(form: FormGroup, config: Config) {
@@ -188,7 +188,12 @@ export function initDataVolumeControl(form: FormGroup, config: Config) {
   form.setControl('datavols', datavolsArray);
 
   for (const vol of datavols) {
-    datavolsArray.push(createFormGroupFromVolume(vol));
+    let volControl = createFormGroupFromVolume(vol, false);
+
+    // Marks the mount path as dirty to prevent the value being overriden by the default mount path
+    volControl.get('mount').markAsDirty();
+
+    datavolsArray.push(volControl);
   }
 }
 

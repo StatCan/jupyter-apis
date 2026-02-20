@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { FormNewComponent } from './pages/form/form-new/form-new.component';
+import { FormEditComponent } from './pages/form/form-edit/form-edit.component';
 import { IndexDefaultComponent } from './pages/index/index-default/index-default.component';
 import { NotebookPageComponent } from './pages/notebook-page/notebook-page.component';
 import { VolumeDetailsPageComponent } from './pages/volume-details-page/volume-details-page.component';
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'notebook/details/:namespace/:notebookName',
     component: NotebookPageComponent,
+  },
+  {
+    path: 'notebook/edit/:namespace/:notebookName',
+    component: FormEditComponent,
   },
   {
     path: 'volume/details/:namespace/:pvcName',

@@ -10,6 +10,15 @@ import {
 import { V1PersistentVolumeClaim, V1Volume } from '@kubernetes/client-node';
 import { EXISTING_SOURCE, Volume } from 'src/app/types';
 
+// Helper values
+const mountValidators: ValidatorFn[] = [
+  Validators.required,
+  Validators.pattern(
+    /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
+  ),
+  duplicateMountPathValidator(),
+];
+
 /*
  * Form Group helpers
  */
@@ -103,8 +112,8 @@ function duplicateMountPathValidator(): ValidatorFn {
 
       if (formArray) {
         const hasWorkspaceVol =
-          formArray.parent.get('workspace').value.newPvc ||
-          formArray.parent.get('workspace').value.existingSource
+          formArray.parent?.get('workspace')?.value.newPvc ||
+          formArray.parent?.get('workspace')?.value.existingSource
             ? true
             : false;
 
@@ -127,14 +136,7 @@ export function createNewPvcVolumeFormGroup(
   name = '{notebook-name}-volume',
 ): FormGroup {
   return new FormGroup({
-    name: new FormControl('', []),
-    mount: new FormControl('', [
-      Validators.required,
-      Validators.pattern(
-        /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
-      ),
-      duplicateMountPathValidator(),
-    ]),
+    mount: new FormControl('', mountValidators),
     newPvc: createNewPvcFormGroup(name),
   });
 }
@@ -142,14 +144,7 @@ export function createNewPvcVolumeFormGroup(
 // For volume
 export function createExistingVolumeFormGroup(): FormGroup {
   return new FormGroup({
-    name: new FormControl('', []),
-    mount: new FormControl('', [
-      Validators.required,
-      Validators.pattern(
-        /^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$/,
-      ),
-      duplicateMountPathValidator(),
-    ]),
+    mount: new FormControl('', mountValidators),
     existingSource: createExistingSourceFormGroup(),
   });
 }
@@ -254,16 +249,24 @@ export function createNewPvcFormGroupFromVolume(
   });
 }
 
-export function createFormGroupFromVolume(volume: Volume): FormGroup {
+export function createFormGroupFromVolume(
+  volume: Volume,
+  isWorkspace: boolean,
+): FormGroup {
+  let validators = [Validators.required];
+  if (!isWorkspace) {
+    validators = mountValidators;
+  }
+
   if (volume.newPvc) {
     return new FormGroup({
-      mount: new FormControl(volume.mount, [Validators.required]),
+      mount: new FormControl(volume.mount, validators),
       newPvc: createNewPvcFormGroupFromVolume(volume.newPvc),
     });
   }
 
   return new FormGroup({
-    mount: new FormControl(volume.mount, [Validators.required]),
+    mount: new FormControl(volume.mount, validators),
     existingSource: createExistingSourceFormGroupFromVolume(
       volume.existingSource,
     ),

@@ -154,10 +154,13 @@
         "phase": "ready",
         "state": ""
       },
+      "volumes": [
+        "test-pro-b-volume"
+      ],
       "labels":{
         "data.statcan.gc.ca/inject-blob-volumes":"true"
       }
-   }
+    }
   ],
   "status": 200,
   "success": true

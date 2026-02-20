@@ -22,7 +22,7 @@ jobs:
 
     - uses: actions/setup-go@v2
       with:
-        go-version: '1.21.5'
+        go-version: '1.26.0'
 
     - name: Gather dependencies
       run: |

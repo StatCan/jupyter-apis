@@ -209,6 +209,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.router.navigate([a.data.link.url]);
           break;
         }
+      case 'nb_edit':
+        if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
+          this.router.navigate([
+            `/notebook/edit/${a.data.namespace}/${a.data.name}`,
+          ]);
+          break;
+        }
       case 'name:link':
         if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
@@ -322,6 +329,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         matIcon: 'info',
       },
       {
+        name: 'nb_edit',
+        status: notebook.status.phase,
+        text: $localize`Edit`,
+        matIcon: 'edit',
+      },
+      {
         name: 'deleteAction',
         status: this.processDeletionActionStatus(notebook),
         text: $localize`Delete`,
@@ -428,6 +441,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       if (pvc.usage) {
         let roundedVal = Math.ceil(parseFloat(pvc.usage));
         pvc.usageRounded = roundedVal.toString() + '%';
+      } else {
+        // need to be set to empty string for the table filter
+        pvc.usageRounded = '';
       }
       if (pvc.usedBytes) {
         // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
@@ -435,6 +451,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {
           binary: true,
         });
+      } else {
+        // need to be set to empty string for the table filter
+        pvc.usedBytesFormatted = '';
       }
     }
 

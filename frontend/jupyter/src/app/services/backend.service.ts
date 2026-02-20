@@ -15,6 +15,7 @@ import {
   PVCPostObject,
   GetPVCResponseObject,
   PVCUsageDataObject,
+  NotebookEditFormObject,
 } from '../types';
 import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
 import { EventObject } from '../types/event';
@@ -209,6 +210,15 @@ export class JWABackendService extends BackendService {
   // POST
   public createNotebook(notebook: NotebookFormObject): Observable<string> {
     const url = `api/namespaces/${notebook.namespace}/notebooks`;
+
+    return this.http.post<JWABackendResponse>(url, notebook).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => 'posted'),
+    );
+  }
+
+  public editNotebook(notebook: NotebookEditFormObject): Observable<string> {
+    const url = `api/namespaces/${notebook.namespace}/notebooks/${notebook.name}`;
 
     return this.http.post<JWABackendResponse>(url, notebook).pipe(
       catchError(error => this.handleError(error)),

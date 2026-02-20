@@ -16,20 +16,7 @@
     "spec":{
       "template":{
         "spec":{
-          "volumes":[
-            {
-              "name":"test-notebook-volume",
-              "persistentVolumeClaim":{
-                "claimName":"test-notebook-volume"
-              }
-            },
-            {
-              "name":"test-notebook-data",
-              "persistentVolumeClaim":{
-                "claimName":"test-notebook-data"
-              }
-            }
-          ],
+          "volumes":[],
           "containers":[
             {
               "name":"test-notebook",
@@ -50,16 +37,7 @@
                   "memory":"2Gi"
                 }
               },
-              "volumeMounts":[
-                {
-                  "name":"test-notebook-volume",
-                  "mountPath":"/home/jovyan"
-                },
-                {
-                  "name":"test-notebook-data",
-                  "mountPath":"/home/jovyan/test-notebook-data"
-                }
-              ],
+              "volumeMounts":[],
               "imagePullPolicy":"Always"
             }
           ]

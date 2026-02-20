@@ -115,6 +115,7 @@ type updatenotebookrequest struct {
 	CPULimit    resource.Quantity `json:"cpuLimit"`
 	Memory      resource.Quantity `json:"memory"`
 	MemoryLimit resource.Quantity `json:"memoryLimit"`
+	Workspace   volrequest        `json:"workspace"`
 	DataVolumes []volrequest      `json:"datavols"`
 }
 
@@ -150,13 +151,22 @@ type notebookapiresponse struct {
 	Notebook notebookresponse `json:"notebook"`
 }
 
+// For outputting string formatted resources specs
+type notebookresources struct {
+	Cpu         string `json:"cpu"`
+	CpuLimit    string `json:"cpuLimit"`
+	Memory      string `json:"memory"`
+	MemoryLimit string `json:"memoryLimit"`
+}
+
 type NotebookWithStatus struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec            kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
-	Status          kubeflowv1.NotebookStatus `json:"status,omitempty"`
-	ProcessedStatus status                    `json:"processed_status"`
+	Spec               kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
+	Status             kubeflowv1.NotebookStatus `json:"status,omitempty"`
+	ProcessedStatus    status                    `json:"processed_status"`
+	FormattedResources notebookresources         `json:"formatted_resources,omitempty"`
 }
 
 type getnotebookresponse struct {
@@ -990,6 +1000,15 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	notebook.Spec.Template.Spec.Volumes = nil
 	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = nil
 
+	// workspace volume
+	if req.Workspace.Mount != "" && (req.Workspace.NewPvc.NewPvcMetadata.Name != nil || req.Workspace.ExistingSource.PersistentVolumeClaim.ClaimName != nil) {
+		err = s.handleVolume(r.Context(), req.Workspace, notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
 	// for updating notebooks, all volumes are considered data volumes
 	for _, volreq := range req.DataVolumes {
 		err = s.handleVolume(r.Context(), volreq, notebook)
@@ -1009,6 +1028,22 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 		Success: true,
 		Status:  http.StatusOK,
 	})
+}
+
+func formatCpuCores(cpu resource.Quantity) string {
+	// MiliValue() returns the value in 1/1000 of a core
+	cores := float64(cpu.MilliValue()) / 1000.0
+
+	return strconv.FormatFloat(cores, 'f', -1, 64)
+}
+
+func formatMemoryToGibibytes(memory resource.Quantity) string {
+	// Convert bytes to Gi (1 Gi = 1024 Mi, 1 Mi = 1024 Ki)
+	// 1 Gi = 1024 * 1024 * 1024 bytes
+	// resouce.Millivalue is 1/1000 bytes (400m = 0.4 bytes)
+	gibibytes := float64(memory.MilliValue()) / (1024 * 1024 * 1024 * 1000)
+
+	return strconv.FormatFloat(gibibytes, 'f', -1, 64)
 }
 
 func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
@@ -1037,6 +1072,9 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 		status.Conditions[i].Message = getUserFriendlyMessage(&status.Conditions[i])
 	}
 
+	// Assumes that there will only be one container in the notebook specs, as per the notebook creation
+	nb_resouces := nb.Spec.Template.Spec.Containers[0].Resources
+
 	resp := &getnotebookresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
@@ -1048,6 +1086,12 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 			Spec:            nb.Spec,
 			Status:          nb.Status,
 			ProcessedStatus: processedStatus,
+			FormattedResources: notebookresources{
+				Cpu:         formatCpuCores(*nb_resouces.Requests.Cpu()),
+				CpuLimit:    formatCpuCores(*nb_resouces.Limits.Cpu()),
+				Memory:      formatMemoryToGibibytes(*nb_resouces.Requests.Memory()),
+				MemoryLimit: formatMemoryToGibibytes(*nb_resouces.Limits.Memory()),
+			},
 		},
 	}
 
@@ -1273,6 +1317,13 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 	// Resource constraints
 	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
+	// Workspace Volume
+	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
+	err := validateNotebookVolume(request.Workspace, validSizes)
+	if err != nil {
+		validationErrors = append(validationErrors, err.Error())
+	}
+
 	// Data volumes
 	if request.DataVolumes != nil {
 		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
@@ -1290,7 +1341,7 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 
 	// Allow for Notebooks creation with no Workspace Volumes
-	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.NewPvc.NewPvcSpec.AccessModes == nil {
+	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.ExistingSource.PersistentVolumeClaim.ClaimName == nil {
 		return nil
 	}
 

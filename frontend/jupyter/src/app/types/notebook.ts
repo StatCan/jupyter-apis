@@ -42,6 +42,10 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
     url: string;
     queryParams?: Params | null;
   };
+  link_edit: {
+    url: string;
+    queryParams?: Params | null;
+  };
   settings?: {
     name: string;
     matIcon?: string;
@@ -73,6 +77,16 @@ export interface NotebookFormObject {
   configurations: PodDefault[];
 }
 
+export interface NotebookEditFormObject {
+  name: string;
+  namespace: string;
+  cpu: number | string;
+  cpuLimit: number | string;
+  memory: number | string;
+  memoryLimit: number | string;
+  datavols: any[];
+}
+
 export interface NotebookRawObject {
   apiVersion: string;
   kind: string;
@@ -88,4 +102,10 @@ export interface NotebookRawObject {
     readyReplicas: number;
   };
   processed_status: Status;
+  formatted_resources: {
+    cpu: string;
+    cpuLimit: string;
+    memory: string;
+    memoryLimit: string;
+  };
 }

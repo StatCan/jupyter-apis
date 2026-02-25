@@ -184,7 +184,7 @@ type updatenotebookrequest struct {
 }
 
 type delaycullingrequest struct {
-	TimeHours int `json:"timehours"`
+	TimeHours string `json:"timehours"`
 }
 
 func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
@@ -992,12 +992,12 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// numKeepAliveTime, err := strconv.Atoi(req.TimeHours)
-	// if err != nil {
-	// 	fmt.Println("Error while parsing:", err)
-	// 	return
-	// }
-	updatedTime := time.Now().Add(time.Duration(req.TimeHours) * time.Hour)
+	numKeepAliveTime, err := strconv.Atoi(req.TimeHours)
+	if err != nil {
+		fmt.Println("Error while parsing:", err)
+		return
+	}
+	updatedTime := time.Now().Add(time.Duration(numKeepAliveTime) * time.Hour)
 	log.Printf("Updated time notebook %q", updatedTime);
 	if notebook.Annotations == nil {
 		notebook.Annotations = map[string]string{}

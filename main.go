@@ -265,7 +265,7 @@ func main() {
 		},
 	}, s.UpdateNotebook)).Methods("PATCH")
 
-	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}/keepalive/{keepalive}", s.checkAccess(authorizationv1.SubjectAccessReview{
+	router.HandleFunc("/api/namespaces/{namespace}/notebooks/{notebook}/keepalive", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{
 				Group:    kubeflowv1.SchemeGroupVersion.Group,

@@ -183,6 +183,10 @@ type updatenotebookrequest struct {
 	Stopped bool `json:"stopped"`
 }
 
+type delaycullingrequest struct {
+	TimeHours int `json:"timehours"`
+}
+
 func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
 	response := gpuresponse{}
 
@@ -895,6 +899,7 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// Meow
 func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespaceName := vars["namespace"]
@@ -962,8 +967,7 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	vars := mux.Vars(r)
 	namespaceName := vars["namespace"]
 	notebookName := vars["notebook"]
-	keepAliveTime := vars["keepalive"]
-	log.Printf("updating notebook %q for %q with additional time", notebookName, namespaceName, keepAliveTime)
+	log.Printf("updating notebook %q for %q with additional time", notebookName, namespaceName)
 	// Todo: validate that the keepalive value is valid.
 
 	// Read the incoming notebook
@@ -973,8 +977,8 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 		return
 	}
 	defer r.Body.Close()
-
-	var req updatenotebookrequest
+	//json object so make it a sturct
+	var req delaycullingrequest
 	err = json.Unmarshal(body, &req)
 	if err != nil {
 		s.error(w, r, err)
@@ -988,21 +992,21 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	updatedNotebook := notebook.DeepCopy()
-	numKeepAliveTime, err := strconv.Atoi(keepAliveTime)
-	if err != nil {
-		fmt.Println("Error while parsing:", err)
-		return
-	}
-	updatedTime := time.Now().Add(time.Duration(numKeepAliveTime) * time.Hour)
-	if updatedNotebook.Annotations == nil {
-		updatedNotebook.Annotations = map[string]string{}
+	// numKeepAliveTime, err := strconv.Atoi(req.TimeHours)
+	// if err != nil {
+	// 	fmt.Println("Error while parsing:", err)
+	// 	return
+	// }
+	updatedTime := time.Now().Add(time.Duration(req.TimeHours) * time.Hour)
+	log.Printf("Updated time notebook %q", updatedTime);
+	if notebook.Annotations == nil {
+		notebook.Annotations = map[string]string{}
 	}
 
-	updatedNotebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
+	notebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
 
 	if true {
-		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), updatedNotebook, metav1.UpdateOptions{})
+		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
 		if err != nil {
 			s.error(w, r, err)
 			return

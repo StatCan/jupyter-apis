@@ -252,9 +252,9 @@ export class JWABackendService extends BackendService {
   }
 
   public updateKeepAlive(namespace: string, name: string, timehours: string): Observable<string> {
-    const url = `api/namespaces/${namespace}/notebooks/${name}/keepalive/${timehours}`;
+    const url = `api/namespaces/${namespace}/notebooks/${name}/keepalive`;
 
-    return this.http.patch<JWABackendResponse>(url, { stopped: false }).pipe(
+    return this.http.patch<JWABackendResponse>(url, { timehours: timehours }).pipe(
       catchError(error => this.handleError(error)),
       map(_ => 'started'),
     );

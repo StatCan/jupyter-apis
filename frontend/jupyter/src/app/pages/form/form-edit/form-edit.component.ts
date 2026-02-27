@@ -119,7 +119,7 @@ export class FormEditComponent
               setConfigForNotebook(nb, this.config);
               break;
             }
-            
+
             initEditFormControls(this.formCtrl, this.config);
             // saves the initial notebook values for comparing changes before submit
             this.initNotebook = this.getSubmitNotebook();
@@ -193,7 +193,10 @@ export class FormEditComponent
     return text;
   }
 
-  getEditNotebookDialogConfig(name: string, simpleDiff: Set<String>): DialogConfig {
+  getEditNotebookDialogConfig(
+    name: string,
+    simpleDiff: Set<String>,
+  ): DialogConfig {
     return {
       title: $localize`Are you sure you want to edit notebook ${name}?`,
       content: $localize`These are the fields getting updated:`,
@@ -214,13 +217,13 @@ export class FormEditComponent
 
     for (const e of delta) {
       // since we currently hide cpuLimit and memoryLimit in the UI, let's also hide it from the diff report
-      if(e.path[0] === 'cpuLimit' || e.path[0] === 'memoryLimit'){
+      if (e.path[0] === 'cpuLimit' || e.path[0] === 'memoryLimit') {
         continue;
       }
 
       // format the field name that is being modified
       let fieldVal = '';
-      switch(e.path[0]){
+      switch (e.path[0]) {
         case 'cpu':
           fieldVal = $localize`CPU`;
           break;
@@ -243,9 +246,17 @@ export class FormEditComponent
     return simpleDiff;
   }
 
-  editNotebook(namespace: string, name: string, notebook: NotebookEditFormObject, simpleDelta: Set<String>): Observable<string> {
+  editNotebook(
+    namespace: string,
+    name: string,
+    notebook: NotebookEditFormObject,
+    simpleDelta: Set<String>,
+  ): Observable<string> {
     return new Observable(subscriber => {
-      const editDialogConfig = this.getEditNotebookDialogConfig(name, simpleDelta);
+      const editDialogConfig = this.getEditNotebookDialogConfig(
+        name,
+        simpleDelta,
+      );
 
       const ref = this.confirmDialog.open(editDialogConfig);
       const editSub = ref.componentInstance.applying$.subscribe(applying => {
@@ -307,12 +318,17 @@ export class FormEditComponent
       return;
     }
 
-    this.editNotebook(this.namespace, this.notebookName, notebook, formattedDelta).subscribe(result => {
+    this.editNotebook(
+      this.namespace,
+      this.notebookName,
+      notebook,
+      formattedDelta,
+    ).subscribe(result => {
       this.snackbar.close();
       if (result !== DIALOG_RESP.ACCEPT) {
         return;
       }
-      
+
       const configSuccess: SnackBarConfig = {
         data: {
           msg: $localize`Notebook edited successfully.`,

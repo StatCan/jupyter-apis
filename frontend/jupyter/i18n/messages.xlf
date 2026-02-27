@@ -597,25 +597,141 @@
         <source>The form contains invalid fields</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">191</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-new.component.ts</context>
           <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6341008356970107572" datatype="html">
+        <source>Are you sure you want to edit notebook <x id="PH" equiv-text="name"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">201</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1320079192727389835" datatype="html">
+        <source>These are the fields getting updated:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">202</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6160721227209921968" datatype="html">
+        <source>Warning: A running notebook server will automatically be restarted after being edited</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">204</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1571190680532015078" datatype="html">
+        <source>EDIT</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">205</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
+          <context context-type="linenumber">189</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6943486270557756671" datatype="html">
+        <source>CANCEL</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">207</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
+          <context context-type="linenumber">178</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/config.ts</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/config.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3856738131101495621" datatype="html">
+        <source>EDITING</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2885840307007437390" datatype="html">
+        <source>CPU</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">228</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1548129644093494406" datatype="html">
+        <source>Memory</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9157635657437103431" datatype="html">
+        <source>Workspace volume</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">234</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5209021234995049809" datatype="html">
+        <source>Data volume(s)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">237</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1899549432163903545" datatype="html">
+        <source>Edit request was sent.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">272</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6926883898539175208" datatype="html">
+        <source>Error <x id="PH" equiv-text="err"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">283</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
+          <context context-type="linenumber">112</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="183077734541413600" datatype="html">
         <source>Editing Notebook...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">303</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6450907786338815094" datatype="html">
         <source>Notebook edited successfully.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0a31a4739749d022f9c0265ef0db1779daf3bad" datatype="html">
@@ -1130,7 +1246,7 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1381043506689898239" datatype="html">
+      <trans-unit id="232897916703901927" datatype="html">
         <source>The accepted locations are /home/jovyan or any of its subdirectories</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/volume/mount/mount.component.ts</context>
@@ -1394,13 +1510,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
           <context context-type="linenumber">210</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1548129644093494406" datatype="html">
-        <source>Memory</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2074758921664227900" datatype="html">
@@ -1814,13 +1923,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
           <context context-type="linenumber">177</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1571190680532015078" datatype="html">
-        <source>EDIT</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
-          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="593520597412993745" datatype="html">
@@ -2238,21 +2340,6 @@
           <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6926883898539175208" datatype="html">
-        <source>Error <x id="PH" equiv-text="err"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">112</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">155</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4872314094100927318" datatype="html">
         <source>Starting Notebook server &apos;<x id="PH" equiv-text="name"/>&apos;...</source>
         <context-group purpose="location">
@@ -2279,21 +2366,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
           <context context-type="linenumber">175</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6943486270557756671" datatype="html">
-        <source>CANCEL</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">178</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3271166475979376691" datatype="html">

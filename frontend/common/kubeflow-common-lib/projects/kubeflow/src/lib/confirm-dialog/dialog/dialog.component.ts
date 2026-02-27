@@ -34,4 +34,8 @@ export class ConfirmDialogComponent implements OnInit {
   onCancelClicked(): void {
     this.dialogRef.close(DIALOG_RESP.CANCEL);
   }
+
+  shouldDisplayEditChanges(data: Set<String>): boolean {
+    return data && data.size > 0
+  }
 }

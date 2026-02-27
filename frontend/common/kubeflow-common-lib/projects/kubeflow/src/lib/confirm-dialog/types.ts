@@ -1,5 +1,7 @@
 export interface DialogConfig {
   title: string;
+  content?: string;
+  editChanges?: Set<String>;
   message: string;
   accept: string;
   applying: string;

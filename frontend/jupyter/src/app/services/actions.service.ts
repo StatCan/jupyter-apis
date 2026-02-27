@@ -25,7 +25,7 @@ export class ActionsService {
     return new Observable(subscriber => {
       const deleteDialogConfig = getDeleteDialogConfig(name);
 
-      const ref = this.confirmDialog.open(name, deleteDialogConfig);
+      const ref = this.confirmDialog.open(deleteDialogConfig);
       const delSub = ref.componentInstance.applying$.subscribe(applying => {
         if (!applying) {
           return;
@@ -89,7 +89,7 @@ export class ActionsService {
   stopNotebook(namespace: string, name: string): Observable<string> {
     return new Observable(subscriber => {
       const stopDialogConfig = getStopDialogConfig(name);
-      const ref = this.confirmDialog.open(name, stopDialogConfig);
+      const ref = this.confirmDialog.open(stopDialogConfig);
       const stopSub = ref.componentInstance.applying$.subscribe(applying => {
         if (!applying) {
           return;
@@ -130,7 +130,7 @@ export class ActionsService {
     return new Observable(subscriber => {
       const deleteDialogConfig = this.getDeleteDialogConfig(name);
 
-      const ref = this.confirmDialog.open(name, deleteDialogConfig);
+      const ref = this.confirmDialog.open(deleteDialogConfig);
       const delSub = ref.componentInstance.applying$.subscribe(applying => {
         if (!applying) {
           return;

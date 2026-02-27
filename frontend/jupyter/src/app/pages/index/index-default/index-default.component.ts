@@ -634,7 +634,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       width: '600px',
     };
 
-    const ref = this.confirmDialog.open(pvc.name, closeDialogConfig);
+    const ref = this.confirmDialog.open(closeDialogConfig);
     const delSub = ref.componentInstance.applying$.subscribe(applying => {
       if (!applying) {
         return;

@@ -22,19 +22,40 @@ export class DelayDialogComponent implements OnInit{
     const fb = new FormBuilder();
 
     this.formDelayCtrl = fb.group({
-      hourControl: [ '1', [Validators.min(0), Validators.max(12)]]
+      hourControl: [ '1', [Validators.min(0), Validators.max(72), Validators.pattern('^([1-9]|[1-6]\d|7[0-2])$')]]
     });
 
   }
 
   onCancelClicked(): void {
-    this.delaydialogRef.close({ status: DELAY_DIALOG_RESP.CANCEL, hours: 3 });
+    this.delaydialogRef.close({ status: DELAY_DIALOG_RESP.CANCEL});
   }
   onOkClicked(): void {
-    const h = this.formDelayCtrl.get("hourControl").value;
+    const h = this.formDelayCtrl.get("hourControl").value.toString();
     this.delaydialogRef.close({ status: DELAY_DIALOG_RESP.ACCEPT, hours: h});
   }
   onNoClick(): void {
     this.onCancelClicked();
+  }
+
+   getDelayError(key: string) {
+    let e: any;
+    const errs = this.formDelayCtrl.get(key).errors || {};
+
+    if (errs.required) {
+      return $localize`Specify an amount of hours for the delay`;
+    }
+    if((e =  errs.pattern)) {
+      return $localize`Specify a full amount of hours for the delay`;
+    }
+
+    if ((e = errs.min)) {
+      return $localize`Specify at least ${e.min} hours`;
+    }
+
+    if ((e = errs.max)) {
+      return $localize`Can't exceed ${e.max} hours`;
+    }
+
   }
 }

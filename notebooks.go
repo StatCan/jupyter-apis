@@ -985,6 +985,12 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	err = validateCullingDelay(req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
 	// Read existing notebook
 	notebook, err := s.listers.notebooks.Notebooks(namespaceName).Get(notebookName)
 	if err != nil {
@@ -1337,6 +1343,31 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 		if !validsizes[bytes/(1<<30)] { // convert bytes to Gibibytes
 			return fmt.Errorf("storage request is invalid, got: %dGi", bytes/(1<<30))
 		}
+	}
+
+	return nil
+}
+
+func validateCullingDelay(request delaycullingrequest) error {
+	var validationErrors []string
+
+	log.Printf("validating delay of ", request.TimeHours)
+
+	// Required string fields
+	if request.TimeHours == "" {
+		validationErrors = append(validationErrors, "Delay is required")
+	}
+	matched, err := regexp.MatchString(`^([1-9]|[1-6]\d|7[0-2])$`, request.TimeHours)
+	if err != nil {
+		log.Printf("error validating culling delay with regex: %v", err)
+		validationErrors = append(validationErrors, "an error occurred while validating the culling delay")
+	} else if !matched {
+		validationErrors = append(validationErrors, "the delay must be between 1 and 72")
+		}
+	
+		// Return all validation errors
+	if len(validationErrors) > 0 {
+		return fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
 	}
 
 	return nil

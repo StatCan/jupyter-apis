@@ -3,7 +3,7 @@
   <div *ngIf="shouldDisplayEditChanges(data.editChanges)">
     <p>{{ data.content }}</p>
 
-    <ul>
+    <ul class="edit-changes-list">
       <li *ngFor="let val of data.editChanges">{{ val }}</li>
     </ul>
   </div>

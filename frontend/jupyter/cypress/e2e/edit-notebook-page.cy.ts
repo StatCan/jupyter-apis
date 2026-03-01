@@ -597,12 +597,9 @@ describe('Edit notebook form', () => {
     it('should edit nothing', () => {
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
+      
       cy.get('[data-cy-form-button="submit"]').click();
-      cy.wait('@mockSubmitNotebook');
+      
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
@@ -620,14 +617,33 @@ describe('Edit notebook form', () => {
         .find('input')
         .type('4');
 
-      // submit the notebook
+      // trigger the confirm dialog
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.get('[data-cy-form-button="submit"]').click();
+
+      cy.get('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and(
+          'have.text',
+          'Are you sure you want to edit notebook test-notebook?',
+        );
+      // test cancelling the submit dialog
+      cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
+      cy.get('mat-dialog-container').should('not.exist');
+
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.edit-changes-list')
+        .should('contain.text', 'CPU')
+        .and('contain.text', 'Memory');
+
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
         success: true,
         status: 200,
       }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
+
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
@@ -643,12 +659,17 @@ describe('Edit notebook form', () => {
 
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.edit-changes-list')
+        .should('contain.text', 'Data volume(s)');
+
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
         success: true,
         status: 200,
       }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
+
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
@@ -660,12 +681,17 @@ describe('Edit notebook form', () => {
 
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.edit-changes-list')
+        .should('contain.text', 'Data volume(s)');
+
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
         success: true,
         status: 200,
       }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
+      
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
@@ -699,12 +725,17 @@ describe('Edit notebook form', () => {
 
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.edit-changes-list')
+        .should('contain.text', 'Workspace volume');
+
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
         success: true,
         status: 200,
       }).as('mockSubmitNotebook');
-      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
+      
       cy.url().should('eq', 'http://localhost:4200/');
     });
   });

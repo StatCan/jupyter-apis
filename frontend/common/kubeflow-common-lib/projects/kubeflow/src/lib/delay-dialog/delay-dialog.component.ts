@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 
 @Component({
-  selector: 'delay-dialog',
+  selector: 'lib-delay-dialog',
   templateUrl: 'delay-dialog.component.html',
 })
 export class DelayDialogComponent implements OnInit {

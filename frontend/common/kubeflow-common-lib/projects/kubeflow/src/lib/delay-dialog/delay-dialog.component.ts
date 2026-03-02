@@ -29,9 +29,10 @@ export class DelayDialogComponent implements OnInit {
       hourControl: [
         '1',
         [
+          Validators.required,
           Validators.min(0),
           Validators.max(72),
-          Validators.pattern('^([1-9]|[1-6]d|7[0-2])$'),
+          Validators.pattern('^([1-9]|[1-6][0-9]|7[0-2])$'),
         ],
       ],
     });
@@ -52,19 +53,17 @@ export class DelayDialogComponent implements OnInit {
     let e: any;
     const errs = this.formDelayCtrl.get(key).errors || {};
 
-    if (errs.required) {
-      return $localize`Specify an amount of hours for the delay`;
+    if ((e = errs.required)) {
+      return $localize`Hours to delay is required`;
     }
-    if ((e = errs.pattern)) {
-      return $localize`Specify a full amount of hours for the delay`;
-    }
-
     if ((e = errs.min)) {
       return $localize`Specify at least ${e.min} hours`;
     }
-
     if ((e = errs.max)) {
       return $localize`Can't exceed ${e.max} hours`;
+    }
+    if ((e = errs.pattern)) {
+      return $localize`Specify a full amount of hours for the delay`;
     }
   }
 }

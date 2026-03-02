@@ -99,14 +99,14 @@
         </context-group>
       </trans-unit>
       <trans-unit id="f19de6f110c914e34f118f3c221771a45bc542ad" datatype="html">
-        <source>Hours to delay</source>
-        <target>Heures pour le délai</target>
+        <source>Hours to delay is required</source>
+        <target>Nombre d'heures pour le délai requis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2956939175730600124" datatype="html">
+      <trans-unit id="4903387837252986467" datatype="html">
         <source>Specify a full amount of hours for the delay</source>
         <target>Spécifiez un nombre d'heures entier pour le délai</target>
         <context-group purpose="location">

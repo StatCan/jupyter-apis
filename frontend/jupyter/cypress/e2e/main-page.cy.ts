@@ -274,6 +274,122 @@ describe('Main tables', () => {
         'http://localhost:4200/notebook/details/kubeflow-user/a-dog-breed-katib',
       );
     });
+
+    it('Delay menu should be disabled if notebook not ready', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-dog-breed-katib')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="keep_alive"]')
+        .and('be.disabled');
+          });
+    it('Delay Dialog Cancel works', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-test-01')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="keep_alive"]')
+        .and('be.enabled')
+        .click();;
+      cy.get('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and(
+          'have.text',
+          'Delay auto-shutdown for a-test-01',
+        );
+      cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
+      cy.get('mat-dialog-container').should('not.exist');
+    });
+    it('Delay menu should be enabled and working', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-test-01')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="keep_alive"]')
+        .and('be.enabled')
+        .click();;
+      cy.get('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and(
+          'have.text',
+          'Delay auto-shutdown for a-test-01',
+        );
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+      cy.get('.mat-mdc-dialog-actions > button').contains('SUBMIT').click();
+      cy.intercept(
+          'PATCH',
+          '/api/namespaces/kubeflow-user/notebooks/a-test-01/keepalive',
+          { success: true, status: 200 },
+        ).as('mockDelayCulling');
+      cy.wait('@mockDelayCulling').its('response.statusCode').should('eq', 200);
+      cy.get('mat-dialog-container').should('not.exist');
+    });
+    it('Delay culling submit disabled if invalid data', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-test-01')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="keep_alive"]')
+        .and('be.enabled')
+        .click();
+      cy.get('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and(
+          'have.text',
+          'Delay auto-shutdown for a-test-01',
+        );
+      // Min
+      cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.value', '1');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+      // Zero
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('0');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+      // Max
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('72');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+      // Negative
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('-1');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+      // Valid
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('24');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+      // Above max
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('73');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+      // Valid
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('1');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+      // Invalid
+      cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+      cy.get('[data-cy-form-input="delayTime"]').find('input').type('a');
+      cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+    });
   });
 
   describe('Volumes table', () => {

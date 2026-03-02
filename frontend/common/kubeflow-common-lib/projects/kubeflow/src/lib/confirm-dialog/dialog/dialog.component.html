@@ -8,7 +8,9 @@
     </ul>
   </div>
 
-  <p>{{ data.message }}</p>
+  <p>
+    <b *ngIf="data.warning">{{ data.warning }}</b> {{ data.message }}
+  </p>
 
   <p class="error">{{ data.error }}</p>
 </div>

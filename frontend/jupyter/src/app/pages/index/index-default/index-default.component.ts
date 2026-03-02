@@ -625,7 +625,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   public closePVCViewerClicked(pvc: PVCProcessedObject) {
     const closeDialogConfig: DialogConfig = {
       title: `Are you sure you want to close this viewer? ${pvc.name}`,
-      message: 'Warning: Any running processes will terminate.',
+      warning: 'Warning:',
+      message: 'Any running processes will terminate.',
       accept: 'CLOSE',
       confirmColor: 'warn',
       cancel: 'CANCEL',

@@ -1101,7 +1101,6 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	notebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
 	notebook.Annotations[LastActivityCheckTimeStamp] = updatedTime.Format(time.RFC3339)
 	 
-
 	if true {
 		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
 		if err != nil {

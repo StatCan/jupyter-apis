@@ -1,13 +1,10 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-  <form
-  class="form"
-  [formGroup]="formDelayCtrl"
-  >
+  <form class="form" [formGroup]="formDelayCtrl">
     <p>{{ data.message }}</p>
     <mat-form-field appearance="outline">
       <mat-label i18n>Hours to delay</mat-label>
-      <input 
+      <input
         matInput
         type="number"
         formControlName="hourControl"
@@ -16,22 +13,19 @@
       <mat-error>{{ getDelayError('hourControl') }}</mat-error>
     </mat-form-field>
     <div mat-dialog-actions>
-      <button
-        mat-button
-        (click)="onCancelClicked()">
+      <button mat-button (click)="onCancelClicked()">
         {{ data.cancel.toUpperCase() }}
       </button>
 
       <button
-        mat-button  
+        mat-button
         (click)="onOkClicked()"
         [mat-dialog-close]="data"
         [color]="data.confirmColor"
-        [disabled]="!formDelayCtrl.valid">
+        [disabled]="!formDelayCtrl.valid"
+      >
         {{ data.accept.toUpperCase() }}
       </button>
     </div>
-    </form>
+  </form>
 </div>
-
-

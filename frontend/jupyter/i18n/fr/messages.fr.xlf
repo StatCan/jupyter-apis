@@ -703,12 +703,28 @@
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6160721227209921968" datatype="html">
-        <source>Warning: A running notebook server will automatically be restarted after being edited</source>
-        <target>Avertissement : Un serveur bloc-notes en cours d’exécution sera automatiquement redémarré après avoir été modifié</target>
+      <trans-unit id="798537467574943028" datatype="html">
+        <source>Warning:</source>
+        <target>Avertissement :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
           <context context-type="linenumber">204</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/config.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/config.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2364251881036320844" datatype="html">
+        <source>A running notebook server will automatically be restarted after being edited</source>
+        <target>Un serveur bloc-notes en cours d'exécution sera automatiquement redémarré après avoir été modifié</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1571190680532015078" datatype="html">
@@ -716,7 +732,7 @@
         <target>MODIFIER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">206</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/notebook-page.component.ts</context>
@@ -728,7 +744,7 @@
         <target>ANNULER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">208</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
@@ -736,11 +752,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3856738131101495621" datatype="html">
@@ -748,7 +764,7 @@
         <target>MODIFICATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2885840307007437390" datatype="html">
@@ -756,7 +772,7 @@
         <target>CPU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1548129644093494406" datatype="html">
@@ -764,7 +780,7 @@
         <target>Mémoire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">231</context>
+          <context context-type="linenumber">232</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -776,7 +792,7 @@
         <target>Volume d'espace de travail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5209021234995049809" datatype="html">
@@ -784,7 +800,7 @@
         <target>Volume(s) de données</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1899549432163903545" datatype="html">
@@ -792,7 +808,7 @@
         <target>La demande de modification a été envoyée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6926883898539175208" datatype="html">
@@ -800,7 +816,7 @@
         <target>Erreur <x id="PH" equiv-text="err"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">283</context>
+          <context context-type="linenumber">284</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
@@ -820,7 +836,7 @@
         <target>Modification du bloc-notes...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">303</context>
+          <context context-type="linenumber">304</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6450907786338815094" datatype="html">
@@ -828,7 +844,7 @@
         <target>Bloc-notes modifié avec succès.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">334</context>
+          <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0a31a4739749d022f9c0265ef0db1779daf3bad" datatype="html">
@@ -2166,7 +2182,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7283860593239202051" datatype="html">
@@ -2202,7 +2218,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6614061627386480272" datatype="html">
@@ -2694,7 +2710,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3496981118988770473" datatype="html">
@@ -2705,17 +2721,17 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6971434231050877464" datatype="html">
-        <source>Warning: Your data might be lost if the notebook server
+      <trans-unit id="2182944778287840891" datatype="html">
+        <source>Your data might be lost if the notebook server
                        is not backed by persistent storage</source>
-        <target>Avertissement: Vos données pourraient disparaître si le serveur bloc-notes n'est pas soutenu par un stockage persistant</target>
+        <target>Vos données pourraient disparaître si le serveur bloc-notes n'est pas soutenu par un stockage persistant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">7,8</context>
+          <context context-type="linenumber">8,9</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">21,22</context>
+          <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2683684114180894925" datatype="html">
@@ -2723,7 +2739,7 @@
         <target>Êtes-vous sûr que vous voulez arrêter ce serveur bloc-notes? <x id="PH" equiv-text="name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3806796620052804699" datatype="html">
@@ -2731,7 +2747,7 @@
         <target>ARRÊT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1256341028296687638" datatype="html">

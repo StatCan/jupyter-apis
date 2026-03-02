@@ -274,7 +274,7 @@ export class JWABackendService extends BackendService {
         map(_ => 'started'),
       );
   }
-  
+
   public updatePVCUsage(
     ns: string | string[],
     usageData: PVCUsageDataObject[],

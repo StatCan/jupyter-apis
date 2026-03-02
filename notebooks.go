@@ -1494,7 +1494,7 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 func validateCullingDelay(request delaycullingrequest) error {
 	var validationErrors []string
 
-	log.Printf("validating delay of ", request.TimeHours)
+	log.Printf("validating delay of %v", request.TimeHours)
 
 	// Required string fields
 	if request.TimeHours == "" {

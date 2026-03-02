@@ -3,6 +3,7 @@ describe('Main tables', () => {
     cy.fixture('settings').then(settings => {
       cy.mockNotebooksRequest(settings.namespace);
       cy.mockPVCsRequest(settings.namespace);
+      cy.mockPVCsUsageRequest(settings.namespace);
       cy.mockKubecostRequest(settings.namespace);
     });
     cy.fixture('notebooks').as('notebooksRequest');
@@ -21,10 +22,8 @@ describe('Main tables', () => {
 
     it('should have the Notebooks table', () => {
       cy.get('[data-cy-table-id="notebooks-table"]').should('exist');
-      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr').should(
-        'have.length',
-        7,
-      );
+      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
+        .should('have.length', 7);
 
       cy.get('[data-cy-toolbar-button="New Notebook"]')
         .should('exist')
@@ -228,10 +227,8 @@ describe('Main tables', () => {
         });
       // clear filters
       cy.get('[mattooltip="Clear filters"]').click();
-      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr').should(
-        'have.length',
-        7,
-      );
+      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
+        .should('have.length', 7);
 
       // generic filter
       cy.get('[data-cy-table-filter-id="notebooks-table"]').type(
@@ -244,10 +241,8 @@ describe('Main tables', () => {
 
       //clear filters
       cy.get('[matchipremove]').click();
-      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr').should(
-        'have.length',
-        7,
-      );
+      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
+        .should('have.length', 7);
     });
 
     it('should open the notebook details page', () => {
@@ -288,10 +283,8 @@ describe('Main tables', () => {
 
     it('should have the Volumes table', () => {
       cy.get('[data-cy-table-id="volumes-table"]').should('exist');
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
-        'have.length',
-        8,
-      );
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr')
+        .should('have.length', 10);
     });
 
     // We use function () in order to access aliases via this
@@ -404,10 +397,8 @@ describe('Main tables', () => {
         });
       // clear filters
       cy.get('[mattooltip="Clear filters"]').click();
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
-        'have.length',
-        8,
-      );
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr')
+        .should('have.length', 10);
 
       // generic filter
       cy.get('[data-cy-table-filter-id="volumes-table"]').type(
@@ -415,15 +406,13 @@ describe('Main tables', () => {
       );
       cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
         'have.length',
-        2,
+        4,
       );
 
       //clear filters
       cy.get('[matchipremove]').click();
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
-        'have.length',
-        8,
-      );
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr')
+        .should('have.length', 10);
     });
 
     it('should open the volume details page', () => {

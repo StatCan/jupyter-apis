@@ -38,22 +38,13 @@ import {
   PVCResponseObject,
   PVCProcessedObject,
   AllocationCostObject,
+  PVCUsageDataObject,
 } from 'src/app/types';
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-import { Input, OnChanges, SimpleChanges } from '@angular/core';
-import {
-  FormGroup,
-  AbstractControl,
-  Validators,
-  ValidatorFn,
-  FormControl,
-  FormGroupDirective,
-  NgForm,
-  ValidationErrors,
-} from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import prettyBytes from 'pretty-bytes';
+
 @Component({
   selector: 'app-index-default',
   templateUrl: './index-default.component.html',
@@ -196,6 +187,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     this.volPollSub = this.poller.exponential(request).subscribe(pvcs => {
       this.processedVolumeData = this.parseIncomingData(pvcs);
+
+      let usageData = this.parseUsageData(pvcs);
+      if (usageData) {
+        this.backend.updatePVCUsage(ns, usageData).subscribe();
+      }
     });
   }
 
@@ -218,6 +214,14 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         }
       case 'keep_alive':
         this.keepAliveClicked(a.data);
+        break;
+      case 'nb_edit':
+        if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
+          this.router.navigate([
+            `/notebook/edit/${a.data.namespace}/${a.data.name}`,
+          ]);
+          break;
+        }
       case 'name:link':
         if (a.data.status.phase === STATUS_TYPE.TERMINATING) {
           a.event.stopPropagation();
@@ -388,6 +392,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         matIcon: 'info',
       },
       {
+        name: 'nb_edit',
+        status: notebook.status.phase,
+        text: $localize`Edit`,
+        matIcon: 'edit',
+      },
+      {
         name: 'deleteAction',
         status: this.processDeletionActionStatus(notebook),
         text: $localize`Delete`,
@@ -496,9 +506,43 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         text: pvc.name,
         url: `/volume/details/${pvc.namespace}/${pvc.name}`,
       };
+
+      if (pvc.usage) {
+        let roundedVal = Math.ceil(parseFloat(pvc.usage));
+        pvc.usageRounded = roundedVal.toString() + '%';
+      } else {
+        // need to be set to empty string for the table filter
+        pvc.usageRounded = '';
+      }
+      if (pvc.usedBytes) {
+        // binary setting is to display as binary SI instead of decimal SI (so GiB instead of GB)
+        // for example binary 1ki = 1024 bytes, while decimal 1Kb = 1000 bytes
+        pvc.usedBytesFormatted = prettyBytes(Number(pvc.usedBytes), {
+          binary: true,
+        });
+      } else {
+        // need to be set to empty string for the table filter
+        pvc.usedBytesFormatted = '';
+      }
     }
 
     return pvcsCopy;
+  }
+
+  public parseUsageData(pvcs: PVCResponseObject[]): PVCUsageDataObject[] {
+    const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
+    let result: PVCUsageDataObject[] = [];
+    for (const pvc of pvcsCopy) {
+      if (pvc.usage) {
+        let val = {
+          name: pvc.name,
+          usage: pvc.usage,
+          usedBytes: pvc.usedBytes,
+        };
+        result.push(val);
+      }
+    }
+    return result;
   }
 
   public parseDeletionActionStatus(pvc: PVCProcessedObject) {

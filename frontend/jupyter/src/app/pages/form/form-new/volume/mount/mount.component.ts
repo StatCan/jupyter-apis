@@ -81,7 +81,7 @@ export class VolumeMountComponent implements OnDestroy {
       return $localize`Mount path is required`;
     }
     if (mountName.hasError('pattern')) {
-      return $localize`The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie`;
+      return $localize`The accepted locations are /home/jovyan or any of its subdirectories`;
     }
     if (mountName.hasError('duplicate')) {
       return $localize`This mount path is already in use`;

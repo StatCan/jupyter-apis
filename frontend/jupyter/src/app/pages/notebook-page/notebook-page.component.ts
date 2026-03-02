@@ -181,7 +181,19 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
         }),
       );
     }
-    buttons.push(
+
+    // Makes a list of actions for the settings button
+    let menuButtons: ToolbarButton[] = [];
+    menuButtons.push(
+      new ToolbarButton({
+        text: $localize`EDIT`,
+        icon: 'edit',
+        disabled: this.status.phase === STATUS_TYPE.TERMINATING ? true : false,
+        tooltip: $localize`Edit this notebook`,
+        fn: () => {
+          this.editNotebook();
+        },
+      }),
       new ToolbarButton({
         text: $localize`DELETE`,
         icon: 'delete',
@@ -192,6 +204,17 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
         },
       }),
     );
+
+    buttons.push(
+      new ToolbarButton({
+        text: $localize`SETTINGS`,
+        icon: 'settings',
+        tooltip: $localize`Settings for this notebook`,
+        fn: null,
+        menu: menuButtons,
+      }),
+    );
+
     if (isEqual(buttons, this.buttonsConfig)) {
       return;
     }
@@ -204,6 +227,12 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
       .subscribe(_ => {
         this.router.navigate(['']);
       });
+  }
+
+  private editNotebook() {
+    this.router.navigate([
+      `/notebook/edit/${this.namespace}/${this.notebookName}`,
+    ]);
   }
 
   private connectToNotebook() {

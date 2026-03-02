@@ -89,7 +89,7 @@
 
         <!--AAW: Removed the mount path from workspace volume
         <app-volume-mount [volGroup]="volGroup"></app-volume-mount>-->
-        <div appearance="outline" class="wide">
+        <div appearance="outline" class="wide" data-cy-form-input="mount-path">
           <mat-label i18n>Mount path</mat-label>
           <p>
             {{ volGroup.get('mount').value }}

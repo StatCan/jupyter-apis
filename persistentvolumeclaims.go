@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"sort"
+	"strconv"
 	"time"
 
 	kf_v1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
@@ -15,7 +18,38 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/apimachinery/pkg/types"
 )
+
+type VolumeMetricsDataResults struct {
+	Metric interface{}    `json:"metric"`
+	Value  [2]interface{} `json:"value"` //first value is unix_time, second value is the result
+}
+
+type VolumeMetricsData struct {
+	ResultType string                     `json:"resultType"`
+	Result     []VolumeMetricsDataResults `json:"result"`
+}
+
+type VolumeMetrics struct {
+	Status string            `json:"status"`
+	Data   VolumeMetricsData `json:"data"`
+}
+
+type pvcusage struct {
+	Name      string `json:"name"`
+	Usage     string `json:"usage"`
+	UsedBytes string `json:"usedBytes"`
+}
+
+type pvcsusagedata struct {
+	Data []pvcusage `json:"data"`
+}
+
+type pvcsusageresponse struct {
+	APIResponseBase
+	PersistentVolumeClaims []pvcusage `json:"pvcs"`
+}
 
 type pvcresponse struct {
 	Name      string                              `json:"name"`
@@ -28,6 +62,8 @@ type pvcresponse struct {
 	Notebooks []string                            `json:"notebooks"`
 	Labels    map[string]string                   `json:"labels"`
 	Viewer    pvcviewerresponse                   `json:"viewer"`
+	Usage     string                              `json:"usage"`
+	UsedBytes string                              `json:"usedBytes"`
 }
 
 type pvcviewerresponse struct {
@@ -78,6 +114,12 @@ const (
 	PvcPhaseTerminating   pvcPhase = "terminating"
 	PvcPhaseStopped       pvcPhase = "stopped"
 )
+
+// PVCUsageAnnotation is the annotation name representing the the used percentage of the PVC
+const PVCUsageAnnotation string = "pvc.kubeflow.org/usage"
+
+// PVCUsedBytesAnnotation is the annotation name representing the the amount of bytes used in the PVC
+const PVCUsedBytesAnnotation string = "pvc.kubeflow.org/used-bytes"
 
 // Set the status of the pvc
 // https://github.com/kubeflow/kubeflow/blob/v1.7.0/components/crud-web-apps/volumes/backend/apps/common/status.py#L4
@@ -178,6 +220,40 @@ func GetNotebooksUsingPvc(pvc string, notebooks []*kf_v1.Notebook) []string {
 	return mountedNotebooks
 }
 
+func (s *server) getPVCUsageMetrics(ns string) (map[string]map[string]string, error) {
+	query := fmt.Sprintf("{__name__=~\"kubelet_volume_stats_used_bytes|kubelet_volume_stats_capacity_bytes\",namespace=\"%s\"}",
+		ns)
+	endpoint := fmt.Sprintf("api/v1/query?query=%s", query)
+	url, _ := s.prometheusURL.Parse(endpoint)
+
+	resp, err := http.Get(url.String())
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var metrics VolumeMetrics
+
+	err = json.NewDecoder(resp.Body).Decode(&metrics)
+	if err != nil {
+		return nil, err
+	}
+
+	// format the output
+	mapPVCMetrics := make(map[string]map[string]string)
+	for _, pvc := range metrics.Data.Result {
+		val := pvc.Metric.(map[string]interface{})
+		pvcKey := val["persistentvolumeclaim"].(string)
+		if _, ok := mapPVCMetrics[pvcKey]; !ok {
+			mapPVCMetrics[pvcKey] = make(map[string]string)
+		}
+		// pvc.Value is array of [datetime, value]
+		mapPVCMetrics[pvcKey][val["__name__"].(string)] = pvc.Value[1].(string)
+	}
+
+	return mapPVCMetrics, nil
+}
+
 // GetPersistentVolumeClaims returns the PVCs in the requested namespace.
 func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -221,6 +297,12 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 		PersistentVolumeClaims: make([]pvcresponse, 0),
 	}
 
+	pvcUsageMetrics, err := s.getPVCUsageMetrics(namespace)
+	// Just log the error if it fails to query prometheus, don't error out the entire call
+	if err != nil {
+		log.Printf("failed to get PVC metrics for %s: %v", namespace, err)
+	}
+
 	for _, pvc := range pvcs {
 		size := pvc.Status.Capacity.Storage()
 		if size == nil {
@@ -235,6 +317,25 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 		status := GetPvcStatus(pvc, allevents)
 		notebooksList := GetNotebooksUsingPvc(pvc.Name, notebooks)
+
+		var usageValueBytes string
+		var usagePercent string
+		if usedValue, ok := pvcUsageMetrics[pvc.Name]["kubelet_volume_stats_used_bytes"]; ok {
+			usageValueBytes = usedValue
+
+			usedValueInt, err1 := strconv.ParseInt(pvcUsageMetrics[pvc.Name]["kubelet_volume_stats_used_bytes"], 10, 64)
+			capacityValueInt, err2 := strconv.ParseInt(pvcUsageMetrics[pvc.Name]["kubelet_volume_stats_capacity_bytes"], 10, 64)
+			if err1 != nil || err2 != nil {
+				log.Printf("failed to parse volume metrics for %s/%s: %v", namespace, pvc.Name, err)
+			} else {
+				usagePercentValue := (float64(usedValueInt) / float64(capacityValueInt)) * 100
+				usagePercent = strconv.FormatFloat(usagePercentValue, 'f', -1, 64)
+			}
+		} else {
+			// read from annotation if notebook is not running
+			usageValueBytes = pvc.Annotations[PVCUsedBytesAnnotation]
+			usagePercent = pvc.Annotations[PVCUsageAnnotation]
+		}
 
 		// TODO: Uncomment when pvcviewer-controller is implemented
 		// var viewerStatusValue notebookPhase
@@ -268,6 +369,8 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			Class:     *pvc.Spec.StorageClassName,
 			Notebooks: notebooksList,
 			Labels:    pvc.Labels,
+			Usage:     usagePercent,
+			UsedBytes: usageValueBytes,
 			// TODO: Uncomment when pvcviewer-controller is implemented
 			// Viewer: pvcviewerresponse{
 			// 	Status: viewerStatusValue,
@@ -277,6 +380,54 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 	}
 
 	s.respond(w, r, &resp)
+}
+
+func (s *server) UpdatePersistentVolumeClaimsUsage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	// Read the incoming usage data
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+
+	var req pvcsusagedata
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("patching persistent volume claims usage for %q", namespace)
+
+	for _, pvc := range req.Data {
+		// only patch if there are values
+		if pvc.Usage != "" && pvc.UsedBytes != "" {
+			patch := fmt.Sprintf(`
+			{
+				"metadata":{
+					"annotations":{
+						"%s": "%s", 
+						"%s": "%s"
+					}
+				}
+			}`, PVCUsageAnnotation, pvc.Usage, PVCUsedBytesAnnotation, pvc.UsedBytes)
+
+			_, err := s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(namespace).Patch(context.TODO(), pvc.Name, types.StrategicMergePatchType, []byte(patch), v1.PatchOptions{})
+			if err != nil {
+				s.error(w, r, err)
+				return
+			}
+		}
+	}
+
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
 }
 
 // Return a list of Pods that are using the given PVC

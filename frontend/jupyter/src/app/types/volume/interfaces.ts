@@ -14,6 +14,8 @@ export interface PVCResponseObject {
   namespace: string;
   status: Status;
   notebooks: string[];
+  usage: string;
+  usedBytes: string;
   viewer: {
     status: STATUS_TYPE;
     url: string;
@@ -24,13 +26,18 @@ export interface PVCResponseObject {
   labels?: { [key: string]: any };
 }
 
+export interface PVCUsageDataObject {
+  name: string;
+  usage: string;
+  usedBytes: string;
+}
+
 export interface GetPVCResponseObject {
   pvc: V1PersistentVolumeClaim;
   notebooks: string[];
 }
 
 export interface Volume {
-  name: string;
   mount: string;
   newPvc?: V1PersistentVolumeClaim;
   existingSource?: V1Volume;
@@ -43,6 +50,8 @@ export interface PVCProcessedObject extends PVCResponseObject {
   openPVCViewerAction?: string;
   ageValue?: string;
   ageTooltip?: string;
+  usageRounded?: string;
+  usedBytesFormatted?: string;
   link: {
     text: string;
     url: string;

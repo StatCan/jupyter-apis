@@ -8,7 +8,7 @@ import (
 
 type SpawnerFormDefaults struct {
 	Image            Image           `yaml:"image" json:"image"`
-	ImageSas  		 ImageGroup      `yaml:"imageSas" json:"imageSas"`
+	ImageSas         ImageGroup      `yaml:"imageSas" json:"imageSas"`
 	AllowCustomImage bool            `yaml:"allowCustomImage" json:"allowCustomImage"`
 	ImagePullPolicy  ImagePullPolicy `yaml:"imagePullPolicy" json:"imagePullPolicy"`
 	CPU              CPU             `yaml:"cpu" json:"cpu"`
@@ -16,7 +16,6 @@ type SpawnerFormDefaults struct {
 	WorkspaceVolume  WorkspaceVolume `yaml:"workspaceVolume" json:"workspaceVolume"`
 	DataVolumes      DataVolumes     `yaml:"dataVolumes" json:"dataVolumes"`
 	GPUs             GPUs            `yaml:"gpus" json:"gpus"`
-	Shm              Shm             `yaml:"shm" json:"shm"`
 	Configurations   Configurations  `yaml:"configurations" json:"configurations"`
 	AffinityConfig   AffinityConfig  `yaml:"affinityConfig" json:"affinityConfig"`
 	TolerationGroup  TolerationGroup `yaml:"tolerationGroup" json:"tolerationGroup"`
@@ -119,11 +118,6 @@ type Image struct {
 type ImageGroup struct {
 	Value   string   `yaml:"value" json:"value"`
 	Options []string `yaml:"options" json:"options"`
-}
-
-type Shm struct {
-	Value    bool `yaml:"value" json:"value"`
-	ReadOnly bool `yaml:"readOnly" json:"readOnly"`
 }
 
 type TolerationGroup struct {

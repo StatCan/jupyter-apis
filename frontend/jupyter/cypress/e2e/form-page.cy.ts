@@ -208,6 +208,14 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="cpu"]')
         .find('mat-error')
         .should('have.text', 'Specify number of CPUs');
+      // invalid value
+      cy.get('[data-cy-form-input="cpu"]').find('input').type('abcd');
+      cy.get('[data-cy-form-input="cpu"]')
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="cpu"]')
+        .find('mat-error')
+        .should('have.text', 'Specify number of CPUs');
       // valid value
       cy.get('[data-cy-form-input="cpu"]').find('input').type('4');
       cy.get('[data-cy-form-input="cpu"]')
@@ -237,6 +245,14 @@ describe('New notebook form', () => {
         .should('have.text', "Can't exceed 48Gi of memory");
       cy.get('[data-cy-form-input="memory"]').find('input').clear();
       // empty value
+      cy.get('[data-cy-form-input="memory"]')
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="memory"]')
+        .find('mat-error')
+        .should('have.text', 'Specify amount of memory (e.g. 2Gi)');
+      // invalid value
+      cy.get('[data-cy-form-input="memory"]').find('input').type('abcd');
       cy.get('[data-cy-form-input="memory"]')
         .find('input')
         .should('have.class', 'ng-invalid');
@@ -356,15 +372,7 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="workspaceVolume"]')
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-error')
-        .should('have.text', ' Is mounted ');
-      // existing volume protected b
-      cy.get(
-        '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',
-      ).click();
-      cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .find('mat-select')
-        .click({ force: true });
+        .should('have.text', ' Already mounted ');
     });
 
     it('workspace volume auto update name', () => {
@@ -465,7 +473,7 @@ describe('New notebook form', () => {
         .find('mat-error')
         .should(
           'have.text',
-          ' The accepted locations are /home/jovyan, /opt/openmpp and any of their subdirectorie ',
+          ' The accepted locations are /home/jovyan or any of its subdirectories ',
         );
       // mount path empty value
       cy.get('[data-cy-form-input="dataVolumes"]')
@@ -555,15 +563,7 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-error')
-        .should('have.text', ' Is mounted ');
-      // existing volume protected b
-      cy.get(
-        '[data-cy-form-input="dataVolumes"] > mat-expansion-panel',
-      ).click();
-      cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('[data-cy-form-input="existing-volume"]')
-        .find('mat-select')
-        .click({ force: true });
+        .should('have.text', ' Already mounted ');
     });
 
     it('data volume auto update name', () => {
@@ -655,9 +655,6 @@ describe('New notebook form', () => {
         'not.exist',
       );
 
-      cy.get('[data-cy-form-input="language"]')
-        .find('.mat-mdc-select-value')
-        .should('have.text', 'English');
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', {

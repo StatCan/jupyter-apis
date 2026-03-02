@@ -43,9 +43,8 @@ export function getFormDefaults(): FormGroup {
     affinityConfig: ['', []],
     tolerationGroup: ['', []],
     datavols: fb.array([]),
-    shm: [true, []],
     configurations: [[], []],
-    language: ['', [Validators.required]],
+    language: ['en', [Validators.required]],
   });
 }
 
@@ -119,7 +118,11 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   );
 }
 
-export function initFormControls(formCtrl: FormGroup, config: Config) {
+export function initFormControls(
+  formCtrl: FormGroup,
+  config: Config,
+  locale: string,
+) {
   initCpuFormControls(formCtrl, config);
 
   initMemoryFormControls(formCtrl, config);
@@ -158,26 +161,24 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
   // GPUs
   updateGPUControl(formCtrl.get('gpus') as FormGroup, config.gpus);
 
-  formCtrl.controls.shm.setValue(config.shm.value);
-  if (config.shm.readOnly) {
-    formCtrl.controls.shm.disable();
-  }
-
   // PodDefaults / Configurations. Set the pre selected labels
   formCtrl.controls.configurations.setValue(config.configurations.value);
   if (config.configurations.readOnly) {
     formCtrl.controls.configurations.disable();
   }
+
+  // language
+  formCtrl.controls.language.setValue(locale);
 }
 
 export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {
   const workspace = config.workspaceVolume.value;
-  if (!workspace) {
+  if (!workspace || (!workspace.existingSource && !workspace.newPvc)) {
     form.get('workspace').disable();
     return;
   }
 
-  form.setControl('workspace', createFormGroupFromVolume(workspace));
+  form.setControl('workspace', createFormGroupFromVolume(workspace, true));
 }
 
 export function initDataVolumeControl(form: FormGroup, config: Config) {
@@ -187,7 +188,12 @@ export function initDataVolumeControl(form: FormGroup, config: Config) {
   form.setControl('datavols', datavolsArray);
 
   for (const vol of datavols) {
-    datavolsArray.push(createFormGroupFromVolume(vol));
+    let volControl = createFormGroupFromVolume(vol, false);
+
+    // Marks the mount path as dirty to prevent the value being overriden by the default mount path
+    volControl.get('mount').markAsDirty();
+
+    datavolsArray.push(volControl);
   }
 }
 

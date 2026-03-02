@@ -1,0 +1,96 @@
+<div class="lib-content-wrapper">
+  <lib-title-actions-toolbar
+    title="Editing notebook {{ notebookName }}"
+    [backButton]="true"
+    (back)="onCancel()"
+    i18n-title
+  >
+  </lib-title-actions-toolbar>
+
+  <!--scrollable page content-->
+  <div class="page-padding lib-flex-grow lib-overflow-auto">
+    <lib-loading-spinner *ngIf="!notebookInfoLoaded"></lib-loading-spinner>
+
+    <ng-container *ngIf="notebookInfoLoaded">
+      <form
+        novalidate
+        class="form"
+        (ngSubmit)="onSubmit()"
+        [formGroup]="formCtrl"
+      >
+        <lib-form-section title="Image" i18n-title>
+          <div class="container">
+            <mat-icon
+              *ngIf="notebookImageType === 'jupyter'"
+              class="server-type-icon icon-inline"
+              svgIcon="jupyter-icon"
+            >
+            </mat-icon>
+            <mat-icon
+              *ngIf="notebookImageType === 'sas'"
+              class="server-type-icon icon-inline"
+              svgIcon="sas-icon"
+            >
+            </mat-icon>
+            <span class="text-inline" data-cy-image-name>{{
+              notebookImage
+            }}</span>
+          </div>
+        </lib-form-section>
+
+        <app-form-cpu-ram
+          [parentForm]="formCtrl"
+          [readonlyCPU]="false"
+          [readonlyMemory]="false"
+          [cpuLimitFactor]="config?.cpu?.limitFactor"
+          [memoryLimitFactor]="config?.memory?.limitFactor"
+          [readonlySpecs]="false"
+        ></app-form-cpu-ram>
+
+        <app-form-workspace-volume
+          [readonly]="false"
+          [volGroup]="formCtrl.get('workspace')"
+          [externalName]="notebookName"
+          [mountedVolumes]="mountedVolumes"
+        >
+        </app-form-workspace-volume>
+
+        <app-form-data-volumes
+          [readonly]="false"
+          [volsArray]="formCtrl.get('datavols')"
+          [externalName]="notebookName"
+          [mountedVolumes]="mountedVolumes"
+        ></app-form-data-volumes>
+      </form>
+
+      <div class="form-buttons">
+        <div
+          [matTooltip]="setTooltipText(formCtrl)"
+          [matTooltipDisabled]="formCtrl.valid"
+        >
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onSubmit()"
+            [disabled]="!formCtrl.valid"
+            i18n
+            data-cy-form-button="submit"
+          >
+            SUBMIT
+          </button>
+        </div>
+
+        <button
+          mat-raised-button
+          type="button"
+          class="cancel-button"
+          (click)="onCancel()"
+          i18n
+          data-cy-form-button="cancel"
+        >
+          CANCEL
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>

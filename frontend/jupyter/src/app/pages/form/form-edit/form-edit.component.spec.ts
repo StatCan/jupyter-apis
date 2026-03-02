@@ -11,16 +11,7 @@ import {
 } from 'kubeflow';
 import { of } from 'rxjs';
 import { JWABackendService } from 'src/app/services/backend.service';
-import { FormAffinityTolerationsModule } from './form-affinity-tolerations/form-affinity-tolerations.module';
-import { FormConfigurationsModule } from './form-configurations/form-configurations.module';
-import { FormCpuRamModule } from './form-cpu-ram/form-cpu-ram.module';
-import { FormDataVolumesModule } from './form-data-volumes/form-data-volumes.module';
-import { FormGpusModule } from './form-gpus/form-gpus.module';
-import { FormImageModule } from './form-image/form-image.module';
-import { FormNameModule } from './form-name/form-name.module';
-import { FormNewComponent } from './form-new.component';
-import { FormWorkspaceVolumeModule } from './form-workspace-volume/form-workspace-volume.module';
-import { VolumeModule } from './volume/volume.module';
+import { FormEditComponent } from './form-edit.component';
 
 const JWABackendServiceStub = {
   getConfig: () => of(),
@@ -41,25 +32,16 @@ const SnackBarServiceStub = {
 };
 
 describe('FormNewComponent', () => {
-  let component: FormNewComponent;
-  let fixture: ComponentFixture<FormNewComponent>;
+  let component: FormEditComponent;
+  let fixture: ComponentFixture<FormEditComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FormNewComponent],
+      declarations: [FormEditComponent],
       imports: [
         CommonModule,
         KfFormModule,
         TitleActionsToolbarModule,
-        VolumeModule,
-        FormWorkspaceVolumeModule,
-        FormDataVolumesModule,
-        FormCpuRamModule,
-        FormGpusModule,
-        FormConfigurationsModule,
-        FormAffinityTolerationsModule,
-        FormImageModule,
-        FormNameModule,
         HttpClientModule,
         RouterTestingModule,
         NoopAnimationsModule,
@@ -73,7 +55,7 @@ describe('FormNewComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FormNewComponent);
+    fixture = TestBed.createComponent(FormEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -29,12 +29,6 @@ import (
 // DefaultServiceAccountName String.
 const DefaultServiceAccountName string = "default-editor"
 
-// SharedMemoryVolumeName String.
-const SharedMemoryVolumeName string = "dshm"
-
-// SharedMemoryVolumePath String.
-const SharedMemoryVolumePath string = "/dev/shm"
-
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
@@ -52,6 +46,8 @@ const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
 // LastActivityAnnotation is the annotation name for the last activity value.
 const LastActivityAnnotation = "notebooks.kubeflow.org/last-activity"
+// LastActivityCheckTimeStamp for the delay shutdown
+const LastActivityCheckTimeStamp = "notebooks.kubeflow.org/last-activity"
 
 // Begin structs necessary for handling volumes
 type volrequest struct {
@@ -93,28 +89,36 @@ type gpurequest struct {
 }
 
 type newnotebookrequest struct {
-	Name               string            `json:"name"`
-	Namespace          string            `json:"namespace"`
-	Image              string            `json:"image"`
-	CustomImage        string            `json:"customImage"`
-	CustomImageCheck   bool              `json:"customImageCheck"`
-	BetaImageCheck     bool              `json:"betaImageCheck"`
-	CPU                resource.Quantity `json:"cpu"`
-	CPULimit           resource.Quantity `json:"cpuLimit"`
-	Memory             resource.Quantity `json:"memory"`
-	MemoryLimit        resource.Quantity `json:"memoryLimit"`
-	GPUs               gpurequest        `json:"gpus"`
-	NoWorkspace        bool              `json:"noWorkspace"`
-	Workspace          volrequest        `json:"workspace"`
-	DataVolumes        []volrequest      `json:"datavols"`
-	EnableSharedMemory bool              `json:"shm"`
-	Configurations     []string          `json:"configurations"`
-	Language           string            `json:"language"`
-	ImagePullPolicy    string            `json:"imagePullPolicy"`
-	ServerType         string            `json:"serverType"`
-	AffinityConfig     string            `json:"affinityConfig"`
-	TolerationGroup    string            `json:"tolerationGroup"`
-	DefaultNotebook    bool              `json:"defaultNotebook"`
+	Name             string            `json:"name"`
+	Namespace        string            `json:"namespace"`
+	Image            string            `json:"image"`
+	CustomImage      string            `json:"customImage"`
+	CustomImageCheck bool              `json:"customImageCheck"`
+	BetaImageCheck   bool              `json:"betaImageCheck"`
+	CPU              resource.Quantity `json:"cpu"`
+	CPULimit         resource.Quantity `json:"cpuLimit"`
+	Memory           resource.Quantity `json:"memory"`
+	MemoryLimit      resource.Quantity `json:"memoryLimit"`
+	GPUs             gpurequest        `json:"gpus"`
+	NoWorkspace      bool              `json:"noWorkspace"`
+	Workspace        volrequest        `json:"workspace"`
+	DataVolumes      []volrequest      `json:"datavols"`
+	Configurations   []string          `json:"configurations"`
+	Language         string            `json:"language"`
+	ImagePullPolicy  string            `json:"imagePullPolicy"`
+	ServerType       string            `json:"serverType"`
+	AffinityConfig   string            `json:"affinityConfig"`
+	TolerationGroup  string            `json:"tolerationGroup"`
+	DefaultNotebook  bool              `json:"defaultNotebook"`
+}
+
+type updatenotebookrequest struct {
+	CPU         resource.Quantity `json:"cpu"`
+	CPULimit    resource.Quantity `json:"cpuLimit"`
+	Memory      resource.Quantity `json:"memory"`
+	MemoryLimit resource.Quantity `json:"memoryLimit"`
+	Workspace   volrequest        `json:"workspace"`
+	DataVolumes []volrequest      `json:"datavols"`
 }
 
 type gpuresponse struct {
@@ -149,13 +153,22 @@ type notebookapiresponse struct {
 	Notebook notebookresponse `json:"notebook"`
 }
 
+// For outputting string formatted resources specs
+type notebookresources struct {
+	Cpu         string `json:"cpu"`
+	CpuLimit    string `json:"cpuLimit"`
+	Memory      string `json:"memory"`
+	MemoryLimit string `json:"memoryLimit"`
+}
+
 type NotebookWithStatus struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec            kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
-	Status          kubeflowv1.NotebookStatus `json:"status,omitempty"`
-	ProcessedStatus status                    `json:"processed_status"`
+	Spec               kubeflowv1.NotebookSpec   `json:"spec,omitempty"`
+	Status             kubeflowv1.NotebookStatus `json:"status,omitempty"`
+	ProcessedStatus    status                    `json:"processed_status"`
+	FormattedResources notebookresources         `json:"formatted_resources,omitempty"`
 }
 
 type getnotebookresponse struct {
@@ -179,7 +192,7 @@ type notebookeventsresponse struct {
 	Events []corev1.Event `json:"events"`
 }
 
-type updatenotebookrequest struct {
+type startstopnotebookrequest struct {
 	Stopped bool `json:"stopped"`
 }
 
@@ -517,17 +530,16 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 			Quantity: s.Config.SpawnerFormDefaults.GPUs.Value.Num,
 			Vendor:   s.Config.SpawnerFormDefaults.GPUs.Value.Vendor,
 		},
-		NoWorkspace:        true,
-		Workspace:          workspaceVol,
-		DataVolumes:        datavols,
-		EnableSharedMemory: s.Config.SpawnerFormDefaults.Shm.Value,
-		Configurations:     s.Config.SpawnerFormDefaults.Configurations.Value,
-		Language:           "en",
-		ImagePullPolicy:    s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
-		ServerType:         "jupyter",
-		AffinityConfig:     s.Config.SpawnerFormDefaults.AffinityConfig.Value,
-		TolerationGroup:    s.Config.SpawnerFormDefaults.TolerationGroup.Value,
-		DefaultNotebook:    true,
+		NoWorkspace:     true,
+		Workspace:       workspaceVol,
+		DataVolumes:     datavols,
+		Configurations:  s.Config.SpawnerFormDefaults.Configurations.Value,
+		Language:        "en",
+		ImagePullPolicy: s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
+		ServerType:      "jupyter",
+		AffinityConfig:  s.Config.SpawnerFormDefaults.AffinityConfig.Value,
+		TolerationGroup: s.Config.SpawnerFormDefaults.TolerationGroup.Value,
+		DefaultNotebook: true,
 	}
 
 	return notebook, nil
@@ -779,23 +791,6 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Add shared memory, if enabled
-	if (s.Config.SpawnerFormDefaults.Shm.ReadOnly && s.Config.SpawnerFormDefaults.Shm.Value) || (!s.Config.SpawnerFormDefaults.Shm.ReadOnly && req.EnableSharedMemory) {
-		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-			Name: SharedMemoryVolumeName,
-			VolumeSource: corev1.VolumeSource{
-				EmptyDir: &corev1.EmptyDirVolumeSource{
-					Medium: corev1.StorageMediumMemory,
-				},
-			},
-		})
-
-		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-			Name:      SharedMemoryVolumeName,
-			MountPath: SharedMemoryVolumePath,
-		})
-	}
-
 	// Add GPU
 	if s.Config.SpawnerFormDefaults.GPUs.ReadOnly {
 		if s.Config.SpawnerFormDefaults.GPUs.Value.Num != "none" {
@@ -899,13 +894,12 @@ func (s *server) DeleteNotebook(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Meow
-func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
+func (s *server) StartStopNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespaceName := vars["namespace"]
 	notebookName := vars["notebook"]
 
-	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
+	log.Printf("patching notebook %q for %q", notebookName, namespaceName)
 
 	// Read the incoming notebook
 	body, err := io.ReadAll(r.Body)
@@ -915,7 +909,7 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	var req updatenotebookrequest
+	var req startstopnotebookrequest
 	err = json.Unmarshal(body, &req)
 	if err != nil {
 		s.error(w, r, err)
@@ -961,6 +955,101 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 		Success: true,
 		Status:  http.StatusOK,
 	})
+}
+
+func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespaceName := vars["namespace"]
+	notebookName := vars["notebook"]
+
+	// Read the incoming notebook
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+
+	var req updatenotebookrequest
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("validating updating notebook request: %s in namespace %s", notebookName, namespaceName)
+
+	err = validateUpdateNotebook(req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("updating notebook %q for %q", notebookName, namespaceName)
+
+	// Get existing notebook
+	notebook, err := s.listers.notebooks.Notebooks(namespaceName).Get(notebookName)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// update resources
+	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
+	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
+	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
+
+	// updating volumes
+
+	//resets the list of volumes for the notebook
+	notebook.Spec.Template.Spec.Volumes = nil
+	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = nil
+
+	// workspace volume
+	if req.Workspace.Mount != "" && (req.Workspace.NewPvc.NewPvcMetadata.Name != nil || req.Workspace.ExistingSource.PersistentVolumeClaim.ClaimName != nil) {
+		err = s.handleVolume(r.Context(), req.Workspace, notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	// for updating notebooks, all volumes are considered data volumes
+	for _, volreq := range req.DataVolumes {
+		err = s.handleVolume(r.Context(), volreq, notebook)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+	}
+
+	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
+}
+
+func formatCpuCores(cpu resource.Quantity) string {
+	// MiliValue() returns the value in 1/1000 of a core
+	cores := float64(cpu.MilliValue()) / 1000.0
+
+	return strconv.FormatFloat(cores, 'f', -1, 64)
+}
+
+func formatMemoryToGibibytes(memory resource.Quantity) string {
+	// Convert bytes to Gi (1 Gi = 1024 Mi, 1 Mi = 1024 Ki)
+	// 1 Gi = 1024 * 1024 * 1024 bytes
+	// resouce.Millivalue is 1/1000 bytes (400m = 0.4 bytes)
+	gibibytes := float64(memory.MilliValue()) / (1024 * 1024 * 1024 * 1000)
+
+	return strconv.FormatFloat(gibibytes, 'f', -1, 64)
 }
 
 func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request) {
@@ -1010,6 +1099,8 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	}
 
 	notebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
+	notebook.Annotations[LastActivityCheckTimeStamp] = updatedTime.Format(time.RFC3339)
+	 
 
 	if true {
 		_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
@@ -1051,6 +1142,9 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 		status.Conditions[i].Message = getUserFriendlyMessage(&status.Conditions[i])
 	}
 
+	// Assumes that there will only be one container in the notebook specs, as per the notebook creation
+	nb_resouces := nb.Spec.Template.Spec.Containers[0].Resources
+
 	resp := &getnotebookresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
@@ -1062,6 +1156,12 @@ func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 			Spec:            nb.Spec,
 			Status:          nb.Status,
 			ProcessedStatus: processedStatus,
+			FormattedResources: notebookresources{
+				Cpu:         formatCpuCores(*nb_resouces.Requests.Cpu()),
+				CpuLimit:    formatCpuCores(*nb_resouces.Limits.Cpu()),
+				Memory:      formatMemoryToGibibytes(*nb_resouces.Requests.Memory()),
+				MemoryLimit: formatMemoryToGibibytes(*nb_resouces.Limits.Memory()),
+			},
 		},
 	}
 
@@ -1180,7 +1280,43 @@ func getUserFriendlyMessage(condition *kubeflowv1.NotebookCondition) string {
 	return condition.Message // fallback to original
 }
 
-// validateNotebook function verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
+// validates resource specs for notebooks
+func validateNotebookResources(cpu resource.Quantity, cpuLimit resource.Quantity, memory resource.Quantity, memoryLimit resource.Quantity) []string {
+	var validationErrors []string
+
+	if cpu.IsZero() || cpu.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "cpu must be positive")
+	}
+	if memory.IsZero() || memory.Cmp(resource.MustParse("0")) < 0 {
+		validationErrors = append(validationErrors, "memory must be positive")
+	}
+	if cpuLimit.IsZero() || cpu.Cmp(cpuLimit) > 0 {
+		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
+	}
+	if memoryLimit.IsZero() || memory.Cmp(memoryLimit) > 0 {
+		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
+	}
+
+	return validationErrors
+}
+
+func validateNotebookDataVolumes(dataVolumes []volrequest) []string {
+	var validationErrors []string
+
+	for _, vol := range dataVolumes {
+		// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
+		validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
+		err := validateNotebookVolume(vol, validSizes)
+
+		if err != nil {
+			validationErrors = append(validationErrors, err.Error())
+		}
+	}
+
+	return validationErrors
+}
+
+// verifies valid and correct input for the newnotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
 func validateNotebook(request newnotebookrequest) error {
 	var validationErrors []string
 
@@ -1211,18 +1347,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Resource constraints
-	if request.CPU.IsZero() || request.CPU.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "cpu must be positive")
-	}
-	if request.Memory.IsZero() || request.Memory.Cmp(resource.MustParse("0")) < 0 {
-		validationErrors = append(validationErrors, "memory must be positive")
-	}
-	if request.CPULimit.IsZero() || request.CPU.Cmp(request.CPULimit) > 0 {
-		validationErrors = append(validationErrors, "cpu limit must be set and CPU limit must be greater than or equal to requested CPU")
-	}
-	if request.MemoryLimit.IsZero() || request.Memory.Cmp(request.MemoryLimit) > 0 {
-		validationErrors = append(validationErrors, "memory limit must be set and Memory limit must be greater than or equal to requested memory")
-	}
+	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
 	// Enum checks
 	if request.ImagePullPolicy != "Always" { // the value is always "Always"
@@ -1244,15 +1369,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	if request.DataVolumes != nil {
-		for _, vol := range request.DataVolumes {
-			// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-			validSizes = map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-			err = validateNotebookVolume(vol, validSizes)
-
-			if err != nil {
-				validationErrors = append(validationErrors, err.Error())
-			}
-		}
+		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
 	}
 
 	// Return all validation errors
@@ -1263,11 +1380,38 @@ func validateNotebook(request newnotebookrequest) error {
 	return nil
 }
 
-// validateNotebook function verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
+// verifies valid and correct input for the updatenotebookrequest struct and returns a boolean indicating if all inputs are or aren't valid
+func validateUpdateNotebook(request updatenotebookrequest) error {
+	var validationErrors []string
+
+	// Resource constraints
+	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
+
+	// Workspace Volume
+	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
+	err := validateNotebookVolume(request.Workspace, validSizes)
+	if err != nil {
+		validationErrors = append(validationErrors, err.Error())
+	}
+
+	// Data volumes
+	if request.DataVolumes != nil {
+		validationErrors = validateNotebookDataVolumes(request.DataVolumes)
+	}
+
+	// Return all validation errors
+	if len(validationErrors) > 0 {
+		return fmt.Errorf("validation failed:\n - %s", strings.Join(validationErrors, "\n - "))
+	}
+
+	return nil
+}
+
+// verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
 func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 
 	// Allow for Notebooks creation with no Workspace Volumes
-	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.NewPvc.NewPvcSpec.AccessModes == nil {
+	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.ExistingSource.PersistentVolumeClaim.ClaimName == nil {
 		return nil
 	}
 
@@ -1275,12 +1419,12 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 	if req.Mount == "" {
 		return fmt.Errorf("mount path is required")
 	} else {
-		matched, err := regexp.MatchString(`^(((\/home\/jovyan)((\/)(.)*)?)|((\/opt\/openmpp)((\/)(.)*)?))$`, req.Mount)
+		matched, err := regexp.MatchString(`^\/home\/jovyan(\/.*)?$`, req.Mount)
 		if err != nil {
 			log.Printf("error validating volume mount path with regex: %v", err)
 			return fmt.Errorf("an error occurred while validating the volume mount path")
 		} else if !matched {
-			return fmt.Errorf("mount path must be /home/jovyan, /opt/openmpp, or any of their subdirectories")
+			return fmt.Errorf("mount path must be /home/jovyan or any of its subdirectories")
 		}
 	}
 

@@ -42,19 +42,12 @@ const innerSpecObject: V1PodSpec = {
         },
       },
       volumeMounts: [
-        { mountPath: '/dev/shm', name: 'dshm' },
         { mountPath: '/home/jovyan', name: 'asa232rstudio-workspace' },
       ],
     },
   ],
   serviceAccountName: 'default-editor',
   volumes: [
-    {
-      emptyDir: {
-        medium: 'Memory',
-      },
-      name: 'dshm',
-    },
     {
       name: 'asa232rstudio-workspace',
       persistentVolumeClaim: {
@@ -100,6 +93,13 @@ const statusProcessedObject = {
   key: 'runningKey',
 };
 
+const formattedResourcesObject = {
+  cpu: '0.5',
+  cpuLimit: '0.5',
+  memory: '2',
+  memoryLimit: '2',
+};
+
 export const mockNotebook: NotebookRawObject = {
   apiVersion: 'kubeflow.org/v1beta1',
   kind: 'Notebook',
@@ -107,4 +107,5 @@ export const mockNotebook: NotebookRawObject = {
   spec: specObject,
   status: statusObject,
   processed_status: statusProcessedObject,
+  formatted_resources: formattedResourcesObject,
 };

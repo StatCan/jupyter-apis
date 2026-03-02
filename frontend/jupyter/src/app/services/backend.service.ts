@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BackendService, SnackBarService, SnackType } from 'kubeflow';
+import { BackendService, SnackBarService } from 'kubeflow';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   NotebookResponseObject,
@@ -14,8 +14,9 @@ import {
   VWABackendResponse,
   PVCPostObject,
   GetPVCResponseObject,
+  PVCUsageDataObject,
+  NotebookEditFormObject,
 } from '../types';
-import { V1Namespace } from '@kubernetes/client-node';
 import { V1PersistentVolumeClaim, V1Pod } from '@kubernetes/client-node';
 import { EventObject } from '../types/event';
 @Injectable({
@@ -216,6 +217,15 @@ export class JWABackendService extends BackendService {
     );
   }
 
+  public editNotebook(notebook: NotebookEditFormObject): Observable<string> {
+    const url = `api/namespaces/${notebook.namespace}/notebooks/${notebook.name}`;
+
+    return this.http.post<JWABackendResponse>(url, notebook).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => 'posted'),
+    );
+  }
+
   public createViewer(namespace: string, viewer: string) {
     const url = `api/namespaces/${namespace}/viewers`;
 
@@ -257,13 +267,35 @@ export class JWABackendService extends BackendService {
     timehours: string,
   ): Observable<string> {
     const url = `api/namespaces/${namespace}/notebooks/${name}/keepalive`;
-
     return this.http
       .patch<JWABackendResponse>(url, { timehours: timehours })
       .pipe(
         catchError(error => this.handleError(error)),
         map(_ => 'started'),
       );
+  }
+  
+  public updatePVCUsage(
+    ns: string | string[],
+    usageData: PVCUsageDataObject[],
+  ): Observable<string> {
+    if (!Array.isArray(ns)) {
+      return this.updateNamespacedPVCUsage(ns, usageData);
+    }
+    //ZONE: our namespace is never a string[]
+    return null;
+  }
+
+  public updateNamespacedPVCUsage(
+    namespace: string,
+    usageData: PVCUsageDataObject[],
+  ): Observable<string> {
+    const url = `api/namespaces/${namespace}/pvcs/usage`;
+
+    return this.http.patch<VWABackendResponse>(url, { data: usageData }).pipe(
+      catchError(error => this.handleError(error)),
+      map(_ => 'updated'),
+    );
   }
 
   // DELETE

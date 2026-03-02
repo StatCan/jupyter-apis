@@ -59,6 +59,11 @@ declare global {
       mockPVCsRequest(namespace: string): Chainable<void>;
 
       /**
+       * Custom command to mock request at '/api/namespaces/<namespace>/pvcs/usage'
+       */
+      mockPVCsUsageRequest(namespace: string): Chainable<void>;
+
+      /**
        * Custom command to mock request at '/api/namespaces/<namespace>/cost/allocation'
        * and returns array with mock cost data
        */

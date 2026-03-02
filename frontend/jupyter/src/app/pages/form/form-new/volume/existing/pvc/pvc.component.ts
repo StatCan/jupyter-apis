@@ -54,7 +54,7 @@ export class ExistingPvcComponent implements OnInit {
       return $localize`Name is required`;
     }
     if (volumeName.hasError('isMounted')) {
-      return $localize`Is mounted`;
+      return $localize`Already mounted`;
     }
   }
 

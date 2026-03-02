@@ -42,11 +42,7 @@ import {
 import { Router } from '@angular/router';
 import { ActionsService } from 'src/app/services/actions.service';
 import { VolumeFormComponent } from '../../volume-form/volume-form.component';
-import {
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Input, OnChanges, SimpleChanges } from '@angular/core';
 import {
   FormGroup,
   AbstractControl,
@@ -120,7 +116,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     public poller: PollerService,
     public actions: ActionsService,
     public dialog: MatDialog,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.kubecostPoller = new ExponentialBackoff({
@@ -266,14 +262,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Triggers the dialog and calls the code if it is positive. 
+  // Triggers the dialog and calls the code if it is positive.
   public keepAliveClicked(notebook: NotebookProcessedObject) {
     const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
-    const ref = this.dialog.open(DelayDialogComponent,
-      {
-        data: delayDialogConfig,
-        width: '600px',
-      });
+    const ref = this.dialog.open(DelayDialogComponent, {
+      data: delayDialogConfig,
+      width: '600px',
+    });
 
     ref.afterClosed().subscribe(res => {
       const config: SnackBarConfig = {
@@ -288,7 +283,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         // If we want to add any messages
       } else {
         if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
-          config.data.msg = $localize`Updating last activity to add ` + res.hours + ` hours`;
+          config.data.msg =
+            $localize`Updating last activity to add ` + res.hours + ` hours`;
           this.actions
             .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
             .subscribe(_ => {
@@ -297,10 +293,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.snackBar.open(config);
         }
       }
-      
     });
-
-
   }
 
   // This is the code for the delay popup
@@ -382,7 +375,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     // Status for auto-shutdown
     // Only a notebook that is active aka has a "last_activity"
     // If notebook not ready then it needs to be disabled
-    let autoShutdownAvailable = notebook.status.phase != STATUS_TYPE.READY ? STATUS_TYPE.UNAVAILABLE : STATUS_TYPE.READY;
+    let autoShutdownAvailable =
+      notebook.status.phase != STATUS_TYPE.READY
+        ? STATUS_TYPE.UNAVAILABLE
+        : STATUS_TYPE.READY;
 
     notebook.settings = [
       {
@@ -402,7 +398,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         status: autoShutdownAvailable,
         text: $localize`Delay auto-shutdown`,
         matIcon: 'av_timer',
-      }
+      },
     ];
   }
 

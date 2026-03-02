@@ -96,7 +96,35 @@
         <source>Hours to delay</source>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.html</context>
-          <context context-type="linenumber">5,6</context>
+          <context context-type="linenumber">9,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2933473152054569601" datatype="html">
+        <source>Specify an amount of hours for the delay</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2956939175730600124" datatype="html">
+        <source>Specify a full amount of hours for the delay</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3847285110838647661" datatype="html">
+        <source>Specify at least <x id="PH" equiv-text="e.min"/> hours</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="877346894336236154" datatype="html">
+        <source>Can&apos;t exceed <x id="PH" equiv-text="e.max"/> hours</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="245354490815845060" datatype="html">

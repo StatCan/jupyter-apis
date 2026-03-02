@@ -106,6 +106,30 @@
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2956939175730600124" datatype="html">
+        <source>Specify a full amount of hours for the delay</source>
+        <target>Spécifiez un nombre d'heures entier pour le délai</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3847285110838647661" datatype="html">
+        <source>Specify at least <x id="PH" equiv-text="e.min"/> hours</source>
+        <target>Spécifiez un minimum de <x id="PH" equiv-text="e.min"/> heures</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="877346894336236154" datatype="html">
+        <source>Can&apos;t exceed <x id="PH" equiv-text="e.max"/> hours</source>
+        <target>Ne peut pas excéder <x id="PH" equiv-text="e.max"/> heures</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="245354490815845060" datatype="html">
         <source>No value to copy to clipboard</source>
         <target>Aucune valeur à copier dans le presse-papiers</target>

@@ -9,10 +9,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 })
 export class DelayDialogComponent implements OnInit{
   public DELAY_DIALOG_RESP = DELAY_DIALOG_RESP;
-  private hours: '';
   formDelayCtrl: FormGroup;
-  @Input() MIN_DELAY = 1;
-  @Input() MAX_DELAY = 72;
   @Input() hourControl: FormControl<number | string>;
 
   constructor(public delaydialogRef: MatDialogRef<DelayDialogComponent>,

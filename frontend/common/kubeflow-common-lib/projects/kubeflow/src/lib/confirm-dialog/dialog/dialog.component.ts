@@ -36,6 +36,6 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   shouldDisplayEditChanges(data: Set<String>): boolean {
-    return data && data.size > 0
+    return data && data.size > 0;
   }
 }

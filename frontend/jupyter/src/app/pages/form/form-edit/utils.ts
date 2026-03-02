@@ -86,33 +86,3 @@ export function setConfigForNotebook(
     }
   }
 }
-
-// ---------------------------------------------------------------------------------------------------------
-// function privateGetDiff(x, y, keepOldVal, path, diff) {
-//   const type1 = getType(x);
-//   const type2 = getType(y);
-//   const currPath = path || [];
-//   const currDiff = diff || [];
-//   if (isTraversalNeeded(type1, type2)) {
-//     const iterator = getKeys(x, y, type1).values();
-//     let { value, done } = iterator.next();
-//     while (!done) {
-//       if (!(Object.prototype.hasOwnProperty.call(x, value))) {
-//         currDiff.push(makeDiff(x[value], y[value], 'add', currPath.concat(value), keepOldVal));
-//       } else if (!(Object.prototype.hasOwnProperty.call(y, value))) {
-//         currDiff.push(makeDiff(x[value], y[value], 'delete', currPath.concat(value), keepOldVal));
-//       } else {
-//         privateGetDiff(x[value], y[value], keepOldVal, currPath.concat(value), currDiff);
-//       }
-//       const curr = iterator.next();
-//       value = curr.value;
-//       done = curr.done;
-//     }
-//   } else {
-//     const op = computeOp(x, y, type1, type2);
-//     if (op != null) {
-//       currDiff.push(makeDiff(x, y, op, path, keepOldVal));
-//     }
-//   }
-//   return currDiff;
-// }

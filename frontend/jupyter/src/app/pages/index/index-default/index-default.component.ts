@@ -283,9 +283,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         duration: 2000,
       };
 
-      if (res === undefined || res.status === DELAY_DIALOG_RESP.CANCEL) {
-        // If we want to add any messages
-      } else {
+      if (!(res === undefined || res.status === DELAY_DIALOG_RESP.CANCEL)) {
         if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
           config.data.msg =
             $localize`Updating last activity to add ` + res.hours + ` hours`;

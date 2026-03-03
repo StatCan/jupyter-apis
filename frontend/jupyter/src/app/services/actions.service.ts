@@ -181,7 +181,7 @@ export class ActionsService {
         .subscribe(response => {
           const config: SnackBarConfig = {
             data: {
-              msg: $localize`Adding auto-shutdown delay of ${timehours} hours to '${name}'...`,
+              msg: $localize`Delaying the auto-shutdown delay of ${timehours} hours to '${name}'...`,
               snackType: SnackType.Info,
             },
           };

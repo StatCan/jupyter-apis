@@ -30,9 +30,9 @@ export class DelayDialogComponent implements OnInit {
         '1',
         [
           Validators.required,
-          Validators.min(0),
+          Validators.min(1),
           Validators.max(72),
-          Validators.pattern('^([1-9]|[1-6][0-9]|7[0-2])$'),
+          Validators.pattern('^[0-9]*$'),
         ],
       ],
     });
@@ -57,13 +57,13 @@ export class DelayDialogComponent implements OnInit {
       return $localize`Hours to delay is required`;
     }
     if ((e = errs.min)) {
-      return $localize`Specify at least ${e.min} hours`;
+      return $localize`Specify at least ${e.min} hour(s)`;
     }
     if ((e = errs.max)) {
       return $localize`Can't exceed ${e.max} hours`;
     }
     if ((e = errs.pattern)) {
-      return $localize`Specify a full amount of hours for the delay`;
+      return $localize`Specify a number of hours for the delay (no decimals)`;
     }
   }
 }

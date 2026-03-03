@@ -1,6 +1,6 @@
 ### Replace these placeholders with actual values
-@KF_USER_ID=wendy.gaultier@statcan.gc.ca
-@KF_NAMESPACE=wendy-gaultier
+@KF_USER_ID=REPLACE_WITH_YOUR_USER_ID
+@KF_NAMESPACE=REPLACE_WITH_YOUR_NAMESPACE
 @KF_NOTEBOOK_NAME=REPLACE_WITH_YOUR_NOTEBOOK_NAME
 @KF_NOTEBOOK_NAME_PATCH=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_PATCH
 @KF_NOTEBOOK_NAME_UPDATE=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_UPDATE
@@ -160,7 +160,6 @@ kubeflow-userid: {{KF_USER_ID}}
 }
 
 ### Postpone Culling
-### api/namespaces/${namespace}/notebooks/${name}/keepalive/
 PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME_PATCH}}/keepalive}
 kubeflow-userid: {{KF_USER_ID}}
 {

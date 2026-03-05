@@ -1491,9 +1491,9 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 	return nil
 }
 
-func validateCullingDelay(int delayHours) error {
+func validateCullingDelay(delayHours int) error {
 	if (delayHours < 1 || delayHours > 72){
-		return fmt.Errorf("validation failed: the delay must be between 1 and 72."))
+		return fmt.Errorf("validation failed: the delay must be between 1 and 72.")
 	}
 
 	return nil

@@ -84,6 +84,7 @@ export interface NotebookEditFormObject {
   cpuLimit: number | string;
   memory: number | string;
   memoryLimit: number | string;
+  workspace: any;
   datavols: any[];
 }
 

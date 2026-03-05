@@ -1,6 +1,16 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-  <p>{{ data.message }}</p>
+  <div *ngIf="shouldDisplayEditChanges(data.editChanges)">
+    <p>{{ data.content }}</p>
+
+    <ul class="edit-changes-list">
+      <li *ngFor="let val of data.editChanges">{{ val }}</li>
+    </ul>
+  </div>
+
+  <p>
+    <b *ngIf="data.warning">{{ data.warning }}</b> {{ data.message }}
+  </p>
 
   <p class="error">{{ data.error }}</p>
 </div>

@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
+  ConfirmDialogService,
   FormModule as KfFormModule,
   NamespaceService,
   SnackBarService,
@@ -31,7 +32,7 @@ const SnackBarServiceStub = {
   close: () => {},
 };
 
-describe('FormNewComponent', () => {
+describe('FormEditComponent', () => {
   let component: FormEditComponent;
   let fixture: ComponentFixture<FormEditComponent>;
 
@@ -50,6 +51,7 @@ describe('FormNewComponent', () => {
         { provide: JWABackendService, useValue: JWABackendServiceStub },
         { provide: NamespaceService, useValue: NamespaceServiceStub },
         { provide: SnackBarService, useValue: SnackBarServiceStub },
+        { provide: ConfirmDialogService, useValue: {} },
       ],
     }).compileComponents();
   }));

@@ -72,18 +72,8 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.6.0",
-    "ng-packagr": "^17.0.3",
     "prettier": "2.3.2",
     "ts-node": "^10.4.0",
     "typescript": "~5.2.2"
-  },
-  "overrides": {
-    "http-proxy-middleware": "2.0.7",
-    "webpack-dev-middleware": "6.1.2",
-    "undici": "6.21.1",
-    "webpack": "5.94.0",
-    "@babel/runtime": "7.26.10",
-    "esbuild": "0.25.1",
-    "vite": "5.4"
   }
 }

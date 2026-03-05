@@ -212,7 +212,7 @@ export class FormEditComponent
     };
   }
 
-  // returns only the parent fields from the diff results to be displayed a simple list the fields with differences
+  // returns only the parent fields from the diff results to be displayed as a simple list of the fields with differences
   formatDiff(delta: rdiffResult[]): Set<String> {
     let simpleDiff: Set<String> = new Set();
 

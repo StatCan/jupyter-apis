@@ -1093,7 +1093,7 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	}
 
 	updatedTime := time.Now().Add(time.Duration(numKeepAliveTime) * time.Hour)
-	log.Printf("Updated notebook %q with time notebook %q", notebookName, updatedTime);
+
 	if notebook.Annotations == nil {
 		notebook.Annotations = map[string]string{}
 	}
@@ -1106,6 +1106,8 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 		s.error(w, r, err)
 		return
 	}
+
+	log.Printf("Updated notebook %q with time %q", notebookName, updatedTime);
 
 	s.respond(w, r, &APIResponseBase{
 		Success: true,
@@ -1490,8 +1492,6 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 }
 
 func validateCullingDelay(int delayHours) error {
-	var validationErrors []string
-
 	if (delayHours < 1 || delayHours > 72){
 		return fmt.Errorf("validation failed: the delay must be between 1 and 72."))
 	}

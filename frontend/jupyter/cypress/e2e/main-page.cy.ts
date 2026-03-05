@@ -340,7 +340,7 @@ describe('Main tables', () => {
         cy.wait('@mockDelayCulling').its('response.statusCode').should('eq', 200);
         cy.get('mat-dialog-container').should('not.exist');
       });
-      it('Delay culling submit disabled if invalid data', () => {
+      it('Should disable submit if invalid data', () => {
         cy.get('[data-cy-table-id="notebooks-table"]')
           .find(`[data-cy-resource-table-row="Name"]`)
           .contains('a-test-01')
@@ -406,7 +406,7 @@ describe('Main tables', () => {
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('1');
         cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
-        // Invalid - letters won't be allowed in the input
+        // Invalid - decimal
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('1.2');
         cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');

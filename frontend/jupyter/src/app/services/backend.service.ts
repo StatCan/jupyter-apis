@@ -269,9 +269,10 @@ export class JWABackendService extends BackendService {
     const url = `api/namespaces/${namespace}/notebooks/${name}/keepalive`;
     return this.http
       .patch<JWABackendResponse>(url, { timehours: timehours })
-      .pipe(catchError(error => this.handleError(error)),
-      map(_ => 'delayed'),
-    );
+      .pipe(
+        catchError(error => this.handleError(error)),
+        map(_ => 'delayed'),
+      );
   }
 
   public updatePVCUsage(

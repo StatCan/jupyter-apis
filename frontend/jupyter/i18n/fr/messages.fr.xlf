@@ -98,28 +98,28 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f19de6f110c914e34f118f3c221771a45bc542ad" datatype="html">
-        <source>Hours to delay is required</source>
-        <target>Nombre d'heures pour le délai requis</target>
+        <trans-unit id="f19de6f110c914e34f118f3c221771a45bc542ad" datatype="html">
+        <source>Hours to delay</source>
+        <target>Nombre d'heures du délai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.html</context>
-          <context context-type="linenumber">5,6</context>
+          <context context-type="linenumber">6,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4903387837252986467" datatype="html">
-        <source>Specify a full amount of hours for the delay</source>
-        <target>Spécifiez un nombre d'heures entier pour le délai</target>
+        <source>Hours to delay is required</source>
+        <target>Nombre d'heures du délai requis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3847285110838647661" datatype="html">
-        <source>Specify at least <x id="PH" equiv-text="e.min"/> hours</source>
+      <trans-unit id="2488421228990292680" datatype="html">
+        <source>Specify at least <x id="PH" equiv-text="e.min"/> hour(s)</source>
         <target>Spécifiez un minimum de <x id="PH" equiv-text="e.min"/> heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="877346894336236154" datatype="html">
@@ -127,7 +127,15 @@
         <target>Ne peut pas excéder <x id="PH" equiv-text="e.max"/> heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1652364953727905903" datatype="html">
+        <source>Specify a number of hours for the delay (no decimals)</source>
+        <target>Spécifiez le nombre d'heures du délai (chiffre entier)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="245354490815845060" datatype="html">
@@ -204,7 +212,7 @@
       </trans-unit>
       <trans-unit id="77d036f9e68a5843b4126e48fa1648a9478b1651" datatype="html">
         <source> *The cluster admin has disabled setting this section! </source>
-        <target>*L'administrateur de la grappe a désactivé le paramètre de cette section !</target>
+        <target>*L'administrateur de la grappe a désactivé le paramètre de cette section !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/section/section.component.html</context>
           <context context-type="linenumber">21,25</context>
@@ -261,7 +269,7 @@
       <trans-unit id="9014900906829838341" datatype="html">
         <source>Name must consist of lowercase alphanumeric characters or &apos;-&apos;,
       and must start and end with an alphanumeric character</source>
-        <target>Le nom doit être composé de caractères alphanumériques minuscules ou « - »,
+        <target>Le nom doit être composé de caractères alphanumériques minuscules ou « - »,
       et doit commencer et se terminer par un caractère alphanumérique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
@@ -280,7 +288,7 @@
       <trans-unit id="6309394782533686443" datatype="html">
         <source>Invalid volume size: Should be an integer, 
         or integer followed by a valid unit</source>
-        <target>Taille du volume invalide : doit être un entier,
+        <target>Taille du volume invalide : doit être un entier,
         ou un entier suivi d'une unité valide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
@@ -290,7 +298,7 @@
       <trans-unit id="3476980733635555302" datatype="html">
         <source>Invalid memory size: Should be an integer, 
         or fixed-point integer followed by a valid unit</source>
-        <target>Taille de mémoire invalide : doit être un entier,
+        <target>Taille de mémoire invalide : doit être un entier,
         ou un entier à virgule fixe suivi d'une unité valide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
@@ -300,7 +308,7 @@
       <trans-unit id="2157861234990328207" datatype="html">
         <source>Invalid cpu limit: Should be a fixed-point 
       integer or an integer followed by &apos;m&apos;</source>
-        <target>Limite de CPU non valide : doit être une valeur à virgule fixe
+        <target>Limite de CPU non valide : doit être une valeur à virgule fixe
       entier ou entier suivi de &apos;m&apos;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/form/validators.ts</context>
@@ -340,32 +348,32 @@
         </context-group>
       </trans-unit>
       <trans-unit id="51ff067a5bc7c37021ad2197510f0056f19586e1" datatype="html">
-        <source> Example:</source>
-        <target> Exemple :</target>
+        <source> Example:</source>
+        <target> Exemple :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">7,9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="14a6e9e9516b54a4cc4e4b76838635a5025b376d" datatype="html">
-        <source> Name: filterValue</source>
-        <target> Nom: valeurFiltre</target>
+        <source> Name: filterValue</source>
+        <target> Nom: valeurFiltre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">9,12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b877f4b7c95a9df608724810332621b126abc72c" datatype="html">
-        <source> Filter empty values by entering double quotes:</source>
-        <target> Filtrez les valeurs vides en saisissant des guillemets :</target>
+        <source> Filter empty values by entering double quotes:</source>
+        <target> Filtrez les valeurs vides en saisissant des guillemets :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">16,19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="472a04cb8c68549357a444ed66edc46ab1182f01" datatype="html">
-        <source> Name: &quot;&quot;</source>
-        <target> Nom: &quot;&quot;</target>
+        <source> Name: &quot;&quot;</source>
+        <target> Nom: &quot;&quot;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">18,21</context>
@@ -381,7 +389,7 @@
       </trans-unit>
       <trans-unit id="c4351955af730c098704f168c7a98f2505f3117d" datatype="html">
         <source>Filter based on the objects&apos; status, by using:</source>
-        <target>Filtrez en fonction du statut des objets, en utilisant :</target>
+        <target>Filtrez en fonction du statut des objets, en utilisant :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">27,31</context>
@@ -421,23 +429,23 @@
       </trans-unit>
       <trans-unit id="363b2c66bcd12b2a99e00dc760cff20743f59a27" datatype="html">
         <source>Filter timestamp values based on:</source>
-        <target>Filtrer les valeurs d'horodatage en fonction de :</target>
+        <target>Filtrer les valeurs d'horodatage en fonction de :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">42,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1860ddf8519c178e0c9c99b02b700b67a9f9b9cc" datatype="html">
-        <source> The &quot;-&quot; character for empty date values:</source>
-        <target> Le caractère "-" pour les valeurs de date vides :</target>
+        <source> The &quot;-&quot; character for empty date values:</source>
+        <target> Le caractère "-" pour les valeurs de date vides :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a81a55763a0547d3b744ed0d72105b487b91ae68" datatype="html">
-        <source> Created at: -</source>
-        <target> Créé à: -</target>
+        <source> Created at: -</source>
+        <target> Créé à: -</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -620,7 +628,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/backend.service.ts</context>
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">363</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3862207452684082108" datatype="html">
@@ -780,7 +788,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">178</context>
+          <context context-type="linenumber">202</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -1930,7 +1938,7 @@
         <target>Nouveau bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7534621219661788184" datatype="html">
@@ -1938,7 +1946,7 @@
         <target>Ajouter un nouveau bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1384916903989385807" datatype="html">
@@ -1946,7 +1954,7 @@
         <target>Bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3864460974886321903" datatype="html">
@@ -1954,7 +1962,7 @@
         <target>Mise-à-jour de la dernière activité pour ajouter </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">289</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4810632459880648919" datatype="html">
@@ -1962,7 +1970,7 @@
         <target>Délai de l'arrêt automatique pour <x id="PH" equiv-text="name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">309</context>
+          <context context-type="linenumber">304</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5729881851916394567" datatype="html">
@@ -1970,7 +1978,7 @@
         <target>Afin de maintenir le bloc-notes actif pendant le nombre d’heures spécifié</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">310</context>
+          <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
       <trans-unit id="935187492052582731" datatype="html">
@@ -1978,7 +1986,7 @@
         <target>Soumettre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">311</context>
+          <context context-type="linenumber">306</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
@@ -1986,7 +1994,7 @@
         <target>Annuler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">313</context>
+          <context context-type="linenumber">308</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3223751240881562733" datatype="html">
@@ -1994,7 +2002,7 @@
         <target>Préparation de l'arrêt du serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">334</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5387813344448714728" datatype="html">
@@ -2002,7 +2010,7 @@
         <target>Serveur bloc-notes en supression.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">291</context>
+          <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5423034101668291795" datatype="html">
@@ -2010,7 +2018,7 @@
         <target>Aucun pod n'est actuellement en cours d'exécution pour ce serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">293</context>
+          <context context-type="linenumber">345</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3507421077462148171" datatype="html">
@@ -2018,7 +2026,7 @@
         <target>Serveur bloc-notes en arrêt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">295</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2956098160626271284" datatype="html">
@@ -2026,7 +2034,7 @@
         <target>En exécution</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">297</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7231778731753154138" datatype="html">
@@ -2037,24 +2045,24 @@
           <context context-type="linenumber">299</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3719875081264412862" datatype="html">
+      <trans-unit id="1171866674381277416" datatype="html">
         <source>Couldn&apos;t find any information for the status of this notebook server.</source>
         <target>Aucune information n'a été trouvée sur l'état de ce serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">301</context>
+          <context context-type="linenumber">353</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9134364280759538026" datatype="html">
+      <trans-unit id="3646507477007895610" datatype="html">
         <source>An error has occured. Click on the notebook server name for more information.</source>
         <target>Une erreur s'est produite. Cliquez sur le nom du serveur bloc-notes pour plus d'informations.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">303</context>
+          <context context-type="linenumber">355</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">357</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1938866431693606922" datatype="html">
@@ -2062,7 +2070,7 @@
         <target>Planification du Pod.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2776617638046368313" datatype="html">
@@ -2070,7 +2078,7 @@
         <target>Voir les détails</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">328</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428" datatype="html">
@@ -2078,7 +2086,7 @@
         <target>Modifier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">334</context>
+          <context context-type="linenumber">395</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
@@ -2086,7 +2094,7 @@
         <target>Supprimer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">397s</context>
+          <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4319570438284829756" datatype="html">
@@ -2094,7 +2102,7 @@
         <target>Retarder l'arrêt automatique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">403</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6425333040033977991" datatype="html">
@@ -2102,7 +2110,7 @@
         <target>Attaché</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">420</context>
+          <context context-type="linenumber">487</context>
         </context-group>
       </trans-unit>
       <trans-unit id="810251571194206100" datatype="html">
@@ -2110,7 +2118,7 @@
         <target>Libre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">424</context>
+          <context context-type="linenumber">491</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5156704408648015254" datatype="html">
@@ -2118,7 +2126,7 @@
         <target>Le volume a été soumit avec succès</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">581</context>
+          <context context-type="linenumber">648</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e2936e947eed8cb9987b1111220f29597a4397b" datatype="html">
@@ -2294,11 +2302,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">200</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6614061627386480272" datatype="html">
@@ -2765,12 +2773,12 @@
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8548755176894449628" datatype="html">
-        <source>Adding auto-shutdown delay of <x id="PH" equiv-text="timehours"/> hours to &apos;<x id="PH_1" equiv-text="name"/>&apos;...</source>
+      <trans-unit id="4715556855288069547" datatype="html">
+        <source>Delaying the auto-shutdown delay of <x id="PH" equiv-text="timehours"/> hours to &apos;<x id="PH_1" equiv-text="name"/>&apos;...</source>
         <target>Ajouter un retard de <x id="PH" equiv-text="timehours"/> heures à l'arrêt automatique de &apos;<x id="PH_1" equiv-text="name"/>&apos;...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">178</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5287831016434712379" datatype="html">
@@ -2778,7 +2786,7 @@
         <target>Êtes-vous sûr que vous voulez supprimer ce volume? <x id="PH" equiv-text="name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5463203516729908103" datatype="html">
@@ -2786,10 +2794,10 @@
         <target>Avertissement: Toutes données dans ce volume seront perdues.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6943486270557756671" datatype="html">
+            <trans-unit id="6943486270557756671" datatype="html">
         <source>CANCEL</source>
         <target>ANNULER</target>
         <context-group purpose="location">
@@ -2810,7 +2818,7 @@
         <target>SUPPRESSION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">204</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>

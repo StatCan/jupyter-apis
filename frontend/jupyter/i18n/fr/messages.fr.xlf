@@ -108,7 +108,7 @@
       </trans-unit>
       <trans-unit id="4903387837252986467" datatype="html">
         <source>Hours to delay is required</source>
-        <target>Nombre d'heures du délai requis</target>
+        <target>Le nombre d'heure(s) de délai est requis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -116,7 +116,7 @@
       </trans-unit>
       <trans-unit id="2488421228990292680" datatype="html">
         <source>Specify at least <x id="PH" equiv-text="e.min"/> hour(s)</source>
-        <target>Spécifiez un minimum de <x id="PH" equiv-text="e.min"/> heures</target>
+        <target>Spécifiez un minimum de <x id="PH" equiv-text="e.min"/> heure(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -132,7 +132,7 @@
       </trans-unit>
       <trans-unit id="1652364953727905903" datatype="html">
         <source>Specify a number of hours for the delay (no decimals)</source>
-        <target>Spécifiez le nombre d'heures du délai (chiffre entier)</target>
+        <target>Spécifiez le nombre d'heures pour le délai (chiffre entier)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/delay-dialog/delay-dialog.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -628,7 +628,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/backend.service.ts</context>
-          <context context-type="linenumber">363</context>
+          <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3862207452684082108" datatype="html">
@@ -1957,9 +1957,9 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3864460974886321903" datatype="html">
-        <source>Updating last activity to add </source>
-        <target>Mise-à-jour de la dernière activité pour ajouter </target>
+      <trans-unit id="6537363496852226276" datatype="html">
+        <source>Updating last activity to add <x id="PH" equiv-text="res.hours"/> hours</source>
+        <target>Mise-à-jour de la dernière activité pour ajouter <x id="PH" equiv-text="res.hours"/> heure(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">289</context>
@@ -1975,7 +1975,7 @@
       </trans-unit>
       <trans-unit id="5729881851916394567" datatype="html">
         <source>This will keep the notebook alive for the number of hours specified</source>
-        <target>Afin de maintenir le bloc-notes actif pendant le nombre d’heures spécifié</target>
+        <target>Ceci permettra de maintenir le bloc-notes actif pendant le nombre d’heures spécifié</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">305</context>
@@ -2306,7 +2306,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6614061627386480272" datatype="html">
@@ -2786,7 +2786,7 @@
         <target>Êtes-vous sûr que vous voulez supprimer ce volume? <x id="PH" equiv-text="name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">174</context>
+          <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5463203516729908103" datatype="html">

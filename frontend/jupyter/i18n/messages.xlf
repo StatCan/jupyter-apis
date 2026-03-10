@@ -550,7 +550,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/backend.service.ts</context>
-          <context context-type="linenumber">363</context>
+          <context context-type="linenumber">364</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3862207452684082108" datatype="html">
@@ -1731,8 +1731,8 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3864460974886321903" datatype="html">
-        <source>Updating last activity to add </source>
+      <trans-unit id="6537363496852226276" datatype="html">
+        <source>Updating last activity to add <x id="PH" equiv-text="res.hours"/> hours</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
           <context context-type="linenumber">289</context>

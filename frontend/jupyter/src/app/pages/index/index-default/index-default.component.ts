@@ -285,8 +285,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
       if (!(res === undefined || res.status === DELAY_DIALOG_RESP.CANCEL)) {
         if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
-          config.data.msg =
-            $localize`Updating last activity to add ${res.hours} hours`;
+          config.data.msg = $localize`Updating last activity to add ${res.hours} hours`;
           this.actions
             .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
             .subscribe(_ => {

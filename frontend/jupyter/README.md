@@ -20,6 +20,8 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running integration tests
 
+Make sure the tests are being run in English. and the namespace is the 'kubeflow-userid'. 
+
 To run integration tests locally, make sure that node modules are installed and the frontend is serving the UI under `localhost:4200`. Then use `npm run e2e` to execute the integration tests via [Cypress](https://www.cypress.io/). This will open Cypress and there select the browser in which the tests will run.
 
 Ideally, tests should be run both in Chrome and Firefox and for that there is the script `npm run e2e-ci-all` that `runs` (instead of `opening`) Cypress. Note that in order for tests to run in a browser, the browser needs to be already installed on the system.

@@ -9,12 +9,15 @@ import {
   ConfirmDialogService,
   SnackBarService,
   DIALOG_RESP,
+  DELAY_DIALOG_RESP,
   SnackType,
   ToolbarButton,
   PollerService,
   DashboardState,
   SnackBarConfig,
   DialogConfig,
+  DelayDialogConfig,
+  DelayDialogComponent,
 } from 'kubeflow';
 import { MatDialog } from '@angular/material/dialog';
 import { JWABackendService } from 'src/app/services/backend.service';
@@ -209,6 +212,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           this.router.navigate([a.data.link.url]);
           break;
         }
+      case 'keep_alive':
+        this.keepAliveClicked(a.data);
+        break;
       case 'nb_edit':
         if (a.data.status.phase !== STATUS_TYPE.TERMINATING) {
           this.router.navigate([
@@ -258,6 +264,51 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     } else {
       this.stopNotebook(notebook);
     }
+  }
+
+  // Triggers the dialog and calls the code if it is positive.
+  public keepAliveClicked(notebook: NotebookProcessedObject) {
+    const delayDialogConfig = this.getDelayDialogConfig(notebook.name);
+    const ref = this.dialog.open(DelayDialogComponent, {
+      data: delayDialogConfig,
+      width: '600px',
+    });
+
+    ref.afterClosed().subscribe(res => {
+      const config: SnackBarConfig = {
+        data: {
+          msg: ``,
+          snackType: SnackType.Success,
+        },
+        duration: 2000,
+      };
+
+      if (!(res === undefined || res.status === DELAY_DIALOG_RESP.CANCEL)) {
+        if (res.status === DELAY_DIALOG_RESP.ACCEPT) {
+          config.data.msg = $localize`Updating last activity to add ${res.hours} hours`;
+          this.actions
+            .updateKeepAlive(notebook.namespace, notebook.name, res.hours)
+            .subscribe(_ => {
+              this.router.navigate(['']);
+            });
+          this.snackBar.open(config);
+        }
+      }
+    });
+  }
+
+  // This is the code for the delay popup
+  private getDelayDialogConfig(name: string): DelayDialogConfig {
+    return {
+      title: $localize`Delay auto-shutdown for ${name}`,
+      message: $localize`This will keep the notebook alive for the number of hours specified`,
+      accept: $localize`Submit`,
+      confirmColor: 'primary',
+      cancel: $localize`Cancel`,
+      error: '',
+      width: '600px',
+      hours: '0',
+    };
   }
 
   public startNotebook(notebook: NotebookProcessedObject) {
@@ -321,6 +372,15 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       text: notebook.name,
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
+
+    // Status for auto-shutdown
+    // Only a notebook that is active aka has a "last_activity"
+    // If notebook not ready then it needs to be disabled
+    let autoShutdownAvailable =
+      notebook.status.phase != STATUS_TYPE.READY
+        ? STATUS_TYPE.UNAVAILABLE
+        : STATUS_TYPE.READY;
+
     notebook.settings = [
       {
         name: 'nb_details',
@@ -339,6 +399,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         status: this.processDeletionActionStatus(notebook),
         text: $localize`Delete`,
         matIcon: 'delete',
+      },
+      {
+        name: 'keep_alive',
+        status: autoShutdownAvailable,
+        text: $localize`Delay auto-shutdown`,
+        matIcon: 'av_timer',
       },
     ];
   }

@@ -158,3 +158,10 @@ kubeflow-userid: {{KF_USER_ID}}
 {
     "name": "{{KF_PVC_VIEWER_NAME_CREATE}}"
 }
+
+### Postpone Culling
+PATCH {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks/{{KF_NOTEBOOK_NAME_PATCH}}/keepalive}
+kubeflow-userid: {{KF_USER_ID}}
+{
+    "timehours": 2
+}

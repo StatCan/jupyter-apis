@@ -274,6 +274,148 @@ describe('Main tables', () => {
         'http://localhost:4200/notebook/details/kubeflow-user/a-dog-breed-katib',
       );
     });
+
+    it('Delay menu', () => {
+      it('Should be disabled if notebook not ready', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-dog-breed-katib')
+          .parent()
+          .parent()
+          .find('[data-cy-resource-table-action-icon="settings"]')
+          .click();
+        cy.get('div[role="menu"]')
+          .should('be.visible')
+          .find('button[data-cy-menu-icon-action="keep_alive"]')
+          .and('be.disabled');
+            });
+      it('Should Cancel on click', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-test-01')
+          .parent()
+          .parent()
+          .find('[data-cy-resource-table-action-icon="settings"]')
+          .click();
+        cy.get('div[role="menu"]')
+          .should('be.visible')
+          .find('button[data-cy-menu-icon-action="keep_alive"]')
+          .and('be.enabled')
+          .click();;
+        cy.get('.mat-mdc-dialog-title')
+          .should('be.visible')
+          .and(
+            'have.text',
+            'Delay auto-shutdown for a-test-01',
+          );
+        cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
+        cy.get('mat-dialog-container').should('not.exist');
+      });
+      it('Should be enabled and working', () => {
+        cy.intercept(
+            'PATCH',
+            '/api/namespaces/kubeflow-user/notebooks/a-test-01/keepalive',
+            { success: true, status: 200 },
+          ).as('mockDelayCulling');
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-test-01')
+          .parent()
+          .parent()
+          .find('[data-cy-resource-table-action-icon="settings"]')
+          .click();
+        cy.get('div[role="menu"]')
+          .should('be.visible')
+          .find('button[data-cy-menu-icon-action="keep_alive"]')
+          .and('be.enabled')
+          .click();;
+        cy.get('.mat-mdc-dialog-title')
+          .should('be.visible')
+          .and(
+            'have.text',
+            'Delay auto-shutdown for a-test-01',
+          );
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        cy.get('.mat-mdc-dialog-actions > button').contains('SUBMIT').click();
+        cy.wait('@mockDelayCulling').its('response.statusCode').should('eq', 200);
+        cy.get('mat-dialog-container').should('not.exist');
+      });
+      it('Should disable submit if invalid data', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-test-01')
+          .parent()
+          .parent()
+          .find('[data-cy-resource-table-action-icon="settings"]')
+          .click();
+        cy.get('div[role="menu"]')
+          .should('be.visible')
+          .find('button[data-cy-menu-icon-action="keep_alive"]')
+          .and('be.enabled')
+          .click();
+        cy.get('.mat-mdc-dialog-title')
+          .should('be.visible')
+          .and(
+            'have.text',
+            'Delay auto-shutdown for a-test-01',
+          );
+        // Min
+        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.value', '1');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        // Zero
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('0');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
+        .should('have.text', "Specify at least 1 hour(s)");
+        // Max
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('72');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        // Negative
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('-1');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
+        .should('have.text', "Specify at least 1 hour(s)");
+        // Valid
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('24');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        // Above max
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('73');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
+        .should('have.text', "Can't exceed 72 hours");
+        // Valid
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('1');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        // Invalid - letters won't be allowed in the input
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('a');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
+        .should('have.text', "Hours to delay is required");
+        // Valid - to clear the message
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('1');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        // Invalid - decimal
+        cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
+        cy.get('[data-cy-form-input="delayTime"]').find('input').type('1.2');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
+        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
+        .should('have.text', "Specify a number of hours for the delay (no decimals)");
+       
+      });
+    });
   });
 
   describe('Volumes table', () => {

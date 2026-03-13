@@ -46,6 +46,8 @@ const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
 // LastActivityAnnotation is the annotation name for the last activity value.
 const LastActivityAnnotation = "notebooks.kubeflow.org/last-activity"
+// LastActivityCheckTimeStamp for the delay shutdown
+const LastActivityCheckTimeStamp = "notebooks.kubeflow.org/last_activity_check_timestamp"
 
 // Begin structs necessary for handling volumes
 type volrequest struct {
@@ -192,6 +194,10 @@ type notebookeventsresponse struct {
 
 type startstopnotebookrequest struct {
 	Stopped bool `json:"stopped"`
+}
+
+type delaycullingrequest struct {
+	TimeHours string `json:"timehours"`
 }
 
 func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
@@ -1046,6 +1052,69 @@ func formatMemoryToGibibytes(memory resource.Quantity) string {
 	return strconv.FormatFloat(gibibytes, 'f', -1, 64)
 }
 
+func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespaceName := vars["namespace"]
+	notebookName := vars["notebook"]
+	log.Printf("updating notebook %q for %q with additional time", notebookName, namespaceName)
+
+	// Read the incoming notebook
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+	defer r.Body.Close()
+	//json object so make it a sturct
+	var req delaycullingrequest
+	err = json.Unmarshal(body, &req)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	numKeepAliveTime, err := strconv.Atoi(req.TimeHours)
+	if err != nil {
+		fmt.Println("Error while parsing:", err)
+		return
+	}
+
+	err = validateCullingDelay(numKeepAliveTime)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// Read existing notebook
+	notebook, err := s.listers.notebooks.Notebooks(namespaceName).Get(notebookName)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	updatedTime := time.Now().Add(time.Duration(numKeepAliveTime) * time.Hour)
+
+	if notebook.Annotations == nil {
+		notebook.Annotations = map[string]string{}
+	}
+
+	notebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
+	notebook.Annotations[LastActivityCheckTimeStamp] = updatedTime.Format(time.RFC3339)
+	 
+	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("Updated notebook %q with time %q", notebookName, updatedTime);
+
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
+}
+
 func (s *server) GetNotebook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
@@ -1417,6 +1486,14 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 		if !validsizes[bytes/(1<<30)] { // convert bytes to Gibibytes
 			return fmt.Errorf("storage request is invalid, got: %dGi", bytes/(1<<30))
 		}
+	}
+
+	return nil
+}
+
+func validateCullingDelay(delayHours int) error {
+	if (delayHours < 1 || delayHours > 72){
+		return fmt.Errorf("validation failed: the delay must be between 1 and 72.")
 	}
 
 	return nil

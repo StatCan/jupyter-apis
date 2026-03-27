@@ -409,7 +409,7 @@
         &gt;"/>) </source>
         <target> Les types de statut (c'est-à-dire <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i
           &gt;"/>ready, waiting, warning, error, unavailable, uninitialized, terminating, stopped<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i
-        &gt;"/>) </source>
+        &gt;"/>) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">projects/kubeflow/src/lib/help-popover/help-popover.component.html</context>
           <context context-type="linenumber">30,36</context>
@@ -1374,7 +1374,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="5020e747986c5790853fc20c7f3a6eb315548831" datatype="html">
-        <source>Detatch volume</source>
+        <source>Detach volume</source>
         <target>Détacher le volume</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>

@@ -1373,7 +1373,7 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5020e747986c5790853fc20c7f3a6eb315548831" datatype="html">
+      <trans-unit id="95209a789f5f5ebee725f344d92c8ae5c2734576" datatype="html">
         <source>Detach volume</source>
         <target>Détacher le volume</target>
         <context-group purpose="location">

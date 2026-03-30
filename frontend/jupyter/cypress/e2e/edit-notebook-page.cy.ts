@@ -698,7 +698,7 @@ describe('Edit notebook form', () => {
     it('should add new workspace volume and move the old one to data volumes', () => {
       // delete workspace
       cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .click();
       // create new workspace
       cy.get('[data-cy-form-button="workspaceVolume-new"]').click();

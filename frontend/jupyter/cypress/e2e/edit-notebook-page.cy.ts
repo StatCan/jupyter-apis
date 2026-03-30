@@ -171,7 +171,7 @@ describe('Edit notebook form', () => {
         'not.exist',
       );
       cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .click();
       cy.get('[data-cy-form-button="workspaceVolume-new"]').should('exist');
       cy.get('[data-cy-form-button="workspaceVolume-existing"]').should(
@@ -271,7 +271,7 @@ describe('Edit notebook form', () => {
         .should('contain.text', 'my-workspace-volume, 4Gi');
       // new volume delete
       cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .click();
       cy.get('[data-cy-form-button="workspaceVolume-new"]').should('exist');
       cy.get('[data-cy-form-button="workspaceVolume-existing"]').should(
@@ -571,15 +571,15 @@ describe('Edit notebook form', () => {
         .should('contain.text', 'dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv, 4Gi');
       // delete data volumes
       cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .eq(2)
         .click();
       cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .eq(1)
         .click();
       cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .eq(0)
         .click();
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should(
@@ -698,7 +698,7 @@ describe('Edit notebook form', () => {
     it('should add new workspace volume and move the old one to data volumes', () => {
       // delete workspace
       cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .click();
       // create new workspace
       cy.get('[data-cy-form-button="workspaceVolume-new"]').click();

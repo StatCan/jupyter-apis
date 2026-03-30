@@ -321,7 +321,7 @@ describe('New notebook form', () => {
         .should('have.text', ' Name is required ');
       // delete new volume
       cy.get('[data-cy-form-input="workspaceVolume"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .click();
       cy.get(
         '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',
@@ -517,11 +517,11 @@ describe('New notebook form', () => {
       // delete new volumes
       // deletes the first data volume in the list, then deletes the last remaining data volume
       cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .eq(0)
         .click();
       cy.get('[data-cy-form-input="dataVolumes"]')
-        .find('mat-icon[mattooltip="Delete volume"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
         .click();
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should(
         'not.exist',

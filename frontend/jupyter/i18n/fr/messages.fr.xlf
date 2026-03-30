@@ -1053,9 +1053,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e295c323cbcd6575dd493a8f2da7dd85d8d9706e" datatype="html">
-        <source>Delete volume</source>
-        <target>Supprimer le volume</target>
+      <trans-unit id="95209a789f5f5ebee725f344d92c8ae5c2734576" datatype="html">
+        <source>Detach volume</source>
+        <target>Détacher le volume</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-data-volumes/form-data-volumes.component.html</context>
           <context context-type="linenumber">52</context>

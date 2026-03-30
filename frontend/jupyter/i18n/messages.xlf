@@ -936,11 +936,15 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e295c323cbcd6575dd493a8f2da7dd85d8d9706e" datatype="html">
-        <source>Delete volume</source>
+      <trans-unit id="95209a789f5f5ebee725f344d92c8ae5c2734576" datatype="html">
+        <source>Detach volume</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-data-volumes/form-data-volumes.component.html</context>
           <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="66b97ad4367fde1abbcb9fb8a4910c3f03b6af89" datatype="html">
@@ -1215,13 +1219,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>
           <context context-type="linenumber">4</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="95209a789f5f5ebee725f344d92c8ae5c2734576" datatype="html">
-        <source>Detach volume</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/form/form-new/form-workspace-volume/form-workspace-volume.component.html</context>
-          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4c01df36153e04929724e0c55bad22f8a3a83510" datatype="html">

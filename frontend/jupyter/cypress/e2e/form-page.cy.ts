@@ -485,5 +485,28 @@ describe('New notebook form', () => {
       cy.wait('@mockSubmitNotebook');
       cy.url().should('eq', 'http://localhost:4200/');
     });
+
+    it('should create a OneLake notebook', ()=>{
+      cy.get('lib-name-input[resourcename="Notebook Server"]').find('input').type('test-notebook-onelake');
+      cy.get('[data-cy-advanced-options-button]').click();
+      cy.get('[data-cy-form-input="onelakeCheck"]').find('input').check({force: true});
+      cy.get('[data-cy-form-input="onelakeWorkspace"]').find('input').type('workspace-guid');
+      cy.get('[data-cy-form-input="onelakeLakehouse"]').find('input').type('lakehouse-guid');
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks', req => {
+        expect(req.body.configurations).to.include('onelake-fuse');
+        expect(req.body.onelake).to.eq(true);
+        expect(req.body.onelakeWorkspace).to.eq('workspace-guid');
+        expect(req.body.onelakeLakehouse).to.eq('lakehouse-guid');
+        req.reply({
+          success: true,
+          status: 200
+        });
+      }).as('mockSubmitNotebook');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.wait('@mockSubmitNotebook');
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
   });
 });

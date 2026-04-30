@@ -103,6 +103,9 @@ type newnotebookrequest struct {
 	DataVolumes        []volrequest      `json:"datavols"`
 	EnableSharedMemory bool              `json:"shm"`
 	Configurations     []string          `json:"configurations"`
+	Onelake            bool              `json:"onelake"`
+	OnelakeWorkspace   string            `json:"onelakeWorkspace"`
+	OnelakeLakehouse   string            `json:"onelakeLakehouse"`
 	Protb              bool              `json:"prob"`
 	Language           string            `json:"language"`
 	ImagePullPolicy    string            `json:"imagePullPolicy"`
@@ -538,6 +541,15 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	// AAW Customization Adding protected B
 	if req.Protb {
 		notebook.ObjectMeta.Labels["notebook.statcan.gc.ca/protected-b"] = "true"
+	}
+
+	// Add OneLake configuration
+	if req.Onelake {
+		notebook.ObjectMeta.Labels["onelake-fuse"] = "true"
+		notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env,
+			corev1.EnvVar{Name: "ONELAKE_WORKSPACE", Value: strings.TrimSpace(req.OnelakeWorkspace)},
+			corev1.EnvVar{Name: "ONELAKE_LAKEHOUSE", Value: strings.TrimSpace(req.OnelakeLakehouse)},
+		)
 	}
 
 	// Add configuration items

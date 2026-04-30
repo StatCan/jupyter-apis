@@ -1,5 +1,4 @@
 import { Status } from 'kubeflow';
-import { PodDefault } from './poddefault';
 import { GPU } from './gpu';
 import {
   V1ContainerState,
@@ -66,7 +65,10 @@ export interface NotebookFormObject {
   workspace: any;
   datavols: any[];
   shm: boolean;
-  configurations: PodDefault[];
+  onelake?: boolean;
+  onelakeWorkspace?: string;
+  onelakeLakehouse?: string;
+  configurations: string[];
 }
 
 export interface NotebookRawObject {

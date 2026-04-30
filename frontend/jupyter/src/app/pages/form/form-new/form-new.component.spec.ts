@@ -18,8 +18,10 @@ import { FormCpuRamModule } from './form-cpu-ram/form-cpu-ram.module';
 import { FormDataVolumesModule } from './form-data-volumes/form-data-volumes.module';
 import { FormGpusModule } from './form-gpus/form-gpus.module';
 import { FormImageModule } from './form-image/form-image.module';
+import { FormImageCustomModule } from './form-image-custom/form-image-custom.module';
 import { FormNameModule } from './form-name/form-name.module';
 import { FormNewComponent } from './form-new.component';
+import { FormProtectedBModule } from './form-protected-b/form-protected-b.module';
 import { FormWorkspaceVolumeModule } from './form-workspace-volume/form-workspace-volume.module';
 import { VolumeModule } from './volume/volume.module';
 
@@ -61,7 +63,9 @@ describe('FormNewComponent', () => {
         FormAffinityTolerationsModule,
         FormAdvancedOptionsModule,
         FormImageModule,
+        FormImageCustomModule,
         FormNameModule,
+        FormProtectedBModule,
         HttpClientModule,
         RouterTestingModule,
         NoopAnimationsModule,
@@ -82,5 +86,28 @@ describe('FormNewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should add the OneLake configuration when selected', () => {
+    component.formCtrl.patchValue({
+      name: 'test-notebook',
+      namespace: 'kubeflow-user',
+      image: 'registry/jupyterlab-cpu:latest',
+      cpu: 1,
+      cpuLimit: 1,
+      memory: 1,
+      memoryLimit: 1,
+      configurations: [],
+      onelake: true,
+      onelakeWorkspace: ' workspace-guid ',
+      onelakeLakehouse: ' lakehouse-guid ',
+    });
+
+    const notebook = component.getSubmitNotebook();
+
+    expect(notebook.configurations).toContain('onelake-fuse');
+    expect(notebook.onelake).toBeTrue();
+    expect(notebook.onelakeWorkspace).toBe('workspace-guid');
+    expect(notebook.onelakeLakehouse).toBe('lakehouse-guid');
   });
 });

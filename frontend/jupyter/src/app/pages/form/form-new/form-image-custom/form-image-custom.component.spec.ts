@@ -48,6 +48,9 @@ describe('FormImageCustomComponent', () => {
       imageGroupOne: new FormControl(),
       imageGroupTwo: new FormControl(),
       imageGroupThree: new FormControl(),
+      onelake: new FormControl(),
+      onelakeWorkspace: new FormControl(),
+      onelakeLakehouse: new FormControl(),
     });
 
     fixture.detectChanges();

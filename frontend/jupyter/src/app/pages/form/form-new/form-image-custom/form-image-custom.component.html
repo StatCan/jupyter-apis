@@ -93,15 +93,57 @@
     </mat-form-field>
 
     <div class="flex-column">
-      <mat-checkbox
-        *ngIf="allowCustomImage"
-        [formControl]="parentForm.get('customImageCheck')"
-        (change)="onSelect($event)"
-        i18n
-        data-cy-form-input="customImageCheck"
-      >
-        Custom Image
-      </mat-checkbox>
+      <div class="image-option-row">
+        <mat-checkbox
+          *ngIf="allowCustomImage"
+          [formControl]="parentForm.get('customImageCheck')"
+          (change)="onSelect($event)"
+          i18n
+          data-cy-form-input="customImageCheck"
+        >
+          Custom Image
+        </mat-checkbox>
+
+        <mat-checkbox
+          [formControl]="parentForm.get('onelake')"
+          i18n
+          data-cy-form-input="onelakeCheck"
+        >
+          OneLake
+        </mat-checkbox>
+      </div>
+
+      <div class="onelake-fields" *ngIf="parentForm?.value.onelake">
+        <mat-form-field
+          class="wide"
+          appearance="outline"
+          data-cy-form-input="onelakeWorkspace"
+        >
+          <mat-label i18n>OneLake workspace</mat-label>
+          <input
+            matInput
+            placeholder="Workspace name or GUID"
+            i18n-placeholder
+            [formControl]="parentForm.get('onelakeWorkspace')"
+          />
+          <mat-error i18n>Workspace is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field
+          class="wide"
+          appearance="outline"
+          data-cy-form-input="onelakeLakehouse"
+        >
+          <mat-label i18n>OneLake lakehouse</mat-label>
+          <input
+            matInput
+            placeholder="Lakehouse name or GUID"
+            i18n-placeholder
+            [formControl]="parentForm.get('onelakeLakehouse')"
+          />
+          <mat-error i18n>Lakehouse is required</mat-error>
+        </mat-form-field>
+      </div>
 
       <mat-form-field
         class="wide"

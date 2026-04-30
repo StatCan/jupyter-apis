@@ -2,6 +2,8 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { GPU, Config } from 'src/app/types';
 import { createFormGroupFromVolume } from 'src/app/shared/utils/volumes';
 
+export const ONELAKE_CONFIGURATION_LABEL = 'onelake-fuse';
+
 export function getFormDefaults(): FormGroup {
   const fb = new FormBuilder();
 
@@ -47,6 +49,9 @@ export function getFormDefaults(): FormGroup {
     shm: [true, []],
     configurations: [[], []],
     prob: [false, []],
+    onelake: [false, []],
+    onelakeWorkspace: ['', []],
+    onelakeLakehouse: ['', []],
     language: ['', [Validators.required]],
   });
 }
@@ -182,6 +187,9 @@ export function initFormControls(formCtrl: FormGroup, config: Config) {
   if (config.configurations.readOnly) {
     formCtrl.controls.configurations.disable();
   }
+  formCtrl.controls.onelake.setValue(
+    config.configurations.value?.includes(ONELAKE_CONFIGURATION_LABEL) ?? false,
+  );
 }
 
 export function initWorkspaceVolumeControl(form: FormGroup, config: Config) {

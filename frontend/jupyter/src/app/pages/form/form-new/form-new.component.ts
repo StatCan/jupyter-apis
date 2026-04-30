@@ -5,12 +5,16 @@ import {
   ChangeDetectorRef,
   AfterContentChecked,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Config, NotebookFormObject } from 'src/app/types';
 import { Subscription } from 'rxjs';
 import { NamespaceService, SnackBarService, SnackType } from 'kubeflow';
 import { Router } from '@angular/router';
-import { getFormDefaults, initFormControls } from './utils';
+import {
+  getFormDefaults,
+  initFormControls,
+  ONELAKE_CONFIGURATION_LABEL,
+} from './utils';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { V1Namespace } from '@kubernetes/client-node';
 
@@ -37,6 +41,8 @@ export class FormNewComponent
   existingNotebooks: Set<string> = new Set<string>();
   mountedVolumes: Set<string> = new Set<string>();
 
+  private readonly onelakeConfigurationLabel = ONELAKE_CONFIGURATION_LABEL;
+
   constructor(
     public namespaceService: NamespaceService,
     public backend: JWABackendService,
@@ -48,6 +54,8 @@ export class FormNewComponent
   ngOnInit(): void {
     // Initialize the form control
     this.formCtrl = this.getFormDefaults();
+
+    this.subscribeToOnelakeControl();
 
     // Update the form Values from the default ones
     this.backend.getConfig().subscribe(config => {
@@ -121,6 +129,56 @@ export class FormNewComponent
     this.cdr.detectChanges();
   }
 
+  private subscribeToOnelakeControl(): void {
+    this.subscriptions.add(
+      this.formCtrl.get('onelake').valueChanges.subscribe(enabled => {
+        this.setOnelakeConfiguration(enabled);
+        this.setOnelakeFieldValidators(enabled);
+      }),
+    );
+
+    this.subscriptions.add(
+      this.formCtrl.get('configurations').valueChanges.subscribe(configs => {
+        const enabled = Array.isArray(configs)
+          ? configs.includes(this.onelakeConfigurationLabel)
+          : false;
+        const onelakeControl = this.formCtrl.get('onelake');
+
+        if (onelakeControl.value !== enabled) {
+          onelakeControl.setValue(enabled, { emitEvent: false });
+          this.setOnelakeFieldValidators(enabled);
+        }
+      }),
+    );
+  }
+
+  private setOnelakeFieldValidators(enabled: boolean): void {
+    for (const controlName of ['onelakeWorkspace', 'onelakeLakehouse']) {
+      const control = this.formCtrl.get(controlName);
+      if (enabled) {
+        control.setValidators([Validators.required]);
+      } else {
+        control.clearValidators();
+        control.setValue('', { emitEvent: false });
+      }
+      control.updateValueAndValidity({ emitEvent: false });
+    }
+  }
+
+  private setOnelakeConfiguration(enabled: boolean): void {
+    const configurationsControl = this.formCtrl.get('configurations');
+    const current = Array.isArray(configurationsControl.value)
+      ? configurationsControl.value
+      : [];
+    const next = current.filter(
+      config => config !== this.onelakeConfigurationLabel,
+    );
+
+    configurationsControl.setValue(
+      enabled ? [...next, this.onelakeConfigurationLabel] : next,
+    );
+  }
+
   initFormControls(formCtrl: FormGroup, config: Config) {
     initFormControls(formCtrl, config);
   }
@@ -128,6 +186,7 @@ export class FormNewComponent
   // Form Actions
   getSubmitNotebook(): NotebookFormObject {
     const notebookCopy = this.formCtrl.value as NotebookFormObject;
+    const onelakeEnabled = notebookCopy.onelake;
     const notebook = JSON.parse(JSON.stringify(notebookCopy));
 
     // Use the custom image instead
@@ -197,6 +256,20 @@ export class FormNewComponent
       if (vol.size) {
         vol.size = vol.size + 'Gi';
       }
+    }
+
+    if (onelakeEnabled) {
+      notebook.onelakeWorkspace = notebook.onelakeWorkspace?.trim();
+      notebook.onelakeLakehouse = notebook.onelakeLakehouse?.trim();
+      notebook.configurations = Array.isArray(notebook.configurations)
+        ? notebook.configurations
+        : [];
+      if (!notebook.configurations.includes(this.onelakeConfigurationLabel)) {
+        notebook.configurations.push(this.onelakeConfigurationLabel);
+      }
+    } else {
+      delete notebook.onelakeWorkspace;
+      delete notebook.onelakeLakehouse;
     }
 
     return notebook;

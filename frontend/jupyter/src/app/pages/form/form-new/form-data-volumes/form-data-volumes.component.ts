@@ -15,7 +15,6 @@ import {
   styleUrls: ['./form-data-volumes.component.scss'],
 })
 export class FormDataVolumesComponent {
-
   @Input() volsArray: FormArray;
   @Input() readonly: boolean;
   @Input() externalName: string;
@@ -67,18 +66,18 @@ export class FormDataVolumesComponent {
     });
   }
 
-  openMe(id: number){
+  openMe(id: number) {
     this.activeItem = id;
   }
 
-  closeMe(id: number){
-    if (this.activeItem == id){
+  closeMe(id: number) {
+    if (this.activeItem == id) {
       this.activeItem = -1;
     }
   }
-  
-  showActiveIcon(id: number){
-    if (this.activeItem == id){
+
+  showActiveIcon(id: number) {
+    if (this.activeItem == id) {
       return true;
     }
     return false;

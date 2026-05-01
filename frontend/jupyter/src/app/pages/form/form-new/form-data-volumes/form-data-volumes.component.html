@@ -12,9 +12,9 @@
         let i = index;
         let last = last
       "
-      (opened)="openPanel.add(i)"
-      (closed)="openPanel.clear()"
-      [expanded]="newestItem"
+      (opened)="openMe(i)"
+      (closed)="closeMe(i)"
+      [expanded]="activeItem"
       [class.last]="last"
       data-cy="data volumes"
     >
@@ -57,7 +57,7 @@
             </mat-icon>
 
             <mat-icon
-              *ngIf="!openPanel.has(i)"
+              *ngIf="showActiveIcon(i)"
               matTooltip="Show volume details"
               i18n-matTooltip
             >
@@ -65,7 +65,7 @@
             </mat-icon>
 
             <mat-icon
-              *ngIf="openPanel.has(i)"
+              *ngIf="!showActiveIcon(i)"
               matTooltip="Hide volume details"
               i18n-matTooltip
             >

@@ -15,13 +15,12 @@ import {
   styleUrls: ['./form-data-volumes.component.scss'],
 })
 export class FormDataVolumesComponent {
-  openPanel = new Set();
 
   @Input() volsArray: FormArray;
   @Input() readonly: boolean;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
-  newestItem = 0;
+  activeItem = 0;
 
   getVolumeTitle = getVolumeTitle;
   getVolumeName = getVolumeName;
@@ -33,7 +32,7 @@ export class FormDataVolumesComponent {
   onDelete(id: number, event: PointerEvent) {
     event.stopPropagation();
     this.volsArray.removeAt(id);
-    this.openPanel.clear();
+    this.activeItem = -1;
     this.volsArray.controls.forEach((v, i) => {
       (v as FormGroup).get('mount').updateValueAndValidity();
     });
@@ -49,7 +48,7 @@ export class FormDataVolumesComponent {
 
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
     volGroup.get('mount').markAsTouched();
-    this.newestItem = volId;
+    this.activeItem = volId;
   }
 
   attachExistingVolume() {
@@ -66,5 +65,22 @@ export class FormDataVolumesComponent {
         (v as FormGroup).get('mount').updateValueAndValidity();
       }
     });
+  }
+
+  openMe(id: number){
+    this.activeItem = id;
+  }
+
+  closeMe(id: number){
+    if (this.activeItem == id){
+      this.activeItem = -1;
+    }
+  }
+  
+  showActiveIcon(id: number){
+    if (this.activeItem == id){
+      return true;
+    }
+    return false;
   }
 }

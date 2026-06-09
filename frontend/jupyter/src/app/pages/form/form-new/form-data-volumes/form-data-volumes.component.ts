@@ -19,8 +19,9 @@ export class FormDataVolumesComponent {
   @Input() readonly: boolean;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
-  activeItem = 0;
-
+  newIndex = 1;
+  openPanel = new Set();
+  activeIndex: number | null = 0; // Keep track of the open panel
   getVolumeTitle = getVolumeTitle;
   getVolumeName = getVolumeName;
   getNewVolumeSize = getNewVolumeSize;
@@ -31,14 +32,22 @@ export class FormDataVolumesComponent {
   onDelete(id: number, event: PointerEvent) {
     event.stopPropagation();
     this.volsArray.removeAt(id);
-    this.activeItem = -1;
+    this.openPanel.clear();
     this.volsArray.controls.forEach((v, i) => {
       (v as FormGroup).get('mount').updateValueAndValidity();
     });
+
+     // Adjust activeIndex if needed
+    if (this.activeIndex === id) {
+      this.activeIndex = null; // Close if removed
+    } else if (this.activeIndex !== null && id < this.activeIndex) {
+      this.activeIndex--; // Shift index if a panel before it was removed
+    }
   }
 
   addNewVolume() {
-    const volId = this.volsArray.length + 1;
+    this.newIndex++;
+    const volId = this.newIndex;
     const volGroup = createNewPvcVolumeFormGroup(
       `{notebook-name}-datavol-${volId}`,
     );
@@ -47,7 +56,8 @@ export class FormDataVolumesComponent {
 
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
     volGroup.get('mount').markAsTouched();
-    this.activeItem = volId;
+    this.activeIndex = volId;
+
   }
 
   attachExistingVolume() {
@@ -67,17 +77,17 @@ export class FormDataVolumesComponent {
   }
 
   openMe(id: number) {
-    this.activeItem = id;
+    this.activeIndex = id;
   }
 
   closeMe(id: number) {
-    if (this.activeItem == id) {
-      this.activeItem = -1;
+    if (this.activeIndex == id) {
+      this.activeIndex = null;
     }
   }
 
   showActiveIcon(id: number) {
-    if (this.activeItem == id) {
+    if (this.activeIndex == id) {
       return true;
     }
     return false;

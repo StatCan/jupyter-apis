@@ -35,7 +35,7 @@ export class FormDataVolumesComponent {
       (v as FormGroup).get('mount').updateValueAndValidity();
     });
 
-     // Adjust activeIndex if needed
+    // Adjust activeIndex if needed
     if (this.activeIndex === id) {
       this.activeIndex = null; // Close if removed
     } else if (this.activeIndex !== null && id < this.activeIndex) {
@@ -55,16 +55,18 @@ export class FormDataVolumesComponent {
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.newIndex}`);
     volGroup.get('mount').markAsTouched();
     this.openMe(volId);
-
   }
 
   attachExistingVolume() {
     this.newIndex++;
+    const volId = this.volsArray.length;
+
     const volGroup = createExistingVolumeFormGroup();
 
     this.volsArray.push(volGroup);
 
     volGroup.get('mount').setValue(`/home/jovyan/vol-${this.newIndex}`);
+    this.openMe(volId);
   }
 
   checkDuplicacy(index: number) {

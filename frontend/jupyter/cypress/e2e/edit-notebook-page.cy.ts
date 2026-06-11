@@ -281,313 +281,313 @@ describe('Edit notebook form', () => {
         '[data-cy-form-input="workspaceVolume"] > mat-expansion-panel',
       ).should('not.exist');
     });
-// Error somewhere here
-  //   it('data volumes', () => {
-  //     // verify default existing volume
-  //     // existing volume header
-  //     // cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //     //   .find('mat-panel-title')
-  //     //   .should('have.text', ' Existing volume ');
-  //     // cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //     //   .find('mat-panel-description')
-  //     //   .should('contain.text', ' test-notebook-data ');
-  //     // cy.get('[data-cy-form-input="dataVolumes"]')
-  //     //   .find('[data-cy-form-input="existing-volume"]')
-  //     //   .find('mat-select')
-  //     //   .should('contain.text', "test-notebook-data");
-  //     // cy.get('[data-cy-form-input="dataVolumes"]')
-  //     //   .find('[data-cy-form-input="mount-path"]')
-  //     //   .find('input')
-  //     //   .should('have.value', '/home/jovyan/test-notebook-data');
-  //     // // add existing volume
-  //     // cy.get('[data-cy-form-button="dataVolumes-new"]').should('exist');
-  //     // cy.get('[data-cy-form-button="dataVolumes-existing"]').should('exist');
-  //     // cy.get('[data-cy-form-button="dataVolumes-existing"]').click();
-  //     // cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //     //   .find('mat-panel-title')
-  //     //   .eq(1)
-  //     //   .should('have.text', ' Existing volume ');
-  //     // // existing volume name empty
-  //     // cy.get('[data-cy-form-input="dataVolumes"]')
-  //     //   .find('[data-cy-form-input="existing-volume"]')
-  //     //   .eq(1)
-  //     //   .find('mat-select')
-  //     //   .click();
-  //     // cy.get('body').click();
-  //     // cy.get('[data-cy-form-input="dataVolumes"]')
-  //     //   .find('[data-cy-form-input="existing-volume"]')
-  //     //   .eq(1)
-  //     //   .find('mat-error')
-  //     //   .should('have.text', ' Name is required ');
-  //     // existing volume name already in use
-  //     // Here
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="existing-volume"]')
-  //       .eq(1)
-  //       .find('mat-select')
-  //       .click();
-  //     cy.get('[role="listbox"] > mat-option')
-  //       .contains('titanic-ml-47xh5-data-m57vq-2md82')
-  //       .click();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="existing-volume"]')
-  //       .eq(1)
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="existing-volume"]')
-  //       .eq(1)
-  //       .find('mat-error')
-  //       .should('have.text', ' Already mounted ');
-  //     // existing volume valid value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="existing-volume"]')
-  //       .eq(1)
-  //       .find('mat-select')
-  //       .click();
-  //     cy.get('[role="listbox"] > mat-option')
-  //       .contains('a-pvc-phase-warning-viewer-ready')
-  //       .click();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="existing-volume"]')
-  //       .eq(1)
-  //       .should('have.class', 'ng-valid');
-  //     cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //       .eq(1)  
-  //       .find('mat-panel-description')
-  //       .should('contain.text', ' a-pvc-phase-warning-viewer-ready ');
-  //     // existing volume mount path empty value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('mat-error')
-  //       .should('have.text', ' Mount path is required ');
-  //     // existing volume mount path invalid pattern
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .type('abc/');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('mat-error')
-  //       .should(
-  //         'have.text',
-  //         ' The accepted locations are /home/jovyan or any of its subdirectories ',
-  //       );
-  //     // existing volume mount path duplicate value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .type('/home/jovyan');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('mat-error')
-  //       .should('have.text', ' This mount path is already in use ');
-  //     // existing volume mount path valid value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .type('/home/jovyan/a-pvc-phase-warning-viewer-ready');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(1)
-  //       .find('input')
-  //       .should('have.class', 'ng-valid');
-  //     // new volume
-  //     cy.get('[data-cy-form-button="dataVolumes-new"]').click();
-  //     cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //       .eq(2)
-  //       .find('mat-panel-title')
-  //       .should('have.text', ' New volume ');
-  //     cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //       .eq(2)  
-  //       .find('mat-panel-description')
-  //       .should('contain.text', ' test-notebook-datavol-3, 16Gi ');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .should('have.value', '/home/jovyan/test-notebook-datavol-3');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .should('have.value', 'test-notebook-datavol-3');
-  //       // new volume empty name value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('mat-error')
-  //       .should('have.text', ' Name is required ');
-  //     // new volume name invalid pattern
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .type('-volume-');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('mat-error')
-  //       .should(
-  //         'have.text',
-  //         " The volume name can only contain lowercase alphanumeric characters,\n       '-' or '.', and must start and end with an alphanumeric character ",
-  //       );
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .clear();
-  //     // new volume name in use
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .type('dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="volume-name"]')
-  //       .find('mat-error')
-  //       .should('have.text', ' Already mounted ');
-  //     // new volume mount path empty value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('mat-error')
-  //       .should('have.text', ' Mount path is required ');
-  //     // new volume mount path invalid pattern
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .type('abc/');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('mat-error')
-  //       .should(
-  //         'have.text',
-  //         ' The accepted locations are /home/jovyan or any of its subdirectories ',
-  //       );
-  //     // new volume mount path duplicate value
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .clear();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .type('/home/jovyan/a-pvc-phase-warning-viewer-ready');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('input')
-  //       .should('have.class', 'ng-invalid');
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('[data-cy-form-input="mount-path"]')
-  //       .eq(2)
-  //       .find('mat-error')
-  //       .should('have.text', ' This mount path is already in use ');
-  //     // new volume size
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('app-volume-size')
-  //       .find('mat-select')
-  //       .click();
-  //     cy.get('mat-option')
-  //       .contains('4')
-  //       .click();
-  //     cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-  //       .find('mat-panel-description')
-  //       .eq(2)
-  //       .should('contain.text', 'dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv, 4Gi');
-  //     // delete data volumes
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('mat-icon[mattooltip="Detach volume"]')
-  //       .eq(2)
-  //       .click();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('mat-icon[mattooltip="Detach volume"]')
-  //       .eq(1)
-  //       .click();
-  //     cy.get('[data-cy-form-input="dataVolumes"]')
-  //       .find('mat-icon[mattooltip="Detach volume"]')
-  //       .eq(0)
-  //       .click();
-  //     cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should(
-  //       'not.exist',
-  //     );
-  //   });
-  // });
+
+    it('data volumes', () => {
+      // verify default existing volume
+      // existing volume header
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .find('mat-panel-title')
+        .should('have.text', ' Existing volume ');
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .find('mat-panel-description')
+        .should('contain.text', ' test-notebook-data ');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .find('mat-select')
+        .should('contain.text', "test-notebook-data");
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .find('input')
+        .should('have.value', '/home/jovyan/test-notebook-data');
+      // add existing volume
+      cy.get('[data-cy-form-button="dataVolumes-new"]').should('exist');
+      cy.get('[data-cy-form-button="dataVolumes-existing"]').should('exist');
+      cy.get('[data-cy-form-button="dataVolumes-existing"]').click();
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .find('mat-panel-title')
+        .eq(1)
+        .should('have.text', ' Existing volume ');
+      // existing volume name empty
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .find('mat-select')
+        .click();
+      cy.get('body').click();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .find('mat-error')
+        .should('have.text', ' Name is required ');
+      // existing volume name already in use
+      // Here
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .find('mat-select')
+        .click();
+      cy.get('[role="listbox"] > mat-option')
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .find('mat-error')
+        .should('have.text', ' Already mounted ');
+      // existing volume valid value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .find('mat-select')
+        .click();
+      cy.get('[role="listbox"] > mat-option')
+        .contains('a-pvc-phase-warning-viewer-ready')
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="existing-volume"]')
+        .eq(1)
+        .should('have.class', 'ng-valid');
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .eq(1)  
+        .find('mat-panel-description')
+        .should('contain.text', ' a-pvc-phase-warning-viewer-ready ');
+      // existing volume mount path empty value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('mat-error')
+        .should('have.text', ' Mount path is required ');
+      // existing volume mount path invalid pattern
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .type('abc/');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('mat-error')
+        .should(
+          'have.text',
+          ' The accepted locations are /home/jovyan or any of its subdirectories ',
+        );
+      // existing volume mount path duplicate value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .type('/home/jovyan');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('mat-error')
+        .should('have.text', ' This mount path is already in use ');
+      // existing volume mount path valid value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .type('/home/jovyan/a-pvc-phase-warning-viewer-ready');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(1)
+        .find('input')
+        .should('have.class', 'ng-valid');
+      // new volume
+      cy.get('[data-cy-form-button="dataVolumes-new"]').click();
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .eq(2)
+        .find('mat-panel-title')
+        .should('have.text', ' New volume ');
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .eq(2)  
+        .find('mat-panel-description')
+        .should('contain.text', ' test-notebook-datavol-3, 16Gi ');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .should('have.value', '/home/jovyan/test-notebook-datavol-3');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .should('have.value', 'test-notebook-datavol-3');
+        // new volume empty name value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('mat-error')
+        .should('have.text', ' Name is required ');
+      // new volume name invalid pattern
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .type('-volume-');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('mat-error')
+        .should(
+          'have.text',
+          " The volume name can only contain lowercase alphanumeric characters,\n       '-' or '.', and must start and end with an alphanumeric character ",
+        );
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .clear();
+      // new volume name in use
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .type('dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="volume-name"]')
+        .find('mat-error')
+        .should('have.text', ' Already mounted ');
+      // new volume mount path empty value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('mat-error')
+        .should('have.text', ' Mount path is required ');
+      // new volume mount path invalid pattern
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .type('abc/');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('mat-error')
+        .should(
+          'have.text',
+          ' The accepted locations are /home/jovyan or any of its subdirectories ',
+        );
+      // new volume mount path duplicate value
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .clear();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .type('/home/jovyan/a-pvc-phase-warning-viewer-ready');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('input')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('[data-cy-form-input="mount-path"]')
+        .eq(2)
+        .find('mat-error')
+        .should('have.text', ' This mount path is already in use ');
+      // new volume size
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('app-volume-size')
+        .find('mat-select')
+        .click();
+      cy.get('mat-option')
+        .contains('4')
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
+        .find('mat-panel-description')
+        .eq(2)
+        .should('contain.text', 'dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv, 4Gi');
+      // delete data volumes
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
+        .eq(2)
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
+        .eq(1)
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"]')
+        .find('mat-icon[mattooltip="Detach volume"]')
+        .eq(0)
+        .click();
+      cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel').should(
+        'not.exist',
+      );
+    });
+  });
 
   describe('edit notebook use cases', () => {
     it('should cancel notebook edit', () => {

@@ -320,7 +320,6 @@ describe('Edit notebook form', () => {
         .find('mat-error')
         .should('have.text', ' Name is required ');
       // existing volume name already in use
-      // Here
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="existing-volume"]')
         .eq(1)

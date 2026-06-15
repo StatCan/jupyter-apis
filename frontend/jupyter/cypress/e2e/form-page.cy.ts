@@ -577,12 +577,12 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .invoke('val')
-        .should('eq', 'test-notebook-datavol-0');
+        .should('eq', 'test-notebook-datavol-1');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .find('input')
         .invoke('val')
-        .should('eq', '/home/jovyan/test-notebook-datavol-0');
+        .should('eq', '/home/jovyan/test-notebook-datavol-1');
       // assert volume name doesn't auto update when dirty
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')
@@ -592,7 +592,7 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="mount-path"]')
         .find('input')
         .invoke('val')
-        .should('eq', '/home/jovyan/test-notebook-datavol-0-dirty');
+        .should('eq', '/home/jovyan/test-notebook-datavol-1-dirty');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .find('input')
@@ -604,12 +604,12 @@ describe('New notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .invoke('val')
-        .should('eq', 'test-notebook-datavol-0-dirty');
+        .should('eq', 'test-notebook-datavol-1-dirty');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .find('input')
         .invoke('val')
-        .should('eq', '/home/jovyan/test-notebook-datavol-0-dirty-mount');
+        .should('eq', '/home/jovyan/test-notebook-datavol-1-dirty-mount');
     });
   });
 

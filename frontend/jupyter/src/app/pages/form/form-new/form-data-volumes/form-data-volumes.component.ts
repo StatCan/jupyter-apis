@@ -19,7 +19,7 @@ export class FormDataVolumesComponent {
   @Input() readonly: boolean;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
-  newIndex = 0
+  newIndex = 0;
   activeIndex: number | null = 0; // Keep track of the open panel
   getVolumeTitle = getVolumeTitle;
   getVolumeName = getVolumeName;

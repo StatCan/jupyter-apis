@@ -20,6 +20,7 @@ export class FormDataVolumesComponent {
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
   newIndex = 0;
+
   activeIndex: number | null = 0; // Keep track of the open panel
   getVolumeTitle = getVolumeTitle;
   getVolumeName = getVolumeName;
@@ -47,7 +48,7 @@ export class FormDataVolumesComponent {
     this.newIndex++;
     const volId = this.volsArray.length;
     const volGroup = createNewPvcVolumeFormGroup(
-      `{notebook-name}-datavol-${volId}`,
+      `{notebook-name}-datavol-${this.newIndex}`,
     );
 
     this.volsArray.push(volGroup);

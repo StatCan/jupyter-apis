@@ -45,7 +45,7 @@ export class FormDataVolumesComponent {
   }
 
   addNewVolume() {
-    this.newIndex++;
+    this.newIndex = this.newIndex + 1;
     const volId = this.volsArray.length;
     const volGroup = createNewPvcVolumeFormGroup(
       `{notebook-name}-datavol-${this.newIndex}`,
@@ -59,7 +59,7 @@ export class FormDataVolumesComponent {
   }
 
   attachExistingVolume() {
-    this.newIndex++;
+    this.newIndex = this.newIndex + 1;
     const volId = this.volsArray.length;
 
     const volGroup = createExistingVolumeFormGroup();

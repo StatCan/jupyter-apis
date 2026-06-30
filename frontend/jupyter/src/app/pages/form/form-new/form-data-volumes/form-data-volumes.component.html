@@ -57,7 +57,7 @@
             </mat-icon>
 
             <mat-icon
-              *ngIf="showActiveIcon(i)"
+              *ngIf="!showActiveIcon(i)"
               matTooltip="Show volume details"
               i18n-matTooltip
             >
@@ -65,7 +65,7 @@
             </mat-icon>
 
             <mat-icon
-              *ngIf="!showActiveIcon(i)"
+              *ngIf="showActiveIcon(i)"
               matTooltip="Hide volume details"
               i18n-matTooltip
             >

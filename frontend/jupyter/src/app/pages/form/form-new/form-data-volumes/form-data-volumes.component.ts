@@ -48,7 +48,6 @@ export class FormDataVolumesComponent {
     this.newIndex = this.newIndex + 1;
 
     const volId = this.volsArray.length;
-    console.log('volid', volId);
     const volGroup = createNewPvcVolumeFormGroup(
       `{notebook-name}-datavol-${this.newIndex}`,
     );
@@ -81,7 +80,6 @@ export class FormDataVolumesComponent {
   }
 
   openMe(id: number) {
-    console.log('Open id ', id);
     this.activeIndex = id;
   }
 

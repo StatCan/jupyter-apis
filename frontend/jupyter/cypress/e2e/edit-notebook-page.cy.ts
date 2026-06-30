@@ -440,16 +440,16 @@ describe('Edit notebook form', () => {
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
         .eq(2)  
         .find('mat-panel-description')
-        .should('contain.text', ' test-notebook-datavol-3, 16Gi ');
+        .should('contain.text', ' test-notebook-datavol-2, 16Gi ');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .eq(2)
         .find('input')
-        .should('have.value', '/home/jovyan/test-notebook-datavol-3');
+        .should('have.value', '/home/jovyan/test-notebook-datavol-2');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
-        .should('have.value', 'test-notebook-datavol-3');
+        .should('have.value', 'test-notebook-datavol-2');
         // new volume empty name value
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')

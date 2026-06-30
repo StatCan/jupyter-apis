@@ -15,14 +15,13 @@ import {
   styleUrls: ['./form-data-volumes.component.scss'],
 })
 export class FormDataVolumesComponent {
-  openPanel = new Set();
-
   @Input() volsArray: FormArray;
   @Input() readonly: boolean;
   @Input() externalName: string;
   @Input() mountedVolumes: Set<string>;
-  newestItem = 0;
+  newIndex = 0;
 
+  activeIndex: number | null = 0; // Keep track of the open panel
   getVolumeTitle = getVolumeTitle;
   getVolumeName = getVolumeName;
   getNewVolumeSize = getNewVolumeSize;
@@ -33,31 +32,43 @@ export class FormDataVolumesComponent {
   onDelete(id: number, event: PointerEvent) {
     event.stopPropagation();
     this.volsArray.removeAt(id);
-    this.openPanel.clear();
     this.volsArray.controls.forEach((v, i) => {
       (v as FormGroup).get('mount').updateValueAndValidity();
     });
+
+    // Adjust activeIndex if needed
+    if (this.activeIndex === id) {
+      this.activeIndex = null; // Close if removed
+    } else if (this.activeIndex !== null && id < this.activeIndex) {
+      this.activeIndex--; // Shift index if a panel before it was removed
+    }
   }
 
   addNewVolume() {
-    const volId = this.volsArray.length + 1;
+    this.newIndex = this.newIndex + 1;
+
+    const volId = this.volsArray.length;
     const volGroup = createNewPvcVolumeFormGroup(
-      `{notebook-name}-datavol-${volId}`,
+      `{notebook-name}-datavol-${this.newIndex}`,
     );
 
     this.volsArray.push(volGroup);
 
-    volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
+    volGroup.get('mount').setValue(`/home/jovyan/vol-${this.newIndex}`);
     volGroup.get('mount').markAsTouched();
-    this.newestItem = volId;
+    this.openMe(volId);
   }
 
   attachExistingVolume() {
+    this.newIndex = this.newIndex + 1;
+    const volId = this.volsArray.length;
+
     const volGroup = createExistingVolumeFormGroup();
 
     this.volsArray.push(volGroup);
 
-    volGroup.get('mount').setValue(`/home/jovyan/vol-${this.volsArray.length}`);
+    volGroup.get('mount').setValue(`/home/jovyan/vol-${this.newIndex}`);
+    this.openMe(volId);
   }
 
   checkDuplicacy(index: number) {
@@ -66,5 +77,22 @@ export class FormDataVolumesComponent {
         (v as FormGroup).get('mount').updateValueAndValidity();
       }
     });
+  }
+
+  openMe(id: number) {
+    this.activeIndex = id;
+  }
+
+  closeMe(id: number) {
+    if (this.activeIndex == id) {
+      this.activeIndex = null;
+    }
+  }
+
+  showActiveIcon(id: number) {
+    if (this.activeIndex == id) {
+      return true;
+    }
+    return false;
   }
 }

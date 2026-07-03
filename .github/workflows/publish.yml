@@ -12,8 +12,8 @@ on:
     - cron: '0 23 * * *'
 
 env:
-  REGISTRY_NAME: k8scc01covidacr
-  DEV_REGISTRY_NAME: k8scc01covidacrdev
+  REGISTRY_NAME: stcthezoneacr
+  DEV_REGISTRY_NAME: stcthezoneacrdev
   TRIVY_VERSION: "v0.57.0"
   TRIVY_DATABASES: '"ghcr.io/aquasecurity/trivy-db:2","public.ecr.aws/aquasecurity/trivy-db"'
   TRIVY_JAVA_DATABASES: '"ghcr.io/aquasecurity/trivy-java-db:1","public.ecr.aws/aquasecurity/trivy-java-db"'

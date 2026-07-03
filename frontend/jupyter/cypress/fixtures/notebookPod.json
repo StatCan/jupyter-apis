@@ -225,7 +225,7 @@
             },
             {
                "name":"test123",
-               "image":"k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
+               "image":"stcthezoneacr.azurecr.io/jupyterlab-cpu:v1",
                "workingDir":"/home/jovyan",
                "ports":[
                   {

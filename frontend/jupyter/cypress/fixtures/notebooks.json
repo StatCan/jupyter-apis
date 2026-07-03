@@ -145,7 +145,7 @@
         "count":"0",
         "message":""
       },
-      "image":"k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
+      "image":"stcthezoneacr.azurecr.io/jupyterlab-cpu:v1",
       "lastActivity":"2023-09-28T13:12:58Z",
       "memory":"2Gi",
       "name":"test-pro-b",

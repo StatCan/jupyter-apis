@@ -28,7 +28,7 @@
           "containers":[
             {
               "name":"test-notebook",
-              "image":"k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
+              "image":"stcthezoneacr.azurecr.io/jupyterlab-cpu:v1",
               "env":[
                 {
                   "name":"KF_LANG",

@@ -146,8 +146,8 @@ Any push to an open PR that has the auto-deploy label on it allows developers to
 1. open a PR and add the auto-deploy label
 2. push to your PR and watch the GitHub Action CI
 3. access your image in Kubeflow DEV via a custom image from any of:
-    - k8scc01covidacrdev.azurecr.io/IMAGENAME:SHA
-    - k8scc01covidacrdev.azurecr.io/IMAGENAME:SHORT_SHA
+    - stcthezoneacrdev.azurecr.io/IMAGENAME:SHA
+    - stcthezoneacrdev.azurecr.io/IMAGENAME:SHORT_SHA
 
 ## Whats Different?
 

@@ -4,26 +4,26 @@
   "user":null,
   "config":{
      "image":{
-        "value":"k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
+        "value":"stcthezoneacr.azurecr.io/jupyterlab-cpu:v1",
         "options":[
-           "k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
-           "k8scc01covidacr.azurecr.io/jupyterlab-pytorch:v1",
-           "k8scc01covidacr.azurecr.io/jupyterlab-tensorflow:v1"
+           "stcthezoneacr.azurecr.io/jupyterlab-cpu:v1",
+           "stcthezoneacr.azurecr.io/jupyterlab-pytorch:v1",
+           "stcthezoneacr.azurecr.io/jupyterlab-tensorflow:v1"
         ],
         "readOnly":false,
         "hideRegistry":false,
         "hideVersion":false
      },
      "imageGroupOne":{
-        "value":"k8scc01covidacr.azurecr.io/rstudio:v1",
+        "value":"stcthezoneacr.azurecr.io/rstudio:v1",
         "options":[
-           "k8scc01covidacr.azurecr.io/rstudio:v1"
+           "stcthezoneacr.azurecr.io/rstudio:v1"
         ]
      },
      "imageGroupTwo":{
-        "value":"k8scc01covidacr.azurecr.io/remote-desktop:v1",
+        "value":"stcthezoneacr.azurecr.io/remote-desktop:v1",
         "options":[
-           "k8scc01covidacr.azurecr.io/remote-desktop:v1"
+           "stcthezoneacr.azurecr.io/remote-desktop:v1"
         ]
      },
      "imageGroupThree":{
@@ -36,9 +36,9 @@
               "state.aaw.statcan.gc.ca/exists-non-sas-notebook-user":"false"
            }
         },
-        "value":"k8scc01covidacr.azurecr.io/sas:v1",
+        "value":"stcthezoneacr.azurecr.io/sas:v1",
         "options":[
-           "k8scc01covidacr.azurecr.io/sas:v1"
+           "stcthezoneacr.azurecr.io/sas:v1"
         ]
      },
      "allowCustomImage":true,

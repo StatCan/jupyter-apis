@@ -68,6 +68,11 @@ export interface Config {
     readOnly?: boolean;
   };
 
+  shm?: {
+    value: boolean;
+    readOnly?: boolean;
+  };
+
   gpus?: {
     value?: GPU;
     readOnly?: boolean;

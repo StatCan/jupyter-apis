@@ -74,6 +74,7 @@ export interface NotebookFormObject {
   noWorkspace: boolean;
   workspace: any;
   datavols: any[];
+  shm: boolean;
   configurations: PodDefault[];
 }
 

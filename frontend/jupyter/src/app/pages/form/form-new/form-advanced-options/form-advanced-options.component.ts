@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, LOCALE_ID, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -8,14 +8,8 @@ import { FormGroup } from '@angular/forms';
 })
 export class FormAdvancedOptionsComponent implements OnInit {
   @Input() parentForm: FormGroup;
-  languageList = [
-    { id: 'en', label: 'English' },
-    { id: 'fr', label: 'Français' },
-  ];
 
-  constructor(@Inject(LOCALE_ID) public localeId: string) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.parentForm.get('language').setValue(this.localeId);
-  }
+  ngOnInit() {}
 }

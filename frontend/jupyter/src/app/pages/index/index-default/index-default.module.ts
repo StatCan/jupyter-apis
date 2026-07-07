@@ -7,8 +7,18 @@ import { ServerTypeComponent } from './server-type/server-type.component';
 import { WarningComponent } from './warning-icons/warning-icon.component';
 
 @NgModule({
-  declarations: [IndexDefaultComponent, ServerTypeComponent, DefaultComponent, WarningComponent],
+  declarations: [
+    IndexDefaultComponent,
+    ServerTypeComponent,
+    DefaultComponent,
+    WarningComponent,
+  ],
   imports: [CommonModule, KubeflowModule],
-  exports: [IndexDefaultComponent, ServerTypeComponent, DefaultComponent, WarningComponent],
+  exports: [
+    IndexDefaultComponent,
+    ServerTypeComponent,
+    DefaultComponent,
+    WarningComponent,
+  ],
 })
 export class IndexDefaultModule {}

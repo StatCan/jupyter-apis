@@ -141,6 +141,7 @@ type notebookresponse struct {
 	Volumes      []string          `json:"volumes"`
 	Labels       map[string]string `json:"labels"`
 	Metadata     metav1.ObjectMeta `json:"metadata"`
+	IsOOMKilled	 bool 			   `json:"isOomk"`
 }
 
 type notebooksresponse struct {
@@ -321,6 +322,11 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
 	}
+
+	//get the data
+	isOOMKilled := isNotebookPodOOMKilled(notebook, s);
+	
+	// Add it to notebook response
 	return notebookresponse{
 		Age:          notebook.CreationTimestamp.Time,
 		Name:         notebook.Name,
@@ -336,7 +342,41 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		Volumes:      volumes,
 		Labels:       notebook.Labels,
 		Metadata:     notebook.ObjectMeta,
+		IsOOMKilled:  isOOMKilled,
 	}, nil
+}
+
+func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
+	log.Printf("getting pod from notebook %q ", nb)
+
+	pods, err := s.listers.pods.Pods(nb.Namespace).List(labels.Everything())
+	if err != nil {
+		return false
+	}
+
+	if len(pods) != 0 {
+		pod := pods[0]
+		resp := &podresponse{
+			APIResponseBase: APIResponseBase{
+				Success: true,
+				Status:  http.StatusOK,
+			},
+			Pod: *pod,
+		}
+		
+		if err != nil {
+			log.Fatalf("JSON marshal indent error: %v", err)
+		}
+
+		lastState := resp.Pod.Status.ContainerStatuses[0].LastTerminationState
+
+		if (lastState.Terminated != nil){
+			if (lastState.Terminated.Reason == "OOMKilled"){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {

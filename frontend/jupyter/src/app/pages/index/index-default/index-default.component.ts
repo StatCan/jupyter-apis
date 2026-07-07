@@ -417,6 +417,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
       nb.default = this.parseDefaultNotebook(nb);
+      nb.warnings = this.parseWarnings(nb);
     }
     return notebooksCopy;
   }
@@ -428,6 +429,17 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       return true;
     }
     return false;
+  }
+
+  // Give back the appropriate warning if two of them
+   parseWarnings(notebook: NotebookProcessedObject) {
+    //Check if oomkilled
+    if(notebook.warnings) {
+      return {matIcon: 'sim_card_alert', text: 'oom'}
+    }
+    // if volume too full
+
+    return {};
   }
 
   // Action handling functions

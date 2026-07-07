@@ -18,11 +18,15 @@ export class WarningComponent implements TableColumnComponent {
       this.textToolTip = '';
       this.row.warnings.forEach(warn => {
         if (warn == 'oomkilled') {
-          this.textToolTip = $localize`Error Out Of Memory Killed.`;
+          this.textToolTip =
+            '* ' + $localize`Error Out Of Memory Killed.` + '\n';
         }
         if (warn == 'volumefull') {
           // Set the warning to be an array of string?
-          this.textToolTip += $localize`One or more of the volume(s) for ${this.row.name} is 95% or more full.`;
+          this.textToolTip +=
+            '* ' +
+            $localize`One or more of the volume(s) for ${this.row.name} is 95% or more full.` +
+            '\n';
         }
       });
     }

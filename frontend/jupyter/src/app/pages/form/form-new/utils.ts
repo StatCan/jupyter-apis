@@ -119,7 +119,11 @@ export function initMemoryFormControls(formCtrl: FormGroup, config: Config) {
   );
 }
 
-export function initFormControls(formCtrl: FormGroup, config: Config, locale: string) {
+export function initFormControls(
+  formCtrl: FormGroup,
+  config: Config,
+  locale: string,
+) {
   initCpuFormControls(formCtrl, config);
 
   initMemoryFormControls(formCtrl, config);

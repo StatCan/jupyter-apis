@@ -1,7 +1,6 @@
 <mat-icon
   *ngIf="showWarnings()"
-  matTooltip="OOMKilled"
-  i18n-matTooltip
+  [matTooltip]="textTooltip"
 >
   sim_card_alert
 </mat-icon>

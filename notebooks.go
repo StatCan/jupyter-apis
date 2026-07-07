@@ -141,7 +141,7 @@ type notebookresponse struct {
 	Volumes      []string          `json:"volumes"`
 	Labels       map[string]string `json:"labels"`
 	Metadata     metav1.ObjectMeta `json:"metadata"`
-	IsOOMKilled	 bool 			   `json:"isOomk"`
+	IsOOMKilled	 bool 			   `json:"isOOMKilled"`
 }
 
 type notebooksresponse struct {
@@ -324,7 +324,9 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	}
 
 	//get the data
-	isOOMKilled := isNotebookPodOOMKilled(notebook, s);
+	isOOMKilled := false
+	// The following is ALWAYS true
+	isOOMKilled = isNotebookPodOOMKilled(notebook, s);
 	
 	// Add it to notebook response
 	return notebookresponse{
@@ -348,12 +350,13 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 
 func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
 	log.Printf("getting pod from notebook %q ", nb)
+	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
+	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
+	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
 
-	pods, err := s.listers.pods.Pods(nb.Namespace).List(labels.Everything())
 	if err != nil {
 		return false
 	}
-
 	if len(pods) != 0 {
 		pod := pods[0]
 		resp := &podresponse{
@@ -366,13 +369,16 @@ func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
 		
 		if err != nil {
 			log.Fatalf("JSON marshal indent error: %v", err)
+			return false
 		}
 
 		lastState := resp.Pod.Status.ContainerStatuses[0].LastTerminationState
 
 		if (lastState.Terminated != nil){
 			if (lastState.Terminated.Reason == "OOMKilled"){
+				log.Println("wooof : %" , pod)
 				return true;
+				
 			}
 		}
 	}

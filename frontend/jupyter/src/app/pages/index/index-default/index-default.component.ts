@@ -417,7 +417,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
       nb.default = this.parseDefaultNotebook(nb);
-      nb.warnings = this.parseWarnings(nb);
+      console.log(nb);
+      // var meow = {};
+      // meow = this.parseWarnings(nb);
+      // if (meow != undefined){
+      //   nb.warnings?.push(meow);
+      // }
+      // console.log("I am the master", nb);
     }
     return notebooksCopy;
   }
@@ -426,6 +432,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     if (
       notebook.labels?.['notebook.statcan.gc.ca/default-notebook'] === 'true'
     ) {
+      console.log(notebook);
       return true;
     }
     return false;
@@ -434,12 +441,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   // Give back the appropriate warning if two of them
    parseWarnings(notebook: NotebookProcessedObject) {
     //Check if oomkilled
-    if(notebook.warnings) {
-      return {matIcon: 'sim_card_alert', text: 'oom'}
+    console.log(" Meow , ", notebook.name, notebook.isOOMKilled);
+    if(notebook.isOOMKilled) {
+      return {code: 'sim_card_alert', text: 'This is an OOM Killed Exception'}
     }
     // if volume too full
 
-    return {};
+    return undefined;
   }
 
   // Action handling functions
@@ -487,6 +495,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${pvc.name}/${pvc.namespace}/${pvc.capacity}`;
   }
 
+  // Data for volume
   public parseIncomingData(pvcs: PVCResponseObject[]): PVCProcessedObject[] {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
 

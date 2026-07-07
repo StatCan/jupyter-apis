@@ -15,10 +15,10 @@ export class WarningComponent implements TableColumnComponent {
     this.row = elem;
   }
 
-  public isOOMKilled() {
+  public showWarnings() {
     //nworks with default. need to fix icon first. 
     if (this.row.hasOwnProperty('default')) {
-      console.log("I am at isOOMKilled");
+      //console.log("I am at isOOMKilled");
       return this.row.default;
     }
     return false;

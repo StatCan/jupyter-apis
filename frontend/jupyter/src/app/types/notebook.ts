@@ -30,6 +30,7 @@ export interface NotebookResponseObject {
   environment: string;
   shortImage: string;
   labels?: { [key: string]: any };
+  isOOMKilled: boolean;
 }
 
 export interface NotebookProcessedObject extends NotebookResponseObject {
@@ -46,10 +47,12 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
     url: string;
     queryParams?: Params | null;
   };
-  warnings?: {
-    matIcon?: string;
-    text?: string;
-  };
+  warnings?: [
+    {
+      code?: string;
+      text?: string;
+    }
+  ];
   settings?: {
     name: string;
     matIcon?: string;

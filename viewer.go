@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -206,17 +205,8 @@ func (s *server) PostPvcViewer(w http.ResponseWriter, r *http.Request) {
 	namespace := vars["namespace"]
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
-	log.Printf("received viewer body %s for namespace %s", body, namespace)
-
 	var req pvcviewerrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return

@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"sort"
@@ -387,15 +386,8 @@ func (s *server) UpdatePersistentVolumeClaimsUsage(w http.ResponseWriter, r *htt
 	namespace := vars["namespace"]
 
 	// Read the incoming usage data
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req pvcsusagedata
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 )
@@ -67,4 +68,20 @@ func (s *server) error(w http.ResponseWriter, r *http.Request, err error) {
 		Status:  http.StatusInternalServerError,
 		Log:     err.Error(),
 	})
+}
+
+// handles reading a request body and unmarshalling to a struct
+func (s *server) readRequestBody(w http.ResponseWriter, r *http.Request, object interface{}) error {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+	defer r.Body.Close()
+
+	err = json.Unmarshal(body, object)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

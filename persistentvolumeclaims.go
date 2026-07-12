@@ -569,9 +569,8 @@ func (s *server) ExpandPvc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate that the new size is an expected value.
-	// K8s will automatically validate that the new size is
-	// not smaller than the old size of the PVC.
+	// Validate the new size is within expected values.
+	// K8s validates automatically that the new size is not smaller.
 	newSizeString := expandPvcRequest.Size.String()
 	if !slices.Contains(validPVCSizes, newSizeString) {
 		s.error(w, r, errors.New("Invalid size for PVC"))
@@ -586,16 +585,12 @@ func (s *server) ExpandPvc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// resp := &getpvcresponse{
-	// 	APIResponseBase: APIResponseBase{
-	// 		Success: true,
-	// 		Status:  http.StatusOK,
-	// 	},
-	// 	Pvc:       *vol,
-	// 	Notebooks: notebooksList,
-	// }
+	log.Printf("Successfully expanded PVC %s/%s to %s", namespace, pvc, newSizeString)
 
-	// s.respond(w, r, resp)
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
 }
 
 func getPodPvcs(pod corev1.Pod) []string {

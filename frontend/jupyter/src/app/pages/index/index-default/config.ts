@@ -16,7 +16,7 @@ import {
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { DefaultComponent } from './default-icon/default-icon.component';
-import { tableConfig } from '../config';
+import { volumeTableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 import { OpenPVCViewerButtonComponent } from '../columns/open-pvcviewer-button/open-pvcviewer-button.component';
 import { ClosePVCViewerButtonComponent } from '../columns/close-pvcviewer-button/close-pvcviewer-button.component';
@@ -191,10 +191,10 @@ const customDeleteCol: TableColumn = {
 
 export const defaultVolumeConfig: TableConfig = {
   id: 'volumes-table',
-  title: tableConfig.title,
+  title: volumeTableConfig.title,
   dynamicNamespaceColumn: true,
-  newButtonText: tableConfig.newButtonText,
-  columns: tableConfig.columns.concat(
+  newButtonText: volumeTableConfig.newButtonText,
+  columns: volumeTableConfig.columns.concat(
     // TODO: Uncomment when pvcviewer-controller is implemented
     // customOpenPVCViewerCol,
     // customClosePVCViewerCol,

@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import {
   ConfirmDialogService,
+  FormDialogService,
   DIALOG_RESP,
+  FormDialogResponse,
   SnackBarConfig,
   SnackBarService,
   SnackType,
-  DialogConfig,
 } from 'kubeflow';
-import { getDeleteDialogConfig, getStopDialogConfig } from './config';
+import { getDeleteDialogConfig, getDeleteVolumeDialogConfig, getExpandVolumeDialogConfig, getStopDialogConfig } from './config';
 import { JWABackendService } from './backend.service';
 import { Observable } from 'rxjs';
+import { PVCProcessedObject } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +20,7 @@ export class ActionsService {
   constructor(
     public backend: JWABackendService,
     public confirmDialog: ConfirmDialogService,
+    public formDialog: FormDialogService,
     private snackBar: SnackBarService,
   ) {}
 
@@ -128,7 +131,7 @@ export class ActionsService {
 
   deleteVolume(name: string, namespace: string): Observable<string> {
     return new Observable(subscriber => {
-      const deleteDialogConfig = this.getDeleteDialogConfig(name);
+      const deleteDialogConfig = getDeleteVolumeDialogConfig(name);
 
       const ref = this.confirmDialog.open(deleteDialogConfig);
       const delSub = ref.componentInstance.applying$.subscribe(applying => {
@@ -169,6 +172,52 @@ export class ActionsService {
     });
   }
 
+  expandVolume(pvc: PVCProcessedObject): Observable<string> {
+    return new Observable(subscriber => {
+      const expandDialogConfig = getExpandVolumeDialogConfig(pvc.name, pvc.capacity);
+
+      const ref = this.formDialog.open(expandDialogConfig);
+      const expandSub = ref.componentInstance.applying$.subscribe((res: FormDialogResponse) => {
+        if (!res.applying) {
+          return;
+        }
+        
+        // Close the open dialog only if the DELETE request succeeded
+        this.backend.expandPVC(pvc.namespace, pvc.name, res.newSize).subscribe({
+          next: _ => {
+            ref.close(DIALOG_RESP.ACCEPT);
+
+            const object = `${pvc.namespace}/${pvc.name}`;
+            const message = $localize`Expand request was sent.`;
+            const config: SnackBarConfig = {
+              data: {
+                msg: `${object}: ${message}`,
+                snackType: SnackType.Info,
+              },
+            };
+            this.snackBar.open(config);
+          },
+          error: err => {
+            const errorMsg = $localize`Error ${err}`;
+            expandDialogConfig.error = errorMsg;
+            ref.componentInstance.applying$.next({
+              applying: false,
+              newSize: ""
+            });
+            subscriber.next('fail');
+          },
+        });
+
+        // request has succeeded
+        ref.afterClosed().subscribe((result: string | undefined) => {
+          expandSub.unsubscribe();
+          subscriber.next(result);
+          subscriber.complete();
+        });
+      });
+    });
+  }
+
   // This only updates the time, it is NOT the dialog
   updateKeepAlive(
     namespace: string,
@@ -191,18 +240,5 @@ export class ActionsService {
           subscriber.complete();
         });
     });
-  }
-
-  private getDeleteDialogConfig(name: string): DialogConfig {
-    return {
-      title: $localize`Are you sure you want to delete this volume? ${name}`,
-      message: $localize`Warning: All data in this volume will be lost.`,
-      accept: $localize`DELETE`,
-      confirmColor: 'warn',
-      cancel: $localize`CANCEL`,
-      error: '',
-      applying: $localize`DELETING`,
-      width: '600px',
-    };
   }
 }

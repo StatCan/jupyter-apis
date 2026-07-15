@@ -129,7 +129,6 @@ export const defaultConfig: TableConfig = {
       }),
       sort: true,
     },
-
     {
       matHeaderCellDef: '',
       matColumnDef: 'actions',
@@ -189,6 +188,21 @@ const customDeleteCol: TableColumn = {
   }),
 };
 
+const customActionsCol: TableColumn = {
+  matHeaderCellDef: '',
+  matColumnDef: 'volumeActions',
+  style: { width: '20px' },
+  value: new ActionListValue([
+    new MenuIconValue({
+      name: 'settings',
+      tooltip: $localize`Open settings for this volume`,
+      color: '',
+      field: 'settings',
+      matIcon: 'settings',
+    }),
+  ]),
+};
+
 export const defaultVolumeConfig: TableConfig = {
   id: 'volumes-table',
   title: volumeTableConfig.title,
@@ -199,6 +213,7 @@ export const defaultVolumeConfig: TableConfig = {
     // customOpenPVCViewerCol,
     // customClosePVCViewerCol,
     customDeleteCol,
+    customActionsCol,
   ),
 };
 

@@ -275,6 +275,15 @@ export class JWABackendService extends BackendService {
       );
   }
 
+  public expandPVC(namespace: string, name: string, size: string): Observable<string> {
+    const url = `api/namespaces/${namespace}/pvcs/${name}/expand`;
+
+    return this.http.patch<JWABackendResponse>(url, {size: size}).pipe(
+      catchError(error => this.handleError(error, false)),
+      map(_ => 'expanded'),
+    );
+  }
+
   public updatePVCUsage(
     ns: string | string[],
     usageData: PVCUsageDataObject[],

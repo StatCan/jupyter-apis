@@ -85,7 +85,7 @@ import { MenuIconComponent } from './menu-icon/menu-icon.component';
     ComponentValueComponent,
     MenuIconComponent,
   ],
-  exports: [ResourceTableComponent, TableComponent, ActionComponent],
+  exports: [ResourceTableComponent, TableComponent, ActionComponent, MenuIconComponent],
   providers: [
     { provide: MatPaginatorIntl, useValue: getCustomPaginatorIntl() },
   ],

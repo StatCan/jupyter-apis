@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  <form class="form" [formGroup]="formDialogFormGroup">
+    <p>{{ data.message }}</p>
+
+    <mat-form-field appearance="outline" class="wide">
+      <mat-label i18n>Size in Gi</mat-label>
+      <!--AAW specific, we want to control the size options users have
+      https://github.com/StatCan/jupyter-apis/issues/7#issuecomment-687249223-->
+      <mat-select formControlName="sizeNum" data-cy="size input">
+        <mat-option *ngFor="let size of disabledSizes" [value]="size" disabled>{{
+          size
+        }}</mat-option>
+        <mat-option *ngFor="let size of enabledSizes" [value]="size">{{
+          size
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <p class="error">{{ data.error }}</p>
+
+    <div mat-dialog-actions>
+      <button mat-button [mat-dialog-close]="DIALOG_RESP.CANCEL" cdkFocusInitial>
+        {{ data.cancel.toUpperCase() }}
+      </button>
+
+      <button
+        *ngIf="!isApplying"
+        mat-button
+        (click)="onAcceptClicked()"
+        [color]="data.confirmColor"
+        [disabled]="!formDialogFormGroup.valid"
+        data-cy-form-button="formDialogSubmit"
+      >
+        {{ data.accept.toUpperCase() }}
+      </button>
+
+      <button *ngIf="isApplying" mat-button disabled>
+        <div class="waiting-button-wrapper">
+          <mat-spinner diameter="16"></mat-spinner>
+          <p>{{ data.applying }}</p>
+        </div>
+      </button>
+    </div>
+  </form>
+</div>

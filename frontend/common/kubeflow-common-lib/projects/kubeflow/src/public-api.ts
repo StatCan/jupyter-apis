@@ -23,6 +23,10 @@ export * from './lib/confirm-dialog/confirm-dialog.service';
 export * from './lib/delay-dialog/delay-dialog.module';
 export * from './lib/delay-dialog/delay-dialog.component';
 
+export * from './lib/form-dialog/form-dialog.module';
+export * from './lib/form-dialog/dialog/form-dialog.component';
+export * from './lib/form-dialog/form-dialog.service';
+
 export * from './lib/popover/popover.component';
 export * from './lib/popover/popover.directive';
 export * from './lib/popover/popover.module';
@@ -55,6 +59,7 @@ export * from './lib/snack-bar/types';
 export * from './lib/services/backend/types';
 export * from './lib/confirm-dialog/types';
 export * from './lib/delay-dialog/types';
+export * from './lib/form-dialog/types';
 export * from './lib/polling/exponential-backoff';
 export * from './lib/form/validators';
 export * from './lib/form/utils';
@@ -113,6 +118,7 @@ export * from './lib/urls/types';
 export * from './lib/icon/icon.component';
 export * from './lib/icon/icon.module';
 export * from './lib/resource-table/action/action.component';
+export * from './lib/resource-table/menu-icon/menu-icon.component';
 
 export * from './lib/status-info/status-info.component';
 export * from './lib/status-info/status-info.module';

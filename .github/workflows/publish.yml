@@ -12,9 +12,7 @@ on:
     - cron: '0 23 * * *'
 
 env:
-  REGISTRY_NAME: k8scc01covidacr
-  # Dev Registry cannot be used in 2.0 since we don't have access to the acrdev
-  DEV_REGISTRY_NAME: k8scc01covidacrdev
+  REGISTRY_NAME: stcthezoneacr
   TRIVY_VERSION: "v0.69.2"
   TRIVY_DATABASES: '"ghcr.io/aquasecurity/trivy-db:2","public.ecr.aws/aquasecurity/trivy-db"'
   TRIVY_JAVA_DATABASES: '"ghcr.io/aquasecurity/trivy-java-db:1","public.ecr.aws/aquasecurity/trivy-java-db"'

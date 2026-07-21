@@ -417,14 +417,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     for (const nb of notebooksCopy) {
       this.updateNotebookFields(nb);
       nb.default = this.parseDefaultNotebook(nb);
-      console.log(nb);
-      var meow = undefined;
-      meow = this.parseWarnings(nb);
-      console.log('MEOW', meow);
-      if (meow != undefined) {
-        nb.warnings?.push(meow);
-      }
-      // console.log("I am the master", nb);
     }
     return notebooksCopy;
   }
@@ -437,18 +429,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       return true;
     }
     return false;
-  }
-
-  // Give back the appropriate warning if two of them
-  parseWarnings(notebook: NotebookProcessedObject) {
-    //Check if oomkilled
-    console.log(' Meow , ', notebook.name, notebook.isOOMKilled);
-    if (notebook.isOOMKilled) {
-      return 'sim_card_alert';
-    }
-    // if volume too full
-
-    return undefined;
   }
 
   // Action handling functions

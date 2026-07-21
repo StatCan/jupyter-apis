@@ -47,7 +47,6 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
     url: string;
     queryParams?: Params | null;
   };
-  warnings?: [code: string];
   settings?: {
     name: string;
     matIcon?: string;

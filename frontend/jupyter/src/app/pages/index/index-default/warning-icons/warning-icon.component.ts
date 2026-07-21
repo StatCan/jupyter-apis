@@ -15,29 +15,44 @@ export class WarningComponent implements TableColumnComponent {
   set element(elem: any) {
     this.row = elem;
     if (this.showWarnings()) {
-      this.textToolTip = '';
-      this.row.warnings.forEach(warn => {
-        if (warn == 'oomkilled') {
-          this.textToolTip =
-            '* ' + $localize`Error Out Of Memory Killed.` + '\n';
-        }
-        if (warn == 'volumefull') {
-          // Set the warning to be an array of string?
-          this.textToolTip +=
-            '* ' +
-            $localize`One or more of the volume(s) for ${this.row.name} is 95% or more full.` +
-            '\n';
-        }
-      });
+      this.textToolTip = this.showWarningsText();
+      console.log("I enter the verification", this.row);
+      //The row never has warnings. 
+      // this.row.warnings.forEach(warn => {
+      //   if (warn == 'oomkilled') {
+      //     this.textToolTip =
+      //       '* ' + `Error Out Of Memory Killed.` + '\n';
+      //   }
+      //   if (warn == 'volumefull') {
+      //     // Set the warning to be an array of string?
+      //     this.textToolTip +=
+      //       '* ' +
+      //       `One or more of the volume(s) for ${this.row.name} is 95% or more full.` +
+      //       '\n';
+      //   }
+      // });
     }
   }
 
   public showWarnings() {
-    //nworks with default. need to fix icon first.
-    if (this.row.hasOwnProperty('default')) {
-      //console.log("I am at isOOMKilled");
-      return this.row.default;
+    var isWarnings = false;
+    if (this.row.hasOwnProperty('isOOMKilled')) {
+      isWarnings = this.row.isOOMKilled;
+      if (this.row.isOOMKilled) {
+        return true;
+      }
     }
-    return false;
+    return isWarnings;
+  }
+
+    public showWarningsText() {
+    //nworks with default. need to fix icon first.
+    var thetext = '';
+    if (this.row.hasOwnProperty('isOOMKilled')) {
+      if (this.row.isOOMKilled) {
+        thetext += '* ' + $localize`Error Out Of Memory Killed.` + '\n';
+      }
+    }
+    return thetext;
   }
 }

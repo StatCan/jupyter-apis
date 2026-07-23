@@ -5,7 +5,12 @@ import { ComponentValue } from './component-value';
 
 export class ActionListValue {
   constructor(
-    public actions: (ActionIconValue | ActionButtonValue | MenuIconValue | ComponentValue)[],
+    public actions: (
+      | ActionIconValue
+      | ActionButtonValue
+      | MenuIconValue
+      | ComponentValue
+    )[],
   ) {}
 }
 

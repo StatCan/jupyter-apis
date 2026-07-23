@@ -506,7 +506,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           status: pvc.status.phase,
           text: $localize`Increase size`,
           matIcon: 'storage',
-        }
+        },
       ];
       // TODO: Uncomment when pvcviewer-controller is implemented
       // pvc.closePVCViewerAction = this.parseClosePVCViewerActionStatus(pvc);

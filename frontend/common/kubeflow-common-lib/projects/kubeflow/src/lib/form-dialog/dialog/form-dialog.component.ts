@@ -22,14 +22,14 @@ export class FormDialogComponent implements OnInit {
   public isApplying = false;
   public applying$ = new Subject<FormDialogResponse>();
 
-  public sizes: number[] = [4, 8, 16, 32, 64, 128, 256, 512]
+  public sizes: number[] = [4, 8, 16, 32, 64, 128, 256, 512];
   public oldSizeNum = 0;
-  public disabledSizes: string[] = []
-  public enabledSizes: string[] = []
+  public disabledSizes: string[] = [];
+  public enabledSizes: string[] = [];
 
   constructor(
     public formDialogRef: MatDialogRef<FormDialogComponent>,
-    
+
     @Inject(MAT_DIALOG_DATA) public data: FormDialogConfig,
   ) {}
 
@@ -52,16 +52,16 @@ export class FormDialogComponent implements OnInit {
     });
   }
 
-  isBiggerSize(newSize: number){
+  isBiggerSize(newSize: number) {
     return newSize > this.oldSizeNum;
   }
 
   onAcceptClicked(): void {
     // clear the error message
-    this.data.error = "";
+    this.data.error = '';
 
     const newSize: number = this.formDialogFormGroup.get('sizeNum')?.value;
-    
+
     this.isApplying = true;
     this.applying$.next({
       applying: true,

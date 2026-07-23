@@ -17,12 +17,13 @@ import { DIALOG_RESP } from '../../confirm-dialog/types';
   styleUrls: ['./form-dialog.component.scss'],
 })
 export class FormDialogComponent implements OnInit {
-  public formDialogFormGroup: FormGroup;
+  public formDialogFormGroup!: FormGroup;
   public DIALOG_RESP = DIALOG_RESP;
   public isApplying = false;
   public applying$ = new Subject<FormDialogResponse>();
 
-  private sizes = ['4Gi', '8Gi', '16Gi', '32Gi', '64Gi', '128Gi', '256Gi', '512Gi']
+  public sizes: number[] = [4, 8, 16, 32, 64, 128, 256, 512]
+  public oldSizeNum = 0;
   public disabledSizes: string[] = []
   public enabledSizes: string[] = []
 
@@ -36,34 +37,30 @@ export class FormDialogComponent implements OnInit {
     this.applying$.subscribe(res => {
       this.isApplying = res.applying;
     });
-    const fb = new FormBuilder();
 
+    this.oldSizeNum = parseInt(this.data.oldSize, 10);
+
+    const fb = new FormBuilder();
     this.formDialogFormGroup = fb.group({
       sizeNum: [
-        this.data.oldSize,
+        this.oldSizeNum,
         [
           Validators.required,
-          this.isDisabledSizeValidator(),
+          this.isSmallerSizeValidator(), // Error will mainly appear if user opens the dropdown but doesn't select an option
         ],
       ],
     });
+  }
 
-    let largerSize = false;
-    for(let i = 0; i < this.sizes.length; i++){
-      if(!largerSize){
-        this.disabledSizes.push(this.sizes[i]);
-
-        if(this.sizes[i] == this.data.oldSize){
-          largerSize = true;
-        }
-      }else{
-        this.enabledSizes.push(this.sizes[i]);
-      }
-    }
+  isBiggerSize(newSize: number){
+    return newSize > this.oldSizeNum;
   }
 
   onAcceptClicked(): void {
-    const newSize = this.formDialogFormGroup.get('sizeNum')?.value.toString();
+    // clear the error message
+    this.data.error = "";
+
+    const newSize: number = this.formDialogFormGroup.get('sizeNum')?.value;
     
     this.isApplying = true;
     this.applying$.next({
@@ -72,19 +69,21 @@ export class FormDialogComponent implements OnInit {
     });
   }
 
-  onCancelClicked(): void {
-    this.formDialogRef.close(DIALOG_RESP.CANCEL);
-  }
-
-  isDisabledSize(): boolean {
-    const inputSize = this.formDialogFormGroup.get('sizeNum')?.value.toString();
-
-    return this.disabledSizes.includes(inputSize)
-  }
-
-  private isDisabledSizeValidator(): ValidatorFn {
+  private isSmallerSizeValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
-      return this.disabledSizes.includes(control.value) ? { isDisabledSize: true } : null;
+      return !this.isBiggerSize(control.value) ? { isSmallerSize: true } : {};
     };
+  }
+
+  getErrorMessage(key: string) {
+    let e: any;
+    const errs = this.formDialogFormGroup.get(key)?.errors || {};
+
+    if ((e = errs.required)) {
+      return $localize`Size is required`;
+    }
+    if ((e = errs.isSmallerSize)) {
+      return $localize`New size has to be larger than the current value`;
+    }
   }
 }

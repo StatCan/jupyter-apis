@@ -44,13 +44,26 @@ export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
     };
   }
 
+export function getConfirmExpandVolumeDialogConfig(name: string, size: number): DialogConfig {
+    return {
+      title: $localize`Are you sure you want to increase the size of ${name} to ${size}Gi?`,
+      message: $localize`To note: the change in size can only be completed when this volume is attached to a running notebook server.`,
+      accept: $localize`INCREASE`,
+      confirmColor: 'primary',
+      cancel: $localize`CANCEL`,
+      error: '',
+      applying: $localize`INCREASING`,
+      width: '600px',
+    };
+  }
+
 // --- Configs for the Form Dialogs ---
 export function getExpandVolumeDialogConfig(name: string, size: string): FormDialogConfig {
     return {
       title: $localize`Increase size of volume ${name}`,
-      message: $localize`Select the new size for this volume. To note that you can only expand the volume. You cannot shrink it.`,
+      message: $localize`Select the new size for this volume. To note that you can only expand the volume, not shrink it.`,
       accept: $localize`Submit`,
-      applying: $localize`INCREASING SIZE`,
+      applying: $localize`INCREASING`,
       confirmColor: 'primary',
       cancel: $localize`Cancel`,
       error: '',

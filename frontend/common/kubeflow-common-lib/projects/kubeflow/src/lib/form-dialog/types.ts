@@ -12,5 +12,5 @@ export interface FormDialogConfig {
 
 export interface FormDialogResponse {
   applying: boolean;
-  newSize: string;
+  newSize: number;
 }

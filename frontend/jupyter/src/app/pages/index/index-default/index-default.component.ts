@@ -681,11 +681,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         return;
       }
 
-      // TODO: Determine if I need something like this for expand volume
-      // pvc.status.phase = STATUS_TYPE.TERMINATING;
-      // pvc.status.message = 'Preparing to delete the Volume...';
-      // pvc.deleteAction = STATUS_TYPE.UNAVAILABLE;
-      // this.pvcsWaitingViewer.delete(pvc.name);
+      // TODO: Determine if something should be done after expansion (like with deleteVolumeClicked)
     });
   }
 

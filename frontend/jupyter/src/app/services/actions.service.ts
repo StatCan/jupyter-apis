@@ -8,7 +8,7 @@ import {
   SnackBarService,
   SnackType,
 } from 'kubeflow';
-import { getDeleteDialogConfig, getDeleteVolumeDialogConfig, getExpandVolumeDialogConfig, getStopDialogConfig } from './config';
+import { getConfirmExpandVolumeDialogConfig, getDeleteDialogConfig, getDeleteVolumeDialogConfig, getExpandVolumeDialogConfig, getStopDialogConfig } from './config';
 import { JWABackendService } from './backend.service';
 import { Observable } from 'rxjs';
 import { PVCProcessedObject } from '../types';
@@ -172,6 +172,53 @@ export class ActionsService {
     });
   }
 
+  private openExpandVolumeSnackbar(pvc: PVCProcessedObject){
+    const object = `${pvc.namespace}/${pvc.name}`;
+    const message = $localize`Expand request was sent.`;
+    const config: SnackBarConfig = {
+      data: {
+        msg: `${object}: ${message}`,
+        snackType: SnackType.Info,
+      },
+    };
+    this.snackBar.open(config);
+  }
+
+  private confirmExpandVolume(pvc: PVCProcessedObject, newSize: number): Observable<string> {
+    return new Observable(subscriber => {
+      const confirmExpandDialogConfig = getConfirmExpandVolumeDialogConfig(pvc.name, newSize);
+
+      const confirmRef = this.confirmDialog.open(confirmExpandDialogConfig);
+      const confirmExpandSub = confirmRef.componentInstance.applying$.subscribe((applying: any) => {
+        if (!applying) {
+          return;
+        }
+
+        // Close the open dialog only if the DELETE request succeeded
+        this.backend.expandPVC(pvc.namespace, pvc.name, newSize).subscribe({
+          next: _ => {
+            confirmRef.close(DIALOG_RESP.ACCEPT);
+
+            this.openExpandVolumeSnackbar(pvc)
+          },
+          error: err => {
+            const errorMsg = $localize`Error ${err}`;
+            confirmExpandDialogConfig.error = errorMsg;
+            confirmRef.componentInstance.applying$.next(false);
+            subscriber.next('fail');
+          },
+        });
+      });
+
+      // request has succeeded
+      confirmRef.afterClosed().subscribe((result: string | undefined) => {
+        confirmExpandSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
+      });
+    });
+  }
+
   expandVolume(pvc: PVCProcessedObject): Observable<string> {
     return new Observable(subscriber => {
       const expandDialogConfig = getExpandVolumeDialogConfig(pvc.name, pvc.capacity);
@@ -181,39 +228,42 @@ export class ActionsService {
         if (!res.applying) {
           return;
         }
-        
-        // Close the open dialog only if the DELETE request succeeded
-        this.backend.expandPVC(pvc.namespace, pvc.name, res.newSize).subscribe({
-          next: _ => {
-            ref.close(DIALOG_RESP.ACCEPT);
 
-            const object = `${pvc.namespace}/${pvc.name}`;
-            const message = $localize`Expand request was sent.`;
-            const config: SnackBarConfig = {
-              data: {
-                msg: `${object}: ${message}`,
-                snackType: SnackType.Info,
-              },
-            };
-            this.snackBar.open(config);
-          },
-          error: err => {
-            const errorMsg = $localize`Error ${err}`;
-            expandDialogConfig.error = errorMsg;
-            ref.componentInstance.applying$.next({
-              applying: false,
-              newSize: ""
-            });
-            subscriber.next('fail');
-          },
-        });
+        // if the size is bigger than 128, then show a confirmDialog before submiting the expand action
+        if(res.newSize < 128){
+          this.backend.expandPVC(pvc.namespace, pvc.name, res.newSize).subscribe({
+            next: _ => {
+              ref.close(DIALOG_RESP.ACCEPT);
 
-        // request has succeeded
-        ref.afterClosed().subscribe((result: string | undefined) => {
-          expandSub.unsubscribe();
-          subscriber.next(result);
-          subscriber.complete();
-        });
+              this.openExpandVolumeSnackbar(pvc)
+            },
+            error: err => {
+              const errorMsg = $localize`Error ${err}`;
+              expandDialogConfig.error = errorMsg;
+              ref.componentInstance.applying$.next({
+                applying: false,
+                newSize: res.newSize
+              });
+              subscriber.next('fail');
+            },
+          });
+        } else {
+          this.confirmExpandVolume(pvc, res.newSize).subscribe(result => {
+            // remove the applying status from the form dialog in case of cancelling the confirm dialog
+            ref.componentInstance.isApplying = false
+
+            if (result !== DIALOG_RESP.ACCEPT) {
+              return;
+            }
+          });
+        }
+      });
+
+      // request has succeeded
+      ref.afterClosed().subscribe((result: string | undefined) => {
+        expandSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
       });
     });
   }

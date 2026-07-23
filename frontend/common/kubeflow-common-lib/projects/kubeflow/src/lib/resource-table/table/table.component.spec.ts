@@ -36,7 +36,7 @@ export class ServerTypeComponent implements TableColumnComponent {
   }
 }
 
-const volumeTableConfig = {
+const tableConfig = {
   title: 'test',
   columns: [
     {
@@ -278,7 +278,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter link values based on all columns', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -294,7 +294,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter link values based on one column', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -310,7 +310,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter link values based on one column', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -326,7 +326,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter date values based on one column using UTC timestamp', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -342,7 +342,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter date values based on one column using X months ago', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     const tableDataCopy = cloneDeep(tableData);
     tableDataCopy[0].age = subMonths(new Date(), 3).toISOString();
     tableDataCopy[1].age = subMonths(new Date(), 2).toISOString();
@@ -361,7 +361,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter component values based on one column', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -377,7 +377,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter status values based on one column using status phase', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -393,7 +393,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter status values based on one column using status message', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -409,7 +409,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter memory values based on all columns', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -425,7 +425,7 @@ describe('TableComponent', () => {
   });
 
   it('should filter memory values based on one column', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
     component.data = tableData;
 
     const compiled = fixture.debugElement.nativeElement;
@@ -441,7 +441,7 @@ describe('TableComponent', () => {
   });
 
   it('should properly configure filter section', () => {
-    component.config = volumeTableConfig;
+    component.config = tableConfig;
 
     expect(component.filteredHeaders).toEqual([]);
     expect(component.showStatus).toEqual(false);
@@ -462,7 +462,7 @@ describe('TableComponent', () => {
     expect(component.showStatus).toEqual(true);
     expect(component.showDate).toEqual(true);
 
-    const configCopy = cloneDeep(volumeTableConfig);
+    const configCopy = cloneDeep(tableConfig);
     configCopy.columns.pop();
     component.ngOnChanges({
       config: new SimpleChange(null, configCopy, false),

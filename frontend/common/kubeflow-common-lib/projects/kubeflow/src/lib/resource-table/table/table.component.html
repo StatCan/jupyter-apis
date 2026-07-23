@@ -328,6 +328,16 @@
               (emitter)="actionTriggered($event)"
               [attr.data-cy-resource-table-action-icon]="action?.name"
             ></lib-menu-icon>
+
+            <!--Component Value-->
+            <lib-component-value
+              *ngIf="isComponentValue(action)"
+              class="action-button"
+              [element]="element"
+              [valueDescriptor]="action"
+              (emitter)="actionTriggered($event)"
+              [attr.data-cy-resource-table-action-icon]="action?.name"
+            ></lib-component-value>
           </ng-container>
         </div>
       </td>

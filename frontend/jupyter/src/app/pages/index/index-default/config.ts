@@ -179,20 +179,14 @@ const customClosePVCViewerCol: TableColumn = {
   }),
 };
 
-const customDeleteCol: TableColumn = {
-  matHeaderCellDef: '',
-  matColumnDef: 'customDelete',
-  style: { width: '40px' },
-  value: new ComponentValue({
-    component: DeleteButtonComponent,
-  }),
-};
-
 const customActionsCol: TableColumn = {
   matHeaderCellDef: '',
   matColumnDef: 'volumeActions',
-  style: { width: '20px' },
+  style: { width: '40px' },
   value: new ActionListValue([
+    new ComponentValue({
+      component: DeleteButtonComponent,
+    }),
     new MenuIconValue({
       name: 'settings',
       tooltip: $localize`Open settings for this volume`,
@@ -212,7 +206,6 @@ export const defaultVolumeConfig: TableConfig = {
     // TODO: Uncomment when pvcviewer-controller is implemented
     // customOpenPVCViewerCol,
     // customClosePVCViewerCol,
-    customDeleteCol,
     customActionsCol,
   ),
 };

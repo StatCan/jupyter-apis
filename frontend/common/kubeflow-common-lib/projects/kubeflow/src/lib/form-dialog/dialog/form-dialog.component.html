@@ -1,7 +1,8 @@
 <h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
   <form class="form" [formGroup]="formDialogFormGroup">
-    <p>{{ data.message }}</p>
+    <p style="white-space: pre-line">{{ data.message }}</p>
+    <p><b>{{ data.boldMessage }}</b></p>
 
     <mat-form-field appearance="outline" class="wide">
       <mat-label i18n>Size in Gi</mat-label>

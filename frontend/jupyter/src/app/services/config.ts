@@ -47,7 +47,7 @@ export function getDeleteVolumeDialogConfig(name: string): DialogConfig {
 export function getConfirmExpandVolumeDialogConfig(name: string, size: number): DialogConfig {
     return {
       title: $localize`Are you sure you want to increase the size of ${name} to ${size}Gi?`,
-      message: $localize`To note: the change in size can only be completed when this volume is attached to a running notebook server.`,
+      message: $localize`Warning: a larger volume is more costly to maintain`,
       accept: $localize`INCREASE`,
       confirmColor: 'primary',
       cancel: $localize`CANCEL`,
@@ -61,7 +61,8 @@ export function getConfirmExpandVolumeDialogConfig(name: string, size: number): 
 export function getExpandVolumeDialogConfig(name: string, size: string): FormDialogConfig {
     return {
       title: $localize`Increase size of volume ${name}`,
-      message: $localize`Select the new size for this volume. To note that you can only expand the volume, not shrink it.`,
+      message: $localize`Select a new size for this volume. You can only increase the size, not reduce it.\n\nThis size increase will only be completed when this volume is attached to a running notebook server.`,
+      boldMessage: $localize`To note: this change is non-reversable.`,
       accept: $localize`Submit`,
       applying: $localize`INCREASING`,
       confirmColor: 'primary',

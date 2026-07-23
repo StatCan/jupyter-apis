@@ -1,6 +1,7 @@
 export interface FormDialogConfig {
   title: string;
   message: string;
+  boldMessage: string;
   accept: string;
   applying: string;
   error?: string;

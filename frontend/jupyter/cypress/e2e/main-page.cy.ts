@@ -589,7 +589,30 @@ describe('Main tables', () => {
       );
     });
 
-    it.only('should increase the size of a volume', () => {
+    it('should open the volume details from the settings menu', () => {
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-pvc-phase-ready-viewer-ready')
+        .scrollIntoView();
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-pvc-phase-ready-viewer-ready')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="pvc_details"]')
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+
+      cy.url().should(
+        'eq',
+        'http://localhost:4200/volume/details/kubeflow-user/a-pvc-phase-ready-viewer-ready',
+      );
+    });
+
+    it('should increase the size of a volume', () => {
       cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('titanic-ml-47xh5-data-m57vq-2md82')
@@ -604,7 +627,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="expand_pvc"]')
-        .click({force: true}); // Forcing the click or else cypress would randomly fail to do the click
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.get('.mat-mdc-dialog-title')
         .should('be.visible')
         .and(
@@ -658,7 +681,7 @@ describe('Main tables', () => {
       cy.get('mat-dialog-container').should('not.exist');
     });
 
-    it.only('should confirm a large size increase of a volume', () => {
+    it('should confirm a large size increase of a volume', () => {
       cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('titanic-ml-47xh5-data-m57vq-2md82')
@@ -673,7 +696,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="expand_pvc"]')
-        .click({force: true}); // Forcing the click or else cypress would randomly fail to do the click
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.get('[data-cy-form-input="volumeSize"]')
         .click()
         .get('mat-option')

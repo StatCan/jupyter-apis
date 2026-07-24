@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { JWABackendService } from './backend.service';
 import { of } from 'rxjs';
 import { ActionsService } from './actions.service';
-import { ConfirmDialogService, SnackBarService } from 'kubeflow';
+import { ConfirmDialogService, FormDialogService, SnackBarService } from 'kubeflow';
 
 const JWABackendServiceStub: Partial<JWABackendService> = {
   deleteNotebook: () => of(),
@@ -22,6 +22,7 @@ describe('ActionsService', () => {
       providers: [
         { provide: JWABackendService, useValue: JWABackendServiceStub },
         { provide: ConfirmDialogService, useValue: {} },
+        { provide: FormDialogService, useValue: {} },
         { provide: SnackBarService, useValue: SnackBarServiceStub },
       ],
     }).compileComponents();

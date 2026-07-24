@@ -301,7 +301,7 @@ describe('Main tables', () => {
           .should('be.visible')
           .find('button[data-cy-menu-icon-action="keep_alive"]')
           .and('be.enabled')
-          .click();;
+          .click();
         cy.get('.mat-mdc-dialog-title')
           .should('be.visible')
           .and(
@@ -587,6 +587,137 @@ describe('Main tables', () => {
         'eq',
         'http://localhost:4200/notebook/details/kubeflow-user/test-notebook-1',
       );
+    });
+
+    it.only('should increase the size of a volume', () => {
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .scrollIntoView();
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="expand_pvc"]')
+        .click({force: true}); // Forcing the click or else cypress would randomly fail to do the click
+      cy.get('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and(
+          'have.text',
+          'Increase size of volume titanic-ml-47xh5-data-m57vq-2md82',
+        );
+      // assert default value matches volume's current size
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .find('mat-select[formControlName="sizeNum"]')
+        .should('contain', '32');
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .click();
+      // assert the sizes dropdown
+      const sizeArray = [4, 8, 16, 32, 64, 128, 256, 512];
+      cy.get('div[role="listbox"]')
+        .should('be.visible')
+        .find('mat-option')
+        .should('have.length', sizeArray.length);
+      cy.get('div[role="listbox"]')
+        .find('mat-option')
+        .each(($option, index) => {
+          console.log("test", $option, index);
+          expect($option).to.contain(sizeArray[index].toString())
+
+          // assert that the smaller sizes are disabled
+          // index 3 matches size '32' which is the size of the selected volume
+          if(index <= 3){
+            expect($option).to.have.class('mdc-list-item--disabled');
+          } else {
+            expect($option).to.not.have.class('mdc-list-item--disabled');
+          }
+        });
+      cy.get('body').click() // close sizes dropdown
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .should('have.class', 'ng-invalid');
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .find('mat-error')
+        .should('have.text', 'New size has to be larger than the current value');
+
+      // assert succesful increase
+      cy.get('[data-cy-form-input="volumeSize"]').click().get('mat-option').contains('64').click();
+      cy.intercept(
+        'PATCH',
+        '/api/namespaces/kubeflow-user/pvcs/titanic-ml-47xh5-data-m57vq-2md82/expand',
+        { success: true, status: 200 },
+      ).as('mockExpandVolume');
+      cy.get('[data-cy-form-button="formDialogSubmit"]').click();
+      cy.wait('@mockExpandVolume')
+        .its('response.statusCode')
+        .should('eq', 200);
+      cy.get('mat-dialog-container').should('not.exist');
+    });
+
+    it.only('should confirm a large size increase of a volume', () => {
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .scrollIntoView();
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="expand_pvc"]')
+        .click({force: true}); // Forcing the click or else cypress would randomly fail to do the click
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .click()
+        .get('mat-option')
+        .contains('128')
+        .click();
+      cy.get('[data-cy-form-button="formDialogSubmit"]').click();
+      cy.get('lib-confirm-dialog')
+        .find('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and('have.text', 'Are you sure you want to increase the size of titanic-ml-47xh5-data-m57vq-2md82 to 128Gi?');
+      cy.get('lib-confirm-dialog')
+        .find('.mat-mdc-dialog-actions > button')
+        .contains('CANCEL')
+        .click();
+      // asert that the first popup is still present
+      cy.get('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and(
+          'have.text',
+          'Increase size of volume titanic-ml-47xh5-data-m57vq-2md82',
+        );
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .click()
+        .get('mat-option')
+        .contains('256')
+        .click();
+      cy.get('[data-cy-form-button="formDialogSubmit"]').click();
+      cy.get('lib-confirm-dialog')
+        .find('.mat-mdc-dialog-title')
+        .should('be.visible')
+        .and('have.text', 'Are you sure you want to increase the size of titanic-ml-47xh5-data-m57vq-2md82 to 256Gi?');
+      cy.intercept(
+        'PATCH',
+        '/api/namespaces/kubeflow-user/pvcs/titanic-ml-47xh5-data-m57vq-2md82/expand',
+        { success: true, status: 200 },
+      ).as('mockExpandVolume');
+      cy.get('lib-confirm-dialog')
+        .find('.mat-mdc-dialog-actions > button')
+        .contains('INCREASE')
+        .click();
+      cy.wait('@mockExpandVolume')
+        .its('response.statusCode')
+        .should('eq', 200);
+      cy.get('mat-dialog-container').should('not.exist');
     });
   });
 

@@ -6,11 +6,11 @@
       <b>{{ data.boldMessage }}</b>
     </p>
 
-    <mat-form-field appearance="outline" class="wide">
+    <mat-form-field appearance="outline" class="wide" data-cy-form-input="volumeSize">
       <mat-label i18n>Size in Gi</mat-label>
       <!--AAW specific, we want to control the size options users have
       https://github.com/StatCan/jupyter-apis/issues/7#issuecomment-687249223-->
-      <mat-select formControlName="sizeNum" data-cy="size input">
+      <mat-select formControlName="sizeNum">
         <mat-option
           *ngFor="let size of sizes"
           [value]="size"

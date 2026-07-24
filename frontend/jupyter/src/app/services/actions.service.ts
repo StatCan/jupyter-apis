@@ -271,7 +271,7 @@ export class ActionsService {
             this.confirmExpandVolume(pvc, res.newSize).subscribe(result => {
               // remove the applying status from the form dialog in case of cancelling the confirm dialog
               ref.componentInstance.isApplying = false;
-              
+
               if (result !== DIALOG_RESP.ACCEPT) {
                 return;
               } else {

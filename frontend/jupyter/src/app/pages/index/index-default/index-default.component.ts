@@ -425,7 +425,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     if (
       notebook.labels?.['notebook.statcan.gc.ca/default-notebook'] === 'true'
     ) {
-      console.log(notebook);
       return true;
     }
     return false;
@@ -476,7 +475,6 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     return `${pvc.name}/${pvc.namespace}/${pvc.capacity}`;
   }
 
-  // Data for volume
   public parseIncomingData(pvcs: PVCResponseObject[]): PVCProcessedObject[] {
     const pvcsCopy = JSON.parse(JSON.stringify(pvcs)) as PVCProcessedObject[];
 

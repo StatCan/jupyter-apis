@@ -52,18 +52,19 @@ type pvcsusageresponse struct {
 }
 
 type pvcresponse struct {
-	Name      string                              `json:"name"`
-	Namespace string                              `json:"namespace"`
-	Status    pvcStatus                           `json:"status"`
-	Age       time.Time                           `json:"age"`
-	Capacity  resource.Quantity                   `json:"capacity"`
-	Modes     []corev1.PersistentVolumeAccessMode `json:"modes"`
-	Class     string                              `json:"class"`
-	Notebooks []string                            `json:"notebooks"`
-	Labels    map[string]string                   `json:"labels"`
-	Viewer    pvcviewerresponse                   `json:"viewer"`
-	Usage     string                              `json:"usage"`
-	UsedBytes string                              `json:"usedBytes"`
+	Name          string                              `json:"name"`
+	Namespace     string                              `json:"namespace"`
+	Status        pvcStatus                           `json:"status"`
+	Age           time.Time                           `json:"age"`
+	Capacity      resource.Quantity                   `json:"capacity"`
+	PendingResize resource.Quantity                   `json:"pendingResize"`
+	Modes         []corev1.PersistentVolumeAccessMode `json:"modes"`
+	Class         string                              `json:"class"`
+	Notebooks     []string                            `json:"notebooks"`
+	Labels        map[string]string                   `json:"labels"`
+	Viewer        pvcviewerresponse                   `json:"viewer"`
+	Usage         string                              `json:"usage"`
+	UsedBytes     string                              `json:"usedBytes"`
 }
 
 type pvcviewerresponse struct {
@@ -311,6 +312,14 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			size = pvc.Spec.Resources.Requests.Storage()
 		}
 
+		// check if there is a pending resize
+		var pendingResize resource.Quantity
+		for _, condition := range pvc.Status.Conditions {
+			if condition.Type == "Resizing" {
+				pendingResize = *pvc.Spec.Resources.Requests.Storage()
+			}
+		}
+
 		allevents, err := s.listers.events.Events(pvc.Namespace).List(labels.Everything())
 		if err != nil {
 			s.error(w, r, err)
@@ -362,17 +371,18 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 		// }
 
 		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, pvcresponse{
-			Name:      pvc.Name,
-			Namespace: pvc.Namespace,
-			Status:    status,
-			Age:       pvc.CreationTimestamp.Time,
-			Capacity:  *size,
-			Modes:     pvc.Spec.AccessModes,
-			Class:     *pvc.Spec.StorageClassName,
-			Notebooks: notebooksList,
-			Labels:    pvc.Labels,
-			Usage:     usagePercent,
-			UsedBytes: usageValueBytes,
+			Name:          pvc.Name,
+			Namespace:     pvc.Namespace,
+			Status:        status,
+			Age:           pvc.CreationTimestamp.Time,
+			Capacity:      *size,
+			PendingResize: pendingResize,
+			Modes:         pvc.Spec.AccessModes,
+			Class:         *pvc.Spec.StorageClassName,
+			Notebooks:     notebooksList,
+			Labels:        pvc.Labels,
+			Usage:         usagePercent,
+			UsedBytes:     usageValueBytes,
 			// TODO: Uncomment when pvcviewer-controller is implemented
 			// Viewer: pvcviewerresponse{
 			// 	Status: viewerStatusValue,

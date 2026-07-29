@@ -1,0 +1,11 @@
+<div>
+  <mat-icon 
+    *ngIf="isPendingResize()" 
+    class="warning"
+    [matTooltip]="getResizeTooltipMessage()"
+    matTooltipClass="custom-tooltip"
+  >
+    warning
+  </mat-icon>
+  {{ element.capacity }}
+</div>

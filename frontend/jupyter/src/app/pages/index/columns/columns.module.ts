@@ -6,6 +6,7 @@ import { OpenPVCViewerButtonComponent } from './open-pvcviewer-button/open-pvcvi
 import { ClosePVCViewerButtonComponent } from './close-pvcviewer-button/close-pvcviewer-button.component';
 import { IconModule, KubeflowModule, UrlsModule } from 'kubeflow';
 import { UsedByComponent } from './used-by/used-by.component';
+import { SizeComponent } from './size/size.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { UsedByComponent } from './used-by/used-by.component';
     ClosePVCViewerButtonComponent,
     DeleteButtonComponent,
     UsedByComponent,
+    SizeComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { UsedByComponent } from './used-by/used-by.component';
     ClosePVCViewerButtonComponent,
     DeleteButtonComponent,
     UsedByComponent,
+    SizeComponent,
   ],
 })
 export class ColumnsModule {}

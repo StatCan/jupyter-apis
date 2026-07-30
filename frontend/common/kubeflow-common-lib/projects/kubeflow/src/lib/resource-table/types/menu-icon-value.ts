@@ -31,7 +31,6 @@ export class MenuIconValue {
     this.color = color;
     this.field = field;
     this.matIcon = matIcon;
-    this.tooltip = tooltip;
   }
 
   getItems(row: any): any[] {

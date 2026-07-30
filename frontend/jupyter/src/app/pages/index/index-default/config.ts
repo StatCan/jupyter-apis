@@ -16,7 +16,7 @@ import {
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { DefaultComponent } from './default-icon/default-icon.component';
-import { tableConfig } from '../config';
+import { volumeTableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 import { OpenPVCViewerButtonComponent } from '../columns/open-pvcviewer-button/open-pvcviewer-button.component';
 import { ClosePVCViewerButtonComponent } from '../columns/close-pvcviewer-button/close-pvcviewer-button.component';
@@ -129,7 +129,6 @@ export const defaultConfig: TableConfig = {
       }),
       sort: true,
     },
-
     {
       matHeaderCellDef: '',
       matColumnDef: 'actions',
@@ -180,25 +179,34 @@ const customClosePVCViewerCol: TableColumn = {
   }),
 };
 
-const customDeleteCol: TableColumn = {
+const customActionsCol: TableColumn = {
   matHeaderCellDef: '',
-  matColumnDef: 'customDelete',
+  matColumnDef: 'volumeActions',
   style: { width: '40px' },
-  value: new ComponentValue({
-    component: DeleteButtonComponent,
-  }),
+  value: new ActionListValue([
+    new ComponentValue({
+      component: DeleteButtonComponent,
+    }),
+    new MenuIconValue({
+      name: 'settings',
+      tooltip: $localize`Open settings for this volume`,
+      color: '',
+      field: 'settings',
+      matIcon: 'settings',
+    }),
+  ]),
 };
 
 export const defaultVolumeConfig: TableConfig = {
   id: 'volumes-table',
-  title: tableConfig.title,
+  title: volumeTableConfig.title,
   dynamicNamespaceColumn: true,
-  newButtonText: tableConfig.newButtonText,
-  columns: tableConfig.columns.concat(
+  newButtonText: volumeTableConfig.newButtonText,
+  columns: volumeTableConfig.columns.concat(
     // TODO: Uncomment when pvcviewer-controller is implemented
     // customOpenPVCViewerCol,
     // customClosePVCViewerCol,
-    customDeleteCol,
+    customActionsCol,
   ),
 };
 

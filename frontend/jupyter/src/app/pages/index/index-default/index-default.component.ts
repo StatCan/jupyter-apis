@@ -494,6 +494,20 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
+      pvc.settings = [
+        {
+          name: 'pvc_details',
+          status: pvc.status.phase,
+          text: $localize`View details`,
+          matIcon: 'info',
+        },
+        {
+          name: 'expand_pvc',
+          status: pvc.status.phase,
+          text: $localize`Increase size`,
+          matIcon: 'storage',
+        },
+      ];
       // TODO: Uncomment when pvcviewer-controller is implemented
       // pvc.closePVCViewerAction = this.parseClosePVCViewerActionStatus(pvc);
       // pvc.openPVCViewerAction = this.parseOpenPVCViewerActionStatus(pvc);
@@ -607,6 +621,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public reactVolumeToAction(a: ActionEvent) {
     switch (a.action) {
+      case 'pvc_details':
+        this.router.navigate([a.data.link.url]);
+        break;
+      case 'expand_pvc':
+        this.expandVolumeClicked(a.data);
+        break;
       case 'delete':
         this.deleteVolumeClicked(a.data);
         break;
@@ -652,6 +672,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         this.snackBar.open(config);
         this.poll(this.currNamespace);
       }
+    });
+  }
+
+  public expandVolumeClicked(pvc: PVCProcessedObject) {
+    this.actions.expandVolume(pvc).subscribe(result => {
+      if (result !== DIALOG_RESP.ACCEPT) {
+        return;
+      }
+
+      // TODO: Determine if something should be done after expansion (like with deleteVolumeClicked)
     });
   }
 

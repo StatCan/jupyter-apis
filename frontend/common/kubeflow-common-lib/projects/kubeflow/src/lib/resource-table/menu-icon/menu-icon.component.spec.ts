@@ -4,7 +4,7 @@ import { MenuIconComponent } from './menu-icon.component';
 import { MenuIconValue } from '../types';
 import { ResourceTableModule } from '../resource-table.module';
 
-describe('ActionComponent', () => {
+describe('MenuIconComponent', () => {
   let component: MenuIconComponent;
   let fixture: ComponentFixture<MenuIconComponent>;
 

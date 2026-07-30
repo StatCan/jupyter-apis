@@ -11,7 +11,7 @@ import {
 import { UsedByComponent } from './columns/used-by/used-by.component';
 import { SizeComponent } from './columns/size/size.component';
 
-export const tableConfig: TableConfig = {
+export const volumeTableConfig: TableConfig = {
   columns: [
     {
       matHeaderCellDef: $localize`Status`,

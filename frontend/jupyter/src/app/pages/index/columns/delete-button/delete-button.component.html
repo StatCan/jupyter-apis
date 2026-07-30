@@ -12,20 +12,22 @@
   </button>
 
   <div
+    *ngIf="isPhaseTerminating()"
     matTooltipClass="custom-tooltip"
     matTooltip="PVC is terminating at the moment."
     i18n-matTooltip
   >
-    <button *ngIf="isPhaseTerminating()" mat-icon-button disabled>
+    <button mat-icon-button disabled>
       <lib-icon [icon]="action.iconInit"></lib-icon>
     </button>
   </div>
 
   <div
+    *ngIf="isPhaseUnavailable()"
     matTooltipClass="custom-tooltip"
     [matTooltip]="getDisabledTooltip(element)"
   >
-    <button *ngIf="isPhaseUnavailable()" mat-icon-button disabled>
+    <button mat-icon-button disabled>
       <lib-icon [icon]="action.iconInit"></lib-icon>
     </button>
   </div>

@@ -612,6 +612,117 @@ describe('Main tables', () => {
       );
     });
 
+    describe('should handle volume pending resize', ()=>{
+      it('should display pending resize icon', ()=>{
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .scrollIntoView();
+        
+        // should display icon on volumes with pending resize
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('test-pro-b-volume')
+        .parent()
+        .parent()
+        .find('app-size')
+        .find('mat-icon')
+        .should('exist').and('have.class', 'warning');
+
+        // should not display icon when volume has no pending resize
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .parent()
+        .parent()
+        .find('app-size')
+        .find('mat-icon')
+        .should('not.exist');
+      });
+
+      it('should disable expand volume when at full size', ()=>{
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-pvc-phase-warning-viewer-ready')
+        .scrollIntoView();
+
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-pvc-phase-warning-viewer-ready')
+        .parent()
+        .parent()
+        .find('app-size')
+        .find('mat-icon')
+        .should('exist').and('have.class', 'warning');
+
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-pvc-phase-warning-viewer-ready')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+
+        cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="expand_pvc"]')
+        .should('be.disabled');
+      });
+
+      it('should disable size options when pending resize', ()=>{
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('test-pro-b-volume')
+        .scrollIntoView();
+
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('test-pro-b-volume')
+        .parent()
+        .parent()
+        .find('app-size')
+        .find('mat-icon')
+        .should('exist').and('have.class', 'warning');
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('test-pro-b-volume')
+        .parent()
+        .parent()
+        .find('[data-cy-resource-table-action-icon="settings"]')
+        .click();
+      cy.get('div[role="menu"]')
+        .should('be.visible')
+        .find('button[data-cy-menu-icon-action="expand_pvc"]')
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+      
+      // assert default value matches volume's pending size and not current real capacity
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .find('mat-select[formControlName="sizeNum"]')
+        .should('contain', '64');
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .click();
+      // assert the sizes dropdown
+      const sizeArray = [4, 8, 16, 32, 64, 128, 256, 512];
+      cy.get('div[role="listbox"]')
+        .should('be.visible')
+        .find('mat-option')
+        .should('have.length', sizeArray.length);
+      cy.get('div[role="listbox"]')
+        .find('mat-option')
+        .each(($option, index) => {
+          expect($option).to.contain(sizeArray[index].toString())
+
+          // assert that the smaller sizes are disabled
+          // index 4 matches size '64' which is the pending size of the selected volume
+          if(index <= 4){
+            expect($option).to.have.class('mdc-list-item--disabled');
+          } else {
+            expect($option).to.not.have.class('mdc-list-item--disabled');
+          }
+        });
+      });
+    })
+
     it('should increase the size of a volume', () => {
       cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
@@ -649,7 +760,6 @@ describe('Main tables', () => {
       cy.get('div[role="listbox"]')
         .find('mat-option')
         .each(($option, index) => {
-          console.log("test", $option, index);
           expect($option).to.contain(sizeArray[index].toString())
 
           // assert that the smaller sizes are disabled

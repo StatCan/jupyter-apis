@@ -237,7 +237,8 @@ export class ActionsService {
     return new Observable(subscriber => {
       const expandDialogConfig = getExpandVolumeDialogConfig(
         pvc.name,
-        pvc.capacity,
+        // Use the pending new size if available to disable values in the dialog
+        pvc.pendingResize == "0" ? pvc.capacity : pvc.pendingResize, 
       );
 
       const ref = this.formDialog.open(expandDialogConfig);

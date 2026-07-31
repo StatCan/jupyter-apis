@@ -503,7 +503,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         },
         {
           name: 'expand_pvc',
-          status: pvc.status.phase,
+          // disable the expand if already at max size
+          status: pvc.capacity == '512Gi' || pvc.pendingResize == '512Gi' ? STATUS_TYPE.UNAVAILABLE : STATUS_TYPE.READY,
           text: $localize`Increase size`,
           matIcon: 'storage',
         },

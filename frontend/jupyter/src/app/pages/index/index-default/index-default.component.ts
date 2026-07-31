@@ -504,7 +504,10 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         {
           name: 'expand_pvc',
           // disable the expand if already at max size
-          status: pvc.capacity == '512Gi' || pvc.pendingResize == '512Gi' ? STATUS_TYPE.UNAVAILABLE : STATUS_TYPE.READY,
+          status:
+            pvc.capacity == '512Gi' || pvc.pendingResize == '512Gi'
+              ? STATUS_TYPE.UNAVAILABLE
+              : STATUS_TYPE.READY,
           text: $localize`Increase size`,
           matIcon: 'storage',
         },
@@ -682,7 +685,7 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         return;
       }
 
-      pvc.pendingResize = result.newSize
+      pvc.pendingResize = result.newSize;
     });
   }
 

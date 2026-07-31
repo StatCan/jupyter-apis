@@ -233,12 +233,14 @@ export class ActionsService {
     });
   }
 
-  expandVolume(pvc: PVCProcessedObject): Observable<{resp: string | undefined, newSize: string}> {
+  expandVolume(
+    pvc: PVCProcessedObject,
+  ): Observable<{ resp: string | undefined; newSize: string }> {
     return new Observable(subscriber => {
       const expandDialogConfig = getExpandVolumeDialogConfig(
         pvc.name,
         // Use the pending new size if available to disable values in the dialog
-        pvc.pendingResize == "0" ? pvc.capacity : pvc.pendingResize, 
+        pvc.pendingResize == '0' ? pvc.capacity : pvc.pendingResize,
       );
 
       const ref = this.formDialog.open(expandDialogConfig);
@@ -266,7 +268,7 @@ export class ActionsService {
                     applying: false,
                     newSize: res.newSize,
                   });
-                  subscriber.next({resp: 'fail', newSize: ""});
+                  subscriber.next({ resp: 'fail', newSize: '' });
                 },
               });
           } else {
@@ -286,9 +288,10 @@ export class ActionsService {
 
       // request has succeeded
       ref.afterClosed().subscribe((result: string | undefined) => {
-        let newsize = ref.componentInstance?.formDialogFormGroup?.get('sizeNum')?.value;
+        let newsize =
+          ref.componentInstance?.formDialogFormGroup?.get('sizeNum')?.value;
         expandSub.unsubscribe();
-        subscriber.next({resp: result, newSize: newsize+'Gi'});
+        subscriber.next({ resp: result, newSize: newsize + 'Gi' });
         subscriber.complete();
       });
     });

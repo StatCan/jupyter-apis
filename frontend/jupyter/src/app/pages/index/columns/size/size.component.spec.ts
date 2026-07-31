@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SizeComponent } from './size.component';
 
 const mockElement = {
-  age: 'Mon, 19 Sep 2022 16:39:10 GMT',
+  age: 'Mon, 19 Sep 2022 16:38:10 GMT',
   capacity: '5Gi',
   pendingSize: '10Gi',
   class: '',

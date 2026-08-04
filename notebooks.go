@@ -350,7 +350,6 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 }
 
 func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
-	log.Println("getting pod from notebook %q ", nb)
 	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
 	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
 	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
@@ -377,7 +376,6 @@ func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
 
 		if (lastState.Terminated != nil){
 			if (lastState.Terminated.Reason == "OOMKilled"){
-				log.Println("wooof : %" , pod)
 				return true;
 				
 			}

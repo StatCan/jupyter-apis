@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"sort"
@@ -120,6 +120,8 @@ const PVCUsageAnnotation string = "pvc.kubeflow.org/usage"
 
 // PVCUsedBytesAnnotation is the annotation name representing the the amount of bytes used in the PVC
 const PVCUsedBytesAnnotation string = "pvc.kubeflow.org/used-bytes"
+
+var validPVCSizes = []string{"4Gi", "8Gi", "16Gi", "32Gi", "64Gi", "128Gi", "256Gi", "512Gi"}
 
 // Set the status of the pvc
 // https://github.com/kubeflow/kubeflow/blob/v1.7.0/components/crud-web-apps/volumes/backend/apps/common/status.py#L4
@@ -387,15 +389,8 @@ func (s *server) UpdatePersistentVolumeClaimsUsage(w http.ResponseWriter, r *htt
 	namespace := vars["namespace"]
 
 	// Read the incoming usage data
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req pvcsusagedata
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -548,6 +543,54 @@ func (s *server) GetPvc(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.respond(w, r, resp)
+}
+
+func (s *server) ExpandPvc(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+	pvc := vars["pvc"]
+
+	// Read the incoming request data for the new pvc size
+	var expandPvcRequest struct {
+		Size resource.Quantity `json:"size"`
+	}
+	err := s.readRequestBody(w, r, &expandPvcRequest)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("Expanding PVC %s/%s", namespace, pvc)
+
+	// Get the PVC resource
+	vol, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).Get(pvc)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	// Validate the new size is within expected values.
+	// K8s validates automatically that the new size is not smaller.
+	newSizeString := expandPvcRequest.Size.String()
+	if !slices.Contains(validPVCSizes, newSizeString) {
+		s.error(w, r, errors.New("Invalid size for PVC"))
+		return
+	}
+
+	// Expand the volume
+	vol.Spec.Resources.Requests[corev1.ResourceStorage] = expandPvcRequest.Size
+	_, err = s.clientsets.kubernetes.CoreV1().PersistentVolumeClaims(namespace).Update(context.TODO(), vol, v1.UpdateOptions{})
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	log.Printf("Successfully expanded PVC %s/%s to %s", namespace, pvc, newSizeString)
+
+	s.respond(w, r, &APIResponseBase{
+		Success: true,
+		Status:  http.StatusOK,
+	})
 }
 
 func getPodPvcs(pod corev1.Pod) []string {

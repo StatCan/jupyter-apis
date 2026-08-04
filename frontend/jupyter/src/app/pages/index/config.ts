@@ -10,7 +10,7 @@ import {
 } from 'kubeflow';
 import { UsedByComponent } from './columns/used-by/used-by.component';
 
-export const tableConfig: TableConfig = {
+export const volumeTableConfig: TableConfig = {
   columns: [
     {
       matHeaderCellDef: $localize`Status`,

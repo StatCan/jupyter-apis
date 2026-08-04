@@ -46,6 +46,7 @@ const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
 // LastActivityAnnotation is the annotation name for the last activity value.
 const LastActivityAnnotation = "notebooks.kubeflow.org/last-activity"
+
 // LastActivityCheckTimeStamp for the delay shutdown
 const LastActivityCheckTimeStamp = "notebooks.kubeflow.org/last_activity_check_timestamp"
 
@@ -639,15 +640,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	namespace := vars["namespace"]
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req newnotebookrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -948,15 +942,8 @@ func (s *server) StartStopNotebook(w http.ResponseWriter, r *http.Request) {
 	log.Printf("patching notebook %q for %q", notebookName, namespaceName)
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req startstopnotebookrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -1009,15 +996,8 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	notebookName := vars["notebook"]
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req updatenotebookrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -1105,15 +1085,8 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	log.Printf("updating notebook %q for %q with additional time", notebookName, namespaceName)
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-	//json object so make it a sturct
 	var req delaycullingrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -1146,14 +1119,14 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 
 	notebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
 	notebook.Annotations[LastActivityCheckTimeStamp] = updatedTime.Format(time.RFC3339)
-	 
+
 	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
 	if err != nil {
 		s.error(w, r, err)
 		return
 	}
 
-	log.Printf("Updated notebook %q with time %q", notebookName, updatedTime);
+	log.Printf("Updated notebook %q with time %q", notebookName, updatedTime)
 
 	s.respond(w, r, &APIResponseBase{
 		Success: true,
@@ -1538,7 +1511,7 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 }
 
 func validateCullingDelay(delayHours int) error {
-	if (delayHours < 1 || delayHours > 72){
+	if delayHours < 1 || delayHours > 72 {
 		return fmt.Errorf("validation failed: the delay must be between 1 and 72.")
 	}
 

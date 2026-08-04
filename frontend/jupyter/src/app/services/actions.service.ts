@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 import {
   ConfirmDialogService,
+  FormDialogService,
   DIALOG_RESP,
+  FormDialogResponse,
   SnackBarConfig,
   SnackBarService,
   SnackType,
-  DialogConfig,
 } from 'kubeflow';
-import { getDeleteDialogConfig, getStopDialogConfig } from './config';
+import {
+  getConfirmExpandVolumeDialogConfig,
+  getDeleteDialogConfig,
+  getDeleteVolumeDialogConfig,
+  getExpandVolumeDialogConfig,
+  getStopDialogConfig,
+} from './config';
 import { JWABackendService } from './backend.service';
 import { Observable } from 'rxjs';
+import { PVCProcessedObject } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +26,7 @@ export class ActionsService {
   constructor(
     public backend: JWABackendService,
     public confirmDialog: ConfirmDialogService,
+    public formDialog: FormDialogService,
     private snackBar: SnackBarService,
   ) {}
 
@@ -128,7 +137,7 @@ export class ActionsService {
 
   deleteVolume(name: string, namespace: string): Observable<string> {
     return new Observable(subscriber => {
-      const deleteDialogConfig = this.getDeleteDialogConfig(name);
+      const deleteDialogConfig = getDeleteVolumeDialogConfig(name);
 
       const ref = this.confirmDialog.open(deleteDialogConfig);
       const delSub = ref.componentInstance.applying$.subscribe(applying => {
@@ -169,6 +178,120 @@ export class ActionsService {
     });
   }
 
+  private openExpandVolumeSnackbar(pvc: PVCProcessedObject) {
+    const object = `${pvc.namespace}/${pvc.name}`;
+    const message = $localize`Expand request was sent.`;
+    const config: SnackBarConfig = {
+      data: {
+        msg: `${object}: ${message}`,
+        snackType: SnackType.Info,
+      },
+    };
+    this.snackBar.open(config);
+  }
+
+  private confirmExpandVolume(
+    pvc: PVCProcessedObject,
+    newSize: number,
+  ): Observable<string> {
+    return new Observable(subscriber => {
+      const confirmExpandDialogConfig = getConfirmExpandVolumeDialogConfig(
+        pvc.name,
+        newSize,
+      );
+
+      const confirmRef = this.confirmDialog.open(confirmExpandDialogConfig);
+      const confirmExpandSub = confirmRef.componentInstance.applying$.subscribe(
+        (applying: any) => {
+          if (!applying) {
+            return;
+          }
+
+          // Close the open dialog only if the DELETE request succeeded
+          this.backend.expandPVC(pvc.namespace, pvc.name, newSize).subscribe({
+            next: _ => {
+              confirmRef.close(DIALOG_RESP.ACCEPT);
+
+              this.openExpandVolumeSnackbar(pvc);
+            },
+            error: err => {
+              const errorMsg = $localize`Error ${err}`;
+              confirmExpandDialogConfig.error = errorMsg;
+              confirmRef.componentInstance.applying$.next(false);
+              subscriber.next('fail');
+            },
+          });
+        },
+      );
+
+      // request has succeeded
+      confirmRef.afterClosed().subscribe((result: string | undefined) => {
+        confirmExpandSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
+      });
+    });
+  }
+
+  expandVolume(pvc: PVCProcessedObject): Observable<string> {
+    return new Observable(subscriber => {
+      const expandDialogConfig = getExpandVolumeDialogConfig(
+        pvc.name,
+        pvc.capacity,
+      );
+
+      const ref = this.formDialog.open(expandDialogConfig);
+      const expandSub = ref.componentInstance.applying$.subscribe(
+        (res: FormDialogResponse) => {
+          if (!res.applying) {
+            return;
+          }
+
+          // if the size is bigger than 128, then show a confirmDialog before submiting the expand action.
+          // 128 was decided with the product owner as the treshold of what is concidered a large volume size.
+          if (res.newSize < 128) {
+            this.backend
+              .expandPVC(pvc.namespace, pvc.name, res.newSize)
+              .subscribe({
+                next: _ => {
+                  ref.close(DIALOG_RESP.ACCEPT);
+
+                  this.openExpandVolumeSnackbar(pvc);
+                },
+                error: err => {
+                  const errorMsg = $localize`Error ${err}`;
+                  expandDialogConfig.error = errorMsg;
+                  ref.componentInstance.applying$.next({
+                    applying: false,
+                    newSize: res.newSize,
+                  });
+                  subscriber.next('fail');
+                },
+              });
+          } else {
+            this.confirmExpandVolume(pvc, res.newSize).subscribe(result => {
+              // remove the applying status from the form dialog in case of cancelling the confirm dialog
+              ref.componentInstance.isApplying = false;
+
+              if (result !== DIALOG_RESP.ACCEPT) {
+                return;
+              } else {
+                ref.close(DIALOG_RESP.ACCEPT);
+              }
+            });
+          }
+        },
+      );
+
+      // request has succeeded
+      ref.afterClosed().subscribe((result: string | undefined) => {
+        expandSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
+      });
+    });
+  }
+
   // This only updates the time, it is NOT the dialog
   updateKeepAlive(
     namespace: string,
@@ -191,18 +314,5 @@ export class ActionsService {
           subscriber.complete();
         });
     });
-  }
-
-  private getDeleteDialogConfig(name: string): DialogConfig {
-    return {
-      title: $localize`Are you sure you want to delete this volume? ${name}`,
-      message: $localize`Warning: All data in this volume will be lost.`,
-      accept: $localize`DELETE`,
-      confirmColor: 'warn',
-      cancel: $localize`CANCEL`,
-      error: '',
-      applying: $localize`DELETING`,
-      width: '600px',
-    };
   }
 }

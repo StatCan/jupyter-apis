@@ -351,6 +351,17 @@ func main() {
 		},
 	}, s.GetPvc)).Methods("GET")
 
+	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}/expand", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "update",
+				Resource: "persistentvolumeclaims",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.ExpandPvc)).Methods("PATCH")
+
 	router.HandleFunc("/api/namespaces/{namespace}/pvcs/{pvc}/pods", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

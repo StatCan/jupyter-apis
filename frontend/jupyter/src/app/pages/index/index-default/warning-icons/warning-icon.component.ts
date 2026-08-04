@@ -30,7 +30,7 @@ export class WarningComponent implements TableColumnComponent {
     return isWarnings;
   }
 
-    public getWarningsText() {
+  public getWarningsText() {
     //nworks with default. need to fix icon first.
     var thetext = '';
     if (this.row.hasOwnProperty('isOOMKilled')) {

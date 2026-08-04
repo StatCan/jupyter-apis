@@ -80,6 +80,12 @@ describe('Main tables', () => {
           i++;
         });
     });
+    
+    it('should have icon for oom', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-dog-breed-katib')
+    });
 
     it('should start a notebook', () => {
       cy.get('[data-cy-table-id="notebooks-table"]')

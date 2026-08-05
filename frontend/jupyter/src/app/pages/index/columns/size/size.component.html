@@ -1,11 +1,11 @@
-<div>
+<div class="size-cell">
   <mat-icon
     *ngIf="isPendingResize()"
-    class="warning"
+    class="warning-icon"
     [matTooltip]="getResizeTooltipMessage()"
     matTooltipClass="custom-tooltip"
   >
     warning
   </mat-icon>
-  {{ element.capacity }}
+  <span class="size-text">{{ element.capacity }}</span>
 </div>

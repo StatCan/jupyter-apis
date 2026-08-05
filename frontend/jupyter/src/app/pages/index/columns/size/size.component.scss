@@ -1,4 +1,13 @@
-.warning {
+.size-cell {
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+}
+
+.warning-icon {
   color: orange;
-  vertical-align: bottom;
+}
+
+.size-text {
+  width: 2.8em;
 }

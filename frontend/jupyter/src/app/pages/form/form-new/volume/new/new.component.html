@@ -54,10 +54,8 @@
     </div>
     <div class="row">
       <div class="column">
-        <!--Sizes is an AAW specific change-->
         <app-volume-size
           [sizeCtrl]="volGroup.get('newPvc.spec.resources.requests.storage')"
-          [sizes]="sizes"
         ></app-volume-size>
       </div>
     </div>

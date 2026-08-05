@@ -11,7 +11,7 @@ export class VolumeSizeComponent implements OnInit {
   private ctrl: FormControl;
   public sizeNum = new FormControl(1, Validators.required);
 
-  @Input() sizes: Set<string>; // AAW change, this appears to be where you input your chosen size anyways
+  public sizes = ['4', '8', '16', '32', '64', '128', '256', '512']; // Zone change, our list of valid sizes
   @Input()
   get sizeCtrl(): FormControl {
     return this.ctrl;

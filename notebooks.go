@@ -1276,9 +1276,7 @@ func validateNotebookDataVolumes(dataVolumes []volrequest) []string {
 	var validationErrors []string
 
 	for _, vol := range dataVolumes {
-		// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-		validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-		err := validateNotebookVolume(vol, validSizes)
+		err := validateNotebookVolume(vol)
 
 		if err != nil {
 			validationErrors = append(validationErrors, err.Error())
@@ -1333,9 +1331,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Workspace and data volumes
-	// Workspace volumes can only be of 4Gi, 8Gi, ..., 32Gi
-	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
-	err := validateNotebookVolume(request.Workspace, validSizes)
+	err := validateNotebookVolume(request.Workspace)
 	if err != nil {
 		validationErrors = append(validationErrors, err.Error())
 	}
@@ -1360,8 +1356,7 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
 	// Workspace Volume
-	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
-	err := validateNotebookVolume(request.Workspace, validSizes)
+	err := validateNotebookVolume(request.Workspace)
 	if err != nil {
 		validationErrors = append(validationErrors, err.Error())
 	}
@@ -1380,7 +1375,7 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 }
 
 // verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
-func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
+func validateNotebookVolume(req volrequest) error {
 
 	// Allow for Notebooks creation with no Workspace Volumes
 	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.ExistingSource.PersistentVolumeClaim.ClaimName == nil {
@@ -1450,14 +1445,10 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 		}
 
 		// Storage request size
-		storage := req.NewPvc.NewPvcSpec.Resources.Requests.Storage
-		bytes, ok := storage.AsInt64()
-		if !ok {
-			return fmt.Errorf("invalid storage format")
-		}
+		storage := req.NewPvc.NewPvcSpec.Resources.Requests.Storage.String()
 
-		if !validsizes[bytes/(1<<30)] { // convert bytes to Gibibytes
-			return fmt.Errorf("storage request is invalid, got: %dGi", bytes/(1<<30))
+		if !slices.Contains(validPVCSizes, storage) {
+			return fmt.Errorf("storage request is invalid, got: %sGi", storage)
 		}
 	}
 

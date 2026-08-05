@@ -31,7 +31,6 @@ export class NewVolumeComponent {
 
   @Input() volGroup: FormGroup;
   @Input() externalName: string;
-  @Input() sizes: Set<string>; // AAW change, has to take place here to control difference between workspace and data vol sizes.
   @Input() mountedVolumes: Set<string>;
 
   yamlPrv = '';

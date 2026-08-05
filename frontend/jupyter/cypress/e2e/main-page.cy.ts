@@ -627,7 +627,7 @@ describe('Main tables', () => {
         .parent()
         .find('app-size')
         .find('mat-icon')
-        .should('exist').and('have.class', 'warning');
+        .should('exist').and('have.class', 'warning-icon');
 
         // should not display icon when volume has no pending resize
         cy.get('[data-cy-table-id="volumes-table"]')
@@ -640,7 +640,7 @@ describe('Main tables', () => {
         .should('not.exist');
       });
 
-      it('should disable expand volume when at full size', ()=>{
+      it('should disable expand volume when pending at full size', ()=>{
         cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('a-pvc-phase-warning-viewer-ready')
@@ -653,7 +653,7 @@ describe('Main tables', () => {
         .parent()
         .find('app-size')
         .find('mat-icon')
-        .should('exist').and('have.class', 'warning');
+        .should('exist').and('have.class', 'warning-icon');
 
         cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
@@ -682,7 +682,7 @@ describe('Main tables', () => {
         .parent()
         .find('app-size')
         .find('mat-icon')
-        .should('exist').and('have.class', 'warning');
+        .should('exist').and('have.class', 'warning-icon');
       cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('test-pro-b-volume')

@@ -19,15 +19,8 @@ export class WarningComponent implements TableColumnComponent {
     }
   }
 
-  public showWarnings() {
-    var isWarnings = false;
-    if (this.row.hasOwnProperty('isOOMKilled')) {
-      isWarnings = this.row.isOOMKilled;
-      if (this.row.isOOMKilled) {
-        return true;
-      }
-    }
-    return isWarnings;
+  public showWarnings(): boolean {
+    return this.row?.isOOMKilled ? true : false;
   }
 
   public getWarningsText() {

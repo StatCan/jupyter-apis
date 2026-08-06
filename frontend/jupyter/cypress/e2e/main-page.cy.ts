@@ -92,7 +92,7 @@ describe('Main tables', () => {
         .should('exist');
     });
     
-    it('should have icon for oom', () => {
+    it('should not have icon for oom', () => {
       cy.get('[data-cy-table-id="notebooks-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('a-test-01')

@@ -31,12 +31,9 @@ export class WarningComponent implements TableColumnComponent {
   }
 
   public getWarningsText() {
-    //nworks with default. need to fix icon first.
     var thetext = '';
-    if (this.row.hasOwnProperty('isOOMKilled')) {
-      if (this.row.isOOMKilled) {
+      if (this.row?.isOOMKilled) {
         thetext += '* ' + $localize`Error Out Of Memory Killed.` + '\n';
-      }
     }
     return thetext;
   }

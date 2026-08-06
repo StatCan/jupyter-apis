@@ -326,8 +326,7 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 
 	//get the data
 	isOOMKilled := false
-	// The following is ALWAYS true
-	isOOMKilled = isNotebookPodOOMKilled(notebook, s);
+	isOOMKilled = s.isNotebookPodOOMKilled(notebook);
 	
 	// Add it to notebook response
 	return notebookresponse{
@@ -349,13 +348,13 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	}, nil
 }
 
-func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
+func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook)(bool) {
 	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
 	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
 	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
 
 	if err != nil {
-		return false
+		return nb, errors.New("an error occured getting the notebook name requirements")
 	}
 	if len(pods) != 0 {
 		pod := pods[0]
@@ -365,11 +364,6 @@ func isNotebookPodOOMKilled(nb *kubeflowv1.Notebook, s *server)(bool) {
 				Status:  http.StatusOK,
 			},
 			Pod: *pod,
-		}
-		
-		if err != nil {
-			log.Fatalf("JSON marshal indent error: %v", err)
-			return false
 		}
 
 		lastState := resp.Pod.Status.ContainerStatuses[0].LastTerminationState

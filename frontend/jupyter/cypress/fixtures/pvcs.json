@@ -3,6 +3,7 @@
     {
       "age": "Thu, 01 Sep 2022 08:36:40 GMT",
       "capacity": "4Gi",
+      "pendingResize": "0",
       "class": "",
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-ready-viewer-ready",
@@ -23,6 +24,7 @@
     {
       "age": "Thu, 29 Sep 2022 16:25:53 GMT",
       "capacity": "4Gi",
+      "pendingResize": "0",
       "class": "",
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-ready-viewer-uninitialized",
@@ -43,6 +45,7 @@
     {
       "age": "Thu, 14 Apr 2022 12:00:28 GMT",
       "capacity": "4Gi",
+      "pendingResize": "0",
       "class": "",
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-ready-viewer-waiting",
@@ -63,6 +66,7 @@
     {
       "age": "Tue, 04 Oct 2022 13:01:05 GMT",
       "capacity": "4Gi",
+      "pendingResize": "0",
       "class": "",
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-unvailable-viewer-unavailable",
@@ -83,6 +87,7 @@
     {
       "age": "Thu, 01 Sep 2022 08:36:21 GMT",
       "capacity": "4Gi",
+      "pendingResize": "0",
       "class": "",
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-waiting-viewer-uninitialized",
@@ -103,6 +108,7 @@
     {
       "age": "Thu, 14 Apr 2022 14:58:53 GMT",
       "capacity": "4Gi",
+      "pendingResize": "512Gi",
       "class": "",
       "modes": ["ReadWriteOnce"],
       "name": "a-pvc-phase-warning-viewer-ready",
@@ -132,6 +138,7 @@
       },
       "age": "2026-02-06T14:57:17Z",
       "capacity": "0",
+      "pendingResize": "0",
       "modes": [
         "ReadWriteOnce"
       ],
@@ -159,6 +166,7 @@
       },
       "age": "2026-02-06T14:57:17Z",
       "capacity": "0",
+      "pendingResize": "0",
       "modes": [
         "ReadWriteOnce"
       ],
@@ -186,6 +194,7 @@
       },
       "age":"2023-09-28T16:30:08Z",
       "capacity":"16Gi",
+      "pendingResize": "64Gi",
       "usage": "5.567",
       "usedBytes": "743628800",
       "modes":[
@@ -214,6 +223,7 @@
       },
       "age":"2023-09-28T16:30:08Z",
       "capacity":"32Gi",
+      "pendingResize": "0",
       "modes":[
         "ReadWriteOnce"
       ],

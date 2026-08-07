@@ -11,7 +11,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -896,7 +896,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="183077734541413600" datatype="html">
@@ -1665,6 +1665,14 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="464780326073513122" datatype="html">
+        <source>Resize pending: This volume will be resized to <x id="PH" equiv-text="this.element.pendingResize"/> once used with a running notebook server</source>
+        <target>Redimensionnement en attente : ce volume sera redimensionné à <x id="PH" equiv-text="this.element.pendingResize"/> une fois utilisé avec un serveur bloc-notes en cours d'exécution.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/columns/size/size.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fbc6d8bbd465eba779b7c1aa7017cc0b47125097" datatype="html">
         <source>Notebooks</source>
         <target>Bloc-notes</target>
@@ -1682,7 +1690,7 @@
         <target>Nom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -1694,7 +1702,7 @@
         <target>Créé à</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">36</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -1714,7 +1722,7 @@
         <target>Taille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2130027189509146725" datatype="html">
@@ -1722,7 +1730,7 @@
         <target>% d'utilisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1839789574610981042" datatype="html">
@@ -1730,7 +1738,7 @@
         <target>Mode d'accès</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1748150374925445786" datatype="html">
@@ -1738,7 +1746,7 @@
         <target>Classe de stockage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1955280138914914248" datatype="html">
@@ -1746,7 +1754,7 @@
         <target>Utilisé par</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4585478839172999913" datatype="html">
@@ -2170,7 +2178,7 @@
         <target>Augmenter la taille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">507</context>
+          <context context-type="linenumber">511</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5156704408648015254" datatype="html">
@@ -2178,7 +2186,7 @@
         <target>Le volume a été soumit avec succès</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">667</context>
+          <context context-type="linenumber">671</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e2936e947eed8cb9987b1111220f29597a4397b" datatype="html">
@@ -2838,7 +2846,7 @@
         <target>Ajouter un retard de <x id="PH" equiv-text="timehours"/> heures à l'arrêt automatique de &apos;<x id="PH_1" equiv-text="name"/>&apos;...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">312</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3496981118988770473" datatype="html">

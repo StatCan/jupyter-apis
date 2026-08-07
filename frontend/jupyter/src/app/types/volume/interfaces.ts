@@ -8,6 +8,7 @@ export interface PVCResponseObject {
     timestamp: string;
   };
   capacity: string;
+  pendingResize: string;
   class: string;
   modes: string[];
   name: string;

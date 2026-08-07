@@ -503,7 +503,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         },
         {
           name: 'expand_pvc',
-          status: pvc.status.phase,
+          // disable the expand if already at max size
+          status:
+            pvc.capacity == '512Gi' || pvc.pendingResize == '512Gi'
+              ? STATUS_TYPE.UNAVAILABLE
+              : STATUS_TYPE.READY,
           text: $localize`Increase size`,
           matIcon: 'storage',
         },
@@ -677,11 +681,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public expandVolumeClicked(pvc: PVCProcessedObject) {
     this.actions.expandVolume(pvc).subscribe(result => {
-      if (result !== DIALOG_RESP.ACCEPT) {
+      if (result.resp !== DIALOG_RESP.ACCEPT) {
         return;
       }
 
-      // TODO: Determine if something should be done after expansion (like with deleteVolumeClicked)
+      pvc.pendingResize = result.newSize;
     });
   }
 

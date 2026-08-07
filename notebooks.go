@@ -142,7 +142,7 @@ type notebookresponse struct {
 	Volumes      []string          `json:"volumes"`
 	Labels       map[string]string `json:"labels"`
 	Metadata     metav1.ObjectMeta `json:"metadata"`
-	IsOOMKilled	 bool 			   `json:"isOOMKilled"`
+	IsOOMKilled  bool              `json:"isOOMKilled"`
 }
 
 type notebooksresponse struct {
@@ -325,11 +325,11 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	}
 
 	//get the data
-	isOOMKilled := false
-	isOOMKilled, err = s.isNotebookPodOOMKilled(notebook);
+	isOOMKilled, err := s.isNotebookPodOOMKilled(notebook)
 	if err != nil {
 		return notebookresponse{}, err
 	}
+
 	// Add it to notebook response
 	return notebookresponse{
 		Age:          notebook.CreationTimestamp.Time,
@@ -350,7 +350,7 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	}, nil
 }
 
-func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook)(bool, error) {
+func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook) (bool, error) {
 	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
 	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
 	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
@@ -359,22 +359,13 @@ func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook)(bool, error) {
 		return false, errors.New("an error occured getting the notebook name requirements")
 	}
 	if len(pods) != 0 {
-		pod := pods[0]
-		resp := &podresponse{
-			APIResponseBase: APIResponseBase{
-				Success: true,
-				Status:  http.StatusOK,
-			},
-			Pod: *pod,
-		}
+		lastState := pods[0].Status.ContainerStatuses[0].LastTerminationState
 
-		lastState := resp.Pod.Status.ContainerStatuses[0].LastTerminationState
-
-		if(lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled") {
-			return true, nil;
+		if lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled" {
+			return true, nil
 		}
 	}
-	return false, nil;
+	return false, nil
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {

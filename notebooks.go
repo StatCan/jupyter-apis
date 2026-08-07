@@ -368,8 +368,10 @@ func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook)(bool, error) {
 			Pod: *pod,
 		}
 
+		lastState := resp.Pod.Status.ContainerStatuses[0].LastTerminationState
+
 		if(lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled") {
-			return true;
+			return true, nil;
 		}
 	}
 	return false, nil;

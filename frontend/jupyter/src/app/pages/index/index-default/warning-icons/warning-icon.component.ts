@@ -25,8 +25,8 @@ export class WarningComponent implements TableColumnComponent {
 
   public getWarningsText() {
     var thetext = '';
-      if (this.row?.isOOMKilled) {
-        thetext += '* ' + $localize`Error Out Of Memory Killed.` + '\n';
+    if (this.row?.isOOMKilled) {
+      thetext += '* ' + $localize`Error Out Of Memory Killed.` + '\n';
     }
     return thetext;
   }

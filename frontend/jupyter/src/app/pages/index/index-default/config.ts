@@ -16,6 +16,7 @@ import {
 } from 'kubeflow';
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { DefaultComponent } from './default-icon/default-icon.component';
+import { WarningComponent } from './warning-icons/warning-icon.component';
 import { volumeTableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 import { OpenPVCViewerButtonComponent } from '../columns/open-pvcviewer-button/open-pvcviewer-button.component';
@@ -129,6 +130,15 @@ export const defaultConfig: TableConfig = {
       }),
       sort: true,
     },
+    {
+      matHeaderCellDef: '',
+      matColumnDef: 'notebook-warning',
+      value: new ComponentValue({
+        component: WarningComponent,
+      }),
+      sort: false,
+    },
+
     {
       matHeaderCellDef: '',
       matColumnDef: 'actions',

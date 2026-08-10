@@ -142,6 +142,7 @@ type notebookresponse struct {
 	Volumes      []string          `json:"volumes"`
 	Labels       map[string]string `json:"labels"`
 	Metadata     metav1.ObjectMeta `json:"metadata"`
+	IsOOMKilled  bool              `json:"isOOMKilled"`
 }
 
 type notebooksresponse struct {
@@ -322,6 +323,14 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
 	}
+
+	//get the data
+	isOOMKilled, err := s.isNotebookPodOOMKilled(notebook)
+	if err != nil {
+		return notebookresponse{}, err
+	}
+
+	// Add it to notebook response
 	return notebookresponse{
 		Age:          notebook.CreationTimestamp.Time,
 		Name:         notebook.Name,
@@ -337,7 +346,32 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		Volumes:      volumes,
 		Labels:       notebook.Labels,
 		Metadata:     notebook.ObjectMeta,
+		IsOOMKilled:  isOOMKilled,
 	}, nil
+}
+
+func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook) (bool, error) {
+	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
+	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
+	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
+	if err != nil {
+		return false, errors.New("an error occured getting the notebook name requirements")
+	}
+
+	if len(pods) != 0 {
+		for _, status := range pods[0].Status.ContainerStatuses {
+			// look for the status of the notebook container
+			if status.Name != nb.Name {
+				continue
+			}
+
+			lastState := status.LastTerminationState
+			if lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled" {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {

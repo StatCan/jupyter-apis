@@ -30,6 +30,7 @@ export interface NotebookResponseObject {
   environment: string;
   shortImage: string;
   labels?: { [key: string]: any };
+  isOOMKilled: boolean;
 }
 
 export interface NotebookProcessedObject extends NotebookResponseObject {

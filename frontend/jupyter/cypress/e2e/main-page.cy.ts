@@ -80,7 +80,29 @@ describe('Main tables', () => {
           i++;
         });
     });
-
+    
+    it('should have icon for oom', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-dog-breed-katib')
+        .parent()
+        .parent()
+        .find('app-warning-icon')
+        .find('mat-icon')
+        .should('exist');
+    });
+    
+    it('should not have icon for oom', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('a-test-01')
+        .parent()
+        .parent()
+        .find('app-warning-icon')
+        .find('mat-icon')
+        .should('not.exist');
+    });
+    
     it('should start a notebook', () => {
       cy.get('[data-cy-table-id="notebooks-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)

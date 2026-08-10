@@ -354,15 +354,21 @@ func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook) (bool, error) {
 	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
 	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
 	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
-
 	if err != nil {
 		return false, errors.New("an error occured getting the notebook name requirements")
 	}
-	if len(pods) != 0 {
-		lastState := pods[0].Status.ContainerStatuses[0].LastTerminationState
 
-		if lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled" {
-			return true, nil
+	if len(pods) != 0 {
+		for _, status := range pods[0].Status.ContainerStatuses {
+			// look for the status of the notebook container
+			if status.Name != nb.Name {
+				continue
+			}
+
+			lastState := status.LastTerminationState
+			if lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled" {
+				return true, nil
+			}
 		}
 	}
 	return false, nil

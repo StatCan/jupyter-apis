@@ -11,7 +11,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -1673,6 +1673,14 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1801298063046788049" datatype="html">
+        <source>Caution; this volume is more than 95% full.</source>
+        <target>Attention, ce volume est rempli à plus de 95%. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/columns/usage/usage.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fbc6d8bbd465eba779b7c1aa7017cc0b47125097" datatype="html">
         <source>Notebooks</source>
         <target>Bloc-notes</target>
@@ -1690,7 +1698,7 @@
         <target>Nom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -1702,7 +1710,7 @@
         <target>Créé à</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
@@ -1722,7 +1730,7 @@
         <target>Taille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2130027189509146725" datatype="html">
@@ -1730,7 +1738,7 @@
         <target>% d'utilisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1839789574610981042" datatype="html">

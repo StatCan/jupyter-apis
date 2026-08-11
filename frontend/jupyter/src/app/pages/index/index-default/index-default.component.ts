@@ -373,6 +373,9 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
 
+    // initialize the array of full volumes attached to the notebook
+    notebook.fullVolumes = [];
+
     // Status for auto-shutdown
     // Only a notebook that is active aka has a "last_activity"
     // If notebook not ready then it needs to be disabled
@@ -485,6 +488,13 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         element.status = {} as Status;
         element.status.message = $localize`Attached`;
         element.status.phase = STATUS_TYPE.MOUNTED;
+
+        // updates the list of full volumes for the notebooks
+        this.processedData.forEach(nb => {
+          if(nb.name === element.notebooks[0] && Math.ceil(parseFloat(element.usage)) > 95) {
+            nb.fullVolumes?.push(element.name);
+          }
+        })
       } else {
         element.status = {} as Status;
         element.status.message = $localize`Unattached`;

@@ -10,6 +10,7 @@ import {
 } from 'kubeflow';
 import { UsedByComponent } from './columns/used-by/used-by.component';
 import { SizeComponent } from './columns/size/size.component';
+import { UsageComponent } from './columns/usage/usage.component';
 
 export const volumeTableConfig: TableConfig = {
   columns: [
@@ -56,11 +57,10 @@ export const volumeTableConfig: TableConfig = {
     {
       matHeaderCellDef: $localize`Use %`,
       matColumnDef: 'usage',
+      textAlignment: 'right',
       style: { width: '8%' },
-      value: new PropertyValue({
-        field: 'usageRounded',
-        popoverField: 'usedBytesFormatted',
-        truncate: true,
+      value: new ComponentValue({
+        component: UsageComponent,
       }),
       sort: true,
     },

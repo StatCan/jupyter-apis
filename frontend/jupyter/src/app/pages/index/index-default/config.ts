@@ -21,6 +21,8 @@ import { volumeTableConfig } from '../config';
 import { DeleteButtonComponent } from '../columns/delete-button/delete-button.component';
 import { OpenPVCViewerButtonComponent } from '../columns/open-pvcviewer-button/open-pvcviewer-button.component';
 import { ClosePVCViewerButtonComponent } from '../columns/close-pvcviewer-button/close-pvcviewer-button.component';
+import { StoppedTimeComponent } from './stopped-time/stopped-time.component';
+import { NotebookProcessedObject } from 'src/app/types';
 
 // --- Config for the Resource Table ---
 export const defaultConfig: TableConfig = {
@@ -60,8 +62,8 @@ export const defaultConfig: TableConfig = {
         component: ServerTypeComponent,
       }),
       sort: true,
-      sortingPreprocessorFn: element => element.serverType,
-      filteringPreprocessorFn: element => {
+      sortingPreprocessorFn: (element: NotebookProcessedObject) => element.serverType,
+      filteringPreprocessorFn: (element: NotebookProcessedObject) => {
         if (element.serverType === 'group-one') {
           return 'rstudio';
         } else if (element.serverType === 'group-two') {
@@ -76,7 +78,7 @@ export const defaultConfig: TableConfig = {
     {
       matHeaderCellDef: $localize`Created at`,
       matColumnDef: 'age',
-      style: { width: '12%' },
+      style: { width: '8%' },
       textAlignment: 'right',
       value: new DateTimeValue({ field: 'age' }),
       sort: true,
@@ -84,14 +86,26 @@ export const defaultConfig: TableConfig = {
     {
       matHeaderCellDef: $localize`Last activity`,
       matColumnDef: 'lastActivity',
+      style: { width: '8%' },
       textAlignment: 'right',
       value: new DateTimeValue({ field: 'lastActivity' }),
       sort: true,
     },
     {
+      matHeaderCellDef: $localize`Last stopped`,
+      matColumnDef: 'lastStopped',
+      style: { width: '8%' },
+      textAlignment: 'right',
+      value: new ComponentValue({
+        component: StoppedTimeComponent,
+      }),
+      sort: true,
+      sortingPreprocessorFn: (element: NotebookProcessedObject) => element.lastStopped,
+    },
+    {
       matHeaderCellDef: $localize`Image`,
       matColumnDef: 'image',
-      style: { width: '30%' },
+      style: { width: '20%' },
       value: new PropertyValue({
         field: 'shortImage',
         popoverField: 'image',

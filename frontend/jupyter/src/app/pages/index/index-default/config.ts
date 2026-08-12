@@ -92,15 +92,23 @@ export const defaultConfig: TableConfig = {
       sort: true,
     },
     {
-      matHeaderCellDef: $localize`Last stopped`,
-      matColumnDef: 'lastStopped',
-      style: { width: '8%' },
+      matHeaderCellDef: '',
+      matColumnDef: 'lastStoppedicon',
       textAlignment: 'right',
+      style: { 'padding-right': '0' },
       value: new ComponentValue({
         component: StoppedTimeComponent,
       }),
-      sort: true,
+      sort: false,
       sortingPreprocessorFn: (element: NotebookProcessedObject) => element.lastStopped,
+    },
+    {
+      matHeaderCellDef: $localize`Last stopped`,
+      matColumnDef: 'lastStopped',
+      textAlignment: 'right',
+      style: { width: '5%', 'padding-left': '0' },
+      value: new DateTimeValue({ field: 'lastStopped' }),
+      sort: true,
     },
     {
       matHeaderCellDef: $localize`Image`,

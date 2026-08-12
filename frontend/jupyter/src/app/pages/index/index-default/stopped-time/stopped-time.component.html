@@ -1,13 +1,7 @@
-<div *ngIf="isCulled" class="lastStopped-cell">
-  <mat-icon
-    [matTooltip]="getCulledTooltipMessage()"
-    matTooltipClass="custom-tooltip"
-  >
-    av_timer
-  </mat-icon>
-  <lib-date-time [date]="lastStoppedDatetime"></lib-date-time>
-</div>
-
-<ng-container *ngIf="!isCulled">
-  <lib-date-time [date]="lastStoppedDatetime"></lib-date-time>
-</ng-container>
+<mat-icon
+  *ngIf="isCulled"
+  [matTooltip]="getCulledTooltipMessage()"
+  matTooltipClass="custom-tooltip"
+>
+  av_timer
+</mat-icon>

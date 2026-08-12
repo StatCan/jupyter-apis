@@ -8,7 +8,7 @@ import { NotebookProcessedObject } from 'src/app/types';
   styleUrls: ['./stopped-time.component.scss'],
 })
 export class StoppedTimeComponent implements TableColumnComponent {
-  lastStoppedDatetime: string = "";
+  lastStoppedDatetime: string = '';
   isCulled: boolean = false;
   constructor() {}
 

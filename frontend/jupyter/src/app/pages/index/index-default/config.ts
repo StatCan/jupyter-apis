@@ -62,7 +62,8 @@ export const defaultConfig: TableConfig = {
         component: ServerTypeComponent,
       }),
       sort: true,
-      sortingPreprocessorFn: (element: NotebookProcessedObject) => element.serverType,
+      sortingPreprocessorFn: (element: NotebookProcessedObject) =>
+        element.serverType,
       filteringPreprocessorFn: (element: NotebookProcessedObject) => {
         if (element.serverType === 'group-one') {
           return 'rstudio';
@@ -100,7 +101,8 @@ export const defaultConfig: TableConfig = {
         component: StoppedTimeComponent,
       }),
       sort: false,
-      sortingPreprocessorFn: (element: NotebookProcessedObject) => element.lastStopped,
+      sortingPreprocessorFn: (element: NotebookProcessedObject) =>
+        element.lastStopped,
     },
     {
       matHeaderCellDef: $localize`Last stopped`,

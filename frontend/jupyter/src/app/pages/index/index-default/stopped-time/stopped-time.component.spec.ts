@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ServerTypeComponent } from './server-type.component';
+import { StoppedTimeComponent } from './stopped-time.component';
 
 describe('ServerTypeComponent', () => {
-  let component: ServerTypeComponent;
-  let fixture: ComponentFixture<ServerTypeComponent>;
+  let component: StoppedTimeComponent;
+  let fixture: ComponentFixture<StoppedTimeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ServerTypeComponent],
+      declarations: [StoppedTimeComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ServerTypeComponent);
+    fixture = TestBed.createComponent(StoppedTimeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TableColumnComponent } from 'kubeflow/lib/resource-table/component-value/component-value.component';
-import { NotebookProcessedObject } from 'src/app/types';
 
 @Component({
   selector: 'app-default-icon',
@@ -8,15 +7,18 @@ import { NotebookProcessedObject } from 'src/app/types';
   styleUrls: ['./default-icon.component.scss'],
 })
 export class DefaultComponent implements TableColumnComponent {
-  isDefault: boolean = false;
+  row: any;
 
   constructor() {}
 
-  set element(elem: NotebookProcessedObject) {
-    this.isDefault = elem?.default ? true : false;
+  set element(elem: any) {
+    this.row = elem;
   }
 
   public isDefaultNotebook() {
-    return this.isDefault;
+    if (this.row.hasOwnProperty('default')) {
+      return this.row.default;
+    }
+    return false;
   }
 }

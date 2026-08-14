@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { StoppedTimeComponent } from './stopped-time.component';
 
-describe('ServerTypeComponent', () => {
+describe('StoppedTimeComponent', () => {
   let component: StoppedTimeComponent;
   let fixture: ComponentFixture<StoppedTimeComponent>;
 

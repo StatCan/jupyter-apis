@@ -13,7 +13,6 @@ export class StoppedTimeComponent implements TableColumnComponent {
   constructor() {}
 
   set element(notebook: NotebookProcessedObject) {
-    console.log(notebook);
     this.lastStoppedDatetime = notebook.lastStopped;
     this.isCulled = notebook.isCulled;
   }

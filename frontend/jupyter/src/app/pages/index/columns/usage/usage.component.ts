@@ -16,11 +16,6 @@ export class UsageComponent implements TableColumnComponent {
     return this.data;
   }
 
-  getDisplayedElement(): string {
-    let roundedVal = Math.ceil(parseFloat(this.element.usage));
-    return !isNaN(roundedVal) ? roundedVal.toString() + '%' : '';
-  }
-
   constructor() {}
 
   isUsageWarning(): boolean {

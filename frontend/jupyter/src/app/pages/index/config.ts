@@ -55,12 +55,23 @@ export const volumeTableConfig: TableConfig = {
       sortingPreprocessorFn: quantityToScalar,
     },
     {
-      matHeaderCellDef: $localize`Use %`,
-      matColumnDef: 'usage',
+      matHeaderCellDef: ``,
+      matColumnDef: 'usageicon',
       textAlignment: 'right',
       style: { width: '8%' },
       value: new ComponentValue({
         component: UsageComponent,
+      }),
+      sort: true,
+    },
+    {
+      matHeaderCellDef: $localize`Use %`,
+      matColumnDef: 'usage',
+      style: { width: '8%' },
+      value: new PropertyValue({
+        field: 'usageRounded',
+        popoverField: 'usedBytesFormatted',
+        truncate: true,
       }),
       sort: true,
     },

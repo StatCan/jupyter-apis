@@ -1485,7 +1485,7 @@
         <source>Caution; this volume is more than 95% full.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/columns/usage/usage.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fbc6d8bbd465eba779b7c1aa7017cc0b47125097" datatype="html">
@@ -1540,28 +1540,28 @@
         <source>Use %</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1839789574610981042" datatype="html">
         <source>Access Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1748150374925445786" datatype="html">
         <source>Storage Class</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1955280138914914248" datatype="html">
         <source>Used by</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4585478839172999913" datatype="html">

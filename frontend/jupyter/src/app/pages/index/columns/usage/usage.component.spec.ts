@@ -11,6 +11,7 @@ const mockElement = {
   name: 'a0-new-image-workspace-d8pc2',
   namespace: 'kubeflow-user',
   notebooks: ['a0-new-image'],
+  usage: '99',
   status: {
     message: 'Bound',
     phase: 'ready',

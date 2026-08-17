@@ -19,6 +19,8 @@ export interface NotebookResponseObject {
   reason: string;
   age: string;
   lastActivity: string;
+  lastStopped: string;
+  isCulled: boolean;
   image: string;
   volumes: string[];
   cpu: string;

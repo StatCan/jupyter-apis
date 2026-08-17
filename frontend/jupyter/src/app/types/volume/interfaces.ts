@@ -8,6 +8,7 @@ export interface PVCResponseObject {
     timestamp: string;
   };
   capacity: string;
+  pendingResize: string;
   class: string;
   modes: string[];
   name: string;
@@ -57,6 +58,12 @@ export interface PVCProcessedObject extends PVCResponseObject {
     url: string;
     queryParams?: Params | null;
   };
+  settings?: {
+    name: string;
+    matIcon?: string;
+    status: string;
+    text: string;
+  }[];
 }
 
 export interface PVCPostObject {

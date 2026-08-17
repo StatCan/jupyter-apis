@@ -23,7 +23,8 @@
         "dshm",
         "dog-breed-nwmrc-tutorial-dog-breed-datavol-1-xrrmt-lf276",
         "dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv"
-      ]
+      ],
+      "isOOMKilled" : true
     },
     {
       "age": "2022-09-15T13:28:12Z",
@@ -69,7 +70,8 @@
         "a0-new-image-workspace-d8pc2",
         "a0-new-image-datavol-1-wlmfg",
         "dshm"
-      ]
+      ],
+      "isOOMKilled" : false
     },
     {
       "age": "2022-09-01T08:36:40Z",
@@ -136,7 +138,8 @@
         "dshm",
         "titanic-ml-47xh5-data-m57vq-2md82",
         "titanic-ml-47xh5-tutorial-titanic-workspace-mxstz-52fbp"
-      ]
+      ],
+      "isOOMKilled" : true
     },
     {
       "age":"2023-09-28T13:12:54Z",
@@ -160,6 +163,7 @@
       "volumes": [
         "test-pro-b-volume"
       ],
+      "isOOMKilled" : true,
       "labels":{
         "data.statcan.gc.ca/inject-blob-volumes":"true"
       }

@@ -494,6 +494,24 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
     for (const pvc of pvcsCopy) {
       pvc.deleteAction = this.parseDeletionActionStatus(pvc);
+      pvc.settings = [
+        {
+          name: 'pvc_details',
+          status: pvc.status.phase,
+          text: $localize`View details`,
+          matIcon: 'info',
+        },
+        {
+          name: 'expand_pvc',
+          // disable the expand if already at max size
+          status:
+            pvc.capacity == '512Gi' || pvc.pendingResize == '512Gi'
+              ? STATUS_TYPE.UNAVAILABLE
+              : STATUS_TYPE.READY,
+          text: $localize`Increase size`,
+          matIcon: 'storage',
+        },
+      ];
       // TODO: Uncomment when pvcviewer-controller is implemented
       // pvc.closePVCViewerAction = this.parseClosePVCViewerActionStatus(pvc);
       // pvc.openPVCViewerAction = this.parseOpenPVCViewerActionStatus(pvc);
@@ -607,6 +625,12 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
 
   public reactVolumeToAction(a: ActionEvent) {
     switch (a.action) {
+      case 'pvc_details':
+        this.router.navigate([a.data.link.url]);
+        break;
+      case 'expand_pvc':
+        this.expandVolumeClicked(a.data);
+        break;
       case 'delete':
         this.deleteVolumeClicked(a.data);
         break;
@@ -652,6 +676,16 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         this.snackBar.open(config);
         this.poll(this.currNamespace);
       }
+    });
+  }
+
+  public expandVolumeClicked(pvc: PVCProcessedObject) {
+    this.actions.expandVolume(pvc).subscribe(result => {
+      if (result.resp !== DIALOG_RESP.ACCEPT) {
+        return;
+      }
+
+      pvc.pendingResize = result.newSize;
     });
   }
 

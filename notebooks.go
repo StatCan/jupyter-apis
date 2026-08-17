@@ -52,6 +52,7 @@ const AutoMountLabel string = "data.statcan.gc.ca/inject-blob-volumes"
 
 // LastActivityAnnotation is the annotation name for the last activity value.
 const LastActivityAnnotation = "notebooks.kubeflow.org/last-activity"
+
 // LastActivityCheckTimeStamp for the delay shutdown
 const LastActivityCheckTimeStamp = "notebooks.kubeflow.org/last_activity_check_timestamp"
 
@@ -148,6 +149,7 @@ type notebookresponse struct {
 	Volumes      []string          `json:"volumes"`
 	Labels       map[string]string `json:"labels"`
 	Metadata     metav1.ObjectMeta `json:"metadata"`
+	IsOOMKilled  bool              `json:"isOOMKilled"`
 }
 
 type notebooksresponse struct {
@@ -328,6 +330,14 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
 	}
+
+	//get the data
+	isOOMKilled, err := s.isNotebookPodOOMKilled(notebook)
+	if err != nil {
+		return notebookresponse{}, err
+	}
+
+	// Add it to notebook response
 	return notebookresponse{
 		Age:          notebook.CreationTimestamp.Time,
 		Name:         notebook.Name,
@@ -343,7 +353,32 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		Volumes:      volumes,
 		Labels:       notebook.Labels,
 		Metadata:     notebook.ObjectMeta,
+		IsOOMKilled:  isOOMKilled,
 	}, nil
+}
+
+func (s *server) isNotebookPodOOMKilled(nb *kubeflowv1.Notebook) (bool, error) {
+	notebookNameRequirement, err := labels.NewRequirement("notebook-name", selection.Equals, []string{nb.Name})
+	labelSelector := labels.NewSelector().Add(*notebookNameRequirement)
+	pods, err := s.listers.pods.Pods(nb.Namespace).List(labelSelector)
+	if err != nil {
+		return false, errors.New("an error occured getting the notebook name requirements")
+	}
+
+	if len(pods) != 0 {
+		for _, status := range pods[0].Status.ContainerStatuses {
+			// look for the status of the notebook container
+			if status.Name != nb.Name {
+				continue
+			}
+
+			lastState := status.LastTerminationState
+			if lastState.Terminated != nil && lastState.Terminated.Reason == "OOMKilled" {
+				return true, nil
+			}
+		}
+	}
+	return false, nil
 }
 
 func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kubeflowv1.Notebook) error {
@@ -601,15 +636,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 	namespace := vars["namespace"]
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req newnotebookrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -927,15 +955,8 @@ func (s *server) StartStopNotebook(w http.ResponseWriter, r *http.Request) {
 	log.Printf("patching notebook %q for %q", notebookName, namespaceName)
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req startstopnotebookrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -988,15 +1009,8 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	notebookName := vars["notebook"]
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-
 	var req updatenotebookrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -1084,15 +1098,8 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 	log.Printf("updating notebook %q for %q with additional time", notebookName, namespaceName)
 
 	// Read the incoming notebook
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-	defer r.Body.Close()
-	//json object so make it a sturct
 	var req delaycullingrequest
-	err = json.Unmarshal(body, &req)
+	err := s.readRequestBody(w, r, &req)
 	if err != nil {
 		s.error(w, r, err)
 		return
@@ -1125,14 +1132,14 @@ func (s *server) UpdateNotebookForCulling(w http.ResponseWriter, r *http.Request
 
 	notebook.Annotations[LastActivityAnnotation] = updatedTime.Format(time.RFC3339)
 	notebook.Annotations[LastActivityCheckTimeStamp] = updatedTime.Format(time.RFC3339)
-	 
+
 	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
 	if err != nil {
 		s.error(w, r, err)
 		return
 	}
 
-	log.Printf("Updated notebook %q with time %q", notebookName, updatedTime);
+	log.Printf("Updated notebook %q with time %q", notebookName, updatedTime)
 
 	s.respond(w, r, &APIResponseBase{
 		Success: true,
@@ -1328,9 +1335,7 @@ func validateNotebookDataVolumes(dataVolumes []volrequest) []string {
 	var validationErrors []string
 
 	for _, vol := range dataVolumes {
-		// Data volumes can only be of 4Gi, 8Gi, 16Gi, ..., 512Gi
-		validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true, 64: true, 128: true, 256: true, 512: true}
-		err := validateNotebookVolume(vol, validSizes)
+		err := validateNotebookVolume(vol)
 
 		if err != nil {
 			validationErrors = append(validationErrors, err.Error())
@@ -1385,9 +1390,7 @@ func validateNotebook(request newnotebookrequest) error {
 	}
 
 	// Workspace and data volumes
-	// Workspace volumes can only be of 4Gi, 8Gi, ..., 32Gi
-	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
-	err := validateNotebookVolume(request.Workspace, validSizes)
+	err := validateNotebookVolume(request.Workspace)
 	if err != nil {
 		validationErrors = append(validationErrors, err.Error())
 	}
@@ -1412,8 +1415,7 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 	validationErrors = validateNotebookResources(request.CPU, request.CPULimit, request.Memory, request.MemoryLimit)
 
 	// Workspace Volume
-	validSizes := map[int64]bool{4: true, 8: true, 16: true, 32: true}
-	err := validateNotebookVolume(request.Workspace, validSizes)
+	err := validateNotebookVolume(request.Workspace)
 	if err != nil {
 		validationErrors = append(validationErrors, err.Error())
 	}
@@ -1432,7 +1434,7 @@ func validateUpdateNotebook(request updatenotebookrequest) error {
 }
 
 // verifies valid and correct input for the volrequest struct and returns an error indicating if all inputs are or aren't valid
-func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
+func validateNotebookVolume(req volrequest) error {
 
 	// Allow for Notebooks creation with no Workspace Volumes
 	if req.Mount == "" && req.NewPvc.NewPvcMetadata.Name == nil && req.ExistingSource.PersistentVolumeClaim.ClaimName == nil {
@@ -1502,14 +1504,10 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 		}
 
 		// Storage request size
-		storage := req.NewPvc.NewPvcSpec.Resources.Requests.Storage
-		bytes, ok := storage.AsInt64()
-		if !ok {
-			return fmt.Errorf("invalid storage format")
-		}
+		storage := req.NewPvc.NewPvcSpec.Resources.Requests.Storage.String()
 
-		if !validsizes[bytes/(1<<30)] { // convert bytes to Gibibytes
-			return fmt.Errorf("storage request is invalid, got: %dGi", bytes/(1<<30))
+		if !slices.Contains(validPVCSizes, storage) {
+			return fmt.Errorf("storage request is invalid, got: %sGi", storage)
 		}
 	}
 
@@ -1517,7 +1515,7 @@ func validateNotebookVolume(req volrequest, validsizes map[int64]bool) error {
 }
 
 func validateCullingDelay(delayHours int) error {
-	if (delayHours < 1 || delayHours > 72){
+	if delayHours < 1 || delayHours > 72 {
 		return fmt.Errorf("validation failed: the delay must be between 1 and 72.")
 	}
 

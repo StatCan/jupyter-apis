@@ -9,8 +9,9 @@ import {
   quantityToScalar,
 } from 'kubeflow';
 import { UsedByComponent } from './columns/used-by/used-by.component';
+import { SizeComponent } from './columns/size/size.component';
 
-export const tableConfig: TableConfig = {
+export const volumeTableConfig: TableConfig = {
   columns: [
     {
       matHeaderCellDef: $localize`Status`,
@@ -46,7 +47,9 @@ export const tableConfig: TableConfig = {
       matColumnDef: 'size',
       textAlignment: 'right',
       style: { width: '8%' },
-      value: new PropertyValue({ field: 'capacity', truncate: true }),
+      value: new ComponentValue({
+        component: SizeComponent,
+      }),
       sort: true,
       sortingPreprocessorFn: quantityToScalar,
     },

@@ -2,6 +2,15 @@ mat-slide-toggle {
   margin-bottom: 0.6rem;
 }
 
+p,.subheader {
+  margin-top: 0.2rem;
+  color: rgba(0, 0, 0, 0.66);
+}
+
+.subheader {
+  margin-bottom: 0.6rem;
+}
+
 //Simulate the h3 heading for the title
 .lbl-toggle-advanced-options {
   color: rgba(0, 0, 0, 0.54);
@@ -58,4 +67,10 @@ mat-slide-toggle {
 
 .matSpacing {
   padding: 0.6em 0em;
+}
+
+.checkbox-icon {
+  position: relative;
+  top: 8px;
+  padding-left: 2px;
 }

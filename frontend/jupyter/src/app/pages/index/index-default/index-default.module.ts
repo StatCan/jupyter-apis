@@ -5,6 +5,7 @@ import { KubeflowModule } from 'kubeflow';
 import { DefaultComponent } from './default-icon/default-icon.component';
 import { ServerTypeComponent } from './server-type/server-type.component';
 import { WarningComponent } from './warning-icons/warning-icon.component';
+import { StoppedTimeComponent } from './stopped-time/stopped-time.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { WarningComponent } from './warning-icons/warning-icon.component';
     ServerTypeComponent,
     DefaultComponent,
     WarningComponent,
+    StoppedTimeComponent,
   ],
   imports: [CommonModule, KubeflowModule],
   exports: [
@@ -19,6 +21,7 @@ import { WarningComponent } from './warning-icons/warning-icon.component';
     ServerTypeComponent,
     DefaultComponent,
     WarningComponent,
+    StoppedTimeComponent,
   ],
 })
 export class IndexDefaultModule {}

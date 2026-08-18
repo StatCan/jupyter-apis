@@ -15,7 +15,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8650499415827640724" datatype="html">
@@ -27,7 +27,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/events/config.ts</context>
@@ -844,7 +844,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9157635657437103431" datatype="html">
@@ -1702,7 +1702,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1520049505561836231" datatype="html">
@@ -1714,7 +1714,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">80</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/events/config.ts</context>
@@ -1730,7 +1730,7 @@
         <target>Taille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2130027189509146725" datatype="html">
@@ -1738,7 +1738,7 @@
         <target>% d'utilisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1839789574610981042" datatype="html">
@@ -1746,7 +1746,7 @@
         <target>Mode d'accès</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1748150374925445786" datatype="html">
@@ -1754,7 +1754,7 @@
         <target>Classe de stockage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1955280138914914248" datatype="html">
@@ -1762,7 +1762,7 @@
         <target>Utilisé par</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4585478839172999913" datatype="html">
@@ -1770,7 +1770,15 @@
         <target>Dernière activité</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8315435743388031928" datatype="html">
+        <source>Last stopped</source>
+        <target>Dernier arrêt</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3012906865384504293" datatype="html">
@@ -1778,7 +1786,7 @@
         <target>Image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3840111939816305457" datatype="html">
@@ -1786,11 +1794,11 @@
         <target>GPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">128</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4027647877328291519" datatype="html">
@@ -1798,11 +1806,11 @@
         <target>CPUs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">139</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2074758921664227900" datatype="html">
@@ -1810,7 +1818,7 @@
         <target>Connecter à ce serveur bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8966109024004058984" datatype="html">
@@ -1830,7 +1838,7 @@
         <target>Arrêter ce serveur bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1580383878043741894" datatype="html">
@@ -1838,7 +1846,7 @@
         <target>Démarrer ce serveur bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7697740977685054585" datatype="html">
@@ -1846,7 +1854,7 @@
         <target>Ouvrir les paramètres pour ce serveur bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8905342294892023661" datatype="html">
@@ -1854,7 +1862,7 @@
         <target>Ouvrir les paramètres pour ce volume</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4798154513902467660" datatype="html">
@@ -1862,7 +1870,7 @@
         <target>RAM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="57403663622654391" datatype="html">
@@ -1870,7 +1878,7 @@
         <target>Stockage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3448462145758383019" datatype="html">
@@ -1878,7 +1886,7 @@
         <target>Total</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/config.ts</context>
-          <context context-type="linenumber">254</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8323c418749a9b093dcab7197fbb8a8a7029e9b6" datatype="html">
@@ -2227,6 +2235,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/server-type/server-type.component.html</context>
           <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97059345835556637" datatype="html">
+        <source>This notebook server was last stopped because of inactivity</source>
+        <target>Ce serveur bloc-notes à été automatiquement arrêté pour raison d'inactivité</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/stopped-time/stopped-time.component.ts</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4925293718881554839" datatype="html">

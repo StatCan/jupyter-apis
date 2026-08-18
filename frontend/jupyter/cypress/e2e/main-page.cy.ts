@@ -23,7 +23,7 @@ describe('Main tables', () => {
     it('should have the Notebooks table', () => {
       cy.get('[data-cy-table-id="notebooks-table"]').should('exist');
       cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
-        .should('have.length', 7);
+        .should('have.length', 8);
 
       cy.get('[data-cy-toolbar-button="New Notebook"]')
         .should('exist')
@@ -199,7 +199,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="deleteAction"]')
-        .click();
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.get('.mat-mdc-dialog-title')
         .should('be.visible')
         .and(
@@ -218,7 +218,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="deleteAction"]')
-        .click();
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.intercept(
         'DELETE',
         '/api/namespaces/kubeflow-user/notebooks/a-test-01',
@@ -250,7 +250,7 @@ describe('Main tables', () => {
       // clear filters
       cy.get('[mattooltip="Clear filters"]').click();
       cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
-        .should('have.length', 7);
+        .should('have.length', 8);
 
       // generic filter
       cy.get('[data-cy-table-filter-id="notebooks-table"]').type(
@@ -264,7 +264,7 @@ describe('Main tables', () => {
       //clear filters
       cy.get('[matchipremove]').click();
       cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
-        .should('have.length', 7);
+        .should('have.length', 8);
     });
 
     it('should open the notebook details page', () => {
@@ -289,7 +289,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="nb_details"]')
-        .click();
+        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
 
       cy.url().should(
         'eq',
@@ -310,7 +310,7 @@ describe('Main tables', () => {
           .should('be.visible')
           .find('button[data-cy-menu-icon-action="keep_alive"]')
           .and('be.disabled');
-            });
+      });
       it('Should Cancel on click', () => {
         cy.get('[data-cy-table-id="notebooks-table"]')
           .find(`[data-cy-resource-table-row="Name"]`)

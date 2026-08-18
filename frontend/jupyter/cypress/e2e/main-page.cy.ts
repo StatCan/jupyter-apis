@@ -36,7 +36,7 @@ describe('Main tables', () => {
     });
 
     // We use function () in order to be able to access aliases via this
-    it('renders every Notebook name into the table', function () {
+    it('renders every Notebook name into the table', () => {
       let i = 0;
       const notebooks = this.notebooksRequest.notebooks;
       // Table is sorted by Name in ascending order by default
@@ -49,7 +49,7 @@ describe('Main tables', () => {
         });
     });
 
-    it('checks Status icon for all notebooks', function () {
+    it('checks Status icon for all notebooks', () => {
       let i = 0;
       const notebooks = this.notebooksRequest.notebooks;
       cy.get('[data-cy-table-id="notebooks-table"]')
@@ -79,6 +79,17 @@ describe('Main tables', () => {
           }
           i++;
         });
+    });
+
+    it.only('should display icon for default notebook', () => {
+      cy.get('[data-cy-table-id="notebooks-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('test-pro-b')
+        .parent()
+        .parent()
+        .find('app-default-icon')
+        .find('mat-icon')
+        .should('exist');
     });
     
     it('should have icon for oom', () => {

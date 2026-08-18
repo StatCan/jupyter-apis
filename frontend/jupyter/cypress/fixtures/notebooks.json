@@ -202,7 +202,8 @@
       ],
       "isOOMKilled" : true,
       "labels":{
-        "data.statcan.gc.ca/inject-blob-volumes":"true"
+        "data.statcan.gc.ca/inject-blob-volumes":"true",
+        "notebook.statcan.gc.ca/default-notebook": "true"
       }
     }
   ],

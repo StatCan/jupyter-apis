@@ -1482,7 +1482,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1801298063046788049" datatype="html">
-        <source>Caution; this volume is more than 95% full.</source>
+        <source>Caution: this volume is more than 95% full.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/columns/usage/usage.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -1533,35 +1533,35 @@
         <source>Size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2130027189509146725" datatype="html">
         <source>Use %</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1839789574610981042" datatype="html">
         <source>Access Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1748150374925445786" datatype="html">
         <source>Storage Class</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1955280138914914248" datatype="html">
         <source>Used by</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/config.ts</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4585478839172999913" datatype="html">
@@ -1985,7 +1985,7 @@
         <source>This notebook server was last stopped because of inactivity</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/stopped-time/stopped-time.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4925293718881554839" datatype="html">

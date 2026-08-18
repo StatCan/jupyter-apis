@@ -24,6 +24,6 @@ export class UsageComponent implements TableColumnComponent {
   }
 
   getWarningTooltipMessage(): string {
-    return $localize`Caution; this volume is more than 95% full.`;
+    return $localize`Caution: this volume is more than 95% full.`;
   }
 }

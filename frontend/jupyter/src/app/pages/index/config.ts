@@ -70,7 +70,7 @@ export const volumeTableConfig: TableConfig = {
       value: new ComponentValue({
         component: UsageComponent,
       }),
-      sort: true,
+      sort: false,
     },
     {
       matHeaderCellDef: $localize`Use %`,

@@ -66,7 +66,7 @@ export const volumeTableConfig: TableConfig = {
       matHeaderCellDef: ``,
       matColumnDef: 'usageicon',
       textAlignment: 'right',
-      style: { 'width': '10px', 'padding': '0'},
+      style: { width: '10px', padding: '0' },
       value: new ComponentValue({
         component: UsageComponent,
       }),

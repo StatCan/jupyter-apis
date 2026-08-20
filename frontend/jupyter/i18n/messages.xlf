@@ -822,11 +822,39 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d0788c549a8914d2873567b302986d7a27fb10b1" datatype="html">
+        <source>Shared memory</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-advanced-options/form-advanced-options.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="654035be27c5ec67001232dbe335f64816894633" datatype="html">
+        <source> Some libraries like PyTorch use shared memory for <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>multiprocessing<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/>. This setting adds temporary storage mounted on <x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>/dev/shm<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> to enable data sharing between processes. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-advanced-options/form-advanced-options.component.html</context>
+          <context context-type="linenumber">5,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="13685f36da784f491d4b3e0110df0b5623306463" datatype="html">
+        <source> If you are planning on doing multiprocessing work, considering toggling this setting. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-advanced-options/form-advanced-options.component.html</context>
+          <context context-type="linenumber">10,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dc7a4227582c76813dffebc57c1f6f094031bbc5" datatype="html">
+        <source><x id="START_BOLD_TEXT" ctype="x-b" equiv-text="&lt;b&gt;"/>Warning: Only toggle this setting if needed.<x id="CLOSE_BOLD_TEXT" ctype="x-b" equiv-text="&lt;/b&gt;"/> It uses a RAM-backed filesystem, which can lead to out-of-memory errors with improper use. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-new/form-advanced-options/form-advanced-options.component.html</context>
+          <context context-type="linenumber">15,17</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4f9350429574d4118ef3709016039f34a0785466" datatype="html">
         <source> Enable Shared Memory </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-advanced-options/form-advanced-options.component.html</context>
-          <context context-type="linenumber">2,4</context>
+          <context context-type="linenumber">19,21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0a31a4739749d022f9c0265ef0db1779daf3bad" datatype="html">

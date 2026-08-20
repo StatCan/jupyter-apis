@@ -41,6 +41,9 @@ const EnvKfLanguage string = "KF_LANG"
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
 
+// CullingAnnotation is the annotation name present on stopped resources due to culling.
+const CullingAnnotation string = "kubeflow-resource-culling"
+
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
 
@@ -140,6 +143,8 @@ type notebookresponse struct {
 	GPUs         gpuresponse       `json:"gpus"`
 	Image        string            `json:"image"`
 	LastActivity string            `json:"lastActivity"`
+	LastStopped  string            `json:"lastStopped"`
+	IsCulled     bool              `json:"isCulled"`
 	Memory       resource.Quantity `json:"memory"`
 	Name         string            `json:"name"`
 	ServerType   interface{}       `json:"serverType"`
@@ -337,6 +342,11 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		return notebookresponse{}, err
 	}
 
+	isCulled := false
+	if notebook.Annotations[CullingAnnotation] != "" && notebook.Annotations[StoppedAnnotation] == notebook.Annotations[CullingAnnotation] {
+		isCulled = true
+	}
+
 	// Add it to notebook response
 	return notebookresponse{
 		Age:          notebook.CreationTimestamp.Time,
@@ -344,6 +354,8 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		Namespace:    notebook.Namespace,
 		Image:        notebook.Spec.Template.Spec.Containers[0].Image,
 		LastActivity: notebook.Annotations[LastActivityAnnotation],
+		LastStopped:  notebook.Annotations[StoppedAnnotation],
+		IsCulled:     isCulled,
 		ServerType:   notebook.Annotations[ServerTypeAnnotation],
 		ShortImage:   imageparts[len(imageparts)-1],
 		CPU:          cpulimit,

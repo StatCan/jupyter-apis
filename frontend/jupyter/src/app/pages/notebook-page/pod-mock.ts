@@ -69,6 +69,10 @@ export const mockPod: V1Pod = {
         terminationMessagePolicy: 'File',
         volumeMounts: [
           {
+            mountPath: '/dev/shm',
+            name: 'dshm',
+          },
+          {
             mountPath: '/home/jovyan',
             name: 'asa232rstudio-workspace',
           },
@@ -475,6 +479,12 @@ export const mockPod: V1Pod = {
           name: 'istio-ca-root-cert',
         },
         name: 'istiod-ca-cert',
+      },
+      {
+        emptyDir: {
+          medium: 'Memory',
+        },
+        name: 'dshm',
       },
       {
         name: 'asa232rstudio-workspace',

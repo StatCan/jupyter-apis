@@ -11,4 +11,4 @@ Any new features that we've implemented won't necessarily be added here as those
 
 ### [New Notebook Form](./frontend/jupyter/src/app/pages/form/form-new/)
 
-- Removed the "form-advanced-options" section (a.k.a the "Miscellaneous Settings" section). This was done in [this pull request](https://github.com/StatCan/jupyter-apis/pull/374). This change included removing the feature to enable shared memory.
+- Removed the language input from the "form-advanced-options" section (a.k.a the "Miscellaneous Settings" section). This was done in [this pull request](https://github.com/StatCan/jupyter-apis/pull/374), but the "shared memory" input was re-added in [this pull request](https://github.com/StatCan/jupyter-apis/pull/386).

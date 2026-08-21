@@ -237,6 +237,9 @@ export class FormEditComponent
         case 'datavols':
           fieldVal = $localize`Data volume(s)`;
           break;
+        case 'shm':
+          fieldVal = $localize`Shared memory`;
+          break;
         default:
           fieldVal = e.path.toString();
       }

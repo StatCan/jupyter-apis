@@ -588,7 +588,7 @@ describe('Edit notebook form', () => {
     });
 
     it('advanced options', () => {
-      //shared memory default
+      //shared memory default value
       cy.get('[data-cy-form-input="shm"]')
       .should('have.class', 'mat-mdc-slide-toggle-checked')
     })

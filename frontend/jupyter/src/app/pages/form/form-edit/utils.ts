@@ -57,10 +57,10 @@ export function setConfigForNotebook(
     }
 
     // Set the resources config from the notebook using the formatted output
-      config.cpu.value = notebook.formatted_resources.cpu;
-      config.cpu.limitValue = notebook.formatted_resources.cpuLimit;
-      config.memory.value = notebook.formatted_resources.memory;
-      config.memory.limitValue = notebook.formatted_resources.memoryLimit;
+    config.cpu.value = notebook.formatted_resources.cpu;
+    config.cpu.limitValue = notebook.formatted_resources.cpuLimit;
+    config.memory.value = notebook.formatted_resources.memory;
+    config.memory.limitValue = notebook.formatted_resources.memoryLimit;
 
     // Set the volumes config from the notebook
     config.workspaceVolume.value = { mount: '/home/jovyan' };
@@ -78,12 +78,15 @@ export function setConfigForNotebook(
               claimName: volMount.name,
             },
           };
-        } else if (volMount.name === 'dshm' && volMount.mountPath === '/dev/shm') {
+        } else if (
+          volMount.name === 'dshm' &&
+          volMount.mountPath === '/dev/shm'
+        ) {
           // Set shared memory toggle value
           config.shm = {
-            value: true
+            value: true,
           };
-        }else {
+        } else {
           config.dataVolumes.value.push({
             mount: volMount.mountPath,
             existingSource: {

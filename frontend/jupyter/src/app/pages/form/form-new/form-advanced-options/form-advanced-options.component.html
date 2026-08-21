@@ -16,7 +16,12 @@
       filesystem, which can lead to out-of-memory errors with improper use.
     </p>
   </div>
-  <mat-slide-toggle color="primary" [formControl]="parentForm.get('shm')" i18n>
+  <mat-slide-toggle
+    color="primary"
+    [formControl]="parentForm.get('shm')"
+    i18n
+    data-cy-form-input="shm"
+  >
     Enable Shared Memory
   </mat-slide-toggle>
 </lib-form-section>

@@ -586,6 +586,12 @@ describe('Edit notebook form', () => {
         'not.exist',
       );
     });
+
+    it('advanced options', () => {
+      //shared memory default
+      cy.get('[data-cy-form-input="shm"]')
+      .should('have.class', 'mat-mdc-slide-toggle-checked')
+    })
   });
 
   describe('edit notebook use cases', () => {
@@ -728,6 +734,25 @@ describe('Edit notebook form', () => {
       cy.get('[data-cy-form-button="submit"]').click();
       cy.get('.edit-changes-list')
         .should('contain.text', 'Workspace volume');
+
+      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
+        success: true,
+        status: 200,
+      }).as('mockSubmitNotebook');
+      cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
+      cy.wait('@mockSubmitNotebook');
+      
+      cy.url().should('eq', 'http://localhost:4200/');
+    });
+
+    it('should disable shared memory', () => {
+      cy.get('[data-cy-form-input="shm"]').click();
+
+      // submit the notebook
+      cy.get('[data-cy-form-button="submit"]').should('be.enabled');
+      cy.get('[data-cy-form-button="submit"]').click();
+      cy.get('.edit-changes-list')
+        .should('contain.text', 'Shared memory');
 
       cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
         success: true,

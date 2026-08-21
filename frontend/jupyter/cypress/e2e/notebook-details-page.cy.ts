@@ -23,16 +23,48 @@ describe('Notebook Details Page', () => {
     cy.get('lib-content-list-item[key="Volumes"]')
       .find('app-volumes')
       .get('.vol-group-container')
-      .should('exist');
+      .should('exist')
+      .and('have.length', 2);
     cy.get('lib-content-list-item[key="Volumes"]')
       .find('app-volumes')
-      .get('.vol-group-container > lib-urls > a')
-      .should('have.text', ' test-notebook-volume\n test-notebook-data\n')
-      .should('have.attr', 'href')
+      .get('.vol-group-container')
+      .eq(0)
+      .find('.group-key > div')
+      .should('have.text', 'PersistentVolumeClaims');
+    cy.get('lib-content-list-item[key="Volumes"]')
+      .find('app-volumes')
+      .get('.vol-group-container')
+      .eq(0)
+      .get('lib-urls > a')
+      .eq(0)
+      .should('have.text', ' test-notebook-volume\n')
+      .and('have.attr', 'href')
       .and('eq', '/volume/details/kubeflow-user/test-notebook-volume');
+    cy.get('lib-content-list-item[key="Volumes"]')
+      .find('app-volumes')
+      .get('.vol-group-container')
+      .eq(0)
+      .get('lib-urls > a')
+      .eq(1)
+      .should('have.text', ' test-notebook-data\n')
+      .and('have.attr', 'href')
+      .and('eq', '/volume/details/kubeflow-user/test-notebook-data');
+    cy.get('lib-content-list-item[key="Volumes"]')
+      .find('app-volumes')
+      .get('.vol-group-container')
+      .eq(1)
+      .find('.group-key > div')
+      .should('have.text', 'Memory-backed Volumes');
+    cy.get('lib-content-list-item[key="Volumes"]')
+      .find('app-volumes')
+      .get('.vol-group-container')
+      .eq(1)
+      .find('mat-chip-option')
+      .should('have.length', 1)
+      .and('have.text', ' dshm ');
     cy.get(
       'lib-details-list-item[key="Shared memory enabled"] > .list-entry-row > .list-entry-value > div',
-    ).should('have.text', ' No\n');
+    ).should('have.text', ' Yes\n');
     cy.get(
       'lib-content-list-item[key="Configurations"] > .list-entry-row > .container > app-configurations',
     ).should('have.text', ' No configurations available for this notebook. ');

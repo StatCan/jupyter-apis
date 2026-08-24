@@ -29,11 +29,20 @@ import (
 // DefaultServiceAccountName String.
 const DefaultServiceAccountName string = "default-editor"
 
+// SharedMemoryVolumeName String.
+const SharedMemoryVolumeName string = "dshm"
+
+// SharedMemoryVolumePath String.
+const SharedMemoryVolumePath string = "/dev/shm"
+
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
+
+// CullingAnnotation is the annotation name present on stopped resources due to culling.
+const CullingAnnotation string = "kubeflow-resource-culling"
 
 // ServerTypeAnnotation is the annotation name representing the server type of the notebook.
 const ServerTypeAnnotation string = "notebooks.kubeflow.org/server-type"
@@ -90,27 +99,28 @@ type gpurequest struct {
 }
 
 type newnotebookrequest struct {
-	Name             string            `json:"name"`
-	Namespace        string            `json:"namespace"`
-	Image            string            `json:"image"`
-	CustomImage      string            `json:"customImage"`
-	CustomImageCheck bool              `json:"customImageCheck"`
-	BetaImageCheck   bool              `json:"betaImageCheck"`
-	CPU              resource.Quantity `json:"cpu"`
-	CPULimit         resource.Quantity `json:"cpuLimit"`
-	Memory           resource.Quantity `json:"memory"`
-	MemoryLimit      resource.Quantity `json:"memoryLimit"`
-	GPUs             gpurequest        `json:"gpus"`
-	NoWorkspace      bool              `json:"noWorkspace"`
-	Workspace        volrequest        `json:"workspace"`
-	DataVolumes      []volrequest      `json:"datavols"`
-	Configurations   []string          `json:"configurations"`
-	Language         string            `json:"language"`
-	ImagePullPolicy  string            `json:"imagePullPolicy"`
-	ServerType       string            `json:"serverType"`
-	AffinityConfig   string            `json:"affinityConfig"`
-	TolerationGroup  string            `json:"tolerationGroup"`
-	DefaultNotebook  bool              `json:"defaultNotebook"`
+	Name               string            `json:"name"`
+	Namespace          string            `json:"namespace"`
+	Image              string            `json:"image"`
+	CustomImage        string            `json:"customImage"`
+	CustomImageCheck   bool              `json:"customImageCheck"`
+	BetaImageCheck     bool              `json:"betaImageCheck"`
+	CPU                resource.Quantity `json:"cpu"`
+	CPULimit           resource.Quantity `json:"cpuLimit"`
+	Memory             resource.Quantity `json:"memory"`
+	MemoryLimit        resource.Quantity `json:"memoryLimit"`
+	GPUs               gpurequest        `json:"gpus"`
+	NoWorkspace        bool              `json:"noWorkspace"`
+	Workspace          volrequest        `json:"workspace"`
+	DataVolumes        []volrequest      `json:"datavols"`
+	EnableSharedMemory bool              `json:"shm"`
+	Configurations     []string          `json:"configurations"`
+	Language           string            `json:"language"`
+	ImagePullPolicy    string            `json:"imagePullPolicy"`
+	ServerType         string            `json:"serverType"`
+	AffinityConfig     string            `json:"affinityConfig"`
+	TolerationGroup    string            `json:"tolerationGroup"`
+	DefaultNotebook    bool              `json:"defaultNotebook"`
 }
 
 type updatenotebookrequest struct {
@@ -133,6 +143,8 @@ type notebookresponse struct {
 	GPUs         gpuresponse       `json:"gpus"`
 	Image        string            `json:"image"`
 	LastActivity string            `json:"lastActivity"`
+	LastStopped  string            `json:"lastStopped"`
+	IsCulled     bool              `json:"isCulled"`
 	Memory       resource.Quantity `json:"memory"`
 	Name         string            `json:"name"`
 	ServerType   interface{}       `json:"serverType"`
@@ -330,6 +342,11 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		return notebookresponse{}, err
 	}
 
+	isCulled := false
+	if notebook.Annotations[CullingAnnotation] != "" && notebook.Annotations[StoppedAnnotation] == notebook.Annotations[CullingAnnotation] {
+		isCulled = true
+	}
+
 	// Add it to notebook response
 	return notebookresponse{
 		Age:          notebook.CreationTimestamp.Time,
@@ -337,6 +354,8 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		Namespace:    notebook.Namespace,
 		Image:        notebook.Spec.Template.Spec.Containers[0].Image,
 		LastActivity: notebook.Annotations[LastActivityAnnotation],
+		LastStopped:  notebook.Annotations[StoppedAnnotation],
+		IsCulled:     isCulled,
 		ServerType:   notebook.Annotations[ServerTypeAnnotation],
 		ShortImage:   imageparts[len(imageparts)-1],
 		CPU:          cpulimit,
@@ -565,16 +584,17 @@ func (s *server) createDefaultNotebook(namespace string, notebookNames []string,
 			Quantity: s.Config.SpawnerFormDefaults.GPUs.Value.Num,
 			Vendor:   s.Config.SpawnerFormDefaults.GPUs.Value.Vendor,
 		},
-		NoWorkspace:     true,
-		Workspace:       workspaceVol,
-		DataVolumes:     datavols,
-		Configurations:  s.Config.SpawnerFormDefaults.Configurations.Value,
-		Language:        "en",
-		ImagePullPolicy: s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
-		ServerType:      "jupyter",
-		AffinityConfig:  s.Config.SpawnerFormDefaults.AffinityConfig.Value,
-		TolerationGroup: s.Config.SpawnerFormDefaults.TolerationGroup.Value,
-		DefaultNotebook: true,
+		NoWorkspace:        true,
+		Workspace:          workspaceVol,
+		DataVolumes:        datavols,
+		EnableSharedMemory: s.Config.SpawnerFormDefaults.Shm.Value,
+		Configurations:     s.Config.SpawnerFormDefaults.Configurations.Value,
+		Language:           "en",
+		ImagePullPolicy:    s.Config.SpawnerFormDefaults.ImagePullPolicy.Value,
+		ServerType:         "jupyter",
+		AffinityConfig:     s.Config.SpawnerFormDefaults.AffinityConfig.Value,
+		TolerationGroup:    s.Config.SpawnerFormDefaults.TolerationGroup.Value,
+		DefaultNotebook:    true,
 	}
 
 	return notebook, nil
@@ -817,6 +837,23 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
+	}
+
+	// Add shared memory, if enabled
+	if (s.Config.SpawnerFormDefaults.Shm.ReadOnly && s.Config.SpawnerFormDefaults.Shm.Value) || (!s.Config.SpawnerFormDefaults.Shm.ReadOnly && req.EnableSharedMemory) {
+		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+			Name: SharedMemoryVolumeName,
+			VolumeSource: corev1.VolumeSource{
+				EmptyDir: &corev1.EmptyDirVolumeSource{
+					Medium: corev1.StorageMediumMemory,
+				},
+			},
+		})
+
+		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+			Name:      SharedMemoryVolumeName,
+			MountPath: SharedMemoryVolumePath,
+		})
 	}
 
 	// Add GPU

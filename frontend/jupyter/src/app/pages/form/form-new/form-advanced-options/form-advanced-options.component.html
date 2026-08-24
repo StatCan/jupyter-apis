@@ -1,0 +1,22 @@
+<lib-form-section title="Miscellaneous Settings" i18n-title>
+  <!-- Shared Memory setting -->
+  <div i18n class="mat-subtitle-1 subheader">Shared memory</div>
+  <div>
+    <p i18n>
+      Some libraries like PyTorch use shared memory for <b>multiprocessing</b>.
+      This setting adds temporary storage mounted on <b>/dev/shm</b> to enable
+      data sharing between processes.
+    </p>
+    <p i18n>
+      If you are planning on doing multiprocessing work, considering toggling
+      this setting.
+    </p>
+    <p i18n>
+      <b>Warning: Only toggle this setting if needed.</b> It uses a RAM-backed
+      filesystem, which can lead to out-of-memory errors with improper use.
+    </p>
+  </div>
+  <mat-slide-toggle color="primary" [formControl]="parentForm.get('shm')" i18n>
+    Enable Shared Memory
+  </mat-slide-toggle>
+</lib-form-section>

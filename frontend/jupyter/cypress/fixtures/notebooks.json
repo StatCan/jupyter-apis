@@ -9,6 +9,8 @@
       },
       "image": "kubeflownotebookswg/jupyter-scipy:latest",
       "lastActivity": "2022-09-21T12:15:06Z",
+      "lastStopped": "",
+      "isCulled": false,
       "memory": "1073741824m",
       "name": "a-dog-breed-katib",
       "namespace": "kubeflow-user",
@@ -20,6 +22,7 @@
         "state": ""
       },
       "volumes": [
+        "dshm",
         "dog-breed-nwmrc-tutorial-dog-breed-datavol-1-xrrmt-lf276",
         "dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv"
       ],
@@ -34,6 +37,8 @@
       },
       "image": "kubeflownotebookswg/codeserver-python:latest",
       "lastActivity": "2022-09-15T13:28:17Z",
+      "lastStopped": "",
+      "isCulled": false,
       "memory": "1Gi",
       "name": "a-test-01",
       "namespace": "kubeflow-user",
@@ -44,7 +49,7 @@
         "phase": "ready",
         "state": ""
       },
-      "volumes": ["b-rstudio-workspace-svdl2"]
+      "volumes": ["dshm", "b-rstudio-workspace-svdl2"]
     },
     {
       "age": "2022-09-19T16:39:10Z",
@@ -55,6 +60,8 @@
       },
       "image": "kubeflownotebookswg/jupyter-scipy:latest",
       "lastActivity": "",
+      "lastStopped": "2022-09-21T12:15:06Z",
+      "isCulled": false,
       "memory": "1Gi",
       "name": "a0-new-image",
       "namespace": "kubeflow-user",
@@ -67,7 +74,34 @@
       },
       "volumes": [
         "a0-new-image-workspace-d8pc2",
-        "a0-new-image-datavol-1-wlmfg"
+        "a0-new-image-datavol-1-wlmfg",
+        "dshm"
+      ],
+      "isOOMKilled" : false
+    },
+    {
+      "age": "2022-09-19T16:39:10Z",
+      "cpu": "500m",
+      "gpus": {
+        "count": 0,
+        "message": ""
+      },
+      "image": "kubeflownotebookswg/sas:latest",
+      "lastActivity": "",
+      "lastStopped": "2022-09-21T12:15:06Z",
+      "isCulled": true,
+      "memory": "1Gi",
+      "name": "b-culled-notebook",
+      "namespace": "kubeflow-user",
+      "serverType": "sas",
+      "shortImage": "sas:latest",
+      "status": {
+        "message": "No Pods are currently running for this Notebook Server.",
+        "phase": "stopped",
+        "state": ""
+      },
+      "volumes": [
+        "b-culled-notebook-workspace-vol"
       ],
       "isOOMKilled" : false
     },
@@ -80,6 +114,8 @@
       },
       "image": "kubeflownotebookswg/rstudio-tidyverse:latest",
       "lastActivity": "2022-09-12T07:30:39Z",
+      "lastStopped": "",
+      "isCulled": false,
       "memory": "1Gi",
       "name": "b-rstudio-terminating",
       "namespace": "kubeflow-user",
@@ -90,7 +126,7 @@
         "phase": "terminating",
         "state": ""
       },
-      "volumes": ["b-rstudio-workspace-svdl2"]
+      "volumes": ["dshm", "b-rstudio-workspace-svdl2"]
     },
     {
       "age": "2022-04-15T09:41:07Z",
@@ -101,6 +137,8 @@
       },
       "image": "kubeflownotebookswg/jupyter-scipy:latest",
       "lastActivity": "2022-09-21T12:16:25Z",
+      "lastStopped": "",
+      "isCulled": false,
       "memory": "1073741824m",
       "name": "inference-unavailable",
       "namespace": "kubeflow-user",
@@ -111,7 +149,7 @@
         "phase": "unavailable",
         "state": ""
       },
-      "volumes": ["coronahack-l9dwt-1759876298-ax7mi-pvc-dfhvr-zqxmt"]
+      "volumes": ["dshm", "coronahack-l9dwt-1759876298-ax7mi-pvc-dfhvr-zqxmt"]
     },
     {
       "age": "2022-04-14T08:25:10Z",
@@ -122,6 +160,8 @@
       },
       "image": "kubeflownotebookswg/jupyter-scipy:latest",
       "lastActivity": "2022-09-21T12:19:26Z",
+      "lastStopped": "",
+      "isCulled": false,
       "memory": "1073741824m",
       "name": "random-forest-waiting",
       "namespace": "kubeflow-user",
@@ -133,6 +173,7 @@
         "state": ""
       },
       "volumes": [
+        "dshm",
         "titanic-ml-47xh5-data-m57vq-2md82",
         "titanic-ml-47xh5-tutorial-titanic-workspace-mxstz-52fbp"
       ],
@@ -147,6 +188,8 @@
       },
       "image":"k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1",
       "lastActivity":"2023-09-28T13:12:58Z",
+      "lastStopped": "",
+      "isCulled": false,
       "memory":"2Gi",
       "name":"test-pro-b",
       "serverType":"jupyter",
@@ -162,7 +205,8 @@
       ],
       "isOOMKilled" : true,
       "labels":{
-        "data.statcan.gc.ca/inject-blob-volumes":"true"
+        "data.statcan.gc.ca/inject-blob-volumes":"true",
+        "notebook.statcan.gc.ca/default-notebook": "true"
       }
     }
   ],

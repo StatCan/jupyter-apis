@@ -19,6 +19,8 @@ export interface NotebookResponseObject {
   reason: string;
   age: string;
   lastActivity: string;
+  lastStopped: string;
+  isCulled: boolean;
   image: string;
   volumes: string[];
   cpu: string;
@@ -76,6 +78,7 @@ export interface NotebookFormObject {
   noWorkspace: boolean;
   workspace: any;
   datavols: any[];
+  shm: boolean;
   configurations: PodDefault[];
 }
 

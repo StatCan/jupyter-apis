@@ -287,13 +287,13 @@ export class FormEditComponent
             subscriber.next(`fail`);
           },
         });
+      });
 
-        // Edit request has succeeded
-        ref.afterClosed().subscribe(result => {
-          editSub.unsubscribe();
-          subscriber.next(result);
-          subscriber.complete();
-        });
+      // Edit request has succeeded
+      ref.afterClosed().subscribe(result => {
+        editSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
       });
     });
   }

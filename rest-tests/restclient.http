@@ -1,7 +1,7 @@
 ### Replace these placeholders with actual values
 @BASE_URL=http://localhost:5000/api
-@KF_USER_ID=REPLACE_WITH_YOUR_USER_ID
-@KF_NAMESPACE=REPLACE_WITH_YOUR_NAMESPACE
+@KF_USER_ID=mathis.marcotte@cloud.statcan.ca
+@KF_NAMESPACE=mathis-marcotte
 @KF_NOTEBOOK_NAME=REPLACE_WITH_YOUR_NOTEBOOK_NAME
 @KF_NOTEBOOK_NAME_PATCH=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_PATCH
 @KF_NOTEBOOK_NAME_UPDATE=REPLACE_WITH_YOUR_NOTEBOOK_NAME_TO_UPDATE
@@ -37,6 +37,10 @@ kubeflow-userid: {{KF_USER_ID}}
 
 ### Get the list of notebooks
 GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/notebooks
+kubeflow-userid: {{KF_USER_ID}}
+
+### Get list of notebooks and PVCs for namespace
+GET {{BASE_URL}}/namespaces/{{KF_NAMESPACE}}/dashboarddata
 kubeflow-userid: {{KF_USER_ID}}
 
 ### Create a new default notebook

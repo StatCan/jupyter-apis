@@ -186,6 +186,26 @@ func main() {
 		},
 	}, s.GetNotebooks)).Methods("GET")
 
+	router.HandleFunc("/api/namespaces/{namespace}/dashboarddata", s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    kubeflowv1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "notebooks",
+				Version:  kubeflowv1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.checkAccess(authorizationv1.SubjectAccessReview{
+		Spec: authorizationv1.SubjectAccessReviewSpec{
+			ResourceAttributes: &authorizationv1.ResourceAttributes{
+				Group:    corev1.SchemeGroupVersion.Group,
+				Verb:     "list",
+				Resource: "persistentvolumeclaims",
+				Version:  corev1.SchemeGroupVersion.Version,
+			},
+		},
+	}, s.GetDashboardData))).Methods("GET")
+
 	router.HandleFunc("/api/namespaces/{namespace}/createdefault", s.checkAccess(authorizationv1.SubjectAccessReview{
 		Spec: authorizationv1.SubjectAccessReviewSpec{
 			ResourceAttributes: &authorizationv1.ResourceAttributes{

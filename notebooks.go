@@ -162,6 +162,12 @@ type notebooksresponse struct {
 	Notebooks []notebookresponse `json:"notebooks"`
 }
 
+type dashboarddataresponse struct {
+	APIResponseBase
+	Notebooks              []notebookresponse `json:"notebooks"`
+	PersistentVolumeClaims []pvcresponse      `json:"pvcs"`
+}
+
 type notebookapiresponse struct {
 	APIResponseBase
 	Notebook notebookresponse `json:"notebook"`
@@ -235,6 +241,21 @@ func (s *server) processGPUs(notebook *kubeflowv1.Notebook) gpuresponse {
 	return response
 }
 
+func (s *server) formatNotebooksResponse(notebooks []*kubeflowv1.Notebook) ([]notebookresponse, error) {
+	output := make([]notebookresponse, 0)
+
+	for _, notebook := range notebooks {
+		nb, err := s.getNotebookData(notebook)
+		if err != nil {
+			return nil, err
+		}
+
+		output = append(output, nb)
+	}
+
+	return output, nil
+}
+
 func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	namespace := vars["namespace"]
@@ -249,22 +270,64 @@ func (s *server) GetNotebooks(w http.ResponseWriter, r *http.Request) {
 
 	sort.Sort(notebooksByName(notebooks))
 
+	notebooksOutput, err := s.formatNotebooksResponse(notebooks)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
 	resp := &notebooksresponse{
 		APIResponseBase: APIResponseBase{
 			Success: true,
 			Status:  http.StatusOK,
 		},
-		Notebooks: make([]notebookresponse, 0),
+		Notebooks: notebooksOutput,
 	}
 
-	for _, notebook := range notebooks {
-		nb, err := s.getNotebookData(notebook)
-		if err != nil {
-			s.error(w, r, err)
-			return
-		}
+	s.respond(w, r, resp)
+}
 
-		resp.Notebooks = append(resp.Notebooks, nb)
+func (s *server) GetDashboardData(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	log.Printf("loading dashboard data for %q", namespace)
+
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	sort.Sort(notebooksByName(notebooks))
+
+	notebooksOutput, err := s.formatNotebooksResponse(notebooks)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	pvcs, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	sort.Sort(persistentVolumeClaimsByName(pvcs))
+
+	pvcsOutput, err := s.formatPvcsResponse(namespace, pvcs, notebooks)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := &dashboarddataresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		Notebooks:              notebooksOutput,
+		PersistentVolumeClaims: pvcsOutput,
 	}
 
 	s.respond(w, r, resp)

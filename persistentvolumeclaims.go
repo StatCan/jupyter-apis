@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	kf_v1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
+	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	"github.com/gorilla/mux"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
@@ -194,7 +194,7 @@ func GetPvcStatus(pvc *corev1.PersistentVolumeClaim, allevents []*corev1.Event) 
 	}
 }
 
-func GetNotebookPvcs(nb *kf_v1.Notebook) []string {
+func GetNotebookPvcs(nb *kubeflowv1.Notebook) []string {
 	pvcs := make([]string, 0)
 	if len(nb.Spec.Template.Spec.Volumes) == 0 {
 		return pvcs
@@ -210,7 +210,7 @@ func GetNotebookPvcs(nb *kf_v1.Notebook) []string {
 }
 
 // Return a list of Notebooks that are using the given PVC.
-func GetNotebooksUsingPvc(pvc string, notebooks []*kf_v1.Notebook) []string {
+func GetNotebooksUsingPvc(pvc string, notebooks []*kubeflowv1.Notebook) []string {
 	mountedNotebooks := make([]string, 0)
 
 	for _, nb := range notebooks {
@@ -257,29 +257,7 @@ func (s *server) getPVCUsageMetrics(ns string) (map[string]map[string]string, er
 	return mapPVCMetrics, nil
 }
 
-// GetPersistentVolumeClaims returns the PVCs in the requested namespace.
-func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	namespace := vars["namespace"]
-
-	log.Printf("loading persistent volume claims for %q", namespace)
-
-	pvcs, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).List(labels.Everything())
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-
-	sort.Sort(persistentVolumeClaimsByName(pvcs))
-
-	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
-	if err != nil {
-		s.error(w, r, err)
-		return
-	}
-
-	sort.Sort(notebooksByName(notebooks))
-
+func (s *server) formatPvcsResponse(namespace string, pvcs []*corev1.PersistentVolumeClaim, notebooks []*kubeflowv1.Notebook) ([]pvcresponse, error) {
 	// TODO: Uncomment when pvcviewer-controller is implemented
 	// //Mix-in the viewer status to the response
 	// viewers, err := s.dynamic.Resource(schema.GroupVersionResource{
@@ -292,19 +270,13 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 	// 	return
 	// }
 
-	resp := pvcsresponse{
-		APIResponseBase: APIResponseBase{
-			Success: true,
-			Status:  http.StatusOK,
-		},
-		PersistentVolumeClaims: make([]pvcresponse, 0),
-	}
-
 	pvcUsageMetrics, err := s.getPVCUsageMetrics(namespace)
 	// Just log the error if it fails to query prometheus, don't error out the entire call
 	if err != nil {
 		log.Printf("failed to get PVC metrics for %s: %v", namespace, err)
 	}
+
+	output := make([]pvcresponse, 0)
 
 	for _, pvc := range pvcs {
 		size := pvc.Status.Capacity.Storage()
@@ -322,8 +294,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 
 		allevents, err := s.listers.events.Events(pvc.Namespace).List(labels.Everything())
 		if err != nil {
-			s.error(w, r, err)
-			return
+			return nil, err
 		}
 
 		status := GetPvcStatus(pvc, allevents)
@@ -370,7 +341,7 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 		// 	}
 		// }
 
-		resp.PersistentVolumeClaims = append(resp.PersistentVolumeClaims, pvcresponse{
+		output = append(output, pvcresponse{
 			Name:          pvc.Name,
 			Namespace:     pvc.Namespace,
 			Status:        status,
@@ -389,6 +360,46 @@ func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Reques
 			// 	Url:    viewerUrl,
 			// },
 		})
+	}
+
+	return output, nil
+}
+
+// GetPersistentVolumeClaims returns the PVCs in the requested namespace.
+func (s *server) GetPersistentVolumeClaims(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	namespace := vars["namespace"]
+
+	log.Printf("loading persistent volume claims for %q", namespace)
+
+	pvcs, err := s.listers.persistentVolumeClaims.PersistentVolumeClaims(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	sort.Sort(persistentVolumeClaimsByName(pvcs))
+
+	notebooks, err := s.listers.notebooks.Notebooks(namespace).List(labels.Everything())
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	sort.Sort(notebooksByName(notebooks))
+
+	pvcsOutput, err := s.formatPvcsResponse(namespace, pvcs, notebooks)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	resp := pvcsresponse{
+		APIResponseBase: APIResponseBase{
+			Success: true,
+			Status:  http.StatusOK,
+		},
+		PersistentVolumeClaims: pvcsOutput,
 	}
 
 	s.respond(w, r, &resp)

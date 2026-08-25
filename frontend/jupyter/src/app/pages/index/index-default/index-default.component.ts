@@ -76,6 +76,8 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
   kubecostLoading = false;
   notebookInfoLoaded = false;
 
+  fullVolumes: Map<string, boolean> = new Map();
+
   private newNotebookButton = new ToolbarButton({
     text: $localize`New Notebook`,
     tooltip: $localize`Add a new notebook`,
@@ -373,6 +375,11 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
       url: `/notebook/details/${notebook.namespace}/${notebook.name}`,
     };
 
+    // Check if this notebook has full volumes
+    if (this.fullVolumes.get(notebook.name)) {
+      notebook.hasFullVolumes = true;
+    }
+
     // Status for auto-shutdown
     // Only a notebook that is active aka has a "last_activity"
     // If notebook not ready then it needs to be disabled
@@ -481,10 +488,22 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
     //AAW: overwrite status field with our custom values
     pvcsCopy.forEach(element => {
       if (element.notebooks.length) {
-        element.usedBy = element.notebooks[0];
+        let usedByNotebookName = element.notebooks[0];
+        element.usedBy = usedByNotebookName;
         element.status = {} as Status;
         element.status.message = $localize`Attached`;
         element.status.phase = STATUS_TYPE.MOUNTED;
+
+        // Check if a notebook needs to be alerted of a full volume
+        if(usedByNotebookName !== "" && Math.ceil(parseFloat(element.usage)) > 95) {
+          this.fullVolumes.set(usedByNotebookName, true);
+
+          // Update the notebook object
+          let usedByNotebook = this.processedData.find(nb=>nb.name === usedByNotebookName);
+          if (usedByNotebook){
+            this.updateNotebookFields(usedByNotebook);
+          }
+        }
       } else {
         element.status = {} as Status;
         element.status.message = $localize`Unattached`;

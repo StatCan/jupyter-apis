@@ -22,3 +22,8 @@ mat-form-field {
     height: 100%;
   }
 }
+
+// ZONE: To enable multiline tooltips
+.multiline-tooltip  {
+  white-space: pre-line;
+}

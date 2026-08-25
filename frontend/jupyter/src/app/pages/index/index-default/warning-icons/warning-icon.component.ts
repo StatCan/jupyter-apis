@@ -16,17 +16,18 @@ export class WarningComponent implements TableColumnComponent {
   }
 
   public showWarnings(): boolean {
-    return this.getWarningsText() !== '' ? true : false;
+    return this.row?.isOOMKilled || this.row?.hasFullVolumes ? true : false;
   }
 
   public getWarningsText() {
-    var thetext = '';
+    var text = $localize`Potential issues with this notebook server:\n`;
     if (this.row?.isOOMKilled) {
-      thetext += '* ' + $localize`Error Out Of Memory Killed.` + '\n';
+      text += $localize`* Last restarted because of an Out-Of-Memory error.\n`;
     }
-    if (this.row?.fullVolumes && this.row.fullVolumes.length > 0) {
-      thetext += '* ' + $localize`One or more volumes is full.` + '\n';
+    
+    if (this.row?.hasFullVolumes) {
+      text += $localize`* One or more attached volumes are full.\n`;
     }
-    return thetext;
+    return text;
   }
 }

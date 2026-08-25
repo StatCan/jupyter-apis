@@ -1,7 +1,8 @@
 <mat-icon
   *ngIf="showWarnings()"
-  [matTooltip]="getWarningsText()"
   class="warning-icon"
+  [matTooltip]="getWarningsText()"
+  matTooltipClass="multiline-tooltip"
 >
   sim_card_alert
 </mat-icon>

@@ -55,6 +55,7 @@ export interface NotebookProcessedObject extends NotebookResponseObject {
     status: string;
     text: string;
   }[];
+  hasFullVolumes?: boolean;
 }
 
 export interface NotebookFormObject {

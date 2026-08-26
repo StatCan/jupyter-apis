@@ -24,7 +24,7 @@ export class WarningComponent implements TableColumnComponent {
     if (this.row?.isOOMKilled) {
       text += $localize`* Last restarted because of an Out-Of-Memory error.\n`;
     }
-    
+
     if (this.row?.hasFullVolumes) {
       text += $localize`* One or more attached volumes are full.\n`;
     }

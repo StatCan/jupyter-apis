@@ -495,12 +495,17 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
         element.status.phase = STATUS_TYPE.MOUNTED;
 
         // Check if a notebook needs to be alerted of a full volume
-        if(usedByNotebookName !== "" && Math.ceil(parseFloat(element.usage)) > 95) {
+        if (
+          usedByNotebookName !== '' &&
+          Math.ceil(parseFloat(element.usage)) > 95
+        ) {
           this.fullVolumes.set(usedByNotebookName, true);
 
           // Update the notebook object
-          let usedByNotebook = this.processedData.find(nb=>nb.name === usedByNotebookName);
-          if (usedByNotebook){
+          let usedByNotebook = this.processedData.find(
+            nb => nb.name === usedByNotebookName,
+          );
+          if (usedByNotebook) {
             this.updateNotebookFields(usedByNotebook);
           }
         }

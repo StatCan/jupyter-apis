@@ -36,7 +36,7 @@ describe('Main tables', () => {
     });
 
     // We use function () in order to be able to access aliases via this
-    it('renders every Notebook name into the table', () => {
+    it('renders every Notebook name into the table', function () {
       let i = 0;
       const notebooks = this.notebooksRequest.notebooks;
       // Table is sorted by Name in ascending order by default
@@ -49,7 +49,7 @@ describe('Main tables', () => {
         });
     });
 
-    it('checks Status icon for all notebooks', () => {
+    it('checks Status icon for all notebooks', function () {
       let i = 0;
       const notebooks = this.notebooksRequest.notebooks;
       cy.get('[data-cy-table-id="notebooks-table"]')
@@ -81,7 +81,7 @@ describe('Main tables', () => {
         });
     });
 
-    it.only('should display icon for default notebook', () => {
+    it('should display icon for default notebook', () => {
       cy.get('[data-cy-table-id="notebooks-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('test-pro-b')
@@ -92,26 +92,92 @@ describe('Main tables', () => {
         .should('exist');
     });
     
-    it('should have icon for oom', () => {
-      cy.get('[data-cy-table-id="notebooks-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('a-dog-breed-katib')
-        .parent()
-        .parent()
-        .find('app-warning-icon')
-        .find('mat-icon')
-        .should('exist');
-    });
-    
-    it('should not have icon for oom', () => {
-      cy.get('[data-cy-table-id="notebooks-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('a-test-01')
-        .parent()
-        .parent()
-        .find('app-warning-icon')
-        .find('mat-icon')
-        .should('not.exist');
+    describe('warning icon', ()=>{
+      it('should not have a warning icon', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-test-01')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .should('not.exist');
+      });
+
+      it('should have a warning for OOMKilled', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-dog-breed-katib')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .should('exist');
+
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-dog-breed-katib')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .invoke('attr', 'aria-describedby')
+          .then(tooltip=>{
+            // Couldn't get the test to open the tooltip by hovering, so using the next best thing
+            cy.get(`#${tooltip}`)
+              .should('have.text', 'Potential issues with this notebook server:\n* Last restarted because of an Out-Of-Memory error.');
+          });
+      });
+      
+      it('should have a warning for full volume', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('b-culled-notebook')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .should('exist');
+
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('b-culled-notebook')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .invoke('attr', 'aria-describedby')
+          .then(tooltip=>{
+            // Couldn't get the test to open the tooltip by hovering, so using the next best thing
+            cy.get(`#${tooltip}`)
+              .should('have.text', 'Potential issues with this notebook server:\n* One or more attached volumes are full.');
+          });
+      });
+
+      it('should have a warning for both OOMKilled and full volume', () => {
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('test-pro-b')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .should('exist');
+
+        cy.get('[data-cy-table-id="notebooks-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('test-pro-b')
+          .parent()
+          .parent()
+          .find('app-warning-icon')
+          .find('mat-icon')
+          .invoke('attr', 'aria-describedby')
+          .then(tooltip=>{
+            // Couldn't get the test to open the tooltip by hovering, so using the next best thing
+            cy.get(`#${tooltip}`)
+              .should('have.text', 'Potential issues with this notebook server:\n* Last restarted because of an Out-Of-Memory error.\n* One or more attached volumes are full.');
+          });
+      });
     });
     
     it('should start a notebook', () => {
@@ -645,7 +711,7 @@ describe('Main tables', () => {
       );
     });
 
-    describe('should handle volume pending resize', ()=>{
+    describe('volume pending resize', ()=>{
       it('should display pending resize icon', ()=>{
         cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
@@ -884,6 +950,33 @@ describe('Main tables', () => {
         .its('response.statusCode')
         .should('eq', 200);
       cy.get('mat-dialog-container').should('not.exist');
+    });
+
+    it('should display usage warning icon when above 95% full', () => {
+      cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .scrollIntoView();
+        
+        // should display icon on volumes with pending resize
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('test-notebook-volume')
+        .parent()
+        .parent()
+        .find('app-usage')
+        .find('mat-icon')
+        .should('exist').and('have.class', 'warning-icon');
+
+        // should not display icon when volume has no pending resize
+        cy.get('[data-cy-table-id="volumes-table"]')
+        .find(`[data-cy-resource-table-row="Name"]`)
+        .contains('titanic-ml-47xh5-data-m57vq-2md82')
+        .parent()
+        .parent()
+        .find('app-usage')
+        .find('mat-icon')
+        .should('not.exist');
     });
   });
 

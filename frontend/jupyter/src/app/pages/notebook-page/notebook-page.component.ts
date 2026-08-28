@@ -5,6 +5,7 @@ import {
   ToolbarButton,
   PollerService,
   Status,
+  DIALOG_RESP,
 } from 'kubeflow';
 import { JWABackendService } from 'src/app/services/backend.service';
 import { Subscription } from 'rxjs';
@@ -224,7 +225,11 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
   private deleteNotebook() {
     this.actions
       .deleteNotebook(this.namespace, this.notebookName)
-      .subscribe(_ => {
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
+          return;
+        }
+
         this.router.navigate(['']);
       });
   }
@@ -242,7 +247,11 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
   private startNotebook() {
     this.actions
       .startNotebook(this.namespace, this.notebookName)
-      .subscribe(_ => {
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
+          return;
+        }
+
         this.poll(this.namespace, this.notebookName);
       });
   }
@@ -250,7 +259,11 @@ export class NotebookPageComponent implements OnInit, OnDestroy {
   private stopNotebook() {
     this.actions
       .stopNotebook(this.namespace, this.notebookName)
-      .subscribe(_ => {
+      .subscribe(result => {
+        if (result !== DIALOG_RESP.ACCEPT) {
+          return;
+        }
+
         this.poll(this.namespace, this.notebookName);
       });
   }

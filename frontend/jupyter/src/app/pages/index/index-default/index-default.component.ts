@@ -754,19 +754,19 @@ export class IndexDefaultComponent implements OnInit, OnDestroy {
           ref.componentInstance.applying$.next(false);
         },
       });
+    });
 
-      // DELETE request has succeeded
-      ref.afterClosed().subscribe(res => {
-        delSub.unsubscribe();
-        if (res !== DIALOG_RESP.ACCEPT) {
-          return;
-        }
+    // DELETE request has succeeded
+    ref.afterClosed().subscribe(res => {
+      delSub.unsubscribe();
+      if (res !== DIALOG_RESP.ACCEPT) {
+        return;
+      }
 
-        pvc.viewer.status = STATUS_TYPE.TERMINATING;
-        pvc.closePVCViewerAction = STATUS_TYPE.TERMINATING;
+      pvc.viewer.status = STATUS_TYPE.TERMINATING;
+      pvc.closePVCViewerAction = STATUS_TYPE.TERMINATING;
 
-        this.pvcsWaitingViewer.delete(pvc.name);
-      });
+      this.pvcsWaitingViewer.delete(pvc.name);
     });
   }
 

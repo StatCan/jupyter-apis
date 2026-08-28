@@ -62,13 +62,13 @@ export class ActionsService {
             subscriber.next(`fail`);
           },
         });
+      });
 
-        // DELETE request has succeeded
-        ref.afterClosed().subscribe(result => {
-          delSub.unsubscribe();
-          subscriber.next(result);
-          subscriber.complete();
-        });
+      // DELETE request has succeeded
+      ref.afterClosed().subscribe(result => {
+        delSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
       });
     });
   }
@@ -124,13 +124,13 @@ export class ActionsService {
             subscriber.next(`fail`);
           },
         });
+      });
 
-        // request has succeeded
-        ref.afterClosed().subscribe(result => {
-          stopSub.unsubscribe();
-          subscriber.next(result);
-          subscriber.complete();
-        });
+      // request has succeeded
+      ref.afterClosed().subscribe(result => {
+        stopSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
       });
     });
   }
@@ -167,13 +167,13 @@ export class ActionsService {
             subscriber.next('fail');
           },
         });
+      });
 
-        // DELETE request has succeeded
-        ref.afterClosed().subscribe(result => {
-          delSub.unsubscribe();
-          subscriber.next(result);
-          subscriber.complete();
-        });
+      // DELETE request has succeeded
+      ref.afterClosed().subscribe(result => {
+        delSub.unsubscribe();
+        subscriber.next(result);
+        subscriber.complete();
       });
     });
   }

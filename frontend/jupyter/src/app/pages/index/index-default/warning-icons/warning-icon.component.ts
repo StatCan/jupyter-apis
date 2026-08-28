@@ -8,26 +8,26 @@ import { TableColumnComponent } from 'kubeflow/lib/resource-table/component-valu
 })
 export class WarningComponent implements TableColumnComponent {
   row: any;
-  textToolTip = '';
 
   constructor() {}
 
   set element(elem: any) {
     this.row = elem;
-    if (this.showWarnings()) {
-      this.textToolTip = this.getWarningsText();
-    }
   }
 
   public showWarnings(): boolean {
-    return this.row?.isOOMKilled ? true : false;
+    return this.row?.isOOMKilled || this.row?.hasFullVolumes ? true : false;
   }
 
   public getWarningsText() {
-    var thetext = '';
+    var text = $localize`Potential issues with this notebook server:\n`;
     if (this.row?.isOOMKilled) {
-      thetext += '* ' + $localize`Error Out Of Memory Killed.` + '\n';
+      text += $localize`* Last restarted because of an Out-Of-Memory error.\n`;
     }
-    return thetext;
+
+    if (this.row?.hasFullVolumes) {
+      text += $localize`* One or more attached volumes are full.\n`;
+    }
+    return text;
   }
 }

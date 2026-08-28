@@ -2050,7 +2050,7 @@
         <target>Nouveau bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7534621219661788184" datatype="html">
@@ -2058,7 +2058,7 @@
         <target>Ajouter un nouveau bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1384916903989385807" datatype="html">
@@ -2066,7 +2066,7 @@
         <target>Bloc-notes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6537363496852226276" datatype="html">
@@ -2074,7 +2074,7 @@
         <target>Mise-à-jour de la dernière activité pour ajouter <x id="PH" equiv-text="res.hours"/> heure(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">288</context>
+          <context context-type="linenumber">290</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4810632459880648919" datatype="html">
@@ -2082,7 +2082,7 @@
         <target>Délai de l'arrêt automatique pour <x id="PH" equiv-text="name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">303</context>
+          <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5729881851916394567" datatype="html">
@@ -2090,7 +2090,7 @@
         <target>Ceci permettra de maintenir le bloc-notes actif pendant le nombre d’heures spécifié</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">304</context>
+          <context context-type="linenumber">306</context>
         </context-group>
       </trans-unit>
       <trans-unit id="935187492052582731" datatype="html">
@@ -2098,7 +2098,7 @@
         <target>Soumettre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">307</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -2110,7 +2110,7 @@
         <target>Annuler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">309</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/config.ts</context>
@@ -2122,7 +2122,7 @@
         <target>Préparation de l'arrêt du serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">333</context>
+          <context context-type="linenumber">335</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5387813344448714728" datatype="html">
@@ -2130,7 +2130,7 @@
         <target>Serveur bloc-notes en supression.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">342</context>
+          <context context-type="linenumber">344</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5423034101668291795" datatype="html">
@@ -2138,7 +2138,7 @@
         <target>Aucun pod n'est actuellement en cours d'exécution pour ce serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">344</context>
+          <context context-type="linenumber">346</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3507421077462148171" datatype="html">
@@ -2146,7 +2146,7 @@
         <target>Serveur bloc-notes en arrêt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">346</context>
+          <context context-type="linenumber">348</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2956098160626271284" datatype="html">
@@ -2154,7 +2154,7 @@
         <target>En exécution</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">348</context>
+          <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7231778731753154138" datatype="html">
@@ -2162,7 +2162,7 @@
         <target>En attente du StatefulSet pour créer le Pod sous-jacent.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">352</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1171866674381277416" datatype="html">
@@ -2170,7 +2170,7 @@
         <target>Aucune information n'a été trouvée sur l'état de ce serveur bloc-notes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">352</context>
+          <context context-type="linenumber">354</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3646507477007895610" datatype="html">
@@ -2178,11 +2178,11 @@
         <target>Une erreur s'est produite. Cliquez sur le nom du serveur bloc-notes pour plus d'informations.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">354</context>
+          <context context-type="linenumber">356</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1938866431693606922" datatype="html">
@@ -2190,7 +2190,7 @@
         <target>Planification du Pod.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">358</context>
+          <context context-type="linenumber">360</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2776617638046368313" datatype="html">
@@ -2198,11 +2198,11 @@
         <target>Voir les détails</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">388</context>
+          <context context-type="linenumber">395</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">501</context>
+          <context context-type="linenumber">525</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428" datatype="html">
@@ -2210,7 +2210,7 @@
         <target>Modifier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">394</context>
+          <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
@@ -2218,7 +2218,7 @@
         <target>Supprimer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">400</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4319570438284829756" datatype="html">
@@ -2226,7 +2226,7 @@
         <target>Retarder l'arrêt automatique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">406</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6425333040033977991" datatype="html">
@@ -2234,7 +2234,7 @@
         <target>Attaché</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">486</context>
+          <context context-type="linenumber">494</context>
         </context-group>
       </trans-unit>
       <trans-unit id="810251571194206100" datatype="html">
@@ -2242,7 +2242,7 @@
         <target>Libre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">490</context>
+          <context context-type="linenumber">514</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4510375834949359066" datatype="html">
@@ -2250,7 +2250,7 @@
         <target>Augmenter la taille</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">511</context>
+          <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5156704408648015254" datatype="html">
@@ -2258,7 +2258,7 @@
         <target>Le volume a été soumit avec succès</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/index-default.component.ts</context>
-          <context context-type="linenumber">671</context>
+          <context context-type="linenumber">695</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e2936e947eed8cb9987b1111220f29597a4397b" datatype="html">
@@ -2301,9 +2301,31 @@
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4925293718881554839" datatype="html">
-        <source>Error Out Of Memory Killed.</source>
-        <target>Erreur: serveur bloc-notes arrêté; mémoire insuffisante</target>
+      <trans-unit id="1675015350311358908" datatype="html">
+        <source>Potential issues with this notebook server:
+</source>
+        <target>Problèmes potentiels avec ce serveur bloc-notes :
+</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/warning-icons/warning-icon.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1991651699656230535" datatype="html">
+        <source>* Last restarted because of an Out-Of-Memory error.
+</source>
+        <target>* Dernier redémarrage dû à une erreur de mémoire insuffisante.
+</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/index/index-default/warning-icons/warning-icon.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3487397955881268262" datatype="html">
+        <source>* One or more attached volumes are full.
+</source>
+        <target>* Un ou plusieurs volumes attachés sont remplis.
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/index/index-default/warning-icons/warning-icon.component.ts</context>
           <context context-type="linenumber">29</context>

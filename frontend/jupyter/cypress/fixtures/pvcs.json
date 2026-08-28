@@ -137,22 +137,22 @@
         "eventMessage": "waiting for first consumer to be created before binding"
       },
       "age": "2026-02-06T14:57:17Z",
-      "capacity": "0",
+      "capacity": "8Gi",
       "pendingResize": "0",
       "modes": [
         "ReadWriteOnce"
       ],
       "class": "default",
       "notebooks": [
-        "test-notebook"
+        "test-pro-b"
       ],
       "labels": null,
       "viewer": {
         "status": "",
         "url": ""
       },
-      "usage": "",
-      "usedBytes": ""
+      "usage": "96",
+      "usedBytes": "1234560"
     },
     {
       "name": "test-notebook-volume",
@@ -165,22 +165,22 @@
         "eventMessage": "waiting for first consumer to be created before binding"
       },
       "age": "2026-02-06T14:57:17Z",
-      "capacity": "0",
+      "capacity": "4Gi",
       "pendingResize": "0",
       "modes": [
         "ReadWriteOnce"
       ],
       "class": "default",
       "notebooks": [
-        "test-notebook"
+        "b-culled-notebook"
       ],
       "labels": null,
       "viewer": {
         "status": "",
         "url": ""
       },
-      "usage": "",
-      "usedBytes": ""
+      "usage": "97.567",
+      "usedBytes": "743628800"
     },
     {
       "name":"test-pro-b-volume",

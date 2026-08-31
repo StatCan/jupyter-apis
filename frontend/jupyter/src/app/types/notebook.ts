@@ -91,6 +91,7 @@ export interface NotebookEditFormObject {
   memoryLimit: number | string;
   workspace: any;
   datavols: any[];
+  smh: boolean;
 }
 
 export interface NotebookRawObject {

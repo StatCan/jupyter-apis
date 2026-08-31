@@ -124,12 +124,13 @@ type newnotebookrequest struct {
 }
 
 type updatenotebookrequest struct {
-	CPU         resource.Quantity `json:"cpu"`
-	CPULimit    resource.Quantity `json:"cpuLimit"`
-	Memory      resource.Quantity `json:"memory"`
-	MemoryLimit resource.Quantity `json:"memoryLimit"`
-	Workspace   volrequest        `json:"workspace"`
-	DataVolumes []volrequest      `json:"datavols"`
+	CPU                resource.Quantity `json:"cpu"`
+	CPULimit           resource.Quantity `json:"cpuLimit"`
+	Memory             resource.Quantity `json:"memory"`
+	MemoryLimit        resource.Quantity `json:"memoryLimit"`
+	Workspace          volrequest        `json:"workspace"`
+	DataVolumes        []volrequest      `json:"datavols"`
+	EnableSharedMemory bool              `json:"shm"`
 }
 
 type gpuresponse struct {
@@ -841,19 +842,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Add shared memory, if enabled
 	if (s.Config.SpawnerFormDefaults.Shm.ReadOnly && s.Config.SpawnerFormDefaults.Shm.Value) || (!s.Config.SpawnerFormDefaults.Shm.ReadOnly && req.EnableSharedMemory) {
-		notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
-			Name: SharedMemoryVolumeName,
-			VolumeSource: corev1.VolumeSource{
-				EmptyDir: &corev1.EmptyDirVolumeSource{
-					Medium: corev1.StorageMediumMemory,
-				},
-			},
-		})
-
-		notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
-			Name:      SharedMemoryVolumeName,
-			MountPath: SharedMemoryVolumePath,
-		})
+		addSharedMemory(&notebook)
 	}
 
 	// Add GPU
@@ -1073,6 +1062,11 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 			s.error(w, r, err)
 			return
 		}
+	}
+
+	// Add shared memory
+	if req.EnableSharedMemory {
+		addSharedMemory(notebook)
 	}
 
 	_, err = s.clientsets.kubeflow.KubeflowV1().Notebooks(namespaceName).Update(r.Context(), notebook, metav1.UpdateOptions{})
@@ -1532,4 +1526,20 @@ func validateCullingDelay(delayHours int) error {
 	}
 
 	return nil
+}
+
+func addSharedMemory(notebook *kubeflowv1.Notebook) {
+	notebook.Spec.Template.Spec.Volumes = append(notebook.Spec.Template.Spec.Volumes, corev1.Volume{
+		Name: SharedMemoryVolumeName,
+		VolumeSource: corev1.VolumeSource{
+			EmptyDir: &corev1.EmptyDirVolumeSource{
+				Medium: corev1.StorageMediumMemory,
+			},
+		},
+	})
+
+	notebook.Spec.Template.Spec.Containers[0].VolumeMounts = append(notebook.Spec.Template.Spec.Containers[0].VolumeMounts, corev1.VolumeMount{
+		Name:      SharedMemoryVolumeName,
+		MountPath: SharedMemoryVolumePath,
+	})
 }

@@ -1,7 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Config, NotebookRawObject } from 'src/app/types';
 import {
-  calculateLimits,
   initCpuFormControls,
   initDataVolumeControl,
   initMemoryFormControls,
@@ -20,6 +19,7 @@ export function getEditFormDefaults(): FormGroup {
       mount: ['/home/jovyan', [Validators.required]],
     }),
     datavols: fb.array([]),
+    shm: [false, []],
   });
 }
 
@@ -31,6 +31,14 @@ export function initEditFormControls(formCtrl: FormGroup, config: Config) {
   initWorkspaceVolumeControl(formCtrl, config);
 
   initDataVolumeControl(formCtrl, config);
+
+  // Shared memory
+  if (config.shm) {
+    formCtrl.controls.shm.setValue(config.shm.value);
+    if (config.shm.readOnly) {
+      formCtrl.controls.shm.disable();
+    }
+  }
 }
 
 export function setConfigForNotebook(
@@ -69,6 +77,14 @@ export function setConfigForNotebook(
               readOnly: false,
               claimName: volMount.name,
             },
+          };
+        } else if (
+          volMount.name === 'dshm' &&
+          volMount.mountPath === '/dev/shm'
+        ) {
+          // Set shared memory toggle value
+          config.shm = {
+            value: true,
           };
         } else {
           config.dataVolumes.value.push({

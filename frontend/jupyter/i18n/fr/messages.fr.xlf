@@ -720,7 +720,7 @@
         <target> SOUMETTRE </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.html</context>
-          <context context-type="linenumber">78,80</context>
+          <context context-type="linenumber">82,84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="31675d6cff734605d5626261d054d8d85913ad12" datatype="html">
@@ -728,7 +728,7 @@
         <target> ANNULER </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.html</context>
-          <context context-type="linenumber">90,92</context>
+          <context context-type="linenumber">94,96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="494510534204827562" datatype="html">
@@ -863,12 +863,20 @@
           <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6076868301983919147" datatype="html">
+        <source>Shared memory</source>
+        <target>Mémoire partagée</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
+          <context context-type="linenumber">241</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1899549432163903545" datatype="html">
         <source>Edit request was sent.</source>
         <target>La demande de modification a été envoyée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6926883898539175208" datatype="html">
@@ -876,7 +884,7 @@
         <target>Erreur <x id="PH" equiv-text="err"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">284</context>
+          <context context-type="linenumber">287</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/actions.service.ts</context>
@@ -904,7 +912,7 @@
         <target>Modification du bloc-notes...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">304</context>
+          <context context-type="linenumber">307</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6450907786338815094" datatype="html">
@@ -912,7 +920,7 @@
         <target>Bloc-notes modifié avec succès.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-edit/form-edit.component.ts</context>
-          <context context-type="linenumber">335</context>
+          <context context-type="linenumber">338</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac184ad5119488375c501e04e46b79dbb6079cc7" datatype="html">
@@ -960,7 +968,7 @@
         <target> Activer la mémoire partagée </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-advanced-options/form-advanced-options.component.html</context>
-          <context context-type="linenumber">19,21</context>
+          <context context-type="linenumber">24,26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0a31a4739749d022f9c0265ef0db1779daf3bad" datatype="html">

@@ -28,6 +28,12 @@
               "persistentVolumeClaim":{
                 "claimName":"test-notebook-data"
               }
+            },
+            {
+              "emptyDir": {
+                "medium": "Memory"
+              },
+              "name": "dshm"
             }
           ],
           "containers":[
@@ -58,6 +64,10 @@
                 {
                   "name":"test-notebook-data",
                   "mountPath":"/home/jovyan/test-notebook-data"
+                },
+                {
+                  "name": "dshm",
+                  "mountPath": "/dev/shm"
                 }
               ],
               "imagePullPolicy":"Always"

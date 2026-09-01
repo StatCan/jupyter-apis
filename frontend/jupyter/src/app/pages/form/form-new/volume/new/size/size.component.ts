@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-volume-size',
@@ -11,7 +10,7 @@ export class VolumeSizeComponent implements OnInit {
   private ctrl: FormControl;
   public sizeNum = new FormControl(1, Validators.required);
 
-  public sizes = ['4', '8', '16', '32', '64', '128', '256', '512']; // Zone change, our list of valid sizes
+  public sizes: number[] = [4, 8, 16, 32, 64, 128, 256, 512]; // Zone change, our list of valid sizes
   @Input()
   get sizeCtrl(): FormControl {
     return this.ctrl;

@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -17,7 +18,6 @@ import (
 
 	kubeflowv1 "github.com/StatCan/kubeflow-apis/apis/kubeflow/v1"
 	"github.com/gorilla/mux"
-	"golang.org/x/exp/slices"
 	"gopkg.in/inf.v0"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -408,7 +408,7 @@ func (s *server) handleVolume(ctx context.Context, req volrequest, notebook *kub
 			},
 			Spec: corev1.PersistentVolumeClaimSpec{
 				AccessModes: req.NewPvc.NewPvcSpec.AccessModes,
-				Resources: corev1.ResourceRequirements{
+				Resources: corev1.VolumeResourceRequirements{
 					Requests: corev1.ResourceList{
 						corev1.ResourceStorage: req.NewPvc.NewPvcSpec.Resources.Requests.Storage,
 					},

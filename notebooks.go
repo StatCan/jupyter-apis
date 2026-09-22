@@ -38,6 +38,11 @@ const SharedMemoryVolumePath string = "/dev/shm"
 // EnvKfLanguage String.
 const EnvKfLanguage string = "KF_LANG"
 
+// Artifactory Creds constants
+const artifactoryUsername string = "Username"
+const artifactoryPassword string = "Token"
+const artifactoryCreds string = "artifactory-creds"
+
 // StoppedAnnotation is the annotation name present on stopped resources.
 const StoppedAnnotation string = "kubeflow-resource-stopped"
 
@@ -907,6 +912,31 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
+	// Add artifactory credentials username
+	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+			Name:  "serviceaccount",
+			ValueFrom: &corev1.EnvVarSource{
+				SecretKeyRef: &corev1.SecretKeySelector{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: artifactoryCreds,
+						},
+						Key: artifactoryUsername,
+					},
+			}
+		})
+	
+	// Add artifactory credentials password
+	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
+			Name:  "serviceaccounttoken",
+			ValueFrom: &corev1.EnvVarSource{
+				SecretKeyRef: &corev1.SecretKeySelector{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: artifactoryCreds,
+						},
+						Key: artifactoryPassword,
+					},
+			}
+		})	
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {
 		notebook.Spec.Template.Spec.Containers[0].ImagePullPolicy = corev1.PullPolicy(req.ImagePullPolicy)

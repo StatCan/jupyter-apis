@@ -921,8 +921,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 						Name: artifactoryCreds,
 						},
 						Key: artifactoryUsername,
-					}
-			}
+					},
+			},
 		})
 	
 	// Add artifactory credentials password
@@ -934,8 +934,8 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 						Name: artifactoryCreds,
 						},
 						Key: artifactoryPassword,
-					}
-			}
+					},
+			},
 		})	
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {

@@ -921,7 +921,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 						Name: artifactoryCreds,
 						},
 						Key: artifactoryUsername,
-					},
+					}
 			}
 		})
 	
@@ -934,7 +934,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 						Name: artifactoryCreds,
 						},
 						Key: artifactoryPassword,
-					},
+					}
 			}
 		})	
 	// Add imagePullPolicy

@@ -914,7 +914,7 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Add artifactory credentials username
 	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-			Name:  "serviceaccount",
+			Name:  "serviceaccountname",
 			ValueFrom: &corev1.EnvVarSource{
 				SecretKeyRef: &corev1.SecretKeySelector{
 					LocalObjectReference: corev1.LocalObjectReference{

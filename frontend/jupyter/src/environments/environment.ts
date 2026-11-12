@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:5000',
-  namespace: 'kubeflow-user', // change this to your own namespace
+  namespace: 'mathis-marcotte', // change this to your own namespace
   resource: 'notebooks',
   ui: 'default',
   jupyterlabLogo: 'assets/logos/jupyterlab-logo.svg',

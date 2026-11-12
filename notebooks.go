@@ -338,7 +338,7 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	}
 
 	cpulimit := resource.Zero.AsDec()
-	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
+	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
 	}
 
@@ -914,29 +914,29 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Add artifactory credentials username
 	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-			Name:  "serviceaccountname",
-			ValueFrom: &corev1.EnvVarSource{
-				SecretKeyRef: &corev1.SecretKeySelector{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: artifactoryCreds,
-						},
-						Key: artifactoryUsername,
-					},
+		Name: "serviceaccountname",
+		ValueFrom: &corev1.EnvVarSource{
+			SecretKeyRef: &corev1.SecretKeySelector{
+				LocalObjectReference: corev1.LocalObjectReference{
+					Name: artifactoryCreds,
+				},
+				Key: artifactoryUsername,
 			},
-		})
-	
+		},
+	})
+
 	// Add artifactory credentials password
 	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-			Name:  "serviceaccounttoken",
-			ValueFrom: &corev1.EnvVarSource{
-				SecretKeyRef: &corev1.SecretKeySelector{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: artifactoryCreds,
-						},
-						Key: artifactoryPassword,
-					},
+		Name: "serviceaccounttoken",
+		ValueFrom: &corev1.EnvVarSource{
+			SecretKeyRef: &corev1.SecretKeySelector{
+				LocalObjectReference: corev1.LocalObjectReference{
+					Name: artifactoryCreds,
+				},
+				Key: artifactoryPassword,
 			},
-		})	
+		},
+	})
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {
 		notebook.Spec.Template.Spec.Containers[0].ImagePullPolicy = corev1.PullPolicy(req.ImagePullPolicy)

@@ -337,10 +337,10 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		volumes = append(volumes, vol.Name)
 	}
 
+	// Zone: We want to display the CPU limits for notebooks since we are silently modifing the requested CPU values
 	cpulimit := resource.Zero.AsDec()
 	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
-		log.Printf("test %s, %+v", notebook.Name, req.MilliValue())
 	}
 
 	//get the data
@@ -1587,6 +1587,7 @@ func addSharedMemory(notebook *kubeflowv1.Notebook) {
 	})
 }
 
+// Applies the CPU request modifier parameter to the given cpu value.
 func (s *server) applyCpuModifier(cpu resource.Quantity) (*resource.Quantity, error) {
 	requestModifier, err := strconv.ParseFloat(s.Config.SpawnerFormDefaults.CPU.RequestModifier, 32)
 	if err != nil {
@@ -1598,9 +1599,10 @@ func (s *server) applyCpuModifier(cpu resource.Quantity) (*resource.Quantity, er
 	}
 
 	modifiedCpuValue := int64(float64(cpu.MilliValue()) * requestModifier)
-	log.Printf("testmodvalue %+v", modifiedCpuValue)
+
 	var val resource.Quantity
 	if cpu.Cmp(defaultCpuValue) < 0 {
+		// if the given value is already smaller than our default, avoid applying the modifier
 		val = cpu
 	} else if modifiedCpuValue < defaultCpuValue.MilliValue() {
 		// return the default value if the modified result would be smaller

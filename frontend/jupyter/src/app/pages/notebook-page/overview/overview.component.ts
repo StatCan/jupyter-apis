@@ -174,10 +174,12 @@ export class OverviewComponent implements OnDestroy {
       if (cn.name !== notebook.metadata.name) {
         continue;
       }
-      if (!cn.resources.requests) {
+      // Zone: Since we are silently reducing the CPU requests for notebooks,
+      // we are going to display the CPU limits for the notebook overview
+      if (!cn.resources?.limits) {
         return null;
       }
-      return cn.resources.requests?.cpu;
+      return cn.resources.limits?.cpu;
     }
   }
 

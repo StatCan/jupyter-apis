@@ -8,7 +8,7 @@ import (
 
 type SpawnerFormDefaults struct {
 	Image            Image           `yaml:"image" json:"image"`
-	ImageSas  		 ImageGroup      `yaml:"imageSas" json:"imageSas"`
+	ImageSas         ImageGroup      `yaml:"imageSas" json:"imageSas"`
 	AllowCustomImage bool            `yaml:"allowCustomImage" json:"allowCustomImage"`
 	ImagePullPolicy  ImagePullPolicy `yaml:"imagePullPolicy" json:"imagePullPolicy"`
 	CPU              CPU             `yaml:"cpu" json:"cpu"`
@@ -42,11 +42,12 @@ type LabelSelectorMatchExpression struct {
 }
 
 type CPU struct {
-	Value       string `yaml:"value" json:"value"`
-	GpuDefault  string `yaml:"gpuDefault" json:"gpuDefault"`
-	LimitFactor string `yaml:"limitFactor" json:"limitFactor"`
-	LimitValue  string `yaml:"limitValue" json:"limitValue"`
-	ReadOnly    bool   `yaml:"readOnly" json:"readOnly"`
+	Value           string `yaml:"value" json:"value"`
+	RequestModifier string `yaml:"requestModifier" json:"requestModifier"`
+	GpuDefault      string `yaml:"gpuDefault" json:"gpuDefault"`
+	LimitFactor     string `yaml:"limitFactor" json:"limitFactor"`
+	LimitValue      string `yaml:"limitValue" json:"limitValue"`
+	ReadOnly        bool   `yaml:"readOnly" json:"readOnly"`
 }
 
 type Configurations struct {

@@ -22,7 +22,6 @@ describe('New notebook form', () => {
     cy.get('[data-cy-toolbar-title]').contains('New notebook').should('exist');
   });
 
-
   it('should update panel header name according to the name input field', () => {
     cy.get('[data-cy-advanced-options-button]').click();
 
@@ -59,7 +58,7 @@ describe('New notebook form', () => {
 
   it('should update access mode input field according to the ConfigMap', () => {
     cy.get('[data-cy-advanced-options-button]').click();
-    
+
     cy.get('[data-cy="workspace volume"]').click();
 
     // 'ReadWriteMany' is the accessModes value of the config fixture
@@ -140,18 +139,24 @@ describe('New notebook form', () => {
       cy.get('[data-cy-form-input="customImageCheck"]')
         .find('input')
         .check({ force: true });
-      cy.get('[data-cy-form-input="betaImageCheck"]')
-        .should('not.have.class', 'mat-mdc-checkbox-checked');
+      cy.get('[data-cy-form-input="betaImageCheck"]').should(
+        'not.have.class',
+        'mat-mdc-checkbox-checked',
+      );
       cy.get('[data-cy-form-input="betaImageCheck"]')
         .find('input')
         .check({ force: true });
-      cy.get('[data-cy-form-input="customImageCheck"]')
-        .should('not.have.class', 'mat-mdc-checkbox-checked');
+      cy.get('[data-cy-form-input="customImageCheck"]').should(
+        'not.have.class',
+        'mat-mdc-checkbox-checked',
+      );
       cy.get('[data-cy-form-input="customImageCheck"]')
         .find('input')
         .check({ force: true });
-      cy.get('[data-cy-form-input="betaImageCheck"]')
-        .should('not.have.class', 'mat-mdc-checkbox-checked');
+      cy.get('[data-cy-form-input="betaImageCheck"]').should(
+        'not.have.class',
+        'mat-mdc-checkbox-checked',
+      );
       // invalid pattern
       cy.get('[data-cy-form-input="customImage"]')
         .find('input')

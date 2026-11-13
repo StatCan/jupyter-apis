@@ -337,8 +337,9 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 		volumes = append(volumes, vol.Name)
 	}
 
+	// Zone: We want to display the CPU limits for notebooks since we are silently modifing the requested CPU values
 	cpulimit := resource.Zero.AsDec()
-	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU]; ok {
+	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
 	}
 
@@ -730,7 +731,13 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = val
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = val
 	} else {
-		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+		val, err := s.applyCpuModifier(req.CPU)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = *val
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
 	}
 
@@ -914,29 +921,29 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 
 	// Add artifactory credentials username
 	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-			Name:  "serviceaccountname",
-			ValueFrom: &corev1.EnvVarSource{
-				SecretKeyRef: &corev1.SecretKeySelector{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: artifactoryCreds,
-						},
-						Key: artifactoryUsername,
-					},
+		Name: "serviceaccountname",
+		ValueFrom: &corev1.EnvVarSource{
+			SecretKeyRef: &corev1.SecretKeySelector{
+				LocalObjectReference: corev1.LocalObjectReference{
+					Name: artifactoryCreds,
+				},
+				Key: artifactoryUsername,
 			},
-		})
-	
+		},
+	})
+
 	// Add artifactory credentials password
 	notebook.Spec.Template.Spec.Containers[0].Env = append(notebook.Spec.Template.Spec.Containers[0].Env, corev1.EnvVar{
-			Name:  "serviceaccounttoken",
-			ValueFrom: &corev1.EnvVarSource{
-				SecretKeyRef: &corev1.SecretKeySelector{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: artifactoryCreds,
-						},
-						Key: artifactoryPassword,
-					},
+		Name: "serviceaccounttoken",
+		ValueFrom: &corev1.EnvVarSource{
+			SecretKeyRef: &corev1.SecretKeySelector{
+				LocalObjectReference: corev1.LocalObjectReference{
+					Name: artifactoryCreds,
+				},
+				Key: artifactoryPassword,
 			},
-		})	
+		},
+	})
 	// Add imagePullPolicy
 	if req.ImagePullPolicy == "Always" || req.ImagePullPolicy == "Never" || req.ImagePullPolicy == "IfNotPresent" {
 		notebook.Spec.Template.Spec.Containers[0].ImagePullPolicy = corev1.PullPolicy(req.ImagePullPolicy)
@@ -1065,7 +1072,13 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// update resources
-	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+	val, err := s.applyCpuModifier(req.CPU)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = *val
 	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
 	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
 	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
@@ -1572,4 +1585,31 @@ func addSharedMemory(notebook *kubeflowv1.Notebook) {
 		Name:      SharedMemoryVolumeName,
 		MountPath: SharedMemoryVolumePath,
 	})
+}
+
+// Applies the CPU request modifier parameter to the given cpu value.
+func (s *server) applyCpuModifier(cpu resource.Quantity) (*resource.Quantity, error) {
+	requestModifier, err := strconv.ParseFloat(s.Config.SpawnerFormDefaults.CPU.RequestModifier, 32)
+	if err != nil {
+		return nil, err
+	}
+	defaultCpuValue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	modifiedCpuValue := int64(float64(cpu.MilliValue()) * requestModifier)
+
+	var val resource.Quantity
+	if cpu.Cmp(defaultCpuValue) < 0 {
+		// if the given value is already smaller than our default, avoid applying the modifier
+		val = cpu
+	} else if modifiedCpuValue < defaultCpuValue.MilliValue() {
+		// return the default value if the modified result would be smaller
+		val = defaultCpuValue
+	} else {
+		val = *resource.NewMilliQuantity(modifiedCpuValue, resource.DecimalSI)
+	}
+
+	return &val, nil
 }

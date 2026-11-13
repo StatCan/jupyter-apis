@@ -18,7 +18,9 @@ describe('Edit notebook form', () => {
   });
 
   it('should have a "New notebook" title', () => {
-    cy.get('[data-cy-toolbar-title]').contains('Editing notebook test-notebook').should('exist');
+    cy.get('[data-cy-toolbar-title]')
+      .contains('Editing notebook test-notebook')
+      .should('exist');
   });
 
   it('image', () => {
@@ -26,7 +28,9 @@ describe('Edit notebook form', () => {
     cy.get('[data-mat-icon-name="jupyter-icon"]').should('exist');
     cy.get('[data-mat-icon-name="sas-icon"]').should('not.exist');
     // value
-    cy.get('[data-cy-image-name]').contains('k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1').should('exist');
+    cy.get('[data-cy-image-name]')
+      .contains('k8scc01covidacr.azurecr.io/jupyterlab-cpu:v1')
+      .should('exist');
   });
 
   describe('validate inputs', () => {
@@ -146,10 +150,10 @@ describe('Edit notebook form', () => {
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel')
         .find('app-existing-volume')
         .find('mat-select')
-        .should('have.text', "test-notebook-volume");
+        .should('have.text', 'test-notebook-volume');
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel')
         .find('[data-cy-form-input="mount-path"] > p')
-        .should('have.text', " /home/jovyan ");
+        .should('have.text', ' /home/jovyan ');
       // existing volume name already in use
       cy.get('[data-cy-form-input="workspaceVolume"]')
         .find('[data-cy-form-input="existing-volume"]')
@@ -257,15 +261,13 @@ describe('Edit notebook form', () => {
       // new volume mount path
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel')
         .find('[data-cy-form-input="mount-path"] > p')
-        .should('have.text', " /home/jovyan ");
+        .should('have.text', ' /home/jovyan ');
       // new volume size
       cy.get('[data-cy-form-input="workspaceVolume"]')
         .find('app-volume-size')
         .find('mat-select')
         .click();
-      cy.get('mat-option')
-        .contains('4')
-        .click();
+      cy.get('mat-option').contains('4').click();
       cy.get('[data-cy-form-input="workspaceVolume"] > mat-expansion-panel')
         .find('mat-panel-description')
         .should('contain.text', 'my-workspace-volume, 4Gi');
@@ -294,7 +296,7 @@ describe('Edit notebook form', () => {
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="existing-volume"]')
         .find('mat-select')
-        .should('contain.text', "test-notebook-data");
+        .should('contain.text', 'test-notebook-data');
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="mount-path"]')
         .find('input')
@@ -351,7 +353,7 @@ describe('Edit notebook form', () => {
         .eq(1)
         .should('have.class', 'ng-valid');
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-        .eq(1)  
+        .eq(1)
         .find('mat-panel-description')
         .should('contain.text', ' a-pvc-phase-warning-viewer-ready ');
       // existing volume mount path empty value
@@ -438,7 +440,7 @@ describe('Edit notebook form', () => {
         .find('mat-panel-title')
         .should('have.text', ' New volume ');
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
-        .eq(2)  
+        .eq(2)
         .find('mat-panel-description')
         .should('contain.text', ' test-notebook-datavol-2, 16Gi ');
       cy.get('[data-cy-form-input="dataVolumes"]')
@@ -450,7 +452,7 @@ describe('Edit notebook form', () => {
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
         .should('have.value', 'test-notebook-datavol-2');
-        // new volume empty name value
+      // new volume empty name value
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('[data-cy-form-input="volume-name"]')
         .find('input')
@@ -562,13 +564,14 @@ describe('Edit notebook form', () => {
         .find('app-volume-size')
         .find('mat-select')
         .click();
-      cy.get('mat-option')
-        .contains('4')
-        .click();
+      cy.get('mat-option').contains('4').click();
       cy.get('[data-cy-form-input="dataVolumes"] > mat-expansion-panel')
         .find('mat-panel-description')
         .eq(2)
-        .should('contain.text', 'dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv, 4Gi');
+        .should(
+          'contain.text',
+          'dog-breed-nwmrc-tutorial-dog-breed-workspace-24ntl-jcjlv, 4Gi',
+        );
       // delete data volumes
       cy.get('[data-cy-form-input="dataVolumes"]')
         .find('mat-icon[mattooltip="Detach volume"]')
@@ -589,9 +592,11 @@ describe('Edit notebook form', () => {
 
     it('advanced options', () => {
       //shared memory default value
-      cy.get('[data-cy-form-input="shm"]')
-      .should('have.class', 'mat-mdc-slide-toggle-checked')
-    })
+      cy.get('[data-cy-form-input="shm"]').should(
+        'have.class',
+        'mat-mdc-slide-toggle-checked',
+      );
+    });
   });
 
   describe('edit notebook use cases', () => {
@@ -603,25 +608,17 @@ describe('Edit notebook form', () => {
     it('should edit nothing', () => {
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
-      
+
       cy.get('[data-cy-form-button="submit"]').click();
-      
+
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
     it('should update cpu and memory', () => {
-      cy.get('[data-cy-form-input="cpu"]')
-        .find('input')
-        .clear();
-      cy.get('[data-cy-form-input="cpu"]')
-        .find('input')
-        .type('1');
-      cy.get('[data-cy-form-input="memory"]')
-        .find('input')
-        .clear();
-      cy.get('[data-cy-form-input="memory"]')
-        .find('input')
-        .type('4');
+      cy.get('[data-cy-form-input="cpu"]').find('input').clear();
+      cy.get('[data-cy-form-input="cpu"]').find('input').type('1');
+      cy.get('[data-cy-form-input="memory"]').find('input').clear();
+      cy.get('[data-cy-form-input="memory"]').find('input').type('4');
 
       // trigger the confirm dialog
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
@@ -643,10 +640,14 @@ describe('Edit notebook form', () => {
         .should('contain.text', 'CPU')
         .and('contain.text', 'Memory');
 
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
+      cy.intercept(
+        'POST',
+        'api/namespaces/kubeflow-user/notebooks/test-notebook',
+        {
+          success: true,
+          status: 200,
+        },
+      ).as('mockSubmitNotebook');
       cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
 
@@ -655,24 +656,31 @@ describe('Edit notebook form', () => {
 
     it('should add a new data volume', () => {
       // testing with a notebook that has no volume
-      cy.intercept('GET', `/api/namespaces/kubeflow-user/notebooks/test-notebook`, {
-        fixture: 'notebook_no_volume',
-      }).as('mockGetNotebookRequestNoVol');
+      cy.intercept(
+        'GET',
+        `/api/namespaces/kubeflow-user/notebooks/test-notebook`,
+        {
+          fixture: 'notebook_no_volume',
+        },
+      ).as('mockGetNotebookRequestNoVol');
       cy.visit('/notebook/edit/kubeflow-user/test-notebook');
       cy.wait('@mockGetNotebookRequestNoVol');
-      
+
       cy.get('[data-cy-form-button="dataVolumes-new"]').click();
 
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.get('[data-cy-form-button="submit"]').click();
-      cy.get('.edit-changes-list')
-        .should('contain.text', 'Data volume(s)');
+      cy.get('.edit-changes-list').should('contain.text', 'Data volume(s)');
 
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
+      cy.intercept(
+        'POST',
+        'api/namespaces/kubeflow-user/notebooks/test-notebook',
+        {
+          success: true,
+          status: 200,
+        },
+      ).as('mockSubmitNotebook');
       cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
 
@@ -688,16 +696,19 @@ describe('Edit notebook form', () => {
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.get('[data-cy-form-button="submit"]').click();
-      cy.get('.edit-changes-list')
-        .should('contain.text', 'Data volume(s)');
+      cy.get('.edit-changes-list').should('contain.text', 'Data volume(s)');
 
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
+      cy.intercept(
+        'POST',
+        'api/namespaces/kubeflow-user/notebooks/test-notebook',
+        {
+          success: true,
+          status: 200,
+        },
+      ).as('mockSubmitNotebook');
       cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
-      
+
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
@@ -714,9 +725,7 @@ describe('Edit notebook form', () => {
         .find('app-volume-size')
         .find('mat-select')
         .click();
-      cy.get('mat-option')
-        .contains('32')
-        .click();
+      cy.get('mat-option').contains('32').click();
       // create existing data
       cy.get('[data-cy-form-button="dataVolumes-existing"]').click();
       // select old workspace for existing
@@ -732,16 +741,19 @@ describe('Edit notebook form', () => {
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.get('[data-cy-form-button="submit"]').click();
-      cy.get('.edit-changes-list')
-        .should('contain.text', 'Workspace volume');
+      cy.get('.edit-changes-list').should('contain.text', 'Workspace volume');
 
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
+      cy.intercept(
+        'POST',
+        'api/namespaces/kubeflow-user/notebooks/test-notebook',
+        {
+          success: true,
+          status: 200,
+        },
+      ).as('mockSubmitNotebook');
       cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
-      
+
       cy.url().should('eq', 'http://localhost:4200/');
     });
 
@@ -751,16 +763,19 @@ describe('Edit notebook form', () => {
       // submit the notebook
       cy.get('[data-cy-form-button="submit"]').should('be.enabled');
       cy.get('[data-cy-form-button="submit"]').click();
-      cy.get('.edit-changes-list')
-        .should('contain.text', 'Shared memory');
+      cy.get('.edit-changes-list').should('contain.text', 'Shared memory');
 
-      cy.intercept('POST', 'api/namespaces/kubeflow-user/notebooks/test-notebook', {
-        success: true,
-        status: 200,
-      }).as('mockSubmitNotebook');
+      cy.intercept(
+        'POST',
+        'api/namespaces/kubeflow-user/notebooks/test-notebook',
+        {
+          success: true,
+          status: 200,
+        },
+      ).as('mockSubmitNotebook');
       cy.get('.mat-mdc-dialog-actions > button').contains('EDIT').click();
       cy.wait('@mockSubmitNotebook');
-      
+
       cy.url().should('eq', 'http://localhost:4200/');
     });
   });

@@ -10,10 +10,7 @@ describe('Notebook Details Page', () => {
       },
     ).as('mockGetNotebookPodRequest');
     cy.visit('/notebook/details/kubeflow-user/test-notebook');
-    cy.wait([
-      '@mockGetNotebookRequest',
-      '@mockGetNotebookPodRequest',
-    ]);
+    cy.wait(['@mockGetNotebookRequest', '@mockGetNotebookPodRequest']);
   });
 
   it('should open notebook details page', () => {
@@ -72,10 +69,10 @@ describe('Notebook Details Page', () => {
       'lib-details-list-item[key="Type"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' JupyterLab\n');
     cy.get(
-      'lib-details-list-item[key="Requested CPU"] > .list-entry-row > .list-entry-value > div',
+      'lib-details-list-item[key="CPUs"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' 500m\n');
     cy.get(
-      'lib-details-list-item[key="Requested memory"] > .list-entry-row > .list-entry-value > div',
+      'lib-details-list-item[key="Memory"] > .list-entry-row > .list-entry-value > div',
     ).should('have.text', ' 2Gi\n');
     cy.get(
       'lib-details-list-item[key="Image"] > .list-entry-row > .list-entry-value > div',
@@ -131,8 +128,12 @@ describe('Notebook Details Page', () => {
     cy.get('[data-cy-toolbar-button="SETTINGS"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="SETTINGS"]').click();
     cy.get('[data-cy-toolbar-button-menu="DELETE"]').should('be.enabled');
-    cy.get('body').click()  // Closes the menu
-    cy.get('lib-status-icon > lib-icon').should('have.attr', 'icon', 'custom:stoppedResource');
+    cy.get('body').click(); // Closes the menu
+    cy.get('lib-status-icon > lib-icon').should(
+      'have.attr',
+      'icon',
+      'custom:stoppedResource',
+    );
     // start the notebook
     cy.intercept(
       'PATCH',
@@ -154,7 +155,10 @@ describe('Notebook Details Page', () => {
     cy.get('[data-cy-toolbar-button="CONNECT"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="STOP"]').should('exist').and('be.enabled');
     cy.get('[data-cy-toolbar-button="START"]').should('not.exist');
-    cy.get('lib-status-icon[data-cy-notebook-status] > mat-icon').should('have.text', ' check_circle ');
+    cy.get('lib-status-icon[data-cy-notebook-status] > mat-icon').should(
+      'have.text',
+      ' check_circle ',
+    );
     cy.get('lib-conditions-table[title="Conditions"]')
       .find('tbody > tr')
       .should('have.length', 4);
@@ -223,7 +227,11 @@ describe('Notebook Details Page', () => {
 
     cy.get('[data-cy-toolbar-button="START"]').should('be.enabled');
     cy.get('[data-cy-toolbar-button="STOP"]').should('not.exist');
-    cy.get('lib-status-icon > lib-icon').should('have.attr', 'icon', 'custom:stoppedResource');
+    cy.get('lib-status-icon > lib-icon').should(
+      'have.attr',
+      'icon',
+      'custom:stoppedResource',
+    );
     cy.get('lib-conditions-table[title="Conditions"]')
       .find('tbody > tr > td')
       .should('have.text', 'No rows to display');

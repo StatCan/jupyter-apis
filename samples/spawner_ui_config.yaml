@@ -67,6 +67,8 @@ spawnerFormDefaults:
 
     # the default cpu request for the container
     value: "0.5"
+    # Zone: a modifier to multiply the CPU request to adjust the value given in the notebook form
+    requestModifier:  "0.5"
     # AAW: default value when a GPU is selected
     gpuDefault: '4.0'
     # a factor by which to multiply the CPU request calculate the cpu limit

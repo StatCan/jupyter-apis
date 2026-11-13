@@ -340,6 +340,7 @@ func (s *server) getNotebookData(notebook *kubeflowv1.Notebook) (notebookrespons
 	cpulimit := resource.Zero.AsDec()
 	if req, ok := notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU]; ok {
 		cpulimit = req.AsDec()
+		log.Printf("test %s, %+v", notebook.Name, req.MilliValue())
 	}
 
 	//get the data
@@ -730,7 +731,13 @@ func (s *server) NewNotebook(w http.ResponseWriter, r *http.Request) {
 		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = val
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = val
 	} else {
-		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+		val, err := s.applyCpuModifier(req.CPU)
+		if err != nil {
+			s.error(w, r, err)
+			return
+		}
+
+		notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = *val
 		notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
 	}
 
@@ -1065,7 +1072,13 @@ func (s *server) UpdateNotebook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// update resources
-	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = req.CPU
+	val, err := s.applyCpuModifier(req.CPU)
+	if err != nil {
+		s.error(w, r, err)
+		return
+	}
+
+	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceCPU] = *val
 	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceCPU] = req.CPULimit
 	notebook.Spec.Template.Spec.Containers[0].Resources.Requests[corev1.ResourceMemory] = req.Memory
 	notebook.Spec.Template.Spec.Containers[0].Resources.Limits[corev1.ResourceMemory] = req.MemoryLimit
@@ -1572,4 +1585,29 @@ func addSharedMemory(notebook *kubeflowv1.Notebook) {
 		Name:      SharedMemoryVolumeName,
 		MountPath: SharedMemoryVolumePath,
 	})
+}
+
+func (s *server) applyCpuModifier(cpu resource.Quantity) (*resource.Quantity, error) {
+	requestModifier, err := strconv.ParseFloat(s.Config.SpawnerFormDefaults.CPU.RequestModifier, 32)
+	if err != nil {
+		return nil, err
+	}
+	defaultCpuValue, err := resource.ParseQuantity(s.Config.SpawnerFormDefaults.CPU.Value)
+	if err != nil {
+		return nil, err
+	}
+
+	modifiedCpuValue := int64(float64(cpu.MilliValue()) * requestModifier)
+	log.Printf("testmodvalue %+v", modifiedCpuValue)
+	var val resource.Quantity
+	if cpu.Cmp(defaultCpuValue) < 0 {
+		val = cpu
+	} else if modifiedCpuValue < defaultCpuValue.MilliValue() {
+		// return the default value if the modified result would be smaller
+		val = defaultCpuValue
+	} else {
+		val = *resource.NewMilliQuantity(modifiedCpuValue, resource.DecimalSI)
+	}
+
+	return &val, nil
 }

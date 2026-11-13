@@ -26,6 +26,7 @@
      },
      "cpu":{
         "value":"0.5",
+        "requestModifier":"0.5",
         "gpuDefault":"4.0",
         "limitFactor":"1.0",
         "limitValue":"4.0",

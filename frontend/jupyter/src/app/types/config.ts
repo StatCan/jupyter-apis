@@ -27,6 +27,7 @@ export interface Config {
 
   cpu?: {
     value: string;
+    requestModifier: string;
     gpuDefault: string;
     limitFactor: string;
     limitValue: string;

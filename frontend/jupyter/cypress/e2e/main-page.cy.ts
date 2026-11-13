@@ -22,8 +22,10 @@ describe('Main tables', () => {
 
     it('should have the Notebooks table', () => {
       cy.get('[data-cy-table-id="notebooks-table"]').should('exist');
-      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
-        .should('have.length', 8);
+      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr').should(
+        'have.length',
+        8,
+      );
 
       cy.get('[data-cy-toolbar-button="New Notebook"]')
         .should('exist')
@@ -91,8 +93,8 @@ describe('Main tables', () => {
         .find('mat-icon')
         .should('exist');
     });
-    
-    describe('warning icon', ()=>{
+
+    describe('warning icon', () => {
       it('should not have a warning icon', () => {
         cy.get('[data-cy-table-id="notebooks-table"]')
           .find(`[data-cy-resource-table-row="Name"]`)
@@ -122,13 +124,15 @@ describe('Main tables', () => {
           .find('app-warning-icon')
           .find('mat-icon')
           .invoke('attr', 'aria-describedby')
-          .then(tooltip=>{
+          .then(tooltip => {
             // Couldn't get the test to open the tooltip by hovering, so using the next best thing
-            cy.get(`#${tooltip}`)
-              .should('have.text', 'Potential issues with this notebook server:\n* Last restarted because of an Out-Of-Memory error.');
+            cy.get(`#${tooltip}`).should(
+              'have.text',
+              'Potential issues with this notebook server:\n* Last restarted because of an Out-Of-Memory error.',
+            );
           });
       });
-      
+
       it('should have a warning for full volume', () => {
         cy.get('[data-cy-table-id="notebooks-table"]')
           .find(`[data-cy-resource-table-row="Name"]`)
@@ -147,10 +151,12 @@ describe('Main tables', () => {
           .find('app-warning-icon')
           .find('mat-icon')
           .invoke('attr', 'aria-describedby')
-          .then(tooltip=>{
+          .then(tooltip => {
             // Couldn't get the test to open the tooltip by hovering, so using the next best thing
-            cy.get(`#${tooltip}`)
-              .should('have.text', 'Potential issues with this notebook server:\n* One or more attached volumes are full.');
+            cy.get(`#${tooltip}`).should(
+              'have.text',
+              'Potential issues with this notebook server:\n* One or more attached volumes are full.',
+            );
           });
       });
 
@@ -172,14 +178,16 @@ describe('Main tables', () => {
           .find('app-warning-icon')
           .find('mat-icon')
           .invoke('attr', 'aria-describedby')
-          .then(tooltip=>{
+          .then(tooltip => {
             // Couldn't get the test to open the tooltip by hovering, so using the next best thing
-            cy.get(`#${tooltip}`)
-              .should('have.text', 'Potential issues with this notebook server:\n* Last restarted because of an Out-Of-Memory error.\n* One or more attached volumes are full.');
+            cy.get(`#${tooltip}`).should(
+              'have.text',
+              'Potential issues with this notebook server:\n* Last restarted because of an Out-Of-Memory error.\n* One or more attached volumes are full.',
+            );
           });
       });
     });
-    
+
     it('should start a notebook', () => {
       cy.get('[data-cy-table-id="notebooks-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
@@ -276,7 +284,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="deleteAction"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+        .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.get('.mat-mdc-dialog-title')
         .should('be.visible')
         .and(
@@ -295,7 +303,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="deleteAction"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+        .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.intercept(
         'DELETE',
         '/api/namespaces/kubeflow-user/notebooks/a-test-01',
@@ -326,8 +334,10 @@ describe('Main tables', () => {
         });
       // clear filters
       cy.get('[mattooltip="Clear filters"]').click();
-      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
-        .should('have.length', 8);
+      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr').should(
+        'have.length',
+        8,
+      );
 
       // generic filter
       cy.get('[data-cy-table-filter-id="notebooks-table"]').type(
@@ -340,8 +350,10 @@ describe('Main tables', () => {
 
       //clear filters
       cy.get('[matchipremove]').click();
-      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr')
-        .should('have.length', 8);
+      cy.get('[data-cy-table-id="notebooks-table"] > tbody > tr').should(
+        'have.length',
+        8,
+      );
     });
 
     it('should open the notebook details page', () => {
@@ -366,7 +378,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="nb_details"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+        .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
 
       cy.url().should(
         'eq',
@@ -403,19 +415,16 @@ describe('Main tables', () => {
           .click();
         cy.get('.mat-mdc-dialog-title')
           .should('be.visible')
-          .and(
-            'have.text',
-            'Delay auto-shutdown for a-test-01',
-          );
+          .and('have.text', 'Delay auto-shutdown for a-test-01');
         cy.get('.mat-mdc-dialog-actions > button').contains('CANCEL').click();
         cy.get('mat-dialog-container').should('not.exist');
       });
       it('Should be enabled and working', () => {
         cy.intercept(
-            'PATCH',
-            '/api/namespaces/kubeflow-user/notebooks/a-test-01/keepalive',
-            { success: true, status: 200 },
-          ).as('mockDelayCulling');
+          'PATCH',
+          '/api/namespaces/kubeflow-user/notebooks/a-test-01/keepalive',
+          { success: true, status: 200 },
+        ).as('mockDelayCulling');
         cy.get('[data-cy-table-id="notebooks-table"]')
           .find(`[data-cy-resource-table-row="Name"]`)
           .contains('a-test-01')
@@ -427,16 +436,17 @@ describe('Main tables', () => {
           .should('be.visible')
           .find('button[data-cy-menu-icon-action="keep_alive"]')
           .and('be.enabled')
-          .click();;
+          .click();
         cy.get('.mat-mdc-dialog-title')
           .should('be.visible')
-          .and(
-            'have.text',
-            'Delay auto-shutdown for a-test-01',
-          );
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+          .and('have.text', 'Delay auto-shutdown for a-test-01');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.enabled',
+        );
         cy.get('.mat-mdc-dialog-actions > button').contains('SUBMIT').click();
-        cy.wait('@mockDelayCulling').its('response.statusCode').should('eq', 200);
+        cy.wait('@mockDelayCulling')
+          .its('response.statusCode')
+          .should('eq', 200);
         cy.get('mat-dialog-container').should('not.exist');
       });
       it('Should disable submit if invalid data', () => {
@@ -454,65 +464,101 @@ describe('Main tables', () => {
           .click();
         cy.get('.mat-mdc-dialog-title')
           .should('be.visible')
-          .and(
-            'have.text',
-            'Delay auto-shutdown for a-test-01',
-          );
+          .and('have.text', 'Delay auto-shutdown for a-test-01');
         // Min
-        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.value', '1');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('input')
+          .should('have.value', '1');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.enabled',
+        );
         // Zero
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('0');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
-        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
-        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
-        .should('have.text', "Specify at least 1 hour(s)");
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.disabled',
+        );
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('input')
+          .should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('mat-error')
+          .should('have.text', 'Specify at least 1 hour(s)');
         // Max
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('72');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.enabled',
+        );
         // Negative
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('-1');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
-        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
-        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
-        .should('have.text', "Specify at least 1 hour(s)");
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.disabled',
+        );
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('input')
+          .should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('mat-error')
+          .should('have.text', 'Specify at least 1 hour(s)');
         // Valid
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('24');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.enabled',
+        );
         // Above max
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('73');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
-        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
-        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
-        .should('have.text', "Can't exceed 72 hours");
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.disabled',
+        );
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('input')
+          .should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('mat-error')
+          .should('have.text', "Can't exceed 72 hours");
         // Valid
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('1');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.enabled',
+        );
         // Invalid - letters won't be allowed in the input
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('a');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
-        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
-        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
-        .should('have.text', "Hours to delay is required");
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.disabled',
+        );
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('input')
+          .should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('mat-error')
+          .should('have.text', 'Hours to delay is required');
         // Valid - to clear the message
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('1');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.enabled');
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.enabled',
+        );
         // Invalid - decimal
         cy.get('[data-cy-form-input="delayTime"]').find('input').clear();
         cy.get('[data-cy-form-input="delayTime"]').find('input').type('1.2');
-        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should('be.disabled');
-        cy.get('[data-cy-form-input="delayTime"]').find('input').should('have.class', 'ng-invalid');
-        cy.get('[data-cy-form-input="delayTime"]').find('mat-error')
-        .should('have.text', "Specify a number of hours for the delay (no decimals)");
-       
+        cy.get('[data-cy-form-button="formDelayCtrlSubmit"]').should(
+          'be.disabled',
+        );
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('input')
+          .should('have.class', 'ng-invalid');
+        cy.get('[data-cy-form-input="delayTime"]')
+          .find('mat-error')
+          .should(
+            'have.text',
+            'Specify a number of hours for the delay (no decimals)',
+          );
       });
     });
   });
@@ -524,8 +570,10 @@ describe('Main tables', () => {
 
     it('should have the Volumes table', () => {
       cy.get('[data-cy-table-id="volumes-table"]').should('exist');
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr')
-        .should('have.length', 10);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
+        'have.length',
+        10,
+      );
     });
 
     // We use function () in order to access aliases via this
@@ -638,8 +686,10 @@ describe('Main tables', () => {
         });
       // clear filters
       cy.get('[mattooltip="Clear filters"]').click();
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr')
-        .should('have.length', 10);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
+        'have.length',
+        10,
+      );
 
       // generic filter
       cy.get('[data-cy-table-filter-id="volumes-table"]').type(
@@ -652,8 +702,10 @@ describe('Main tables', () => {
 
       //clear filters
       cy.get('[matchipremove]').click();
-      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr')
-        .should('have.length', 10);
+      cy.get('[data-cy-table-id="volumes-table"] > tbody > tr').should(
+        'have.length',
+        10,
+      );
     });
 
     it('should open the volume details page', () => {
@@ -703,7 +755,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="pvc_details"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+        .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
 
       cy.url().should(
         'eq',
@@ -711,116 +763,118 @@ describe('Main tables', () => {
       );
     });
 
-    describe('volume pending resize', ()=>{
-      it('should display pending resize icon', ()=>{
+    describe('volume pending resize', () => {
+      it('should display pending resize icon', () => {
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('titanic-ml-47xh5-data-m57vq-2md82')
-        .scrollIntoView();
-        
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('titanic-ml-47xh5-data-m57vq-2md82')
+          .scrollIntoView();
+
         // should display icon on volumes with pending resize
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('test-pro-b-volume')
-        .parent()
-        .parent()
-        .find('app-size')
-        .find('mat-icon')
-        .should('exist').and('have.class', 'warning-icon');
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('test-pro-b-volume')
+          .parent()
+          .parent()
+          .find('app-size')
+          .find('mat-icon')
+          .should('exist')
+          .and('have.class', 'warning-icon');
 
         // should not display icon when volume has no pending resize
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('titanic-ml-47xh5-data-m57vq-2md82')
-        .parent()
-        .parent()
-        .find('app-size')
-        .find('mat-icon')
-        .should('not.exist');
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('titanic-ml-47xh5-data-m57vq-2md82')
+          .parent()
+          .parent()
+          .find('app-size')
+          .find('mat-icon')
+          .should('not.exist');
       });
 
-      it('should disable expand volume when pending at full size', ()=>{
+      it('should disable expand volume when pending at full size', () => {
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('a-pvc-phase-warning-viewer-ready')
-        .scrollIntoView();
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-pvc-phase-warning-viewer-ready')
+          .scrollIntoView();
 
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('a-pvc-phase-warning-viewer-ready')
-        .parent()
-        .parent()
-        .find('app-size')
-        .find('mat-icon')
-        .should('exist').and('have.class', 'warning-icon');
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-pvc-phase-warning-viewer-ready')
+          .parent()
+          .parent()
+          .find('app-size')
+          .find('mat-icon')
+          .should('exist')
+          .and('have.class', 'warning-icon');
 
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('a-pvc-phase-warning-viewer-ready')
-        .parent()
-        .parent()
-        .find('[data-cy-resource-table-action-icon="settings"]')
-        .click();
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('a-pvc-phase-warning-viewer-ready')
+          .parent()
+          .parent()
+          .find('[data-cy-resource-table-action-icon="settings"]')
+          .click();
 
         cy.get('div[role="menu"]')
-        .should('be.visible')
-        .find('button[data-cy-menu-icon-action="expand_pvc"]')
-        .should('be.disabled');
+          .should('be.visible')
+          .find('button[data-cy-menu-icon-action="expand_pvc"]')
+          .should('be.disabled');
       });
 
-      it('should disable size options when pending resize', ()=>{
+      it('should disable size options when pending resize', () => {
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('test-pro-b-volume')
-        .scrollIntoView();
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('test-pro-b-volume')
+          .scrollIntoView();
 
         cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('test-pro-b-volume')
-        .parent()
-        .parent()
-        .find('app-size')
-        .find('mat-icon')
-        .should('exist').and('have.class', 'warning-icon');
-      cy.get('[data-cy-table-id="volumes-table"]')
-        .find(`[data-cy-resource-table-row="Name"]`)
-        .contains('test-pro-b-volume')
-        .parent()
-        .parent()
-        .find('[data-cy-resource-table-action-icon="settings"]')
-        .click();
-      cy.get('div[role="menu"]')
-        .should('be.visible')
-        .find('button[data-cy-menu-icon-action="expand_pvc"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
-      
-      // assert default value matches volume's pending size and not current real capacity
-      cy.get('[data-cy-form-input="volumeSize"]')
-        .find('mat-select[formControlName="sizeNum"]')
-        .should('contain', '64');
-      cy.get('[data-cy-form-input="volumeSize"]')
-        .click();
-      // assert the sizes dropdown
-      const sizeArray = [4, 8, 16, 32, 64, 128, 256, 512];
-      cy.get('div[role="listbox"]')
-        .should('be.visible')
-        .find('mat-option')
-        .should('have.length', sizeArray.length);
-      cy.get('div[role="listbox"]')
-        .find('mat-option')
-        .each(($option, index) => {
-          expect($option).to.contain(sizeArray[index].toString())
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('test-pro-b-volume')
+          .parent()
+          .parent()
+          .find('app-size')
+          .find('mat-icon')
+          .should('exist')
+          .and('have.class', 'warning-icon');
+        cy.get('[data-cy-table-id="volumes-table"]')
+          .find(`[data-cy-resource-table-row="Name"]`)
+          .contains('test-pro-b-volume')
+          .parent()
+          .parent()
+          .find('[data-cy-resource-table-action-icon="settings"]')
+          .click();
+        cy.get('div[role="menu"]')
+          .should('be.visible')
+          .find('button[data-cy-menu-icon-action="expand_pvc"]')
+          .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
 
-          // assert that the smaller sizes are disabled
-          // index 4 matches size '64' which is the pending size of the selected volume
-          if(index <= 4){
-            expect($option).to.have.class('mdc-list-item--disabled');
-          } else {
-            expect($option).to.not.have.class('mdc-list-item--disabled');
-          }
-        });
+        // assert default value matches volume's pending size and not current real capacity
+        cy.get('[data-cy-form-input="volumeSize"]')
+          .find('mat-select[formControlName="sizeNum"]')
+          .should('contain', '64');
+        cy.get('[data-cy-form-input="volumeSize"]').click();
+        // assert the sizes dropdown
+        const sizeArray = [4, 8, 16, 32, 64, 128, 256, 512];
+        cy.get('div[role="listbox"]')
+          .should('be.visible')
+          .find('mat-option')
+          .should('have.length', sizeArray.length);
+        cy.get('div[role="listbox"]')
+          .find('mat-option')
+          .each(($option, index) => {
+            expect($option).to.contain(sizeArray[index].toString());
+
+            // assert that the smaller sizes are disabled
+            // index 4 matches size '64' which is the pending size of the selected volume
+            if (index <= 4) {
+              expect($option).to.have.class('mdc-list-item--disabled');
+            } else {
+              expect($option).to.not.have.class('mdc-list-item--disabled');
+            }
+          });
       });
-    })
+    });
 
     it('should increase the size of a volume', () => {
       cy.get('[data-cy-table-id="volumes-table"]')
@@ -837,7 +891,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="expand_pvc"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+        .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.get('.mat-mdc-dialog-title')
         .should('be.visible')
         .and(
@@ -848,8 +902,7 @@ describe('Main tables', () => {
       cy.get('[data-cy-form-input="volumeSize"]')
         .find('mat-select[formControlName="sizeNum"]')
         .should('contain', '32');
-      cy.get('[data-cy-form-input="volumeSize"]')
-        .click();
+      cy.get('[data-cy-form-input="volumeSize"]').click();
       // assert the sizes dropdown
       const sizeArray = [4, 8, 16, 32, 64, 128, 256, 512];
       cy.get('div[role="listbox"]')
@@ -859,34 +912,41 @@ describe('Main tables', () => {
       cy.get('div[role="listbox"]')
         .find('mat-option')
         .each(($option, index) => {
-          expect($option).to.contain(sizeArray[index].toString())
+          expect($option).to.contain(sizeArray[index].toString());
 
           // assert that the smaller sizes are disabled
           // index 3 matches size '32' which is the size of the selected volume
-          if(index <= 3){
+          if (index <= 3) {
             expect($option).to.have.class('mdc-list-item--disabled');
           } else {
             expect($option).to.not.have.class('mdc-list-item--disabled');
           }
         });
-      cy.get('body').click() // close sizes dropdown
-      cy.get('[data-cy-form-input="volumeSize"]')
-        .should('have.class', 'ng-invalid');
+      cy.get('body').click(); // close sizes dropdown
+      cy.get('[data-cy-form-input="volumeSize"]').should(
+        'have.class',
+        'ng-invalid',
+      );
       cy.get('[data-cy-form-input="volumeSize"]')
         .find('mat-error')
-        .should('have.text', 'New size has to be larger than the current value');
+        .should(
+          'have.text',
+          'New size has to be larger than the current value',
+        );
 
       // assert succesful increase
-      cy.get('[data-cy-form-input="volumeSize"]').click().get('mat-option').contains('64').click();
+      cy.get('[data-cy-form-input="volumeSize"]')
+        .click()
+        .get('mat-option')
+        .contains('64')
+        .click();
       cy.intercept(
         'PATCH',
         '/api/namespaces/kubeflow-user/pvcs/titanic-ml-47xh5-data-m57vq-2md82/expand',
         { success: true, status: 200 },
       ).as('mockExpandVolume');
       cy.get('[data-cy-form-button="formDialogSubmit"]').click();
-      cy.wait('@mockExpandVolume')
-        .its('response.statusCode')
-        .should('eq', 200);
+      cy.wait('@mockExpandVolume').its('response.statusCode').should('eq', 200);
       cy.get('mat-dialog-container').should('not.exist');
     });
 
@@ -905,7 +965,7 @@ describe('Main tables', () => {
       cy.get('div[role="menu"]')
         .should('be.visible')
         .find('button[data-cy-menu-icon-action="expand_pvc"]')
-        .click({force: true}); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
+        .click({ force: true }); // Forcing the click because cypress can randomly fail to do the click by scrolling out of focus
       cy.get('[data-cy-form-input="volumeSize"]')
         .click()
         .get('mat-option')
@@ -915,7 +975,10 @@ describe('Main tables', () => {
       cy.get('lib-confirm-dialog')
         .find('.mat-mdc-dialog-title')
         .should('be.visible')
-        .and('have.text', 'Are you sure you want to increase the size of titanic-ml-47xh5-data-m57vq-2md82 to 128Gi?');
+        .and(
+          'have.text',
+          'Are you sure you want to increase the size of titanic-ml-47xh5-data-m57vq-2md82 to 128Gi?',
+        );
       cy.get('lib-confirm-dialog')
         .find('.mat-mdc-dialog-actions > button')
         .contains('CANCEL')
@@ -936,7 +999,10 @@ describe('Main tables', () => {
       cy.get('lib-confirm-dialog')
         .find('.mat-mdc-dialog-title')
         .should('be.visible')
-        .and('have.text', 'Are you sure you want to increase the size of titanic-ml-47xh5-data-m57vq-2md82 to 256Gi?');
+        .and(
+          'have.text',
+          'Are you sure you want to increase the size of titanic-ml-47xh5-data-m57vq-2md82 to 256Gi?',
+        );
       cy.intercept(
         'PATCH',
         '/api/namespaces/kubeflow-user/pvcs/titanic-ml-47xh5-data-m57vq-2md82/expand',
@@ -946,9 +1012,7 @@ describe('Main tables', () => {
         .find('.mat-mdc-dialog-actions > button')
         .contains('INCREASE')
         .click();
-      cy.wait('@mockExpandVolume')
-        .its('response.statusCode')
-        .should('eq', 200);
+      cy.wait('@mockExpandVolume').its('response.statusCode').should('eq', 200);
       cy.get('mat-dialog-container').should('not.exist');
     });
 
@@ -957,19 +1021,20 @@ describe('Main tables', () => {
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('titanic-ml-47xh5-data-m57vq-2md82')
         .scrollIntoView();
-        
-        // should display icon on volumes with pending resize
-        cy.get('[data-cy-table-id="volumes-table"]')
+
+      // should display icon on volumes with pending resize
+      cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('test-notebook-volume')
         .parent()
         .parent()
         .find('app-usage')
         .find('mat-icon')
-        .should('exist').and('have.class', 'warning-icon');
+        .should('exist')
+        .and('have.class', 'warning-icon');
 
-        // should not display icon when volume has no pending resize
-        cy.get('[data-cy-table-id="volumes-table"]')
+      // should not display icon when volume has no pending resize
+      cy.get('[data-cy-table-id="volumes-table"]')
         .find(`[data-cy-resource-table-row="Name"]`)
         .contains('titanic-ml-47xh5-data-m57vq-2md82')
         .parent()

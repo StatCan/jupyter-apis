@@ -57,7 +57,9 @@ export function setConfigForNotebook(
     }
 
     // Set the resources config from the notebook using the formatted output
-    config.cpu.value = notebook.formatted_resources.cpu;
+    // Zone: Since we are silently reducing the CPU requests for notebooks,
+    // we are going to display the CPU limit value for the Edit notebook default CPU
+    config.cpu.value = notebook.formatted_resources.cpuLimit;
     config.cpu.limitValue = notebook.formatted_resources.cpuLimit;
     config.memory.value = notebook.formatted_resources.memory;
     config.memory.limitValue = notebook.formatted_resources.memoryLimit;

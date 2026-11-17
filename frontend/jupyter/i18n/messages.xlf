@@ -938,15 +938,19 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="01817bd08ce56cd2966da83498f862a5c3984cc8" datatype="html">
-        <source>Requested CPUs</source>
+      <trans-unit id="fb6f3e2a26f3a6f2bc33f91adcd60502dbe5adac" datatype="html">
+        <source>CPUs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
       </trans-unit>
-      <trans-unit id="329af8132d78efd4ab83314aadb6e0ae02c71398" datatype="html">
-        <source>Requested Memory Gi</source>
+      <trans-unit id="3dd36abc1ace81fa9420d467567a8484941802f4" datatype="html">
+        <source>Memory (in Gi)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/form/form-new/form-cpu-ram/form-cpu-ram.component.html</context>
           <context context-type="linenumber">36</context>
@@ -2255,13 +2259,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
           <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="fb6f3e2a26f3a6f2bc33f91adcd60502dbe5adac" datatype="html">
-        <source>CPUs</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/notebook-page/overview/overview.component.html</context>
-          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="58d4a9814864741040bc5905b6a368836e683f76" datatype="html">
